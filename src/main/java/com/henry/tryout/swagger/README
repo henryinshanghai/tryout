@@ -1,0 +1,29 @@
+to 'generate json documentation':
+    add the springfox-swagger dependency.
+
+to 'generate human readable and interactive html documentation':
+    add the springfox-swagger-ui dependency
+
+to enable swagger in spring boot
+    add @EnableSwagger2 at some class in spring boot
+
+to get the documentation that springfox provided:
+    /v2/api-docs // JSON documentation
+    /swagger-ui.html // human readable documentation
+
+to tailor what the documentation display:
+    - sharp off the unnecessary endpoints:
+        create a docket instance, and add in the restrictions.
+
+    - adding application metadata
+        still add this in docket instance
+        refer apiInfo() method
+
+to setup more specific information on apis:
+    adding details to APIs using annotations;
+    - annotations on controller
+    - annotations on entity
+
+    there's way much annotations for information, make the code have loads noises.
+
+replacement: Spring REST Docs
