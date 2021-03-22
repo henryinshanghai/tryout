@@ -15,6 +15,16 @@ public class Customer {
     private String firstName;
     private String lastName;
 
+    private String behaviour;
+
+    public Customer() {
+    }
+
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -37,5 +47,13 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getBehaviour() {
+        return behaviour;
+    }
+
+    public void setBehaviour(String behaviour) {
+        this.behaviour = behaviour;
     }
 }

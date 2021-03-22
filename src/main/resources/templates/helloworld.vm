@@ -1,1 +1,139 @@
-Hello $name!  Welcome to Velocity!
+<html>
+<body>
+Hello $customer.getFirstName()!
+<table>
+    #foreach( $mud in $mudsOnSpecial )
+        #if ( $customer.hasPurchased($mud) )
+            <tr>
+                <td>
+                    $flogger.getPromo( $mud )
+                </td>
+            </tr>
+        #end
+    #end
+</table>
+
+===
+    #set($a = "Velocity") ## set a value to a var
+<strong>a's value is:$a</strong>
+
+===
+#*
+    multiple line comments
+ *#
+    $foo <br/> ## for reference never defined, no error. print out literraly
+    $customer.firstName ## for var added in context, use $varName to refer that.
+    $customer.lastName
+
+===
+    $customer.getFirstName()
+    $customer.getLastName()
+
+===
+    #set($myArr = ["tom", "dick", "henry"])
+the first item : $myArr[0] ## tom
+
+    #set($index = 1)
+the second item : $myArr[$index] ## dick
+
+    #set($myMap = {})
+    #set($discard = $myMap.put("tom", 26))
+    #set($discard = $myMap.put("jack", 27))
+    #set($discard = $myMap.put("annie", 28))
+    #set($discard = $myMap.put("people", ["anna", "ben", "cris", "dick", "ella"]))
+
+the jack item : $myMap.get("jack")
+the item's item : $myMap.get("people")[2] ## cris
+
+===
+    #set($vice = "fire")
+Jack is a $vicemaniac. ## print out $vicemaniac literrally
+Jack is a ${vice}maniac. ## print out fire maniac
+
+===
+#*
+    to refer a var that are never defined.
+ *#
+this is a var never define before : $varNeverDefine ## print out literally
+
+this is a var never define before : $!varNeverDefine ## print out nothing
+
+===
+    #set($a = 1)
+    #if($a==1)true enough#elseno way!#end ## else do not get identified
+
+    #set($a = 2)
+    #if($a==1)true enough#{else}no way!#end
+
+    #set($primate = "monkey")
+    #set($customer.behaviour = $primate)
+
+result: $customer.behaviour
+
+===
+about RHS
+
+    #set($bill = "10 dollars")
+    #set( $monkey = $bill ) ## variable reference
+
+    #set( $monkey.Friend = "monica" ) ## set string literal to a certain property
+
+    #set( $monkey.Blame = $whitehouse.Leak ) ## property reference
+    #set( $monkey.Plan = $spindoctor.weave($web) ) ## method reference
+    #set( $monkey.Number = 123 ) ##number literal
+    #set( $monkey.Say = ["Not", $my, "fault"] ) ## ArrayList
+    #set( $monkey.Map = {"banana" : "good", "roast beef" : "bad"}) ## Map
+
+===
+    #set($allProducts = ["banana", "apple", "peach", "grape"])
+    #foreach( $product in $allProducts )
+        <li>$product</li>
+    #end
+
+===
+#set($allProducts = {})
+#set($discard = $allProducts.put("banana", 6.0))
+#set($discard = $allProducts.put("apple", 10.0))
+#set($discard = $allProducts.put("peach", 2.0))
+#set($discard = $allProducts.put("grape", 15.0))
+
+    #foreach( $key in $allProducts.keySet() )
+    <li>Key: $key -> Value: $allProducts.get($key)</li>
+    #end
+
+===
+## #set($customerList = ["annie", "jin", "andy", "uther"])
+
+    #foreach( $customer in $customerList )
+    <tr>
+        <td>$foreach.count</td> ## 索引值从1开始
+        <td>$customer.Name</td>
+    </tr>
+    #end
+
+===
+## to quickly know if you are in last loop
+    #foreach( $customer in $customerList)
+        $customer.lastName #if( $foreach.hasNext ),#end
+    #end
+
+===
+## list first 5 customers only
+    #foreach( $customer in $customerList )
+        #if( $foreach.count > 5 )  ## $foreach.count
+            #break
+        #end
+        $customer.lastName
+    #end
+
+===
+## include ()encoding problem)
+#include("src/main/resources/templates/poem") ## this need correct path & separator
+
+the end of including.
+
+===
+the tutorial that apache provide is really borning!!! jack off
+</body>
+</html>
+<!-- html code haven't been recognized. -->
