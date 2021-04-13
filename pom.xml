@@ -19,7 +19,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-	</properties>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -107,6 +107,19 @@
         </dependency>
         <!-- this is for demoing the init and destroy of bean in Spring container 👆 -->
 
+        <!-- this is for Spring test 👇-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <!-- this is for Spring test 👆 -->
     </dependencies>
 
 	<build>
