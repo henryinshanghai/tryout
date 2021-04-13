@@ -1,0 +1,13 @@
+是：JDK中提供的一个类型；
+作用：用来表示异步任务执行的结果；
+特征：
+    1 能够通过编程的方式 来 显式地设置任务执行的结果与状态 - 以此来主动控制任务结束；
+    2 能够作为一个 CompletionStage(计算阶段) - 任务计算完成后，能够触发另一个函数/行为；
+    3 当多个线程同时调用 同一个CompletableFuture的 complete、cancel方法时，只有一个线程会成功。
+    ===
+    它还实现了 CompletionStage接口的一些方法：
+    4 当 CompletableFuture任务结束后， 使用 任务执行线程 来执行 依赖于任务执行结果的函数/行为。
+    5 异步方法在没有指定Executor参数的时候， 都是使用 ForkJoinPool.commonPool()线程池来执行的。
+    6 所有 CompletionStage方法的实现都是相互独立的 - 方法之间不会相互影响。
+
+
