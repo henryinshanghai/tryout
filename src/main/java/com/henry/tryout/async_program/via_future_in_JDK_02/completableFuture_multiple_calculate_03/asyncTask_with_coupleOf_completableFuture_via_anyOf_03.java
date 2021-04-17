@@ -1,0 +1,4 @@
+package com.henry.tryout.async_program.via_future_in_JDK_02.completableFuture_multiple_calculate_03;
+
+public class asyncTask_with_coupleOf_completableFuture_via_anyOf_03 {
+}
