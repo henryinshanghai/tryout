@@ -2,9 +2,10 @@ package com.henry.tryout.async_program.via_future_in_JDK_02.exception_04;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class asyncTask_with_exception_01 {
+public class asyncTask_with_exception_combine_00 {
 
 
     public static void one() throws InterruptedException, ExecutionException {
@@ -61,7 +62,7 @@ public class asyncTask_with_exception_01 {
         System.out.println("---main thread got future result---");
     }
 
-    public static void two1() throws InterruptedException, ExecutionException {
+    public static void two1() throws InterruptedException, ExecutionException, TimeoutException {
         // 1.创建一个CompletableFuture对象
         CompletableFuture<String> future = new CompletableFuture<String>();
 
@@ -84,14 +85,16 @@ public class asyncTask_with_exception_01 {
 
         // 3.等待计算结果
         System.out.println("---main thread wait future result---");
-        System.out.println(future.exceptionally(t -> "default").get());// 默认值
-        // System.out.println(future.get(1000,TimeUnit.MILLISECONDS));
+//        System.out.println(future.exceptionally(t -> "default").get());// 默认值
+         System.out.println(future.get(1000, TimeUnit.MILLISECONDS)); // note: this seems useless, there's TimeoutException throw out
         System.out.println("---main thread got future result---");
     }
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
 
-        two();
+//        one();
+//        two();
+        two1();
     }
 
 }

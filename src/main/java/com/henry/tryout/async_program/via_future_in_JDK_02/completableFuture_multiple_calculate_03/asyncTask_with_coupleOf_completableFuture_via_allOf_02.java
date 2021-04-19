@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class asyncTask_with_coupleOf_completableFuture_02 {
+public class asyncTask_with_coupleOf_completableFuture_via_allOf_02 {
 
     // 1.异步任务，返回future
     public static CompletableFuture<String> doSomethingOne(String id) {
@@ -58,48 +58,34 @@ public class asyncTask_with_coupleOf_completableFuture_02 {
         futureList.add(doSomethingOne("1"));
         futureList.add(doSomethingOne("2"));
         futureList.add(doSomethingOne("3"));
-        futureList.add(doSomethingOne("4"));
+        futureList.add(doSomethingOne("4")); // 调用 doSomethingOne()四次
 
         // 2.转换多个future为一个
         CompletableFuture<Void> result = CompletableFuture
                 .allOf(futureList.toArray(new CompletableFuture[futureList.size()]));
 
         // 3.等待所有future都完成
-        System.out.println(result.get()); // null
+        System.out.println(result.get()); // 这里会打印出来什么？ 为什么会是null   这个result变量之后就没有再使用了
 
-        // 4.等所有future执行完毕后，获取所有future的计算结果
+        // 4.等所有future执行完毕后，获取所有future的计算结果 - 手段：在 futureList上进行流式处理
         CompletableFuture<List<String>> finallyResult =
                 result.thenApply(new Function<Void, List<String>>() {
 
+                // 返回 已经执行结束的future对象的list
                 @Override
                 public List<String> apply(Void t) {
                     return futureList.stream()
-                            .map(future -> future.join())
-                            .collect(Collectors.toList());
+                            .map(future -> future.join()) // 筛选出来那些个 join() 执行完成的任务
+                            .collect(Collectors.toList()); // 把结果放到一个容器中去
                 }
             });
 
         // 5.打印所有future的结果
-        for (String str : finallyResult.get()) {
+        for (String str : finallyResult.get()) { // 这里get()得到的值是： 各个任务的返回值的集合
             System.out.println(str);
         } // 1 2 3 4
     }
 
-    public static void anyOf() throws InterruptedException, ExecutionException {
-        // 1.创建future列表
-        List<CompletableFuture<String>> futureList = new ArrayList<>();
-        futureList.add(doSomethingOne("1"));
-        futureList.add(doSomethingOne("2"));
-        futureList.add(doSomethingTwo("3"));
-
-        // 2.转换多个future为一个
-        CompletableFuture<Object> result = CompletableFuture
-                .anyOf(futureList.toArray(new CompletableFuture[futureList.size()]));
-
-        // 3.等待某一个future完成
-        System.out.println(result.get());
-
-    }
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         // 1.allOf

@@ -1,0 +1,50 @@
+CompletionStage.java
+
+是：一个接口类型；
+作用：表示异步计算的一个节点；
+特征：
+    1 当另一个CompletionStage节点计算完成后， 当前的CompletionStage会执行或者计算得到一个值；
+    2 节点A在计算完成后，可能会触发 那些个依赖其计算结果的节点 开始计算。
+
+    ---
+    3 节点的计算过程可以 被表述成为 一个函数、消费者、可执行的Runnable - 具体取决于 节点是不是需要参数或者会不会产生结果；
+    4 节点有三种执行的模式：
+        默认执行；
+        默认异步执行； - 用法：使用async后缀的方法；
+        使用用户自定义的线程来执行； - 用法：通过传递一个 Executor类型的对象；
+
+    ---
+    5 当一个节点的计算执行完成后，可以独自触发(或者与其他节点的完成状态一同触发) 另一个节点的执行。
+        手段：节点直接的依赖关系，可以使用then前缀的方法来表示。
+源码摸石头：
+    字段：
+        result字段：表示 该节点中任务的执行结果；
+        stack字段：表示 当前节点的任务执行完成后，所需要触发的 一系列行为的入口 - 这是一个链表节点的结构；
+        asyncPool字段：表示 用来执行异步任务的线程池。
+
+    方法：
+        1 CompletableFuture<Void> asyncRunStage(Executor e, Runnable f){}方法；
+        作用：立即返回一个 CompletableFuture对象；
+        特征：
+            1 当前线程不会被阻塞掉；
+        用法：
+            在方法体中，把 AsyncRun任务 投递到线程池后，线程池里的线程会执行 任务的run()方法。
+
+    内部类：
+        AsyncRun.java
+        参考：AsyncRun_comments_02.java
+
+    方法2：
+        public static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier){...}
+        参数：supplier所表示的行为；
+        返回值： CompletableFuture的实例，表示 行为的执行结果；
+
+    方法3：
+        public static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier,
+                                                               Executor executor) {...}
+
+        参数：supplier所表示的行为/任务；
+            executor - 由程序员自己指定线程池中的线程来执行任务，而不是使用默认的线程池
+        返回值：supplier行为执行所得到的结果。
+
+

@@ -1,0 +1,6 @@
+CompletableFuture的特征：
+    多个CompletableFuture可以相继运算，产生结果。
+
+具体手段：
+    1 thenCompose()
+        当一个 CompletableFuture 执行完毕后，执行另外一个 CompletableFuture。

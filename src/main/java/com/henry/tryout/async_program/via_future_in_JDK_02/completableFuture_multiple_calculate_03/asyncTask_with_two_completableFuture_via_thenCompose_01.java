@@ -4,7 +4,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
-public class asyncTask_with_two_completableFuture_01 {
+public class asyncTask_with_two_completableFuture_via_thenCompose_01 {
 
 
     // 1.异步任务，返回future
