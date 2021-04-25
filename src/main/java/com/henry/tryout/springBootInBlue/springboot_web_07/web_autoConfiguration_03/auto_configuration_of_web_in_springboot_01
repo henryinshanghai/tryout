@@ -1,0 +1,47 @@
+Spring Boot为了 配置Web所提供的 类型：
+    - WebMvcAutoConfiguration.java
+    - WebMvcProperties.java
+
+在这两个类型中可以找到 Spring Boot为我们自动配置了哪些东西：
+1 自动配置的ViewResolver：
+    返回值为 xxxViewResolver 的一系列方法；
+    比如 InternalResourceViewResolver - 通过设置前缀、后缀、控制器中的方法，来得到实际页面的路径。
+
+2 自动配置的静态资源：
+    方法：addResourceHandlers()
+    具体实现的配置：
+        1 把
+            类路径下的 /static、/public、/resources子目录
+            与 /META-INF/resources文件夹下的静态文件
+          都直接映射到 /**;
+            这样所有这些路径下的文件都可以通过 http://localhost:8080/** 来 进行访问；
+        2 webjar;
+            是：jar包；
+            作用：用来 把常用的脚本框架封装到jar包中；
+            配置效果：把 webjar 的 /META-INF/resources/webjars/目录下的静态文件 都 映射为 /webjar/**;
+                这样该子目录下的所有静态文件都可以通过 http://localhost:8080/webjar/** 来 进行访问。
+
+3 自动配置的 Formatter 与 Converter；
+    作用：？？？
+    方法：addFormatters()
+    // 注： 可能是因为Spring Boot重新实现了这部分逻辑。当前的 WebMvcAutoConfiguration.java 是在 web.servlet子包下面的。其中也没有 addFormatters()方法。
+    // 结论：只要 程序员定义了 Converter、GenericConverter 和 Formatter接口的实现类，并把它们定义为Spring中的Bean。这些Bean就会自动注册到 Spring MVC 中
+
+4 自动配置的 HttpMessageConverters
+    作用：？？？
+    // 同样地，Spring Boot新版本中也没有了书本上提供的源码；
+    // 结论：如果 程序员想要 新增 "自定义的HttpMessageConverter"，只需要：
+        1 定义一个自己的 HttpMessageConverters的Bean；
+        2 然后 在Java配置类型中，把自定义的Bean 注册进去即可;
+
+5 静态首页的支持：
+    只要，把静态index.html文件放在如下目录中：
+        - classpath:/META-INF/resources/index.html
+        - classpath:/static/index.html
+        - classpath:/resources/index.html
+        - classpath:/public/index.html
+    这样，当程序员访问 http://loclahost:8080/时（aka 应用程序的根目录），会直接映射到 index.html文件。
+
+
+
+

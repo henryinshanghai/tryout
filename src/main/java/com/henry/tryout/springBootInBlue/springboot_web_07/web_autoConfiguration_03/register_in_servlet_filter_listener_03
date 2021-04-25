@@ -1,0 +1,9 @@
+前提条件：项目使用嵌入式的Servlet容器(Tomcat、Jetty)；
+目标：注册 Servlet、Filter、Listener；
+手段1：把 Servlet、Filter、Listener 声明成为Spring Bean；
+    @Bean
+
+手段2：在 Java配置类中， 添加 ServletRegistrationBean、FilterRegistrationBean、ServletRegistrationBean的Bean。
+    new ServletRegistrationBean(new XxxServlet(), "/xx/*")
+
+

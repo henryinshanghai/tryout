@@ -1,0 +1,21 @@
+web开发的核心内容：
+    1 内嵌Servlet容器；
+    2 SpringMV；
+
+Spring Boot如何为Web开发提供支持的呢？
+答：
+    1 spring-boot-starter-web起步依赖； - 作用：提供了 嵌入的Tomcat 以及 SpringMVC的依赖。
+    2 web相关的自动配置； - 存储在 spring-boot-autoconfigure.jar包中的 org.springframework.boot.autoconfigure.web 目录下面。
+
+===
+Spring Boot中Web开发的相关技术
+
+页面技术： Thymeleaf；
+是：一个模板引擎；
+特征：它提供了对 Spring MVC的完美支持；
+
+目标：在Spring Boot项目中使用 Thymeleaf作为视图技术 实现View层页面。
+参考：项目
+注：页面技术不是使用Spring Boot的关键，但是具体实现页面效果时，却是必须掌握的。
+    抓住重点，不要让太多细节喧宾夺主
+

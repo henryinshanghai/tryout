@@ -1,0 +1,19 @@
+Tomcat能够被配置哪些属性？
+答：可以被配置的属性 都在 autoconfigure.web.ServerProperties配置类中 进行了定义；
+
+如何给这些个属性设置/配置 value？
+答：在application.properties属性文件中添加即可；
+
+属性的特征：
+    1 通用的Servlet容器配置 都以 server作为前缀；
+    2 Tomcat特有的配置 都已 server.tomcat 作为前缀；
+
+用法1：使用属性文件来配置Tomcat
+    配置Servlet容器；
+    server.port= # 配置程序的运行端口，默认为8080
+    server.session-timeout= # 设置用户会话session的过期事件，以秒为单位
+    server.context-path= # 设置servlet容器的访问路径，默认为/
+
+用法2：使用代码来配置Tomcat
+参考：drill_config_tomcat
+

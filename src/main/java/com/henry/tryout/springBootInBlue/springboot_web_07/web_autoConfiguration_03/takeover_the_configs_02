@@ -1,0 +1,16 @@
+如果想要 完全地 自定义配置 Spring MVC：
+手段：
+    1 定义配置类型；
+    2 在配置类型上添加 @EnableWebMvc注解；
+
+如果想要 继承Spring Boot提供的默认的 Spring MVC的配置，并提供个别的个性化属性：
+手段：
+    1 定义一个配置类型 并继承自 WebMvcConfigurerAdapter；
+    2 不需要使用 @EnableWebMvc注解；
+    3 使用 Spring MVC的配置方法 来 添加 Spring Boot所准备的自动配置(???)
+特征：
+    - 自定义的addViewController()方法并不会覆盖掉 WebMvcAutoConfiguration.java 中的addViewController()方法；
+        如果两种配置都有效的话？到底谁算数呢？
+    - 这是推荐用法；
+
+can we have a demo on this?
