@@ -1,0 +1,28 @@
+WebSocket
+是：一项技术；
+作用：
+    为 浏览器 与 服务器端 提供了 "双工异步通信"的功能；
+    双工通信： 浏览器可以向服务端发送消息，服务端也可以向浏览器端发送消息。
+特征：
+    WebSocket需要浏览器的支持 - IE10.0+、Chrome 13+、Firefox 6+ // 注：多数现代浏览器都支持这个特性
+原理：一个socket；
+用法1：使用WebSocket来编程； - 非常烦琐，要处理很多细节
+用法2：使用其子协议 STOMP 来编程；
+    特征：
+        - 这是一个更高级别的协议；
+        - 使用 帧(frame)的格式来定义消息；
+        - 具体用法与 HTTP的request/response类似。
+
+---
+Spring Boot中提供的自动配置：
+支持了个啥？
+    支持：内嵌的Tomcat使用WebSocket；
+怎么支持的？
+    在autoconfig.websocket包下；
+        WebSocketAutoConfiguration.java // 由于Spring Boot的升级，这个类也不见了
+
+实战：项目 drill_web_websocket_broadcast
+
+---
+点对点式地双向通信
+参考：项目 drill_web_websocket_point2point
