@@ -1,0 +1,40 @@
+这里书本上是使用 Boot2Docker来实现 在Windows系统中安装 Docker。
+然后通过Dokcer镜像 来 安装并运行各个需要的软件应用（比如Oracle）。
+
+但是Boot2Docker的方式其实已经被遗弃了，甚至于弹出的提示信息中所使用的新的方式（https://docker.com/toolbox）也已经被遗弃了。
+
+最终到了 https://docs.docker.com/docker-for-windows/install/#system-requirements-for-wsl-2-backend
+但是 Windows对Docker的支持需要一些附加的条件：
+WSL的安装 - 这个网站给出了两种方式，第一种是试用Windows版本(实测不好用)，第二种，乖乖手动安装（可行）
+
+安装完成后，在本地电脑上就能 打开小鲸鱼了。
+
+然后一通跟着tutorial来操作：
+- 克隆；
+- 构建；
+- 运行；
+- 分享。
+
+===
+现在尝试使用Dokcer来安装应用，看看有什么好处
+
+在此之前，需要先下载应用的镜像image:
+issue1: oracle的镜像下载的非常慢 - 因为镜像本身非常大
+issue2：下载得到oracle xe的镜像后，无法使用docker run来启动镜像，得到运行的容器。
+报错信息：
+Error invoking remote method 'docker-start-container':
+	Error: (HTTP code 500) server error -
+	Ports are not available: listen tcp 0.0.0.0:1521: bind:
+		Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+
+Error invoking remote method 'docker-start-container': Error: (HTTP code 500) server error - i/o timeout
+
+
+工具没有带来便利，而是苦难。Darn!
+
+docker的任何一个命令，启动、关闭、删除都非常慢...
+
+===
+实战项目：
+参考：drill_data_jpa 项目

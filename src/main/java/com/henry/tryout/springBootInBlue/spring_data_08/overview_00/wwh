@@ -1,0 +1,40 @@
+Spring Boot 如何支持数据访问呢？
+
+Spring Data：
+是：Spring提供的一个子项目；
+作用：解决数据访问的问题；
+特征：
+    1 是一个伞形项目；
+    2 包含关系型数据库 & 非关系型数据库的 数据访问技术；
+    3 用起来很简单；
+    4 不同的数据访问技术 都提供了 其独有的 Repository；
+    5 能够根据属性名 进行计数、删除、查询方法这些个操作 - 自定义的PersonRepository.java
+
+Spring Data项目的子项目：
+    太长不看
+应用：使用Spring Data，程序员可以使用统一的API对上述子项目(数据存储技术)进行数据相关的操作；
+原理：Spring Data Commons项目；
+
+===
+Spring Data Commons项目
+
+是：Spring中的一个子项目；
+作用：为程序员提供统一的标准 来 访问不同数据库技术中存储的数据；
+特征：
+    1 是上述Spring Data所有子项目的公共依赖；
+    2 统一的标准 - CRUD、查询、排序与分页相关的操作
+工作原理：
+    1 Spring Data Repository抽象；
+    作用：作为 data access操作的统一标准；
+    实现手段：抽象中定义了 各种各样与数据访问相关的方法；
+    应用：帮助程序员节省了大量的冗余代码；
+参考：
+    1 根接口 Repository接口；
+    2 子接口 CrudRepository接口；
+    3 孙子接口 PagingAndSortingRepository接口；
+特征：不同的数据访问技术 都提供了 其独有的 Repository；
+    Spring Data JPA -> JpaRepository.java
+    Spring Data MongoDB -> MongoDBRepository.java
+
+
+

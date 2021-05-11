@@ -1,0 +1,64 @@
+提要：Spring Boot一般会如何对某项技术提供支持呢？
+答：
+    1 封装该技术，并提供给程序员一个使用该技术的类型；
+    2 在Spring Boot中，自动配置好1中提供的类型 - 减少程序员使用该技术时的阻力/难度。
+
+Spring Boot对DataBase操作的支持有以下几种类型：
+---
+对JDBC的支持；
+支持1：对JDBC的自动配置；
+原理：
+    1 spring-boot-starter-data-jpa 起步依赖， 依赖于 spring-boot-starter-jdbc;
+    2 Spring Boot对JDBC做了自动配置；
+        在org.springframework.boot.autoconfigure.jdbc包下；
+程序员的使用方式：
+    1 使用以 "spring.datasource"为前缀的属性，来配置具体的数据源；
+
+支持2：支持 注解式事务(并默认开启)；
+支持3：默认提供并配置了一个 jdbcTemplate;
+支持4：支持 初始化数据；
+用法：
+    1 放置在 类路径下的 schema.sql文件会自动用来初始化表结构；
+    2 而 data.sql文件 会自动用来填充表数据；
+
+---
+对JPA的支持；
+支持1：对JPA的自动配置；
+原理：
+    在org.springframework.boot.autoconfigure.orm.jpa 包下；
+    (通过查看包下的具体类型，可以推断出 Spring Boot为JPA所提供的具体支持是什么)
+特征：
+    1 Spring Boot默认的JPA实现是 - Hibernate；
+    2 在application.properties属性文件中， 使用 以spring.jpa为前缀的属性 来对JPA进行配置；
+    3 Spring Boot为程序员配置了像是 transactionManager、entityManagerFactory这样的Bean - 程序员可以直接拿来使用；
+    4 SpringBoot能够自动扫描 注解有@Entity的实体类 - JpaBaseConfiguration.getPackagesToScan()
+应用：
+    场景：Web应用中，可能会遇到 “在控制器或者页面中访问数据时，会话连接已关闭”的Error；
+    处理手段：可以配置一个 xxx? (＠_＠;)
+    惊喜： Spring Boot对这样具体的场景，也进行了有效的支持。
+
+---
+对 Spring Data JPA 的支持；
+支持1：对 Spring Data JPA的自动配置；
+原理：
+    org.springframework.boot.autoconfigure.data.jpa包下；
+特征（查看包下面的类可知）：
+    1 JpaRepoAutoConfiguration 依赖于 HibernateJpaAutoConfiguration配置类；
+    2 Spring Boot自动开启了 对Spring Data JPA的支持 - 不需要程序员再去使用注解来手动开启。
+
+===
+在Spring Boot中使用JPA的SOP：
+1 在项目的Maven依赖中添加 spring-boot-starter-data-jpa;
+2 定义 DataSource、实体类与数据访问层；
+3 在需要进行数据访问时，注入 数据访问层的Bean。
+
+不需要任何其他的配置
+
+===
+in action:
+目标：
+    1 使用方法名进行查询；
+    2 使用@Query进行查询、分页、排序；
+    3 实现实体查询 - 对象的属性有值，就把该值作为查询条件。
+    手段： Specification 与 自定义Repo；
+    

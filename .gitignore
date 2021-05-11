@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+src/main/java/com/henry/tryout/springBootInBlue/spring_data_08/spring_data_jpa_02/define_own_repo_01/*

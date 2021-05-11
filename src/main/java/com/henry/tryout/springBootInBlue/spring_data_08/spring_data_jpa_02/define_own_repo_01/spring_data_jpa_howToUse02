@@ -1,0 +1,19 @@
+前情提要：
+1 Spring Data项目提供了 CrudRepository、PagingAndSortingRepo 供程序员使用；
+2 Spring Data JPA(作为子项目) 提供了新增的JpaRepo 供程序员使用；
+
+需求：程序员想要实现自己的Repo 来 封装一些特定的DB操作。怎么办？
+手段/实现方法：
+    1 创建自定义的Repo接口；
+    参考： CustomRepo
+
+    2 创建接口的实现类；
+    参考：CustomRepoImpl
+
+    3 创建自定义的 RepoFactoryBean；// 工厂Bean
+    作用：得到一个RepoFactory - 它会注册自定义的RepoImpl
+    参考：CustomRepoFactoryBean;
+
+    4 在启动类上开启 Spring对自定义Repo的支持；
+    手段：@EnableJpaRepositories(repositoryFactoryBeanClass=<自定义的FactoryBean.class>)
+

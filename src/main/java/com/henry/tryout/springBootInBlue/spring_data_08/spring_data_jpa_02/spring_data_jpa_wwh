@@ -1,0 +1,89 @@
+从 Hibernate 开始。
+
+For DataAccessToDB -> JPA(based on OR)
+                        - Hibernate;
+                        - EclipseLink;
+                        - OpenJPA;
+
+程序员可以针对于JPA编写代码，这样不管具体的数据访问层技术是什么，程序员所编写的代码都能正常工作。
+
+---
+Spring Data JPA；
+是：Spring Data的一个子项目；
+作用：Data Access；
+特征：极大地减少了 使用JPA访问数据时的代码量；
+原理：使用基于JPA的 Repository；
+
+假设：
+    数据表 PERSON；
+    字段：
+        ID(Number)
+        NAME(Varchar2)
+        AGE(Number)
+        ADDRESS(Varchar2)
+    实体类 Person；
+    属性：
+        id(Long)
+        name(String)
+        age(Integer)
+        address(String)
+
+用法：
+    1 定义数据访问层；
+        手段：继承JpaRepository接口；
+        特征：一旦继承xxx后，就自动包含了xxx方法；
+    2 开启Spring对于JPA的支持；
+        手段：在配置类上添加 @EnableJpaRepository注解；
+        特征：注解中的value参数 - 用于扫描数据访问层 所在包下面的数据访问的接口定义。
+    3 编写 JpaRepository的配置类；
+        手段：@Configuration注解；
+    4 在DAO层接口中自定义查询方法；
+        任务：定义DAO层的查询方法；
+        手段1：根据属性名 来 定义查询方法； - 原理：Spring Data JPA支持 通过“在Repository接口中定义方法名” 来 定义查询。
+        用法：
+            1 常规查询；
+                手段：按照特定规则来定义方法名；
+            2 限制结果数量；
+                手段：使用top、first关键字；
+        示例：xxx
+
+        手段2：使用JPA的NamedQuery查询；
+        原理： Spring Data JPA支持 “使用JPA的NameQuery 来 定义查询方法” - 使用一个方法名 来 映射一个查询语句。
+        用法：
+            1 在实体类型Person上添加 @NamedQuery注解；
+            2 在注解中，添加从方法名 -> 查询语句的映射关系；
+            3 在定义的DAO层接口中，使用方法。
+        示例：xxx
+
+        手段3：使用@Query查询；
+        原理：Spring Data JPA支持 “把@Query注解在方法上来实现查询”
+        用法1：在查询语句中使用参数的索引号；
+        用法2：在查询语句中使用命名的参数；
+        用法3：使用 @Modifying 与 @Query注解组合来实现 更新查询。
+        示例：xxx
+
+        手段4：使用Criteria查询；
+        原理：
+            1 JPA提供了使用准则查询的方式；
+            2 Spring Data JPA提供了 Specification接口 来 快捷地构造准则查询；
+            3 Specification接口 定义了一个 toPredicate()方法 用来构造查询条件；
+        用法：
+            1 DAO层接口定义时，实现JpaSpecificationExecutor;
+            2 创建一个类型，用于定义 Criteria查询；
+            3 在DAO层的查询方法中使用 自定义的Criteria；
+
+        手段5：排序与分页；
+        原理：Spring Data JPA 充分考虑了 排序与分页的场景，并提供了 Sort类、Page接口、Pageable接口。
+        用法：
+            1 在DAO层接口中定义方法 - 包含排序、分页参数；
+            2 在调用具体方法时，传入排序参数、分页参数；
+        特征：
+            使用Page接口可以获取到：
+                当前页面的记录；
+                总页数；
+                总记录数；
+                是否有上一页、下一页...
+
+
+
+
