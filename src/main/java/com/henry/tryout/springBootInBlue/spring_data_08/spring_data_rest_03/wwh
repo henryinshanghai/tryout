@@ -1,0 +1,24 @@
+Spring Data REST:
+是：Spring的一个子项目；
+作用：把 repository(封装DAO操作的抽象接口) 输出为 REST资源(可以通过浏览器直接访问的资源)；
+原理：使用Spring Da它的repository；
+特征：
+    1 支持的Repo - Spring Data Jpa、Spring Data MongoDB...
+用法1: 在Spring MVC中使用 Spring Data REST；
+    原理：Spring Data REST的配置信息 在 mvc的xxx包下面的ooo配置类中已经定义了。
+    SOP：
+        1 继承ooo类，或者在配置类上使用 @Import来导入ooo类型；
+        2 使用REST - 参考 在Spring Boot中使用REST；
+
+===
+Spring Boot对REST的支持；
+老把式了 - xxx包下的ooo配置类型；
+    xxx：rest；
+    ooo：SpringBootRepository-RestMvcConfiguration;
+用法1：直接引入data-rest的依赖，不需要其他的手动配置；
+    原理：ooo中已经 对RepositoryRestConfiguration 做好了配置；
+用法2：在 application.properties 属性文件中，可以使用 以 spring.data.rest为前缀的属性 - 来配置RepoRestConfiguration;
+
+===
+实战：
+    drill_data_rest 项目
