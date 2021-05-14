@@ -1,4 +1,4 @@
-package com.henry.tryout.gson;
+package com.henry.tryout.gson.officalWebsite;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -19,7 +19,7 @@ public class CollectionExample_04 {
 
         // Deserialization jsonObj -> collection
         // 准备一个Collection类型； - 由于Collection作为容器可能会存放任意类型的元素，所以这里的手段是：TypeToken()
-        // 语法： Type xxx = new TypeToken<Collection<ooo>>(){}.getType()
+        // 语法： Type filePathToBase64Str = new TypeToken<Collection<ooo>>(){}.getType()
         Type collectionType = new TypeToken<Collection<Integer>>(){}.getType();
         Collection<Integer> ints2 = gson.fromJson(json, collectionType);
         // ==> ints2 is same as ints

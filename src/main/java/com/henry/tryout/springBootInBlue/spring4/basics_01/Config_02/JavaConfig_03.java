@@ -29,7 +29,7 @@ public class JavaConfig_03 {
             使用这个Java配置类 一共配置了哪些内容？
             1 把xxx配置为 Spring容器中的bean；
             2 把ooo配置为 Spring容器中的bean；
-            3 把 ooo 注入到 xxx 中， 作为xxx的依赖项
+            3 把 ooo 注入到 filePathToBase64Str 中， 作为xxx的依赖项
      */
 
     // 另一种配置的方式 - 直接把依赖项 作为 返回Bean的方法的参数

@@ -27,8 +27,8 @@ SOP：
     4 运行查看结果 - 06
 
 声明切入点的两种方式：
-    - 1 使用注解的语法  @annotation(xxx)；
-    - 2 使用 表达式的语法  execution(xxx);
+    - 1 使用注解的语法  @annotation(filePathToBase64Str)；
+    - 2 使用 表达式的语法  execution(filePathToBase64Str);
 
 具体语法不做深究
  */
