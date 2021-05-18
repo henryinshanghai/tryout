@@ -1,0 +1,18 @@
+Spring中的事务；
+知识卡：所有的数据访问技术 都有 事务处理机制； - 所以它们都需要提供 API 来 开启事务、提交事务(以完成数据操作 OR　在发生错误时回滚数据)
+特征：使用统一的方式　来　处理不同数据访问技术的事务细节；
+手段：
+    1 Spring提供了一个 PlatformTransactionManager接口；
+    2 不同的数据访问技术，它们的事务会需要各自实现这个接口；
+映射关系：
+    JDBC数据访问技术 - DataSource_TransactionManager;
+    JPA数据访问技术 - Jpa_TransactionManager;
+    Hibernate数据访问技术 - Hibernate_TransactionId;
+事务管理器用法(前提)：
+    任务：在程序中定义事务管理器；
+    SOP:
+        1 创建事务管理器的Bean实例；
+        2 为此Bean实例 设置 数据源；
+
+===
+Spring中事务的用法1 - 声明式事务；
