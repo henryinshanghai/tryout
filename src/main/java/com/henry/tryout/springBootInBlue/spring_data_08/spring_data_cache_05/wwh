@@ -1,0 +1,62 @@
+为什么要缓存数据？
+为了节约数据库操作所需要的耗时，提升应用的体验；
+
+===
+Spring对缓存的支持
+
+支持1：统一不同的缓存技术；
+手段：
+    1 CacheManager接口；- 各种缓存技术的抽象接口
+        Spring所支持的CacheManager接口的具体实现类；
+        note：对于不同的缓存技术，需要其对应的CacheManager的实现。
+        用法：在Spring中使用某一个实现类时，需要 先把该实现类的Bean注册到 Spring容器中。
+
+    2 Cache接口； - 缓存的各种操作
+        注：一般不会直接与Cache接口打交道。
+
+支持2：声明式的缓存注解；
+特征：以声明的方式 来 添加缓存；
+用法：Spring提供了4个注解， 用来声明 缓存规则；
+原理：AOP；
+具体注解：
+    1 @Cacheable；
+        规则：方法执行前，Spring会先查看缓存中是不是有需要的数据；
+            - 如果有数据，直接返回缓存中的数据；
+            - 如果没有，调用方法执行数据库操作，并在操作后把结果添加到缓存中去。
+
+    2 @CachePut
+        规则：不管怎样，都会把方法的返回值 添加到缓存中；
+
+    3 @CacheEvict
+        规则：把一条/多条数据从缓存中删除。
+
+    4 @Caching
+        作用：用来组合多个注解策略，应用在同一个方法上
+
+支持3：开发者能够非常简单地开启 “注解式缓存”；
+手段：在配置类上添加 @EnableCaching注解；
+
+===
+Spring Boot中对数据缓存的支持
+
+支持1：提供了多个CacheManager实现的配置类；
+特征：
+    1 这些个配置类都放在 autoconfigure.cache包中；
+    2 默认情况下(没有进一步配置时)，所使用的配置类是 Simple_Cache_Configuration - 对应的CacheManager是 ConcurrentMap_CacheManager;
+    3 可以使用 以"spring.cache"作为前缀的属性， 来 在application.property中配置缓存相关的属性；
+        可以配置的属性：
+            # 缓存类型
+            # 缓存名称
+            # ehcache配置文件的地址
+            ...
+用法：
+    1 导入缓存的相关starter；
+    2 在配置类 上添加@EnableCaching - 以此开启Spring Boot对缓存的支持即可。
+
+===
+实战：
+    参考 drill_data_cache 项目
+
+
+
+

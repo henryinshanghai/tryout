@@ -1,0 +1,34 @@
+什么是NoSQL？
+是：一个泛称；
+作用：表示 所有不使用relationship作为数据管理基础 的数据库系统；
+特征：
+    1 不使用SQL语言 来作为查询语句；
+    2 数据存储 不会使用固定的表、字段；
+    3 存储分类：
+        3.1 文档型存储；- MongoDB
+        3.2 图形关系存储； - Neo4j
+        3.3 键值对存储； - Redis
+
+===
+Before jump into action.安装这些个NoSQL软件
+
+MongoDB；
+    参考项目：drill_data_mongodb
+    安装软件：
+        MongoDB
+        添加为Windows服务；
+        默认启动端口为27017；
+
+        图形化工具：Compass;
+        填写域名、端口后，可以直接连接到 本地运行的MongoDB服务；aka 数据库实例
+
+Redis:
+    参考项目：drill_data_redis
+    安装软件：
+        Redis
+        添加为Windows服务？
+        默认启动端口为 6379
+
+        图形化工具：Redis Desktop Manager；
+        点击 Connect to Redis Server就能填写信息，连接到本地的Redis服务。
+        作为查看数据的面板，非常友善

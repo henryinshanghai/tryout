@@ -16,3 +16,70 @@ Spring中的事务；
 
 ===
 Spring中事务的用法1 - 声明式事务；
+作用：指定哪些个方法需要使用事务；
+用法：在方法上 添加@Transactional注解；
+原理：
+    1 当 被注解的方法被调用时， Spring会开启一个新的事务；
+    2 当方法无异常运行结束后，Spring会提交这个事务。
+特征： @Transactional注解来自于 springframework的一个子包，而不是javax的子包。
+
+目标/任务：开启Spring对声明式事务的支持；
+手段：在配置类上添加 @EnableTransactionManagement注解；
+原理：添加了 事务管理器的注解之后， Spring容器 就会 自动扫描 "注解了@Transactional的方法和类"。
+
+
+===
+高级用法：对事务的行为 进行定制；
+手段：使用@Transactional注解提供的属性；
+属性列表：
+    propagation - 定制 事务的生命周期；
+    isolation - 定制 事务的完整性；
+    timeout - 定制 事务的过期时间；
+    readOnly - 指定 当前事务是否是只读事务；
+    rollbackFor - 指定 具体哪些异常能够导致回滚；
+    noRollbackFor - 指定 哪些异常不会导致回滚。
+
+用法：在类的级别上，使用@Transactional注解；
+作用：为类中所有的public方法 开启事务；
+特征：如果类上 与 方法上，同时使用了 @Transactional注解，则 - 方法级别的注解会覆盖 类级别的注解。
+
+===
+Spring Data JPA项目中，对事务的支持；
+
+支持1：JPA对所有的方法都开启了事务；
+支持2：查询类事务 默认启用 readOnly=true的属性值。
+参考：SimpleJpaRepository.java
+源码认识：
+    1 类级别上的 readonly=true 属性值；
+    2 在save、delete相关操作的方法上，重写readOnly=true 属性。
+
+===
+Spring Boot中，对事务的支持；
+
+支持1：对 事务管理器 进行自动配置；
+具体支持：
+当开发者选择使用 JDBC作为数据访问技术时，Spring Boot做了如下两件事；
+    - 1 定义了Platform_Transaction_Manager的实现 - DataSourceTransactionManager类型(作为Spring容器中的Bean)
+    - 2 对1中提供的Bean，Spring Boot配套提供了其自动配置类型；
+        autoconfigure.jdbc.DataSource_Transaction_Manager_AutoConfiguration
+        DataSourceTransactionManagerAutoConfiguration
+        作用：返回一个配置完备的 事务管理器；
+
+如果使用 JPA作为数据访问技术，Spring Boot也会做同样的事情；
+    - 1 提供接口的实现类 - JpaTransactionManager类型(作为Spring容器的Bean)
+    - 2 提供1中类型的配置类 - JpaBaseConfiguration.java
+
+支持2：对 注解式事务的支持(自动开启)；
+原理：
+    - 1 用于配置事务行为的类型 - TransactionAutoConfiguration.java
+    - 2 配置类的依赖 - DataSource_TransactionManager_AutoConfiguration.java
+        在此依赖类型中，就开启了 对声明式事务的支持；
+        代码：？？？
+用法：在Spring Boot中，不再需要 显式地使用 @Enable_TransactionManagement注解 来 开启"声明式事务".
+
+===
+实战：参考 drill_data_transaction 项目
+
+
+
+
