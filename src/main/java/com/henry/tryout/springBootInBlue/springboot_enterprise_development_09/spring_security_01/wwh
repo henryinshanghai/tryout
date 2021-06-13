@@ -1,0 +1,91 @@
+Spring Security
+是：Spring框架提供的一个模块？
+作用：为 Spring项目 提供安全保障；
+原理： 依赖注入 + AOP；
+抽象用法：先配置(xml配置 OR Java配置)，再使用；
+概念：
+    1 认证(Authentication);
+        确认当前用户是否是合法用户；
+    2 授权(Authorization);
+        检查当前用户所拥有的操作权限；
+
+======
+使用Spring Security~
+
+---
+1 开启Spring Security的过滤器支持；
+预期做法：
+    注册一个 DelegatingFilterProxy 过滤器 到  WebApplicationInitializer中；
+开发者真正的做法：
+    把自己的 Initializer类 继承自 AbstractSecurityWebApplicationInitializer 类型；
+    原理：
+        ASWAI类型中的 insertSpringSecurityFilterChain()方法中，已经注册了 DelegatingFilterProxy；
+SO：为了开启 Spring Security的过滤器支持；
+public class AppInitializer extends
+    AbstractSecurityWebApplicationInitializer { // ASWAI
+
+    }
+
+---
+2 配置Spring Security；
+做法：在配置类上：
+    - 1 添加 @EnableWebSecurity注解；
+    - 2 把这个类型 继承自 WebSecurityConfigurerAdapter(WSCA);
+    - 3 重写相关的方法 来 进行需要的安全配置。
+
+---
+3 对 当前用户的合法性 进行认证；
+如何对当前用户进行认证？
+答：获取当前用户的信息， 然后拿着这个信息到 一个有效用户集合中 对比查找。找到的话，就是合法用户
+
+有效的用户集合在什么地方？
+3-1 内存中的用户 以及 用户的权限；
+    用法：xxx
+
+3-2 JDBC数据源中的用户 以及 用户权限；
+    注：Spring Security
+    - 默认了用户表的数据结构；
+    - 定义了用户、角色权限获取的SQL语句； // 可以重新定制
+    用法：xxx
+
+3-3 更通用的数据源 - NoSQL、JPA等
+    用法：xxx
+
+---
+4 对 用户的请求 进行授权；
+手段：
+    1 拦截到用户请求； // Spring Security提供的专用方法
+    2 查找用户的请求权限；
+    3 进行对应的安全处理。 // 同1
+
+---
+5 对 用户的登录行为 进行定制；
+可以定制的内容：
+    - 登陆页面的访问地址；
+    - 登录成功后所转向的页面；
+    - 登录成功后，使用cookie来存储用户信息；
+    - 设置cookie的有效期；
+    - 注销的相关内容；
+
+===
+Spring Boot对 Spring Security所提供的支持
+
+支持1：提供对它的配置类 SecurityAutoConfiguration.java、SecurityProperties.java;
+    SecurityAutoConfiguration：
+        - 配置了内存中的用户(用户名 user，密码：在项目启动时出现)；
+        - 配置：忽略对静态文件的拦截；
+        - 配置 一些所需要的Bean实例(xxx)
+
+    SecurityProperties：
+        提供了一堆 开发者可以在属性文件中拿来配置Spring Security的属性；
+
+
+支持2：支持开发者对现有的配置进行扩展；
+手段：将配置类 继承自 WebSecurityConfigurerAdapter类型。
+
+===
+实战：
+    参考 - drill_enterprise_security
+
+
+

@@ -35,6 +35,7 @@ public class CustomRepositoryFactoryBean_03<T extends JpaRepository<S, ID>, S, I
 
 
         // 4 重写 getTargetRepo()方法 - 获取到自定义的CustomRepo的实现类
+        // this is a fail
 //        @Override
 //        @SuppressWarnings({"unchecked"})
 //        protected <T, ID extends Serializable> SimpleJpaRepository<?, ?> getTargetRepository(

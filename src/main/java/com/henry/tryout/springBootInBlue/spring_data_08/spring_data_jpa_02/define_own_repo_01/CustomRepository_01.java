@@ -6,7 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.io.Serializable;
 
 // 0 定义一个接口 - 作用：？？？
-@NoRepositoryBean // 1 声明此接口不是 领域类的接口(PersonRepo)
+@NoRepositoryBean // 1 声明此接口不是 领域类的接口(eg. PersonRepo)
 public interface CustomRepository_01<T, ID extends Serializable>
 		extends PagingAndSortingRepository<T, ID> { // 2 实现 PagingAndSortingRepository接口,继承能力
 

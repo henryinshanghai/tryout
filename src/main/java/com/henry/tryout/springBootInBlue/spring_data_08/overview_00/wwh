@@ -11,7 +11,11 @@ Spring Data：
     5 能够根据属性名 进行计数、删除、查询方法这些个操作 - 自定义的PersonRepository.java
 
 Spring Data项目的子项目：
-    太长不看
+    Spring Data JPA
+    Spring Data MongoDB
+    Spring Data Redis
+    Spring Data REST
+    ...
 应用：使用Spring Data，程序员可以使用统一的API对上述子项目(数据存储技术)进行数据相关的操作；
 原理：Spring Data Commons项目；
 

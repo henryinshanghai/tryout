@@ -12,7 +12,7 @@ Spring Data JPA；
 是：Spring Data的一个子项目；
 作用：Data Access；
 特征：极大地减少了 使用JPA访问数据时的代码量；
-原理：使用基于JPA的 Repository；
+原理：使用基于JPA的 Repository； <=> 特征：不同的数据访问技术 都提供了 其独有的 Repository；
 
 假设：
     数据表 PERSON；
