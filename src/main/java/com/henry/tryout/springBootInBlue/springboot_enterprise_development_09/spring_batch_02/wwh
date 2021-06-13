@@ -1,0 +1,75 @@
+Spring Batch
+是：Spring框架中的一个子项目；
+作用：用来处理大量的数据操作；
+抽象用法：
+    1 读取大量数据；
+    2 进行特定的处理；
+    3 输出成为特定的形式。
+概念：
+    JobRepo - 用来添加/注册 Job的容器/集合；
+    JobLauncher - 用来 启动Job的接口；
+    Job - 用来定义真实需要执行的任务；
+    Step - 1+2+3
+    ItemReader - 1 读取数据的接口
+    ItemProcessor - 2 处理数据的接口
+    ItemWriter - 3 输出数据的接口
+具体用法：
+    1 把上述概念中对应的组件 注册成为 Spring中的Bean；
+    2 开启Spring对配处理的支持 - 在配置类上添加注解 @EnableBatchProcessing;
+    3 具体操作：
+        对Job进行监听；
+            1 定义一个类，实现JobExecutionListener；
+            2 在定义了Job的Bean上绑定此监听器； .listener(listener_bean_method_call)
+
+        数据读取；
+            使用Spring Batch所提供的 ItemReader的实现类型；
+
+        数据处理&校验；
+            处理:实现ItemProcessor接口，重写其 process()方法。
+                入参：读取到的数据； 返回值：给ItemWriter使用。
+
+            校验：使用JSR-303规范所提供的注解，来校验ItemReader读取到的数据 是不是满足要求；
+                note：JSR-303规范的实现有 hibernate-validator;
+                1 将自定义的 ItemProcessor实现 ValidatingItemProcess接口；
+                2 定义自己的校验器，实现 Validator接口；
+                3 在 ItemProcessor的实现里 设置自定义的校验器。
+
+        数据输出：
+            使用Spring Batch所提供的 ItemWriter的实现类型；
+
+        计划任务/定时执行任务：
+            note：任务的执行是通过 JobLauncher的run()方法进行的；
+            所以，为了能够定时执行任务：
+            手段 - 在计划任务方法中，执行JobLauncher的run()方法。
+            需要在配置类上添加 @EnableScheduling 来 开启Spring对于定时任务的支持。
+
+        参数后置绑定：吓死个人 啥意思呀
+        当前在定义ItemReader的时候，参数是 硬编码 在代码中的； - 待读取文件的位置信息
+        怎么能不是硬编码，而是在运行时动态选择呢？
+        答：参数后置绑定。
+        手段：
+            1 在JobParameters中绑定参数；
+            2 在声明ItemReader时，使用 @StepScope的生命周期；
+            3 再使用@Value 来 注入具体的值。
+
+===
+Spring Boot对 Spring Batch的支持：
+支持1：提供配置类 用于对Spring Batch进行自动配置；
+    autoconfigure.batch
+
+支持2：为开发者自动初始化了用于存储 批处理记录的数据库；
+
+支持3：当程序启动时，自动执行 定义了Job的Bean。
+
+===
+实战：
+    drill_enterprise_batch
+
+
+
+
+
+
+
+
+
