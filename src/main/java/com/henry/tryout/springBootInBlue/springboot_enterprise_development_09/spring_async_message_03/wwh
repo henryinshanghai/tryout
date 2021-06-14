@@ -1,0 +1,76 @@
+异步通信
+是：一种通信方式；
+特征：消息发送者sender 发送消息后，不需要等待 消息接收者receiver的处理与返回；
+概念：
+    1 消息代理(message broker);
+        作用：代理 消息发送者；
+        - 1 接收消息发送者所发送的消息
+        - 2 把消息 传递到指定的目的地
+    2 目的地(destination);
+        - 1 队列(queue);
+        应用：点对点式的消息通信；
+        - 2 主题(topic);
+        应用：发布/订阅式的消息通信。
+
+点对点式消息通信：
+sender -> proxy -> receiver;
+特征：每一条消息都只有唯一的sender 与 receiver。
+
+发布/订阅式 消息通信：
+sender -> topic -> {subscriber1、subscriber2... subscriberN}
+sender也叫做发布者
+receiver也叫做订阅者
+
+===
+消息代理的企业级实现
+
+JMS消息代理
+是：一个规范；
+特征：基于JVM消息代理；
+具体实现：ActiveMQ、HornetQ
+
+AMQP消息代理
+是：一个规范；
+特征：
+    1 兼容JMS；
+    2 支持跨语言、跨平台；
+具体实现：RabbitMQ
+
+===
+Spring对异步消息的支持
+
+支持的来源：
+JMS - spring-jms
+AMQP(Advanced Message Queuing Protocol) - spring-rabbit
+
+支持1：提供了连接消息代理的 ConnectionFactory;
+支持2：提供了发送消息用的 xxxTemplate；
+支持3：提供了注解 - 来监听消息代理发布的消息；
+支持4：提供了 开启对异步消息支持的注解
+
+===
+Spring Boot对异步消息的支持
+
+支持1：对JMS进行自动配置的配置类；
+位于 autoconfigure.jms包下；
+特征：支持的JMS实现有 - ActiveMQ、HornetQ、Artemis；
+
+支持2：提供连接消息代理的类 ActiveMQConnectionFactory;
+
+支持3：支持开发者 通过 spring.activemq作为前缀的属性 来 配置ActiveMQ的连接属性；
+
+支持4：为开发者配置好了 JmsTemplate；
+
+支持5：默认开启了 对注解式消息监听的支持。 aka 自动开启@EnableJms
+
+对AMQP的支持类似
+
+===
+JMS实战
+参考:
+    drill_enterprise_jms
+
+
+
+
+
