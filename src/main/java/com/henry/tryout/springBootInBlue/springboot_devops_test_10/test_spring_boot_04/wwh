@@ -1,0 +1,19 @@
+Spring Boot中的测试 VS Spring MVC中的测试
+
+===
+测试的需求 & Spring Boot是如何满足这些需求的
+需求1：测试项目功能，就需要一个Spring上下文/容器；
+手段：@SpringApplicationConfiguration注解 - 用于配置应用上下文；
+
+需求2：测试时，需要一些基本的测试组件；（比如说Junit 这样能够在不启动项目本身的情况下，对代码进行测试）
+手段：在新建项目时，Spring Boot会为开发者自动添加 spring-boot-starter-test的依赖。
+
+需求3：按照Maven的目录规则，测试代码应该与项目源码分开；
+手段：Spring Boot会自动创建出一个当前项目的测试类，位于 src/test/java目录下。
+
+===
+Action：测试某一个控制器方法是否满足测试用例；
+参考：
+    drill_test_springboot
+
+

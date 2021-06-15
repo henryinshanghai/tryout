@@ -1,0 +1,71 @@
+Docker
+是：一个工具；
+作用：实现虚拟化；
+概念：
+    镜像；
+    容器；
+    ...
+用法：
+    1 使用已经编译好的Docker镜像 - 简化软件的安装；
+    2 编译自己的Docker镜像，并运行 镜像的容器。
+特征：
+    1 所有主流的云计算(PaaS)平台都支持 发布Docker镜像；
+    2 Docker使用 Dockerfile 来编译得到项目的镜像；
+
+===
+Dockerfile
+是：一个文本文件；
+作用：Docker会使用它作为说明书 来 把项目编译成镜像；
+特征：Dockerfile文件中只能够使用特定的指令；
+    - FROM指令； // 声明 当前镜像所继承的父镜像 - note：编译当前镜像时，会自动下载父镜像
+    - MAINTAINER指令； // 声明 当前镜像的作者
+    - RUN指令； // 用于 在当前镜像上执行Linux命令，以得到新的layer层。 特征：这是一个编译时动作
+
+    - CMD指令； // 声明 启动镜像容器时的默认行为。
+        特征：
+            1 一个文件中只能有一个CMD指令；
+            2 CMD指令中设置的行为 可以在运行镜像时，使用参数来覆盖。
+            3 这是一个运行时动作。
+    - EXPOSE指令； // 声明 镜像运行时的容器所需要监听的端口
+    - ENV指令； // 用于 设置环境变量
+
+    - ADD指令； // 用于 从当前工作目录中，复制文件到镜像目录中去
+    - ENTRYPOINT指令； // 用于 把'容器'像'可执行程序'一样执行
+        特征：
+            1 镜像运行时就能够接收参数；
+            2 这是一个运行时动作。
+
+
+===
+在Linux系统(CentOS7)中安装Docker
+执行命令： yum install docker
+
+启动docker - systemctl start docker
+设置docker开启自启动 - systemctl enable docker
+
+
+===
+Dockerfile的用法：
+1 把DockerFile文件 与 编译好的项目jar文件 放在同一个目录下；
+2 编写Dockerfile文件的内容；// 参考Dockerfile
+3 使用Docker工具 来 编译jar包得到镜像。
+    - 切换到Dockerfile文件所在的目录；
+    - 执行命令： docker build -t henry/myImage .
+        docker build 是基础命令；
+        henry/myImage 是自定义的镜像名称；
+        . 表示Dockerfile文件相对于当前目录的路径 aka Dockerfile就在当前目录下
+    编译成功标识：successfully built xxx
+4 验证镜像是否编译成功；
+    手段：查看本地所有的镜像；
+    具体做法：执行命令 docker images，看看有没有叫做 henry/myImage 的镜像。
+5 运行镜像；
+    - 执行命令： docker run -d --name ch10 -p 8080:8080 henry/myImage
+    作用：把docker容器的8080端口 映射到 host主机的8080端口。
+    具体语法：
+        docker run -d # 基础命令
+        --name <container_name> # 指定运行中的容器的名字
+        -d # 表示以后台方式启动容器
+        -p <container_port:host_port> # 表示从容器端口到host主机端口的映射
+        henry/myImage # 表示镜像的名称
+
+

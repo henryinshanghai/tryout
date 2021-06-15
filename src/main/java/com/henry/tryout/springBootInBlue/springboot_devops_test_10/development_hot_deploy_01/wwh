@@ -1,0 +1,34 @@
+开发阶段的热部署
+
+热部署：
+是：一种技术；
+作用：能够在不重新编译代码的情况下，使代码的改动生效；
+分类：
+===
+1 模板文件的热部署；
+note： 在Spring Boot中,使用模板引擎创建的页面 默认会开启缓存；
+由于缓存的存在，当开发者修改了页面之后 - 刷新页面是看不到对页面的最新改动的(这不是开发阶段我们想要的效果)。
+解决手段：关闭模板引擎的缓存；
+具体做法：在 application.properties文件中添加对应的配置；
+    velocity模板引擎 - spring.velocity.cache=false
+    Thymeleaf模板引擎 - spring.thymeleaf.cache=false
+    ...
+
+2 类文件的热部署；
+手段：Spring Loaded；
+用法：
+    1 下载 springloaded的jar包；
+    2 配置项目的vm arguments,添加内容来指定 springloaded 的路径：
+        -javaagent:<path_of_jar> -noverify
+
+3 对几乎任何类型文件的热部署；
+手段：第三方工具JRebel；
+用法：
+    1 使用rebel.xml文件 来 配置需要热部署的目录；
+    2 以JRebel 来 启动程序；- 如果启动时，控制台出现了与JRebel有关的信息，说明JRebel配置成功
+    3 然后对任何文件的修改，基本上都可以实现实时热部署。
+
+4 对页面和代码改动的热部署；
+手段：spring-boot-devtools依赖；
+用法：直接在项目的pom文件中引入 spring-boot-devtools依赖即可。
+

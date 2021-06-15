@@ -1,0 +1,54 @@
+部署
+是：项目上线过程中的一个步骤；
+作用：把项目放到一个可以被公共网络访问的服务器上 - 供用户访问；
+特征：在上传项目时，并不是把项目的整个文件夹上传。而是某种更紧凑的文件格式
+
+===
+格式1：jar包形式；
+用法：
+1 生成jar包；
+    对于Spring Boot项目，如果在pom文件中声明的打包方式(<packing>标签的值)为 jar。则：
+    执行 mvn package，就能够得到一个jar包。
+    注：控制台中会给出构建得到的jar包的存放位置。
+
+2 运行jar包；
+    对于xxx.jar包，如果想要运行它(其中的启动类)，则：
+        1 命令行进入到jar包所在的目录；
+        2 执行命令：java -jar xxx.jar即可
+
+3 把运行中的jar包 注册成为Linux服务；
+评论：这个现在没有使用的case，而且具体操作有点太细节 暂时skip掉😄
+
+===
+格式2：war包形式；
+用法：
+1 生成war包；
+手段：
+    1 在Spring Boot项目的pom文件中，把packing标签的值改成war；
+    2 执行mvn package命令；
+注：war包的运行需要一个Servlet容器(比如Tomcat、Jetty等)
+
+2 把jar包转化成为war包；
+应用场景：选择打包方式时选择的是jar，但是部署时又希望能够以war包方式部署。
+手段：
+    1 更改packing标签为 war；
+    2 添加tomcat依赖 以 覆盖内嵌的tomcat依赖；
+    3 在项目中添加 ServletInitializer类，
+        继承 SpringBoot_ServletInitializer，
+        并重写其 configure(application)方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
