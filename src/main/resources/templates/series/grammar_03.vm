@@ -1,0 +1,33 @@
+## #if指令
+#set($condition = 10)
+
+## #if ... #else ... #end
+#if ($condition < 10)    Go North
+#elseif ($condition == 10)    Go East
+#else    Go West
+#end
+
+## 判断条件为true的两种情形：
+## 1 变量为布尔类型，且值为true
+#set($foo = true)
+#if($foo)
+    the condition is true!
+#end
+
+## 2 变量不是布尔类型，且值不为null
+#set($foo = 10)
+#if($foo)
+    the condition is also true!
+#end
+
+## 关系运算
+## Velocity中的==可以直接比较数值，字符串以及其他对象
+## 如果==两侧的对象是不同的类的对象，在比较前会用toString()转换后再比较
+#set($var1 = 100)
+#set($var2 = "henry")
+#if($var1 == $var2)
+    plus
+#else
+    minus
+#end
+

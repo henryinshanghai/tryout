@@ -5,8 +5,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Velocity_HelloWorld {
     public static void main(String[] args) {
@@ -15,15 +14,18 @@ public class Velocity_HelloWorld {
         ve.init();
 
         /*  step2  get the Template  */
-        Template t = ve.getTemplate( "src/main/resources/templates/helloworld.vm" ); // E:\develop\tryout\src\main\resources\templates\helloworld.vm
+        Template t = ve.getTemplate( "src/main/resources/templates/series/grammar_07.vm" ); // E:\develop\tryout\src\main\resources\templates\helloworld.vm
 
         /*  step3 create a context and add data */
         VelocityContext context = new VelocityContext();
         context.put("name", "World");
 
+
+
         Customer customer = new Customer();
         customer.setFirstName("liu");
         customer.setLastName("henry");
+        customer.setBehaviour("pick up the bottle");
         context.put("customer", customer);
 
         List<Customer> customerList =  Arrays.asList(
@@ -36,6 +38,12 @@ public class Velocity_HelloWorld {
                 new Customer("deng", "kai")
         );
         context.put("customerList", customerList);
+
+        Map<String, Integer> basicInfos = new HashMap<>();
+        basicInfos.put("henry", 26);
+        basicInfos.put("jane", 27);
+        basicInfos.put("jeniffer", 30);
+        context.put("basicInfos", basicInfos);
 
         /* step4 now render the template into a StringWriter */
         StringWriter writer = new StringWriter();

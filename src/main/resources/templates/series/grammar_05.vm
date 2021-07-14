@@ -1,0 +1,22 @@
+## foreach指令
+#foreach( $customer in $customerList) ## 列表中的元素
+    $customer.firstName $customer.lastName</br>
+#end
+
+## 遍历数组
+#set($array = [1, 3, 5, 8])
+#foreach($item in $array)
+    number: $item
+#end
+
+## 遍历map对象
+#foreach($key in $basicInfos.keySet())
+    Key:$key ---> Value: $basicInfos.get($key)<br>
+#end
+
+## 计数器变量
+#set($array = [1, 3, 5, 8])
+#foreach($item in $array)
+counter: $velocityCount
+#set($velocityCount = $velocityCount + 1)
+#end

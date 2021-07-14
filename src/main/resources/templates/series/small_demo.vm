@@ -1,0 +1,4 @@
+#set($hero = "batman")
+#if($hero)
+    I'm the Bat!
+#end

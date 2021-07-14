@@ -1,0 +1,19 @@
+## 引入指令 - 将本地文件引入当前文件
+## 特征 - 被引入的文件必须位于TEMPLATE_ROOT
+
+## #Include
+## 特征：velocity不会对被引入的文件进行解析
+## 应用： 用来引入静态文件
+import by include directive:
+    #include("src/main/resources/templates/poem")
+
+## #parse - 在当前模板中引入并执行另一个(本地的)模板,并把解析结果放到当前位置中
+## 特征：被引入的模板文件，可以是静态的，也可以是动态的
+## 2 参数可以是一个双引号括起来的文件名，也可以是一个变量，但是它不能接受多个参数
+## 3 可以嵌套使用多层；
+## 4 变量出现重名时，就近原则
+import by include directive:
+    #parse("src/main/resources/templates/series/small_demo.vm")
+
+
+## #Stop指令会停止模板引擎的执行，并返回。这在debug中比较有用。

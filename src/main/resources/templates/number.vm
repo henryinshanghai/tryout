@@ -1,0 +1,11 @@
+#macro (formatThousands $number)
+    #if($number>=1000)
+        $!{numberTool.format('#,000.00',$number)}
+    #else
+        $!{numberTool.format('#0.00',$number)}
+    #end
+#end
+
+hahaha
+
+#formatThousands(1000)

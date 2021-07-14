@@ -1,0 +1,18 @@
+## 逻辑运算
+#set($foo = true)
+#set($bar = 5)
+## &&和||是有短路效应的。一旦前一个就可以判断真假，后面的条件不再进行判断
+#if($foo && $bar<10)
+    A & B is true
+#end
+
+#if($foo || $bar)
+    A || B is true
+#end
+
+#set($foo = false)
+## 使用!来取反时，需要把!放在变量的前面
+#if(!$foo )
+    using ! to make false become true
+#end
+

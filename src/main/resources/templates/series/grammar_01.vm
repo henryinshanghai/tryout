@@ -1,0 +1,28 @@
+## 单行注释
+
+#* 多行注释 *#
+
+## 获取到对象的属性
+#set($name = $customer.firstName)
+<span>$name</span>
+
+#* 引用的规范写法 ${ref_name} *#
+${customer.lastName}
+
+#* 引用一个不存在的属性 - 1*#
+result01: ${customer.nonExistProperty}
+
+#* 引用一个不存在的属性 - 1*#
+result02: $!{customer.nonExistProperty}
+
+## 能够被velocity解析的变量，一定要是一个VTL标识符
+## $2.5就不会被解析 因为 2.5不是一个VTL标识符  - VTL标识符必须以字母开头，后面可以包含并且仅能包含字母、数字、下划线以及减号
+## aka 以字面值输出
+$2.5
+
+## 特殊符号 与 对特殊符号的转义\ - \只会对它后面的一个字符进行转义：使其有特殊含义，或者失去特殊含义
+## 如果knight没有被定义，则：全部会原样输出
+#set($knight="henry")
+$knight ## 输出 henry
+\$knight ## 输出 $knight
+\\$knight ## 输出 \henry - 第二个\失去特殊含义后，被原样输出

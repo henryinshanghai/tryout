@@ -1,0 +1,42 @@
+## 大小写 - Velocity对大小写是敏感的
+$customer.firstName ## liu
+$customer.firstname ## $customer.firstname
+
+#* 指令 - 实现页面中的各种操作 *#
+## #set - 给变量赋值
+## 语法 - LHS必须是一个变量或者属性；
+## RHS必须是以下7种类型之一：变量、属性、字符串字面值、数字字面值、方法、ArrayList、Map
+## demo - #set($foo="bar")或者#set($foo.bar=$test)
+
+#*
+#set( $test = $test2 + 3)
+#set( $test.a = "abc")
+#set( $test.b = 1)
+#set( $test.c = $test.a)
+#set( $test.d = $test.calc("1+1"))
+#set( $test.e = ["123", "abc", $test.c]) ## 访问时使用$test.e.get(0)就可以获得值"123"
+#set( $test.f = {"name":"car", "color":"red"})   ## 访问时使用$test.f.get("color")就可以获得值"red"
+*#
+
+## 放在""中的字符串也会被velocity解析
+#*
+#set($test.a ="abc")
+#set($test.b ="$test.a")
+#set($test.b = '$test.a')
+*#
+
+#set($knight="henry")
+#set($batman="$knight")
+BATMAN: $batman
+
+#set($superman='$knight')
+SUPERMAN: $superman
+
+## print loads of text literally
+#literal()
+nothing is gonna change my love for you.
+#end
+
+
+
+

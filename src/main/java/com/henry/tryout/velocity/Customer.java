@@ -50,6 +50,7 @@ public class Customer {
     }
 
     public String getBehaviour() {
+        System.out.println("execute getBehaviour method!");
         return behaviour;
     }
 
