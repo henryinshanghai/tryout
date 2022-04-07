@@ -1,4 +1,4 @@
-package com.henry.tryout.java_8_features.java8_lambda;
+package com.henry.tryout.java_8_features.lambda_01;
 
 public class Hello {
     public static void main(String[] args) {
