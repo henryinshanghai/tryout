@@ -1,4 +1,7 @@
-package com.henry.tryout.java_8_features.stream_02.practice_06;
+package com.henry.tryout.java_8_features.stream_02;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Transaction {
     private final Trader trader;

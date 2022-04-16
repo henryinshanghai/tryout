@@ -1,5 +1,8 @@
 package com.henry.tryout.java_8_features.stream_02.practice_06;
 
+import com.henry.tryout.java_8_features.stream_02.Trader;
+import com.henry.tryout.java_8_features.stream_02.Transaction;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

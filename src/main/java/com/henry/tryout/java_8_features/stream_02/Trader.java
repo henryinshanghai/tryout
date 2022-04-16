@@ -1,4 +1,4 @@
-package com.henry.tryout.java_8_features.stream_02.practice_06;
+package com.henry.tryout.java_8_features.stream_02;
 
 public class Trader {
     private final String name;
