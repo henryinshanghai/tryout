@@ -23,18 +23,18 @@ public class Point {
         return y;
     }
 
-    // 针对此方法 进行单元测试 - testMoveRightBy
+    // case01 - 针对此方法 进行单元测试 - testMoveRightBy  参考： Lambda_Expression_Test.java
     // public的方法比较容易测试 - 但lambda表达式没有名字，不容易测试
     public Point moveRightBy(int x) {
         return new Point(this.x + x, this.y);
     }
 
-    // 对lambda表达式进行测试 - 手段：借助某个字段来访问到lambda函数
+    // case02 - 对lambda表达式进行测试 - 手段：借助某个字段来访问到lambda函数
     // 特征：Lambda表达式会生成 函数接口的一个实例。
     public final static Comparator<Point> compareByXAndThenY
             = Comparator.comparing(Point::getX).thenComparing(Point::getY);
 
-    // 通过使用lambda表达式的方法 来 对lambda进行测试
+    // case03 - 通过使用lambda表达式的方法 来 对lambda进行测试
     // lambda表达式的初衷是封装逻辑后，给其他方法使用 - 你不应该把它声明为public
     public static List<Point> moveAllPointsRightBy(List<Point> points, int x) {
         return points.stream()
