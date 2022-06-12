@@ -152,16 +152,25 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 		<!-- 其中Jackson Annotations依赖Jackson Core，Jackson Databind依赖Jackson Annotations。-->
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jersey -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
+			<version>2.1.6.RELEASE</version>
+		</dependency>
 
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
 			<!-- compiler version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
