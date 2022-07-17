@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm.bytecode_and_classloader;
+package com.henry.tryout.easy_coding.jvm.bytecode_and_classloader_01;
 
 import sun.misc.Launcher;
 

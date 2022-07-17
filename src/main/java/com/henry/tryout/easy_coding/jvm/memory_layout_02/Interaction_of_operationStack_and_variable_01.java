@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm.memory_layout;
+package com.henry.tryout.easy_coding.jvm.memory_layout_02;
 
 public class Interaction_of_operationStack_and_variable_01 {
     public static void main(String[] args) {

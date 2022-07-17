@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm.bytecode_and_classloader;
+package com.henry.tryout.easy_coding.jvm.bytecode_and_classloader_01;
 
 import java.util.HashMap;
 import java.util.Map;
