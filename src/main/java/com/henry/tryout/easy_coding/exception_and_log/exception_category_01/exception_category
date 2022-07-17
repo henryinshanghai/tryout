@@ -1,0 +1,52 @@
+JDK中所定义的完整的异常机制：
+
+1 所有的异常都是 Throwable的子类；
+2 简单分类： Error（致命异常） + Exception(非致命异常)
+
+Error表示系统发生了不可控的错误，比如 StackOverflow 或者 OutOfMemoryError
+特征：这类异常程序无法处理，只能人工介入。
+
+Exception又分成 checked异常 与 unchecked异常；
+checked异常：
+    是：需要在代码中进行显示处理的异常 - 否则代码会编译出错。
+    用法：
+        1 如果能够自行处理，则：在当前方法中捕获异常；
+        2 如果无法处理，则：向调用方抛出这个异常对象。
+    应用：
+        SQLException、ClassNotFoundException等；
+    分类：
+        1 无能为力、引起注意型；
+            比如 字段超长引起的SQLException，程序没办法做任何操作。
+            处理方式：完整地保存异常现场，以供开发人员介入解决。
+        2 力所能及、坦然处置型；
+            比如 未授权异常(UnAuthorizedException),程序可以跳转至 权限申请页面。
+
+unchecked异常：
+    是：运行时异常；
+    特征：
+        1 继承自 RuntimeException；
+        2 不需要程序进行显式的捕捉与处理；
+    分类：
+        1 可预测异常(Predicated Exception);
+            如 IndexOutOfBoundsException, NullPointException等；
+            这类异常不应该被产生或者抛出；
+            手段：提前做好边界检查、空指针判断；
+        2 需要捕获的异常(Caution Exception)；
+            如 Dubbo框架 进行RPC调用时所产生的 远程服务超时异常 DubboTimeoutException。
+            特征：这类异常 客户端需要进行显式的处理；
+            手段：重试 或者 降级处理？？？
+        3 可透出异常(Ignored Exception);
+            是：框架和系统产生的,并且会自行处理的异常；
+            特征：程序本身不需要关心这类异常。
+            如 Spring框架抛出的 NoSuchRequestHandlingMethodException异常 - 这个异常 Spring框架会自己处理掉。
+            处理方式：把 异常 映射到 合适的状态码。
+
+======
+warp it up:
+异常：Error + Exception；
+Exception：checked + unchecked；
+checked：必须在程序中显式的处理，否则程序会有编译报错；
+unchecked:
+    - 可预测异常(Predicated Exception); 好的编码习惯
+    - 需要捕获的异常;
+    - 可以忽略的异常；
