@@ -191,6 +191,23 @@
 			<version>2.1</version>
 			<classifier>jdk15</classifier> <!-- 引入json-lib的时候需要添加这个标签 否则maven无法成功引入它 -->
 		</dependency>
+
+		<!-- 对于新项目 - 配置 slf4j + logback（门面模式） -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+<!--			<version>${slf4j-api.version}</version>-->
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+<!--			<version>${logback-classic.version}</version>-->
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+<!--			<version>${logback-core.version}</version>-->
+		</dependency>
 	</dependencies>
 
 	<build>
