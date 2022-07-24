@@ -1,0 +1,4 @@
+集合 × 泛型
+
+List、List<Object>、List<?>的区别？
+demo: ListNoGeneric
