@@ -1,0 +1,19 @@
+TreeMap
+    是：按照Key的排序结果来组织内部结构的Map类；
+    特征：
+        1 提供了Key的排序；
+        2 继承自接口 SortedMap, NavigableMap;
+            SortedMap接口 - 表示（接口约束）：
+                1 Map的key有序，并且不能重复；
+                2 支持获取头尾的Key-Value元素；
+                3 支持 根据key指定的范围来获取子集合。
+                特征：
+                    #1 插入的Key必须实现 Comparable 或者提供额外的比较器Comparator；
+                        因此，key不能为null(null无法参与比较)，但是value可以为null
+            NavigableMap接口 - 表示（接口约束）：
+                1 支持 根据指定的搜索条件 返回最匹配的Key-Value元素；
+                特征：可导航的接口 继承了 SortedMap接口；
+    去重原理：
+        TreeMap不是使用hashMap 与 equals来 确定对象的唯一性的（从而实现元素去重）
+    应用：在 Key有排序要求的场景下，使用 TreeMap；
+
