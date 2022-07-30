@@ -1,6 +1,5 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.map_08;
+package com.henry.tryout.easy_coding.data_structure_and_collection.map_08.treeMap_02;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class TreeMapRepeat_01 {

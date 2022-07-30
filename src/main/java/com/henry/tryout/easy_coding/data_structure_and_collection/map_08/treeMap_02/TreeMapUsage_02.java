@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.map_08;
+package com.henry.tryout.easy_coding.data_structure_and_collection.map_08.treeMap_02;
 
 import java.util.TreeMap;
 
