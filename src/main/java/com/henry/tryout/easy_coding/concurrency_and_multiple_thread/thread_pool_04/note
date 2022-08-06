@@ -1,0 +1,60 @@
+线程：
+    作用：使程序能够更加充分合理地使用 CPU、内存、网络、IO等资源；
+    特征：
+        1 创建一个线程需要N多的动作：
+            开辟虚拟机栈、本地方法栈、程序计数器 这些个线程私有空间；
+        2 在线程销毁时，又需要对这些空间进行回收。
+        3 如果频繁地创建与销毁线程，会没必要地浪费很多的系统资源。
+
+核心问题 & 解决方案
+#1 频繁创建与销毁线程，会浪费很多的系统资源；
+#2 当并发请求太大，已经达到系统所能承载的上限时，需要对线程数量做管理，不至于出现服务完全不可用的情况；
+
+解决方案：线程池。
+作用：
+    1 管理线程的CRUD，控制并发数量；
+    2 针对多个线程进行精细化管理，比如
+        - 实现 与时间相关的功能 如定时执行、周期执行等。
+        - 实现线程队列的缓存策略 + 拒绝机制；
+        - 隔离线程环境；
+            同一台服务器上有两个服务：交易服务 + 搜索服务；
+            交易服务的线程会消耗更多的资源，因此把两类线程放在不同的线程池中进行管理。
+用法：
+    1 使用线程池来创建线程；
+        ThreadPoolExecutor 构造方法；
+    2 自定义 ThreadFactory 与 RejectedExecutionHandler;
+    3 编写一个简单的 线程池demo。
+
+------
+Executors 与 ThreadPoolExecutor之间的关系
+
+Executor接口 -> ExecutorService接口 作用：定义管理线程任务的方法；
+ExecutorService接口 -> AbstractExecutorService抽象类
+                        作用：提供了 submit()、invokeAll()方法的实现
+                        特征：抽象类中没有实现execute()方法
+
+Executors类：
+高层用法：通过静态工厂方法 来 创建线程池的包装对象；
+    1 ForkJoinPool;
+    2 ThreadPoolExecutor;
+    3 ScheduledThreadPoolExecutor;
+
+Executors的核心方法：
+    参考：ThreadPoolExecutorClassRelationship_02
+
+Executors中默认的 线程工厂 与 拒绝策略太过简单，对用户不很友好。
+- 线程工厂；
+    希望它能够 对线程池创建的线程添加明确的标识 - aka，为线程本身指定有意义的名称和相应的序列号。
+    Demo: UserThreadFactory
+    一个有意义的线程名称，能够帮助定位 issue的root cause 以及 具体位置、业务场景等。
+
+- 拒绝策略；
+    希望拒绝策略能够考虑到具体的业务场景，给出相应的提示 或者 友好地跳转。
+    Demo: UserRejectHandler
+
+    ThreadPoolExecutor中提供的四个 静态内部类：
+    #1 AbortPolicy（默认）：丢弃任务，并抛出 RejectedExecutionException异常。
+    #2 DiscardPolicy：丢弃任务，但是不抛出异常(不推荐)；
+    #3 DiscardOldestPolicy: 丢弃队列中等待最久的任务，然后把当前任务添加到队列中。
+    #4 CallerRunsPolicy：直接调用任务的run()方法, aka, 绕过线程池。
+Usage Demo: UserThreadPool
