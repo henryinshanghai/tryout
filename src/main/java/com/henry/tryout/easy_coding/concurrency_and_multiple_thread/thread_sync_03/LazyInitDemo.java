@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_03;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_sync_03;
 
 public class LazyInitDemo {
     private static TransactionService service = null;
@@ -22,6 +22,16 @@ public class LazyInitDemo {
         }
 
         return service;
+    }
+
+    public static void main(String[] args) {
+        TransactionService service = getService();
+
+        TransactionService service1 = getService();
+
+        if (service == service1) {
+            System.out.println("单例模式使用成功！");
+        }
     }
 }
 
