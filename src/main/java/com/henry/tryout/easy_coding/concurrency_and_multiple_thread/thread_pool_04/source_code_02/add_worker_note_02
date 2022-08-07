@@ -1,0 +1,65 @@
+addWorker()解析
+
+第一处：
+    配合循环语句所出现的label，作用类似于goto。
+    语法：label在定义时必须要 把标签和冒号的组合语句 紧紧挨着循环体之前 - 否则会有编译出错。
+    作用：在实现多重循环时，能够快速地退出到任意一层循环。
+    特征：如果滥用，会导致很多问题；
+    此处的用法：
+        retry下面,有两个无限循环；
+        在workerCount加一成功后，则：直接退出两层循环。
+
+第二处：
+为了方便阅读代码，更可读的编写方式如下：
+Boolean isNotAllowedToCreateTask =
+    runStateAtLeast(c, SHUTDOWN) && (runStateAtLeast(c, STOP)
+        || firstTask != null || workQueue.isEmpty());
+
+if(isNotAllowedToCreateTask) {
+    ...
+}
+
+第三处：
+语法作用：与第一处的标签相呼应；
+特征： AtomicInteger对象的加一操作是原子性的。
+break retry意思是说, 直接跳出 与retry相邻的这个循环体。
+
+第四处：
+continue retry表示 跳转到标签处，继续执行循环。
+作用：
+    如果条件为false，则说明：线程池还处于运行状态。aka, 会继续在for(;;)循环中执行
+
+第五处：
+fact：
+    1 compareAndIncrementWorkerCount方法执行失败的概率非常低。
+    2 即使失败，再次执行时成功的概率也非常高。- 类似于自旋锁的原理
+手段：
+    先加一，创建失败时，再减一。
+特征：
+    这种并发创建线程的方式比较轻量级。
+    并发创建线程的另一种方式：
+        先创建线程，成功后加一。
+        如果创建线程后，发现超出了限制，则：再来销毁线程，再把线程数量-1.
+    特征：这种方式，相比于👆的方式。代价要大得多
+
+第六处：
+fact：Worker对象是 工作线程的核心类实现。
+部分源码：
+    // 特征：1 实现了Runnable接口；
+    // 2 会把本对象当作参数 传入给run()方法中的 runWorker(this)
+    // - 因此 内部属性线程 thread在调用start()的时候，就会调用到 runWorker()方法
+    private final class Worker extends AbstractQueueSynchronizer
+        implements Runnable {
+        Worker(Runnable firstTask) {
+            // setState是AQS的方法；
+            // 特征：在 runWork()方法执行之前,禁止线程中断
+            setState(-1);
+            this.firstTask = firstTask;
+            this.thread = getThreadFactory().newThread(this);
+        }
+
+        // 在 thread上调用start()之后，执行 runWorker()方法
+        public void run() {
+            runWorker(this);
+        }
+    }
