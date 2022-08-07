@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_pool_04;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_pool_04.basic_usage_01;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -27,6 +27,7 @@ public class MyThreadPoolExecutor_01 {
      */
     RejectedExecutionHandler handler;
 
+    // 在构造器中判断传入参数，并抛出异常
     public MyThreadPoolExecutor_01(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         if (corePoolSize < 0 ||
                 maximumPoolSize <= 0 ||
