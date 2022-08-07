@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_pool_04;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_pool_04.basic_usage_01;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,13 +21,17 @@ public class UserThreadFactory_03 implements ThreadFactory {
         // 为线程指定一个有意义的名字
         String name = namePrefix + nextId.getAndIncrement();
         Thread thread = new Thread(null, task, name, 0); // 5个参数的构造方法取消了？
+        // ① 打印 当前线程的名称
         System.out.println(thread.getName());
         return thread;
     }
 
     public static void main(String[] args) {
+        // 创建线程工厂时,传入 线程组的名称
         UserThreadFactory_03 userThread = new UserThreadFactory_03("test");
+        // 创建线程时，传入自定义的任务
         Thread thread = userThread.newThread(new Task());
+        // 启动线程
         thread.start();
     }
 }
@@ -39,6 +43,12 @@ class Task implements Runnable {
     // 调用线程的start()方法时，真正执行的方法是 run()
     @Override
     public void run() {
+        // ② 在自定义的任务中, 打印出当前任务线程中的count值
         System.out.println("running_" + count.getAndIncrement());
     }
 }
+/*
+UserThreadFactory's test-Worker-0
+running_0
+
+ */
