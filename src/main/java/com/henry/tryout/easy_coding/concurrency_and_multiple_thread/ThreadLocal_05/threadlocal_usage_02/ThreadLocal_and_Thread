@@ -1,0 +1,51 @@
+Thread
+    - ThreadLocal.ThreadLocalMap threadlocals
+
+    synchronized void start()
+    static Thread currentThread()
+
+======
+ThreadLocal
+    // 这3个成员变量有什么作用？
+    int HASH_INCREMENT
+    AtomicInteger nextHashCode
+    int threadLocalHashCode
+
+    T get() // 返回ThreadLocal变量封装的对象
+    void set(T value)
+    void remove()
+    T setInitialValue()
+
+        static class ThreadLocalMap
+            // 成员变量的作用？ 使用一个数组来实现 Map结构
+            Entry[] table
+            int threshold
+
+            Entry getEntry(ThreadLocal key)
+            void set(ThreadLocal key, Object value)
+            void remove(ThreadLocal key)
+
+                static class Entry      --->    WeakReference 一旦引用指向的对象变成null,则：自动断开指向
+                    Object value
+
+
+文字描述：
+ThreadLocal中有一个静态内部类 ThreadLocalMap;
+ThreadLocalMap中有一个静态内部类 Entry；
+Thread中 有一个 ThreadLocal.ThreadLocalMap类型的属性；
+    这个属性的赋值 是在 ThreadLocalMap的createMap()中完成的。
+
+ThreadLocal 与 ThreadLocalMap中都存在的3组方法：
+- get()
+- set()
+- remove()
+
+特征：
+    1 在 ThreadLocal中，这些方法只做校验和判断的工作；
+    2 方法具体的实现会委托到 ThreadLocalMap中去。
+    3 map中的key是 ThreadLocal类型的变量。
+
+Entry类
+特征：
+    1 继承自 WeakReference类；
+    2 没有任何方法，只有一个 value成员变量。

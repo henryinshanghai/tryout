@@ -1,0 +1,26 @@
+栈中：
+    Thread对象的引用a；
+    ThreadLocal对象的引用b-1；
+    ThreadLocal对象的引用b-2;
+
+堆中：
+    线程对象本身：
+        持有 ThreadLocalMap引用 & 对象；
+            ThreadLocalMap对象中，持有多个 Entry对象：
+                Entry对象c-1;
+                    弱引用Key-1
+                    Value-1 // 这会是本地线程独占对象
+                Entry对象c-2；
+                    弱引用Key-2
+                    Value-2 // 这会是本地线程独占对象
+
+    ThreadLocal对象1本身； // 由弱引用Key1指向
+    ThreadLocal对象2本身； // 由弱引用key2指向
+
+总结：
+1 Thread对象中只存在一个ThreadLocalMap对象；
+2 ThreadLocalMap对象中 存在有多个 Entry对象；
+3 Entry对象中的弱引用 指向一个ThreadLocal对象；
+4 ThreadLocal对象 可以被多个线程共享；
+
+5 线程中的Entry对象会持有value，但ThreadLocal对象本身不会持有value；// value是干啥用的？

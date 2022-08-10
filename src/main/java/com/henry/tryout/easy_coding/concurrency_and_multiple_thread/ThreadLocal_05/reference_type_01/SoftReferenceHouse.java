@@ -1,6 +1,5 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal_05;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal_05.reference_type_01;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
