@@ -49,3 +49,5 @@ Entry类
 特征：
     1 继承自 WeakReference类；
     2 没有任何方法，只有一个 value成员变量。
+
+

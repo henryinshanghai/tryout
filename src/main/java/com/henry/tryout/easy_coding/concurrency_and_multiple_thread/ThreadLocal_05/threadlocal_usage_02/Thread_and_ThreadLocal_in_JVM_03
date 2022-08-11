@@ -24,3 +24,42 @@
 4 ThreadLocal对象 可以被多个线程共享；
 
 5 线程中的Entry对象会持有value，但ThreadLocal对象本身不会持有value；// value是干啥用的？
+
+Entry类源码：
+
+static class Entry extends WeakReference<ThreadLocal<?>> {
+
+    /** The value associated with this ThreadLocal. */
+    Object value;
+
+    Entry(ThreadLocal<?> k, Object v) {
+        super(k);
+        value = v;
+    }
+}
+
+所有的Entry对象都被 ThreadLocalMap类型的threadlocals 所持有；
+当线程对象执行完毕后，线程对象内的实例属性 都会被垃圾回收；
+即使线程正在执行，如果 ThreadLocal对象的引用 被置为null，则：
+    Entry的Key就会 自动在下一次 YGC的时候被垃圾回收；
+在 ThreadLocal对象使用get() 或者 set()的时候，会：
+    自动地将哪些 key == null的value 置为null - 使value能够被垃圾回收，从而避免内存泄漏
+
+ThreadLocal源码：
+    注释：ThreadLocal对象 通常作为私有、静态变量使用；
+    推论： ThreadLocal对象的生命周期 不会随着线程的结束而结束。- 线程只是 ThreadLocal对象的使用方，而不是持有方
+
+线程使用 ThreadLocal对象时常用的3个方法：
+1 set(): 如果没有set()操作，容易引起脏数据；
+2 get(): 如果没有get(), 无法使用 ThreadLocal对象中的值；
+3 remove(): 如果没有remove()操作，容易引起 内存泄漏
+
+======
+用法2：作为非静态的成员变量 - 被每一个实例独有；
+
+变量的分类：
+    局部变量；
+    成员变量；
+    线程内变量；- 复杂的线程方法 可能会需要调用很多的方法来实现某一个功能，那
+        怎么能够在同一个线程之间传递 线程内变量 呢？
+        答： ThreadLocal
