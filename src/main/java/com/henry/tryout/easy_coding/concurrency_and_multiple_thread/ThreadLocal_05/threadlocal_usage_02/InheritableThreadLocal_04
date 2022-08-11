@@ -1,0 +1,69 @@
+用法2：作为非静态的成员变量 - 被每一个实例独有；
+
+变量的分类：
+    局部变量；
+    成员变量；
+    线程内变量；- 复杂的线程方法 可能会需要调用很多的方法来实现某一个功能，那
+        怎么能够在同一个线程之间传递 线程内变量 呢？
+        答： ThreadLocal.
+        作用：用来 在同一个线程内，跨类、跨方法传递数据。
+        如果没有 ThreadLocal，那么相互之间的信息传递，势必会需要靠 返回值和参数；- 这可能会导致互相耦合
+
+        用法：通过把 Thread构造方法的最后一个参数设置为 true,就可以 把当前线程的变量
+                继续往下传递给 它创建的子线程。
+        源码：Thread.java
+            // 1 把父线程的不为null的线程变量都拷贝过来
+            if (inheritThreadLocals && parent.inheritableThreadLocals != null)
+                        this.inheritableThreadLocals =
+                            ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);
+            +
+
+            static ThreadLocalMap createInheritedMap(ThreadLocalMap parentMap) {
+                return new ThreadLocalMap(parentMap); // 2 调用 ThreadLocalMap的私有构造方法 来 产生一个实例对象
+            }
+
+            createInheritedMap() 其实就是：1 + 2.
+
+            private ThreadLocalMap(ThreadLocalMap parentMap) {
+                // table用于存储
+                Entry[] parentTable = parentMap.table;
+                int len = parentTable.length;
+                setThreshold(len);
+                table = new Entry[len];
+
+                for (int j = 0; j < len; j++) {
+                    Entry e = parentTable[j];
+                    if (e != null) {
+                        @SuppressWarnings("unchecked")
+                        ThreadLocal<Object> key = (ThreadLocal<Object>) e.get();
+                        if (key != null) {
+                            Object value = key.childValue(e.value);
+                            Entry c = new Entry(key, value);
+                            int h = key.threadLocalHashCode & (len - 1);
+                            while (table[h] != null)
+                                h = nextIndex(h, len);
+                            table[h] = c;
+                            size++;
+                        }
+                    }
+                }
+            }
+
+淘宝在很多场景下就是通过 ThreadLocal 来 透传全局上下文的，比如
+    用 ThreadLocal来存储监控系统的某一个标记位，暂时命名为 traceId.
+    预期：某一次请求下所有的traceId都是一致的，以获得可以统一解析的日志文件。
+    实际：但在实际开发开发过程中，发现子线程中的traceId为null.
+
+    解决手段：
+        使用 InheritableThreadLocal 来 解决父子线程之间共享线程变量的问题。
+        - 这样就能够使整个连接过程中的traceId一致
+    代码：RequestProcessTrace_03
+
+======
+SimpleDateFormat
+
+特征：
+    1 线程不安全；
+    2 如果定义成为 static变量（被所有的实例共享），就会有数据同步的问题。
+
+源码：
