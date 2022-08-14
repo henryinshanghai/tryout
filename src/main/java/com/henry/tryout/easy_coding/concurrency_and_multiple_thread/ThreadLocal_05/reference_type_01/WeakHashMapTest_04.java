@@ -11,25 +11,27 @@ public class WeakHashMapTest_04 {
         SellerInfo sellerInfo2 = new SellerInfo();
 
         // 这里如果换成 HashMap，则： Key是对 House对象的强引用
-        // WeakHashMap中的Key, 是对对象的弱引用 - 一旦引用指向的对象成为null,则自动断开指向
+        // 特征：WeakHashMap中的Key, 是对对象的弱引用 - 一旦引用所指向的对象成为null,则 自动断开指向？？？
         WeakHashMap<House, SellerInfo> weakHashMap =
-                new WeakHashMap<>();
+                new WeakHashMap<>(); // 方案1：使用 WeakHashMap - 特征：👆
 
+        // 建立 房子 -> 房主的关系
         weakHashMap.put(seller1, sellerInfo1);
         weakHashMap.put(seller2, sellerInfo2);
 
         System.out.println("weakHashMap before null, size = " + weakHashMap.size());
 
-        // 把key1的强引用移除，只有弱引用指向 new House("xxx")
+        // 把seller1对象的强引用 移除 - 这样就只剩下弱引用指向 new House("xxx")
+        // 由于弱引用的特性，这里的 匿名对象会被GC回收 - 弱引用对象本身会不会被回收掉呢？ YES
         seller1 = null;
 
-        // 催出回收器 进行垃圾回收
+        // 催促回收器 进行垃圾回收 - 有且只有弱引用指向的对象,会在 YGC时被回收掉
         System.gc();
         System.runFinalization();
 
         // 如果使用HashMap，则： size会仍旧等于2
         // 按照预期，这里WeakHashMap的大小会变成1 - 因为key1-value1已经被回收了
-        System.out.println("weakHashMap after null, size = " + weakHashMap.size());
+        System.out.println("weakHashMap after null, size = " + weakHashMap.size()); //  方案1：使用 WeakHashMap
         System.out.println(weakHashMap);
     }
 }
@@ -39,7 +41,9 @@ class SellerInfo {
 }
 /*
     如果使用HashMap的话，把key1设置为null，不会影响 map的size；
-    使用 WeakHashMap，把key1指向的对象设置为null后，由于仅存的引用是虚引用，因此会被GC回收。map的size也变成了1
+    使用 WeakHashMap，把key1指向的对象设置为null后，由于仅存的引用是虚引用，因此会被GC回收。
+    这里回收的不仅仅是 真实对象, 也包括 弱引用对象本身。
+
     WeakHashMap应用：
         缓存不敏感的临时信息。
         比如用户登录系统后的浏览路径，会在关闭浏览器的时候自动清空。
