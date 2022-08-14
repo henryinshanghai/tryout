@@ -1,8 +1,8 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal_05.threadlocal_usage_02;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal_05.threadlocal_usage_02.feature_and_mechanism_01;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CsGameByThreadLocal {
+public class CsGameByThreadLocal_01 {
     // 静态成员变量 - 被类的所有实例共享
     public static final Integer BULLET_NUMBER = 1500;
     public static final Integer KILLED_ENIMIES = 0;
@@ -18,13 +18,14 @@ public class CsGameByThreadLocal {
     private static final ThreadLocalRandom RANDOM
             = ThreadLocalRandom.current();
 
-    // 初始化子弹的数量
-    // 手段：定义一个 ThreadLocal类型的变量 - new ThreadLocal并重写其 initialValue()方法
-    // 相当于对 静态变量BULLET_NUMBER 做了一层封装
     /*
-        特征：1 每个线程都会单独持有 ThreadLocal变量的副本；
-        2 由于变量没有被多个线程共享，因此不存在线程安全问题；
-        3 通常会使用 private static来修饰 ThreadLocal变量；
+         初始化子弹的数量
+         手段：定义一个 ThreadLocal类型的变量 - new ThreadLocal并重写其 initialValue()方法
+         相当于对 静态变量BULLET_NUMBER 做了一层封装
+
+            特征：1 每个线程都会单独持有 ThreadLocal变量的副本；
+            2 由于变量没有被多个线程共享，因此不存在线程安全问题；
+            3 通常会使用 private static来修饰 ThreadLocal变量；
      */
     private static final ThreadLocal<Integer> BULLET_NUMBER_THREADLOCAL
             = new ThreadLocal<Integer>() {
@@ -36,7 +37,7 @@ public class CsGameByThreadLocal {
         }
     };
 
-    // 初始化杀敌数量
+    // 初始化杀敌数量 - 使用 ThreadLocal变量
     private static final ThreadLocal<Integer> KILLED_ENEMIES_THREADLOCAL
             = new ThreadLocal<Integer>() {
         @Override
@@ -45,7 +46,7 @@ public class CsGameByThreadLocal {
         }
     };
 
-    // 初始化自己的命数
+    // 初始化自己的命数 - 使用 ThreadLocal变量
     private static final ThreadLocal<Integer> LIFE_VALUE_THREADLOCAL
             = new ThreadLocal<Integer>() {
         @Override
@@ -54,13 +55,12 @@ public class CsGameByThreadLocal {
         }
     };
 
-    // 定义每位队员 - 线程类 继承自 Thread，重写run()方法
+    // 定义每位队员（线程） - 线程类 继承自 Thread, 重写run()方法
     private static class Player extends Thread {
 
-        // 以下=右边的变量，都是在线程中被使用的变量：
+        // 在线程中所使用的变量：
         /*
             RANDOM
-
             BULLET_NUMBER_THREADLOCAL
             BULLET_NUMBER
             KILLED_ENEMIES_THREADLOCAL
@@ -70,7 +70,7 @@ public class CsGameByThreadLocal {
          */
         @Override
         public void run() {
-            // 从 Threadlocal对象上调用 get() - 得到对象中存储的值
+            // 从 Threadlocal对象上调用 get() - 得到对象中封装的值
             Integer bullets = BULLET_NUMBER_THREADLOCAL.get() -
                     RANDOM.nextInt(BULLET_NUMBER);
             Integer killEnemies = KILLED_ENEMIES_THREADLOCAL.get() +
@@ -89,27 +89,28 @@ public class CsGameByThreadLocal {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < TOTAL_PLAYERS; i++) {
+        for (int i = 0; i < TOTAL_PLAYERS; i++) { // 每次循环都会新建线程
             // 每个线程对象 使用的 ThreadLocal变量都是自己私有的副本 - ThreadLocal变量的值不会相互干扰
             new Player().start();
         }
     }
 }
 /*
-#问题1 - ThreadLocal变量是怎么成为线程的独立拷贝的？
-    - 1 我们在定义 ThreadLocal变量时，覆写了其中的initialValue()方法；
-    - 2 这个方法的执行时机是 - threadLocal对象调用get()方法时。
+#问题1 - ThreadLocal变量是怎么成为 线程的独立拷贝 的？
+    - 1 我们在定义 ThreadLocal变量时，覆写了其中的 initialValue()方法；
+    - 2 initialValue这个方法的执行时机是 - threadLocal对象调用get()方法时。
+
     get()源码：
         public T get() {
             Thread t = Thread.currentThread(); // 当前线程
             ThreadLocalMap map = getMap(t); // 当前线程的 ThreadLocalMap对象
 
-            if (map != null) { // 如果map不为null,说明 Thread类的threadLocals属性已经被初始化
+            if (map != null) { // 如果map不为null,说明 Thread类的threadLocals属性已经被初始化 Key是ThreadLocal变量
                 ThreadLocalMap.Entry e = map.getEntry(this);
                 // 如果e为null,则： setInitialValue()方法还是会被执行到
                 if (e != null) {
                     @SuppressWarnings("unchecked")
-                    T result = (T)e.value;
+                    T result = (T)e.value; // value是一个泛型变量，具体类型取决于使用者传入的类型
                     return result;
                 }
             }
@@ -131,7 +132,7 @@ public class CsGameByThreadLocal {
             // getMap(t)做的事情 - 返回线程t的 threadLocals属性 return t.threadLocals;
             ThreadLocalMap map = getMap(t);
             if (map != null)
-                map.set(this, value);
+                map.set(this, value); // 这个value是 使用者在定义ThreadLocal变量时传入的
             else
                 createMap(t, value);
             return value;
