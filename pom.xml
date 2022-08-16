@@ -179,12 +179,6 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>com.alibaba</groupId>-->
-<!--			<artifactId>fastjson</artifactId>-->
-<!--			<version>1.2.15</version>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
@@ -208,6 +202,24 @@
 			<artifactId>logback-core</artifactId>
 <!--			<version>${logback-core.version}</version>-->
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.21.0</version>
+<!--			<scope>test</scope>-->
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -221,6 +233,18 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+
+			<!-- maven-surefire-plugin maven用于执行测试用例的插件 -->
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<properties>
+						<!-- 使用标签来选择 要执行的测试用例的类型 -->
+						<includeTags>fast</includeTags>
+						<excludeTags>slow</excludeTags>
+					</properties>
 				</configuration>
 			</plugin>
 		</plugins>

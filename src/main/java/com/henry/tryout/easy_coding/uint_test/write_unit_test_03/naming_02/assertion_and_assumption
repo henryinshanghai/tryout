@@ -1,0 +1,55 @@
+在 定义好了 需要运行的测试方法后,接着就要：对测试方法的细节进行处理
+手段：断言 + 假设；
+
+断言：
+    作用：如果不满足条件的话，则：测试用例会被认为失败。
+    原理：断言封装好了常用的判断的逻辑；
+
+假设：
+    作用：如果条件不满足的话，则：测试用例会直接退出 - 最终记录的状态是跳过
+
+应用：Junit5.x 提供了一系列经典的断言和假设方法。
+
+对断言的选择，优先采用更精确的断言 - 因为更精确的断言通常能提供更友好的输出格式。
+如: assertEquals(100, result) 要好于 assertTrue(100 == result)
+
+断言负责验证逻辑 以及 数据的合法性和完整性。
+JUnit提供的断言有自己的局限性，这时候可以使用 第三方断言库。
+比如 AssertJ
+
+======
+AssertJ
+
+核心：流式断言(Fluent Assertions);
+特征：
+    1 允许一个目标对象 通过各种Fluent Assert API的连接判断, 来 进行多次断言；
+    2 对IDE很友好；
+用法：
+    AssertJ的 assertThat()方法；
+        使用Java泛型；
+        增加了目标类型对象所对应的XxxAssert类
+            - 签名 public static AbstractCharSequenceAssert<?, String> assertThat(String actual)
+            对比于 JUnit中的 public static void assertThat(), 返回值类型为void
+            结果：AssertJ对于不同的类型就会有不同的断言方法 - 比如 String 和 Date的断言方法就不一样
+
+        AssertJ对自定义的Java Bean的判断：
+            1 AssertJ使用 AssertJ assertions generator来生成对应的XxxAssert类。
+            2 使用XxxAssert类来辅助我们 对模板bean进行断言API判断；
+            3 AssertJ assertions generator有相应的Maven 与 Gradle插件，所以生成这样的代码会很容易；
+
+        AssertJ中其他常用的扩展：
+            DB assertions, Guava assertions等
+
+        DB assertions的应用：
+            不管你使用哪一种DAO框架,在执行完成数据操作后，都可以使用DB assertions对数据库中的书进行断言 - 单元测试的利器
+
+Junit断言 demo:
+    JUnitSampleTest
+
+
+
+
+
+
+
+
