@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm;
+package com.henry.tryout.easy_coding.jvm_04;
 
 public class Hello {
     public static void main(String[] args) {
