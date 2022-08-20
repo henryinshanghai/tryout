@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.exception_and_log.log_04;
+package com.henry.tryout.easy_coding.exception_and_log_05.log_04;
 
 import java.util.logging.Logger;
 
