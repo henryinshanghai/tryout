@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm.object_instance;
+package com.henry.tryout.easy_coding.jvm_04.object_instance;
 
 public class InstanceDemo {
     public static void main(String[] args) {

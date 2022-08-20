@@ -1,8 +1,9 @@
-package com.henry.tryout.easy_coding.jvm.bytecode_and_classloader_01;
+package com.henry.tryout.easy_coding.jvm_04.bytecode_and_classloader_01.classloader_02;
 
-public class TestClassLoader_02 {
+// 获取到当前类 的 类加载器列表
+public class ViewClassLoaders_02 {
     public static void main(String[] args) {
-        ClassLoader c = TestClassLoader_02.class.getClassLoader();
+        ClassLoader c = ViewClassLoaders_02.class.getClassLoader();
         System.out.println(c);
         ClassLoader c1 = c.getParent();
         System.out.println(c1);
