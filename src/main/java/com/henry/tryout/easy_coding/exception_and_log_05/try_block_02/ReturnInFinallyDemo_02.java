@@ -1,6 +1,6 @@
-package com.henry.tryout.easy_coding.exception_and_log.try_block_02;
+package com.henry.tryout.easy_coding.exception_and_log_05.try_block_02;
 
-public class ReturnInFinallyDemo {
+public class ReturnInFinallyDemo_02 {
     static int x = 1;
     static int y = 10;
     static int z = 100;
@@ -18,9 +18,9 @@ public class ReturnInFinallyDemo {
         try {
             return ++x;
         } catch (Exception e) {
-            return ++y;
+            return ++y; // 11
         } finally {
-            return ++z;
+            return ++z; // 101
         }
     }
 }
@@ -31,5 +31,5 @@ public class ReturnInFinallyDemo {
 3 如果有异常抛出，则：运行结果会是y=11，而x=1
 
 启示：
-不要在 finally代码块中使用return语句。
+    不要在 finally代码块中使用return语句。
  */
