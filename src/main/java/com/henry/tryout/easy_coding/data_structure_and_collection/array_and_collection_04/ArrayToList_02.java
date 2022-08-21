@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ArrayAsList_02 {
+public class ArrayToList_02 {
     public static void main(String[] args) {
         String[] stringArray = new String[3];
 
@@ -12,19 +12,28 @@ public class ArrayAsList_02 {
         stringArray[1] = "two";
         stringArray[2] = "three";
 
-        // 把数组转换成为集合
+        // 把数组转换成为list集合 - 手段：Arrays.asList()
         List<String> stringList = Arrays.asList(stringArray);
-        // 修改转换后的集合中的元素 - 成功
+
+        /* 对转换得到的list尝试各种操作 👇 */
+        // ① 修改list中的元素 - 成功
         stringList.set(0, "oneList");
-        // 查看数组中的第一个元素 - 结果：oneList     说明：原始的数组也随之被改变
+        // 验证原数组：查看数组中的第一个元素 - 结果：oneList     说明：原始的数组也随之被改变
         System.out.println(stringArray[0]);
 
-        // 对转换后的集合 添加元素 - 编译不会报错，但是运行会报错 UnsupportedOperationException
+        // ② 向list中 添加元素 - 编译不会报错，但是运行会报错 UnsupportedOperationException
 //        stringList.add("four");
+        // ③ 从list中 移除元素
 //        stringList.remove(2);
+        // ④ 清除list中的所有元素
 //        stringList.clear();
 
-        // 数组转集合安全的方式 - 手动new出一个李鬼来
+        /*
+            以上，说明: 转换后得到的list 其实只是原始数组的一个视图(适配器模式)。list本身存在诸多限制
+                原理： Arrays.asList()返回是一个内部类ArrayList.
+        */
+
+        // 数组转集合安全的方式 - 手段：使用转换得到的list作为参数，手动new出一个新的list对象
         ArrayList<String> safeStringList = new ArrayList<>(Arrays.asList(stringArray));
         System.out.println(safeStringList.size());
         safeStringList.add("clint");

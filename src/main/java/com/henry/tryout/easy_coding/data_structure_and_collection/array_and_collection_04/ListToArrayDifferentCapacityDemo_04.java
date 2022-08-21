@@ -3,7 +3,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.array_and_col
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListToArrayCapacityDemo_04 {
+public class ListToArrayDifferentCapacityDemo_04 {
     public static final int COUNT = 100 * 100 * 100;
 
     public static void main(String[] args) {
@@ -20,27 +20,30 @@ public class ListToArrayCapacityDemo_04 {
         Double[] notEnoughArray = new Double[COUNT - 1];
         list.toArray(notEnoughArray);
 
+        // 使用 容量与list size相等的数组
         long middle1 = System.nanoTime();
         Double[] equalsArray = new Double[COUNT];
         list.toArray(equalsArray);
 
+        // 使用 容量是list size两倍的数组
         long middle2 = System.nanoTime();
         Double[] doubleArray = new Double[COUNT * 2];
         list.toArray(doubleArray);
         long end = System.nanoTime();
 
+        // 比较不同条件下的比较耗时 - 手段: nanoTime()的时间差 / (1000 * 1000) ms
         long notEnoughArrayTimeSpan = middle1 - start;
         long equalsArrayTimeSpan = middle2 - middle1;
         long doubleArrayTimeSpan = end - middle2;
 
         System.out.println("数组容量小于集合大小时，耗时： " +
-                notEnoughArrayTimeSpan / (1000.0 * 1000.0) + " ms");
+                notEnoughArrayTimeSpan / (1000.0 * 1000.0) + " ms"); // 29.3124 ms
 
         System.out.println("数组容量等于集合大小时，耗时：" +
-                equalsArrayTimeSpan / (1000.0 * 1000.0) + " ms");
+                equalsArrayTimeSpan / (1000.0 * 1000.0) + " ms"); // 4.6907 ms
 
         System.out.println("数组容量大于集合大小时，耗时： " +
-                doubleArrayTimeSpan / (1000.0 * 1000.0) + " ms");
+                doubleArrayTimeSpan / (1000.0 * 1000.0) + " ms"); // 5.9113 ms
 
     }
 }
@@ -51,5 +54,5 @@ public class ListToArrayCapacityDemo_04 {
         1 大小应该与列表的size相同；
         2 数组的类型应该与列表item类型相同。
 
-赋值100万个数字的差异不是很明显
+结论： 当数组容量 = list's size时， toArray(array01)的耗时最小
  */
