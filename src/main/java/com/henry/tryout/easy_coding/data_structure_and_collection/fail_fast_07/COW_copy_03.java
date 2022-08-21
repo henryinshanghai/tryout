@@ -2,7 +2,6 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.fail_fast_07;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class COW_copy_03 {
     public static void main(String[] args) {

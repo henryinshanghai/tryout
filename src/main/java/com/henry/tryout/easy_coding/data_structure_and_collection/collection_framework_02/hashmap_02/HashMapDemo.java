@@ -1,7 +1,8 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02;
+package com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.hashmap_02;
 
 import java.util.HashMap;
 
+// 查看 put(k, v)的源码 - set for another day🤭
 public class HashMapDemo {
     public static void main(String[] args) {
         HashMap<String, String> map = new HashMap<>();
