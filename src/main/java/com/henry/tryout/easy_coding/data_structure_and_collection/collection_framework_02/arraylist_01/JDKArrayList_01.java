@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02;
+package com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.arraylist_01;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -7,7 +7,7 @@ import java.util.function.UnaryOperator;
 import sun.misc.SharedSecrets;
 
 
-public class ArrayList<E> extends AbstractList<E>
+public class JDKArrayList_01<E> extends AbstractList<E>
         implements List<E>, RandomAccess, Cloneable, java.io.Serializable
 {
     private static final long serialVersionUID = 8683452581122892189L;
@@ -51,7 +51,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @throws IllegalArgumentException if the specified initial capacity
      *         is negative
      */
-    public ArrayList(int initialCapacity) {
+    public JDKArrayList_01(int initialCapacity) {
         if (initialCapacity > 0) {
             // 当开发者传入的参数大于0时，根据传入参数的大小 来初始化elementData
             this.elementData = new Object[initialCapacity];
@@ -66,7 +66,7 @@ public class ArrayList<E> extends AbstractList<E>
     /**
      * Constructs an empty list with an initial capacity of ten.
      */
-    public ArrayList() {
+    public JDKArrayList_01() {
         this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
     }
 
@@ -78,7 +78,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @param c the collection whose elements are to be placed into this list
      * @throws NullPointerException if the specified collection is null
      */
-    public ArrayList(Collection<? extends E> c) {
+    public JDKArrayList_01(Collection<? extends E> c) {
         elementData = c.toArray();
         if ((size = elementData.length) != 0) {
             // c.toArray might (incorrectly) not return Object[] (see 6260652)
@@ -138,7 +138,6 @@ public class ArrayList<E> extends AbstractList<E>
         // 怎么能确保 列表容量 >= size + 1呢？答：按需扩容
         /*
             1 计算需要扩容到的容量 - 要么是预期的最小容量，要么是默认容量；
-            2
          */
         ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
     }
@@ -167,7 +166,7 @@ public class ArrayList<E> extends AbstractList<E>
      * @param minCapacity the desired minimum capacity 需要扩容到的容量
      */
     private void grow(int minCapacity) {
-        // 获取到 旧数组的容量
+        /* 确定newCapacity👇 */
         int oldCapacity = elementData.length;
         // 计算得到一个新的容量 新容量 = 旧容量的1.5倍
         int newCapacity = oldCapacity + (oldCapacity >> 1);
@@ -175,6 +174,8 @@ public class ArrayList<E> extends AbstractList<E>
         if (newCapacity - minCapacity < 0)
             // 用 需要扩容到的容量 来更新 新容量的大小
             newCapacity = minCapacity;
+
+        /* 对极限的情况进行分类讨论👇 */
         // 如果 计算出的新容量 比 数组所能允许的最大容量 还要大，则：
         if (newCapacity - MAX_ARRAY_SIZE > 0)
             // 根据 需要扩容到的容量 来更新 新容量的大小 - 新容量至多不能超过 Integer.MAX_VALUE
@@ -273,7 +274,7 @@ public class ArrayList<E> extends AbstractList<E>
      */
     public Object clone() {
         try {
-            ArrayList<?> v = (ArrayList<?>) super.clone();
+            JDKArrayList_01<?> v = (JDKArrayList_01<?>) super.clone();
             v.elementData = Arrays.copyOf(elementData, size);
             v.modCount = 0;
             return v;
@@ -782,7 +783,7 @@ public class ArrayList<E> extends AbstractList<E>
             int i = cursor;
             if (i >= size)
                 throw new NoSuchElementException();
-            Object[] elementData = ArrayList.this.elementData;
+            Object[] elementData = JDKArrayList_01.this.elementData;
             if (i >= elementData.length)
                 throw new ConcurrentModificationException();
             cursor = i + 1;
@@ -795,7 +796,7 @@ public class ArrayList<E> extends AbstractList<E>
             checkForComodification();
 
             try {
-                ArrayList.this.remove(lastRet);
+                JDKArrayList_01.this.remove(lastRet);
                 cursor = lastRet;
                 lastRet = -1;
                 expectedModCount = modCount;
@@ -808,12 +809,12 @@ public class ArrayList<E> extends AbstractList<E>
         @SuppressWarnings("unchecked")
         public void forEachRemaining(Consumer<? super E> consumer) {
             Objects.requireNonNull(consumer);
-            final int size = ArrayList.this.size;
+            final int size = JDKArrayList_01.this.size;
             int i = cursor;
             if (i >= size) {
                 return;
             }
-            final Object[] elementData = ArrayList.this.elementData;
+            final Object[] elementData = JDKArrayList_01.this.elementData;
             if (i >= elementData.length) {
                 throw new ConcurrentModificationException();
             }
@@ -859,7 +860,7 @@ public class ArrayList<E> extends AbstractList<E>
             int i = cursor - 1;
             if (i < 0)
                 throw new NoSuchElementException();
-            Object[] elementData = ArrayList.this.elementData;
+            Object[] elementData = JDKArrayList_01.this.elementData;
             if (i >= elementData.length)
                 throw new ConcurrentModificationException();
             cursor = i;
@@ -872,7 +873,7 @@ public class ArrayList<E> extends AbstractList<E>
             checkForComodification();
 
             try {
-                ArrayList.this.set(lastRet, e);
+                JDKArrayList_01.this.set(lastRet, e);
             } catch (IndexOutOfBoundsException ex) {
                 throw new ConcurrentModificationException();
             }
@@ -883,7 +884,7 @@ public class ArrayList<E> extends AbstractList<E>
 
             try {
                 int i = cursor;
-                ArrayList.this.add(i, e);
+                JDKArrayList_01.this.add(i, e);
                 cursor = i + 1;
                 lastRet = -1;
                 expectedModCount = modCount;
@@ -949,21 +950,21 @@ public class ArrayList<E> extends AbstractList<E>
             this.parentOffset = fromIndex;
             this.offset = offset + fromIndex;
             this.size = toIndex - fromIndex;
-            this.modCount = ArrayList.this.modCount;
+            this.modCount = JDKArrayList_01.this.modCount;
         }
 
         public E set(int index, E e) {
             rangeCheck(index);
             checkForComodification();
-            E oldValue = ArrayList.this.elementData(offset + index);
-            ArrayList.this.elementData[offset + index] = e;
+            E oldValue = JDKArrayList_01.this.elementData(offset + index);
+            JDKArrayList_01.this.elementData[offset + index] = e;
             return oldValue;
         }
 
         public E get(int index) {
             rangeCheck(index);
             checkForComodification();
-            return ArrayList.this.elementData(offset + index);
+            return JDKArrayList_01.this.elementData(offset + index);
         }
 
         public int size() {
@@ -1025,7 +1026,7 @@ public class ArrayList<E> extends AbstractList<E>
             return new ListIterator<E>() {
                 int cursor = index;
                 int lastRet = -1;
-                int expectedModCount = ArrayList.this.modCount;
+                int expectedModCount = JDKArrayList_01.this.modCount;
 
                 public boolean hasNext() {
                     return cursor != SubList.this.size;
@@ -1037,7 +1038,7 @@ public class ArrayList<E> extends AbstractList<E>
                     int i = cursor;
                     if (i >= SubList.this.size)
                         throw new NoSuchElementException();
-                    Object[] elementData = ArrayList.this.elementData;
+                    Object[] elementData = JDKArrayList_01.this.elementData;
                     if (offset + i >= elementData.length)
                         throw new ConcurrentModificationException();
                     cursor = i + 1;
@@ -1054,7 +1055,7 @@ public class ArrayList<E> extends AbstractList<E>
                     int i = cursor - 1;
                     if (i < 0)
                         throw new NoSuchElementException();
-                    Object[] elementData = ArrayList.this.elementData;
+                    Object[] elementData = JDKArrayList_01.this.elementData;
                     if (offset + i >= elementData.length)
                         throw new ConcurrentModificationException();
                     cursor = i;
@@ -1069,7 +1070,7 @@ public class ArrayList<E> extends AbstractList<E>
                     if (i >= size) {
                         return;
                     }
-                    final Object[] elementData = ArrayList.this.elementData;
+                    final Object[] elementData = JDKArrayList_01.this.elementData;
                     if (offset + i >= elementData.length) {
                         throw new ConcurrentModificationException();
                     }
@@ -1098,7 +1099,7 @@ public class ArrayList<E> extends AbstractList<E>
                         SubList.this.remove(lastRet);
                         cursor = lastRet;
                         lastRet = -1;
-                        expectedModCount = ArrayList.this.modCount;
+                        expectedModCount = JDKArrayList_01.this.modCount;
                     } catch (IndexOutOfBoundsException ex) {
                         throw new ConcurrentModificationException();
                     }
@@ -1110,7 +1111,7 @@ public class ArrayList<E> extends AbstractList<E>
                     checkForComodification();
 
                     try {
-                        ArrayList.this.set(offset + lastRet, e);
+                        JDKArrayList_01.this.set(offset + lastRet, e);
                     } catch (IndexOutOfBoundsException ex) {
                         throw new ConcurrentModificationException();
                     }
@@ -1124,14 +1125,14 @@ public class ArrayList<E> extends AbstractList<E>
                         SubList.this.add(i, e);
                         cursor = i + 1;
                         lastRet = -1;
-                        expectedModCount = ArrayList.this.modCount;
+                        expectedModCount = JDKArrayList_01.this.modCount;
                     } catch (IndexOutOfBoundsException ex) {
                         throw new ConcurrentModificationException();
                     }
                 }
 
                 final void checkForComodification() {
-                    if (expectedModCount != ArrayList.this.modCount)
+                    if (expectedModCount != JDKArrayList_01.this.modCount)
                         throw new ConcurrentModificationException();
                 }
             };
@@ -1157,13 +1158,13 @@ public class ArrayList<E> extends AbstractList<E>
         }
 
         private void checkForComodification() {
-            if (ArrayList.this.modCount != this.modCount)
+            if (JDKArrayList_01.this.modCount != this.modCount)
                 throw new ConcurrentModificationException();
         }
 
         public Spliterator<E> spliterator() {
             checkForComodification();
-            return new ArrayListSpliterator<E>(ArrayList.this, offset,
+            return new ArrayListSpliterator<E>(JDKArrayList_01.this, offset,
                     offset + this.size, this.modCount);
         }
     }
@@ -1236,13 +1237,13 @@ public class ArrayList<E> extends AbstractList<E>
          * these streamlinings.
          */
 
-        private final ArrayList<E> list;
+        private final JDKArrayList_01<E> list;
         private int index; // current index, modified on advance/split
         private int fence; // -1 until used; then one past last index
         private int expectedModCount; // initialized when fence set
 
         /** Create new spliterator covering the given  range */
-        ArrayListSpliterator(ArrayList<E> list, int origin, int fence,
+        ArrayListSpliterator(JDKArrayList_01<E> list, int origin, int fence,
                              int expectedModCount) {
             this.list = list; // OK if null unless traversed
             this.index = origin;
@@ -1252,7 +1253,7 @@ public class ArrayList<E> extends AbstractList<E>
 
         private int getFence() { // initialize fence to size on first use
             int hi; // (a specialized variant appears in method forEach)
-            ArrayList<E> lst;
+            JDKArrayList_01<E> lst;
             if ((hi = fence) < 0) {
                 if ((lst = list) == null)
                     hi = fence = 0;
@@ -1288,7 +1289,7 @@ public class ArrayList<E> extends AbstractList<E>
 
         public void forEachRemaining(Consumer<? super E> action) {
             int i, hi, mc; // hoist accesses and checks from loop
-            ArrayList<E> lst; Object[] a;
+            JDKArrayList_01<E> lst; Object[] a;
             if (action == null)
                 throw new NullPointerException();
             if ((lst = list) != null && (a = lst.elementData) != null) {

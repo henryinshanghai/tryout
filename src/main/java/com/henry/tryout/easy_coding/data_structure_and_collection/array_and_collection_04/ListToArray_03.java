@@ -1,6 +1,6 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection.array_and_collection_04;
 
-import com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.ArrayList;
+import com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.arraylist_01.JDKArrayList_01;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class ListToArray_03 {
     public static void main(String[] args) {
 
-        List<String> list = new ArrayList<>();
+        List<String> list = new JDKArrayList_01<>();
         list.add("one");
         list.add("two");
         list.add("three");

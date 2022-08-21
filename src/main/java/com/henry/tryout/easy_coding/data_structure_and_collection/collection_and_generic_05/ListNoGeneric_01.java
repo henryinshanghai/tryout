@@ -1,6 +1,6 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection.collection_and_generic_05;
 
-import com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.ArrayList;
+import com.henry.tryout.easy_coding.data_structure_and_collection.collection_framework_02.arraylist_01.JDKArrayList_01;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class ListNoGeneric_01 {
     public static void main(String[] args) {
 
         // 没有泛型之前，定义集合的方式
-        List a1 = new ArrayList();
+        List a1 = new JDKArrayList_01();
         a1.add(new Object());
         a1.add(new Integer(111));
         a1.add(new String("hello a1a1"));
