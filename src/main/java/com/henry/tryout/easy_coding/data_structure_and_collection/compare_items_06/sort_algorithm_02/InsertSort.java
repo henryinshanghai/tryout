@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06;
+package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06.sort_algorithm_02;
 
 /*
     算法思路描述：
@@ -24,11 +24,9 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items
     流程中的debug：
         assert <预期目标>
  */
-public class InsertSort_03_01 {
-    /**
-     * 对数组中的元素进行排序
-     * @param a
-     */
+public class InsertSort {
+
+    // 核心API - 对数组中的元素进行排序
     public static void sort(Comparable[] a){
         // 插入排序     原因：从无序区域取出元素插入到有序区
         int itemAmount = a.length;
@@ -55,7 +53,9 @@ public class InsertSort_03_01 {
         assert isSorted(a);
     }
 
+    // 辅助API 👇
     private static boolean isSorted(Comparable[] a, int leftBar, int rightBar) {
+        // 当前元素 一定要比 它的前一个元素更大
         for (int cursor = leftBar + 1; cursor <= rightBar; cursor++) {
             if(less(a[cursor], a[cursor - 1])) return false;
         }
@@ -63,6 +63,7 @@ public class InsertSort_03_01 {
         return true;
     }
 
+    // 对外的单参数方法
     public static boolean isSorted(Comparable[] a){
         return isSorted(a, 0, a.length - 1);
     }
@@ -93,7 +94,7 @@ public class InsertSort_03_01 {
     }
 
 
-    // 测试用例
+    // 测试用例 👇
     public static void main(String[] args) {
         // 从标准输入中读取字符串，然后把它们排序输出
         Integer[] a = new Integer[]{1, 4, 2, 7, 9, 0};
