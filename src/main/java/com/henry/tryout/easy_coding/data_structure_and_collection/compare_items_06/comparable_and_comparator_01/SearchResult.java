@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06;
+package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06.comparable_and_comparator_01;
 
 public class SearchResult implements Comparable<SearchResult> { // 实现Comparable接口时，添加上泛型限定 - 这样在编译阶段，就能发现传入的参数是不是 SearchResult对象
     int relativeRatio;
@@ -30,5 +30,14 @@ public class SearchResult implements Comparable<SearchResult> { // 实现Compara
     // 这是做什么用的？
     public void setRecentOrders(int recentOrders) {
         this.recentOrders = recentOrders;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchResult{" +
+                "relativeRatio=" + relativeRatio +
+                ", count=" + count +
+                ", recentOrders=" + recentOrders +
+                '}';
     }
 }
