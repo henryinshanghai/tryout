@@ -2,14 +2,15 @@ fail-fast:
     是：一个策略；
     作用：用来指明在错误发生时的处理方式；
     应用：在遍历集合元素的过程中。
-    手段：在遍历中途出现意料之外的修改时，通过 unchecked异常 来暴力地反馈出来；
+    手段：在遍历中途出现 意料之外的修改 时，通过 unchecked异常 来暴力地反馈出来；
 
-应用原理：
-    在多线程环境下，当前线程会维护一个 计数比较器 expectModCount,aka,记录已经被修改的次数。
-    在进入遍历之前，把 实时修改次数modCount 赋值给 expectedModCount - 如果这两个数据不相等，就会抛出异常。
+    原理：
+        在多线程环境下，当前线程会维护一个 计数比较器expectModCount,aka,记录已经被修改的次数。
+        在进入遍历之前，把 实时修改次数modCount 赋值给 expectedModCount - 如果这两个数据不相等，就会抛出异常。
 
-java.util下面的所有集合类都是 fail-fast的，而 concurrent包下面的集合类都是 fail-safe的。
-fail-safe: 班长拿出手机快速拍照，然后根据照片点名，而不关心同学们的进进出出。
+    应用实例：
+        java.util下面的所有集合类都是 fail-fast的，而 concurrent包下面的集合类都是 fail-safe的。
+        fail-safe: 班长拿出手机快速拍照，然后根据照片点名，而不关心同学们的进进出出。
 
-demo: ArrayList.subList();
-主列表 master、子列表 branch - 主列表上元素的增加或删除，都会导致子列表的遍历、增加、删除 - 从而产生 fail-fast异常。
+    demo: ArrayList.subList(); // 方法返回的是一个视图
+    主列表 master、子列表 branch - 主列表上元素的增加或删除，都会导致子列表的遍历、增加、删除 - 从而产生 fail-fast异常。
