@@ -1,0 +1,12 @@
+hashCode() 与 equals()
+
+作用：标识对象的唯一性；
+应用：这两个方法 协同工作 来 判断两个对象是否相等；
+原理：
+    1 调用Object.hashCode()来为 实例对象生成唯一的hash值 - 不同对象很有可能会产生相同的hash值；
+    2 在 hashCode相同的情况下，再调用equals() 对实例对象进行一次值的比较。
+规则：
+    #1 如果两个对象的 equals()是相等的，那么 两个对象调用hashCode()返回的结果也必须是相同的；
+    #2 任何覆写 equals 的时候，都需要同时覆写 hashCode.
+应用：
+    1 HashMap get()方法；

@@ -1,10 +1,11 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06;
+package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06.equal_object_03;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public class ListEquals_04 {
+// 判断两个list对象是不是相等的
+public class EqualsList {
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();
         linkedList.add(1);
@@ -12,14 +13,21 @@ public class ListEquals_04 {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         arrayList.add(1);
 
-        // 为什么这里的 equals()方法会返回true？ - 主要取决于 equals()方法的实现
-        // equals()方法中判断了两点 - 1 是不是List的类型； 2 集合中的item的数量与内容是不是相同
+        /*
+            手段1：xxx.equals(ooo)
+            equals()方法会返回什么值？
+            答：主要取决于 equals()方法的实现
+
+            equals()方法中判断了两点 - 1 是不是List的类型； 2 集合中的item的数量与内容是不是相同
+            所以这里会返回 true
+         */
         if (arrayList.equals(linkedList)) {
             System.out.println("equals is true");
         } else {
             System.out.println("equals is false");
         }
 
+        // 手段2：Objects.equals(xxx, ooo)
         if (Objects.equals(arrayList, linkedList)) { // 结果是相等的
             System.out.println("两个变量相等");
         } else {
