@@ -1,0 +1,6 @@
+为什么没有抛出 ConcurrentModificationException异常呢？
+原理：
+    #1 遍历集合时，会使用一个cursor游标 来标识当前扫描到的位置；
+    #2 当cursor == size的时候，就会退出循环；
+    #3 在remove two元素之后，会把所有元素往前拷贝 - cursor = (size-1) == 2.此时 cursor也等于2
+    #4 基于#3，在执行 hasNext()时，返回值为false，从而退出循环体。不会执行到 next()方法，也就不会 checkForComodification()
