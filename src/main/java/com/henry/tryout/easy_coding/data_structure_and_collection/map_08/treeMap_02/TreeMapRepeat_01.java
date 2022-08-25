@@ -16,6 +16,7 @@ public class TreeMapRepeat_01 {
     }
 }
 
+// TreeMap中Key的定义 - 判断元素是否是重复元素的手段 - 两个元素是否可以视为相等
 class Key implements Comparable<Key> {
 
     @Override
