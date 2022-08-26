@@ -1,0 +1,28 @@
+JDK中的并发包解析：
+    - 1 线程同步类；
+        作用：协调不同线程之间的交互/协作；
+        demo：CountDownLatch（倒计数门闩）, Semaphore(信号量), CyclicBarrier(循环屏障)
+
+    - 2 并发集合类；
+        作用：支持多线程环境下的并发修改；
+        demo:
+            ConcurrentHashMap;
+                特征：分段锁 -> CAS, 性能不断提升
+            ConcurrentSkipListMap; 跳表
+            CopyOnWriteArrayList; 奶牛列表
+            BlockingQueue; 阻塞队列
+
+    - 3 线程管理类；
+        线程池；
+        用法：
+            1 Executors静态工厂 / ThreadPoolExecutor；
+            2 使用 ScheduledExecutorService 来 执行定时任务；
+
+    - 4 与锁相关的类；
+        作用：用于保证多线程操作的互斥性；
+        demo: ReentrantLock;
+        特征：锁的很多概念在弱化，因为很多类库都已经把锁做了很好的封装
+
+并发包中的类有很多，彼此之间的差异也比较微妙。
+需要开发者有很好的Java基础、逻辑思维能力，一定的数据结构基础。
+才能分清楚各个类族的优缺点、差异点。
