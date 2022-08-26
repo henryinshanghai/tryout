@@ -2,6 +2,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.map_08.hashMa
 
 import java.util.HashMap;
 
+// 没能够形成预期中的死链
 public class HashMapEndlessLoop {
     private static HashMap<Long, EasyCoding> map = new HashMap<>();
 
