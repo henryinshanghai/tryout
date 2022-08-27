@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_sync_03;
+package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_sync_03.concept_01;
 
 public class LazyInitDemo {
     private static TransactionService service = null;
