@@ -1,0 +1,33 @@
+目标：多线程场景下，需要声明 某个线程对某段代码拥有执行权；
+手段：对 部分场景的执行现场 进行加锁；
+原理：多线程导致的资源竞争, 需要多个线程能够有序地完成工作。
+
+锁的发展：
+    悲观锁 - 乐观锁 - 偏向锁 - 分段锁等
+锁的特征：
+    1 互斥性；
+    2 不可见性???
+作用：
+    由于锁的存在，有些操作 对外界来说是黑箱进行的, aka, 只有锁的持有者(某个线程) 才知道 对变量进行了哪些操作。
+
+
+学习锁的方式：
+    通过 对 java.util.concurrent(JUC)包中的基础类的解析，来说明 锁的本质与特性。
+
+    Java中锁的用法：
+    - 1 使用并发包中的锁类；
+        Lock 是JUC包中的顶层接口；
+            特征：它没有使用 synchroniz ed(提供互斥性)，而是使用volatile(提供可见性)。
+        JUC中的一些基础类型；
+            Lock -> ReentrantLock -> { Sync, FairSync, NonFairSync}
+        特征：
+            #1 ReentrantLock实现Lock时，依赖了 Sync；
+            #2 Sync 继承了 AbstractQueuedSynchronizer(AQS) - 这是 JUC包实现同步的基础工具；
+            #3 在AQS中，有一个state变量(volatile) 作为共享资源；
+        用法：
+            1 如果线程获取资源失败，则：线程 进入同步FIFO队列中 等待；
+            2 如果线程获取资源成功，则：执行 临界区的代码；
+            3 执行完成后，释放资源，然后通知 同步队列中的等待线程(可以获取资源啦)
+
+        JDK8中添加了一个新的锁： StampedLock；
+        作用：改进了读写锁 ReentrantReadWriteLock；
