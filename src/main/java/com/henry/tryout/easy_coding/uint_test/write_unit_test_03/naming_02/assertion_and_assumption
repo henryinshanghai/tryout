@@ -32,9 +32,9 @@ AssertJ
             对比于 JUnit中的 public static void assertThat(), 返回值类型为void
             结果：AssertJ对于不同的类型就会有不同的断言方法 - 比如 String 和 Date的断言方法就不一样
 
-        AssertJ对自定义的Java Bean的判断：
+        AssertJ对 自定义的Java Bean 的判断：
             1 AssertJ使用 AssertJ assertions generator来生成对应的XxxAssert类。
-            2 使用XxxAssert类来辅助我们 对模板bean进行断言API判断；
+            2 使用XxxAssert类 来 辅助我们 对模板bean进行断言API判断；
             3 AssertJ assertions generator有相应的Maven 与 Gradle插件，所以生成这样的代码会很容易；
 
         AssertJ中其他常用的扩展：

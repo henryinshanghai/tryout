@@ -49,7 +49,7 @@ public class JUnitSampleTest {
     }
 }
 /*
-来来回回,就两个方法：
+JUnit原生的断言 - 来来回回,就两个方法：
     Assertions.assertEquals()
     Assertions.assertTrue()
  */
