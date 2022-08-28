@@ -23,17 +23,17 @@ ThreadLocal可能引起的副作用：
             使用框架缓存了 每个用户对应的SecurityContext - 这个对象封装了session相关的信息。
     原因：
         1 优化后的方式，会为每个用户新建一个 session相关的上下文；
-        2 ThreadLocal没有在线程结束后及时地进行remove操作；
-        结果在高并发场景下，线程池中的线程 就可能会读取到上一个线程 所缓存的用户信息。
+        2 ThreadLocal没有 在线程结束后 及时地进行remove操作；
+        结果在高并发场景下，线程池中的线程 就可能会读取到 上一个线程所缓存的用户信息。
 
     代码模拟：DirtyDataInThreadLocal.java
 
 2 内存泄露
 fact：在 ThreadLocal的源码中，推荐使用 static关键字来修饰 ThreadLocal。
 ThreadLocal的设计初衷：希望 threadLocal对象失去引用之后，借助弱引用的机制来 回收Entry的value。
-由于 threadlocal对象被static修饰，因此其生命周期要比 类的实例更长， aka，弱引用机制也就失效了。
+由于 threadlocal对象 被static修饰，因此其生命周期要 比类的实例更长 -> 弱引用机制也就失效了。
 
 aka 在线程执行完成后，如果不进行remove()操作，则：
-    通过 threadlocal对象所持有的String对象 并不会被释放。
+    Thread对象 通过threadlocal对象所持有的String对象 并不会被释放。
 
 总结：对于 threadlocal副作用的解决方案 - 每次使用完threadlocal之后，都需要使用remove()来及时清理。
