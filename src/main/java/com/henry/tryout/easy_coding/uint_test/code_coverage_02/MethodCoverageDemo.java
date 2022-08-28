@@ -60,5 +60,4 @@ public class MethodCoverageDemo {
 因此 这两个测试用例，满足了 条件判定覆盖的要求。
 
 结论：分支覆盖 是 条件判定覆盖的一个子集。
-
  */

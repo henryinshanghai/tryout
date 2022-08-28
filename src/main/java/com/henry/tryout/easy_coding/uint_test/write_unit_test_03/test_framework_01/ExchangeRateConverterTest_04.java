@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// 数据驱动测试 - @TestFactory
 @DisplayName("售票器类型测试")
 public class ExchangeRateConverterTest_04 {
     private TicketSeller ticketSeller;
