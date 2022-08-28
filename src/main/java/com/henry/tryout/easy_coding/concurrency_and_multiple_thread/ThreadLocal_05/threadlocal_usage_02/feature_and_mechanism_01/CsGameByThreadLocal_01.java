@@ -2,6 +2,7 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 
 import java.util.concurrent.ThreadLocalRandom;
 
+// 使用 ThreadLocal 来 让每个线程都有自己的变量副本
 public class CsGameByThreadLocal_01 {
     // 静态成员变量 - 被类的所有实例共享
     public static final Integer BULLET_NUMBER = 1500;
@@ -9,19 +10,17 @@ public class CsGameByThreadLocal_01 {
     public static final Integer LIFE_VALUE = 10;
     public static final Integer TOTAL_PLAYERS = 10;
 
-    // 随机数；  作用：用来展示每个对象的不同数据???
     /*
-        特征：
-            1 静态变量 - 被所有实例共享
-            2 JDK7引入 - 每个线程都能有自己的随机数生成器，而不是共享
+        随机数；  作用：用来展示每个对象的不同数据???
+        特征：1 静态变量 - 被所有实例共享 2 JDK7引入 - 每个线程都能有自己的随机数生成器，而不是共享
      */
     private static final ThreadLocalRandom RANDOM
             = ThreadLocalRandom.current();
 
     /*
          初始化子弹的数量
-         手段：定义一个 ThreadLocal类型的变量 - new ThreadLocal并重写其 initialValue()方法
-         相当于对 静态变量BULLET_NUMBER 做了一层封装
+         手段：定义一个 ThreadLocal类型的变量 - #1 new ThreadLocal并重写其 initialValue()方法
+         作用：相当于对 静态变量BULLET_NUMBER 做了一层封装
 
             特征：1 每个线程都会单独持有 ThreadLocal变量的副本；
             2 由于变量没有被多个线程共享，因此不存在线程安全问题；
@@ -96,7 +95,7 @@ public class CsGameByThreadLocal_01 {
     }
 }
 /*
-#问题1 - ThreadLocal变量是怎么成为 线程的独立拷贝 的？
+#问题1 ThreadLocal变量是怎么成为 线程的独立拷贝 的？
     - 1 我们在定义 ThreadLocal变量时，覆写了其中的 initialValue()方法；
     - 2 initialValue这个方法的执行时机是 - threadLocal对象调用get()方法时。
 

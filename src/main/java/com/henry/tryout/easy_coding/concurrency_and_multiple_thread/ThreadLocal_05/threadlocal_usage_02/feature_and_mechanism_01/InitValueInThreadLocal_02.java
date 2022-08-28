@@ -7,15 +7,14 @@ public class InitValueInThreadLocal_02 {
             new StringBuilder("init");
 
     // 创建 ThreadLocal变量 - 覆写 initialValue()方法，并返回可变对象 StringBuilder
-    /*
-    private static final ThreadLocal<StringBuilder> builder
-            = new ThreadLocal<StringBuilder>(){
-
-        @Override
-        protected StringBuilder initialValue() {
-            return INIT_VALUE; // 1 ThreadLocal中封装的是一个 可变变量
-        }
-    }; */
+//    private static final ThreadLocal<StringBuilder> builder
+//            = new ThreadLocal<StringBuilder>(){
+//
+//        @Override
+//        protected StringBuilder initialValue() {
+//            return INIT_VALUE; // 1 ThreadLocal中封装的是一个 可变变量
+//        }
+//    };
     private static final StringBuilder builder = new StringBuilder("init");
 
     // 定义线程类，重写run()方法
@@ -34,6 +33,7 @@ public class InitValueInThreadLocal_02 {
                 inThread.append("-" + i);
             }
             System.out.println(this.getName() + " " + inThread.toString());
+
         }
     }
 
@@ -56,8 +56,7 @@ Thread-4 init-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9
     这么看来，builder这个变量看起来并不是 线程私有的呀。否则，线程2 与 线程1看到的初始值为什么会是不一样的呢？
 
 手段：把这里的builder从 ThreadLocal 替换成为 StringBuilder类型；
-结果：控制台打印的结果 和 使用ThreadLocal变量时一致。
-
-结论：在线程中操作共享对象时，仍旧会需要同步操作???
+结果：数据结果乱序不可控???
+结论：如果编码时 使用某个引用 来 操作共享对象时，仍旧需要进行线程同步的操作？？？
 
  */
