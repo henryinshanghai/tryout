@@ -20,14 +20,14 @@ public class TicketSellerTest_01 {
     // 定义待测试类的实例
     private TicketSeller ticketSeller;
 
-    // 定义在真个测试类开始之前需要执行的操作
+    // 定义 在整个测试类开始之前 需要执行的操作
     @BeforeAll
     public static void init() {
         // 全局与外部资源的创建、初始化工作
 
     }
 
-    // 定义整个测试类完成之后 需要执行的操作
+    // 定义 整个测试类完成之后 需要执行的操作
     @AfterAll
     public static void cleanUp() {
         // 全局与外部资源的释放、销毁
