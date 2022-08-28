@@ -26,6 +26,7 @@ public class SoftReferenceHouse_01 {
 // 自定义的大对象
 class House {
     public static final Integer DOOR_NUMBER = 2000;
+    // 大的数组
     public Door[] doors = new Door[DOOR_NUMBER];
 
     private String info;
@@ -55,25 +56,13 @@ JVM运行参数： -Xms20m -Xmx20m
 
 原理：
     1 SoftReference的父类中的 private T referent; 属性，指向了 new House()匿名对象；
-    2 SoftReference中的get()方法，也是调用 super.get()来 访问父类的这个私有属性的；
+    2 SoftReference中的get()方法，也是调用 super.get()来 访问父类的这个私有属性 referent 的；
     结果： 大量的House对象 在内存即将耗尽之前，被一次次地清理掉。
 
-JVM堆内存被占满的原因：
+在经过GC回收后，JVM堆内存仍旧被占满的原因：
     1 buyer2本身是一个SoftReference对象；
     2 buyer2被集合 ArrayList的强引用所劫持；
 
 结果：不断循环执行 houses.add()，在 i=347219 时，终于产生了OOM。
 
-知识卡：
-    软引用、弱引用、虚引用都有 带有队列的构造方法：
-        public SoftReference(T referent, ReferenceQueue<? super T> q){...}
-    作用：能够在队列中检查具体哪一个软引用的对象被回收了 - 进而把失去对象的软引用给回收掉。
-
-demo的作用：证明了软引用在内存紧张时的回收能力。
-应用：软引用一般用于 在同一服务器内缓存中间结果；
-    如果命中缓存，则：直接提取缓存结果；否则，重新计算或者获取。
-note：软引用不能用来缓存高频数据 - 因为一旦服务器重启或者内存紧张触发了对软引用的回收，则：缓存就会失效。
-
-追问：如果内存没有到达OOM，软引用会被回收吗？
-验证Demo: SoftReferenceWhenIdle
  */

@@ -2,11 +2,12 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 
 import java.lang.ref.WeakReference;
 
+// 特性 - 如果某个对象 只被弱引用所指向，则：下一次YGC（新生代垃圾回收）时会回收此对象
 public class WeakReferenceWhenIdle_03 {
     public static void main(String[] args) {
         // seller强引用 指向 new House()对对象
         House seller = new House();
-        // buyer3 指向 弱引用对象; 弱引用对象 封装了 seller强引用指向的House对象
+        // buyer3引用 指向 弱引用对象; 弱引用对象 封装了 seller强引用指向的House对象
         WeakReference<House> buyer3 = new WeakReference<>(seller);
         // 去除真实对象上的强引用
         seller = null;
@@ -16,7 +17,7 @@ public class WeakReferenceWhenIdle_03 {
         while (true) {
             /* 这里去掉 催促垃圾回收的代码 - 以便使对象本身存活更长的时间。 */
 
-            // 如果 buyer3引用指向的对象(真实对象)被回收...
+            // 如果 buyer3引用所指向的对象(真实对象)被回收...
             if (buyer3.get() == null) {
                 long duration = (System.nanoTime() - start) / (1000 * 1000);
                 // 则：打印👇
