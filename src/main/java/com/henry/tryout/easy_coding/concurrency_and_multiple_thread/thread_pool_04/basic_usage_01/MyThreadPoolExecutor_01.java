@@ -6,7 +6,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class MyThreadPoolExecutor_01 {
-    // 线程池中的常驻 核心线程数量 - 任务完成后，核心线程会被保留。
+    // 线程池的7个成员变量
+    // 线程池中的常驻 核心线程数量 - 特征：任务完成后，核心线程会被保留。
     int corePoolSize;
     // 线程池所能容纳的最大线程数量 - 这个数字必须≥1
     int maximumPoolSize;

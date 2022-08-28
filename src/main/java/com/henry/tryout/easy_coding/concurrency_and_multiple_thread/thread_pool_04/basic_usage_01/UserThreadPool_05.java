@@ -5,13 +5,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+// 线程池 ThreadPoolExecutor的用法 - 7个参数
 public class UserThreadPool_05 {
     public static void main(String[] args) {
         // 设置缓存队列的长度为2 - 目的：快速地触发 rejectHandler
         BlockingQueue queue = new LinkedBlockingQueue<>(2);
 
-        // 线程工厂：准备需要执行的任务 - 任务有两个来源
-        // 特征：在创建线程工厂的时候，可以为自定义的工厂指定名称
+        // 指定名称的线程工厂：用于生产一组 完成相同任务的线程
         UserThreadFactory_03 f1 = new UserThreadFactory_03("第1机房");
         UserThreadFactory_03 f2 = new UserThreadFactory_03("第2机房");
 
@@ -28,19 +28,10 @@ public class UserThreadPool_05 {
                 new ThreadPoolExecutor(1, 2, 60,
                         TimeUnit.SECONDS, queue, f2, handler);
 
-        // 创建400个任务线程 - 使用线程池对象 来 执行线程任务；
-        // 手段：调用线程池对象的execute()方法，传入待执行的任务
+        /* 使用线程池对象 来 执行线程任务； 手段：调用线程池对象的execute()方法，传入待执行的任务 👇 */
         Runnable task = new Task();
-        // 特征：当循环的次数设置为5时，
-        // 线程池First的 名为第1机房的线程工厂，创建了3个线程来处理 需要多次执行的任务。
-        // 因此，引起了 线程池的拒绝策略 打印如下👇
-        /*
-            不是很清楚为什么引起了拒绝策略？！
-            task rejected. java.util.concurrent.ThreadPoolExecutor@61064425[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 4]
-         */
         for (int i = 0; i < 5; i++) {
-            // 使用线程池 来处理任务 - 两个线程池独立地处理相同的任务各200次
-            // 重复的 execute()方法调用 会导致线程池的拒绝策略
+            // 线程池的最大线程数为2 & 阻塞队列的大小为2 - 如果交给线程池5个任务/线程去执行，就会引发 拒绝策略
             threadPoolFirst.execute(task);
 //            threadPoolSecond.execute(task);
         }
