@@ -6,9 +6,9 @@ public class SoftReferenceWhenIdle_02 {
     public static void main(String[] args) {
         House seller = new House();
 
-        // 第一处
+        // 第一处 - 只创建一个对象，并使用软引用指向此对象
         SoftReference<House> buyer2 = new SoftReference<>(seller); // 方案1
-        seller = null;
+        seller = null; // 把seller强引用指向别处
 
         while (true) {
             // 建议 JVM进行垃圾回收 方案1
@@ -35,5 +35,4 @@ public class SoftReferenceWhenIdle_02 {
 参考：方案1
 结果：在相同的JVM环境下，buyer2 still here会一直输出。
 结论：buyer2一直持有 new House()的有效引用。即便 对象本身已经被置为null了
-
  */
