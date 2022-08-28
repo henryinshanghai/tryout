@@ -18,12 +18,11 @@
     ThreadLocal对象2本身； // 由弱引用key2指向
 
 总结：
-1 Thread对象中只存在一个ThreadLocalMap对象；
+1 Thread对象中 只存在一个 ThreadLocalMap对象；
 2 ThreadLocalMap对象中 存在有多个 Entry对象；
 3 Entry对象中的弱引用 指向一个ThreadLocal对象；
 4 ThreadLocal对象 可以被多个线程共享；
-
-5 线程中的Entry对象会持有value，但ThreadLocal对象本身不会持有value；// value是干啥用的？
+5 线程中的Entry对象 会持有value，但ThreadLocal对象 本身不会 持有value；// value是干啥用的？
 
 Entry类源码：
 
@@ -43,7 +42,7 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 即使线程正在执行，如果 ThreadLocal对象的引用 被置为null，则：
     Entry的Key就会 自动在下一次 YGC的时候被垃圾回收；
 在 ThreadLocal对象使用get() 或者 set()的时候，会：
-    自动地将哪些 key == null的value 置为null - 使value能够被垃圾回收，从而避免内存泄漏
+    自动地将那些 key == null的value 置为null - 使value能够被垃圾回收，从而避免内存泄漏
 
 ThreadLocal源码：
     注释：ThreadLocal对象 通常作为私有、静态变量使用；

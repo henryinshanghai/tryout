@@ -5,7 +5,7 @@ Thread
     static Thread currentThread()
 
 ======
-ThreadLocal
+ThreadLocal源码
     // 这3个成员变量有什么作用？
     int HASH_INCREMENT
     AtomicInteger nextHashCode
@@ -49,5 +49,3 @@ Entry类
 特征：
     1 继承自 WeakReference类；
     2 没有任何方法，只有一个 value成员变量。
-
-
