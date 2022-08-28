@@ -24,19 +24,21 @@ public class DirtyDataInThreadLocal {
         @Override
         public void run() {
             if (flag) {
-                // 第一个线程在set()之后，没有进行remove()调用 线程1为 threadlocal变量ser的值为：Thread-0. session info.
-                // 而第二个线程出于某种原因，没有进行 set操作
+                // 第一个线程在set()之后，没有进行remove()调用 线程1为 threadlocal变量set的值为：Thread-0. session info.
+                // 而第二个线程出于某种原因，没有进行 set操作 - 这里使用flag来模拟
                 threadLocal.set(this.getName() + ". session info.");
                 flag = false;
             }
 
-            // 结果：线程2执行到这条语句时，使用的 threadLocal的值是上一个线程设置的
+            // 结果：线程2 执行到这条语句时，使用的threadLocal的值 是上一个线程设置的
             System.out.println(this.getName() + "线程是 " + threadLocal.get());
         }
     }
 
 }
 /*
-结论： 在线程池中使用 ThreadLocal时，由于线程的重用，可能会导致 脏数据 - ThreadLocal变量没能是线程私有的
-解决手段：每次用完 threadLocal之后，及时地调用 remove()方法完成清理。
+结论：
+    在线程池中使用 ThreadLocal时，由于线程的重用，可能会导致 脏数据 - ThreadLocal变量没能是线程私有的(与初衷不符合)
+解决手段：
+    每次用完 threadLocal之后，及时地调用 remove()方法完成清理。
  */
