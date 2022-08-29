@@ -4,40 +4,37 @@ public class MergeSortTopToDownDrill {
     private static Comparable[] aux;
 
     public static void sort(Comparable[] a) {
-        // 初始化辅助数组的大小
         aux = new Comparable[a.length];
-
         sort(a, 0, a.length - 1);
     }
 
     private static void sort(Comparable[] a, int leftBar, int rightBar) {
-        if (leftBar >= rightBar) {
-            return;
-        }
+        if (leftBar >= rightBar) return;
 
         int middle = leftBar + (rightBar - leftBar) / 2;
-        sort(a, leftBar, middle);
+        sort(a, 0, middle);
+        assert isSorted(a, 0, middle);
+
         sort(a, middle + 1, rightBar);
+        assert isSorted(a, middle + 1, rightBar);
 
         merge(a, leftBar, middle, rightBar);
+        assert isSorted(a, 0, a.length - 1);
     }
 
     private static void merge(Comparable[] a, int leftBar, int middle, int rightBar) {
-        int leftHalveCursor = leftBar;
-        int rightHalveCursor = middle + 1;
-
-        // 把 原始数组指定区间中的元素 拷贝的 辅助数组中
-        for (int i = leftBar; i <= rightBar; i++) {
-            // 如果aux没有做大小的初始化，这里aux会是一个null
-            aux[i] = a[i];
+        for (int cursor = leftBar; cursor <= rightBar; cursor++) {
+            aux[cursor] = a[cursor];
         }
 
-        // 对 两个有序区间 进行归并操作
-        for (int i = leftBar; i <= rightBar; i++) {
-            if (leftHalveCursor > middle) a[i] = aux[rightHalveCursor++];
-            else if (rightHalveCursor > rightBar) a[i] = aux[leftHalveCursor++];
-            else if (less(aux[leftHalveCursor], aux[rightHalveCursor])) a[i] = aux[leftHalveCursor++];
-            else a[i] = aux[rightHalveCursor++];
+        int leftHalfCursor = leftBar;
+        int rightHalfCursor = middle + 1;
+
+        for (int cursor = leftBar; cursor <= rightBar; cursor++) {
+            if (leftHalfCursor > middle) a[cursor] = aux[rightHalfCursor++];
+            else if(rightHalfCursor > rightBar) a[cursor] = aux[leftHalfCursor++];
+            else if (less(aux[leftHalfCursor], aux[rightHalfCursor])) a[cursor] = aux[leftHalfCursor++];
+            else a[cursor] = aux[rightHalfCursor++];
         }
     }
 
@@ -45,17 +42,26 @@ public class MergeSortTopToDownDrill {
         return v.compareTo(w) < 0;
     }
 
-    public static void printItem(Comparable[] a) {
+    public static void printItems(Comparable[] a) {
         for (Comparable item : a) {
             System.out.print(item + " ");
         }
     }
 
+    private static boolean isSorted(Comparable[] a, int leftBar, int rightBar) {
+        for (int cursor = leftBar; cursor <= rightBar; cursor++) {
+            if (less(a[leftBar + 1], a[leftBar])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
-        String[] a = {"H", "E", "N", "R", "Y", "A", "N", "D", "J", "I", "A", "N", "M", "E", "I"};
-//        String[] a = {"M", "E", "R", "G", "E", "S", "O", "R", "T", "E", "X", "A", "M", "P", "L", "E"};
+        String[] a = {"H", "E", "N", "R", "Y", "A", "N", "D", "J", "A", "N", "E"};
         sort(a);
 
-        printItem(a);
+        printItems(a);
     }
 }
