@@ -25,7 +25,15 @@ public class ArrayListFailFast_02 {
         List<String> cowList = new CopyOnWriteArrayList<>();
         Iterator<String> cowIterator = cowList.iterator();
 
-        // 等价代码
+        // 没有抛出异常的原理 - 等价的iterator代码
+        /*
+            hasNext() - return cursor != size;
+            next() - next() { checkForComodification(); ...}
+            remove(item) - fastRemove(index); - System.arraycopy(elementData, index+1, elementData, index, numMoved);
+            #1 在remove(item)时，会：1 把所有的元素往前拷贝； 2 更新size变量的值；
+            #2 在执行hasNext()时，因为: cursor == size, 因此 结果为false
+            #3 没有机会执行到next()的第一行代码，从而抛出 并发修改异常~~
+         */
         Iterator<String> iterator = list.iterator();
         while (iterator.hasNext()) {
             String item = iterator.next();
