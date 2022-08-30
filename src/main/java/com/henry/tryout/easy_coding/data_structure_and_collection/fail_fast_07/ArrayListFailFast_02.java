@@ -17,7 +17,7 @@ public class ArrayListFailFast_02 {
 
         List<String> list2 = new ArrayList<>(list);
 
-        // 在遍历操作时，删除列表中的元素 - 预期：抛出并发修改异常
+        // 1 在遍历操作时，删除列表中的元素 - 预期：抛出并发修改异常
         // 结果：打脸了，没有抛出异常 why?
         /*
             hasNext() - return cursor != size;
@@ -33,10 +33,8 @@ public class ArrayListFailFast_02 {
             }
         }
 
-        List<String> cowList = new CopyOnWriteArrayList<>();
-        Iterator<String> cowIterator = cowList.iterator();
 
-        // 在遍历时修改list中的item - 手段：使用iterator对象进行remove()操作
+        // 2 在遍历时修改list中的item - 手段：使用iterator对象进行remove()操作
         Iterator<String> iterator = list2.iterator();
         while (iterator.hasNext()) {
             String item = iterator.next();
@@ -49,5 +47,6 @@ public class ArrayListFailFast_02 {
 }
 /*
 结论：
-    #1 可以使用Iterator 机制 来进行 "遍历时的删除"；- 注：如果是多线程并发，还需要在 Iterator遍历时加锁
+    #1 可以使用Iterator 机制 来进行 "遍历时的删除"；
+    #2 手段2：使用 COWList 见02
  */

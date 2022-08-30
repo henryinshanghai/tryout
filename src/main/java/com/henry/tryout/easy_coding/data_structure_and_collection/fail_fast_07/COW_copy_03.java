@@ -3,7 +3,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.fail_fast_07;
 import java.util.ArrayList;
 import java.util.List;
 
-// 对COW类型的list执行写操作会很耗时 - COW的原理导致的
+// 对COW类型的list执行写操作会很耗时 - 因为每次写都会拷贝出一个list的副本
 // 验证手段：构造一个场景，不断地向 COWList中写入新元素
 public class COW_copy_03 {
     public static void main(String[] args) {
