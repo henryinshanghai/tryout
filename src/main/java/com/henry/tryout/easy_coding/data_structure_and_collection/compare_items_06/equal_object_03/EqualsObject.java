@@ -36,7 +36,7 @@ public class EqualsObject {
     public static void main(String[] args) {
         Set<EqualsObject> hashSet = new HashSet<>();
 
-        // a, b, c是同一个对象吗？ 答：取决于 hashCode()有没有被重写 - 如果有，视为同一个对象； 如果没有，则：视为不同对象
+        // a, b, c是同一个对象吗？ 答：取决于 hashCode()有没有被根据对象属性重写 - 如果有，视为同一个对象； 如果没有，则：视为不同对象
         EqualsObject a = new EqualsObject(1, "one");
         EqualsObject b = new EqualsObject(1, "one");
         EqualsObject c = new EqualsObject(1, "one");
