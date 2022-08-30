@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import java.util.HashSet;
 import java.util.Set;
 
+// 使用自定义的对象 作为 set的item
 public class EqualsObject {
     private int id;
     private String name;
@@ -29,7 +30,8 @@ public class EqualsObject {
     // 关键点：没有同时重写 hashCode()方法
     @Override
     public int hashCode() {
-        // 计算当前对象的 hashCode值 - 手段：Objects.hashCode()方法
+        // 重写 hashCode()方法，不再是 返回对象地址
+        // 返回一个根据自定义对象属性值计算出来的结果    手段：Objects.hashCode()方法
         return Objects.hashCode(id, name);
     }
 

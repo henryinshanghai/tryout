@@ -13,7 +13,7 @@ public class MapsGetMethod {
         getNode(hash(key), key)
 
         if (e.hash == hash &&
-            ((k = e.key) == key || (key != null && key.equals(k))))
+            ((k = e.key) == key || (key != null && key.equals(k)))) // 要么是对象地址相等, 要么是 对象的值相等
             return e;
 
             e.hash == hash // 先决条件，只有true时，才会执行后继的代码
