@@ -3,7 +3,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.collection_fr
 
 import java.util.Arrays;
 
-// 警戒容量为4， 最大容量为7
+// 自定义的列表 特征：警戒容量为4， 最大容量为7
 public class MyArrayList_01<E> { // extends AbstractList<E>  implements List<E>, RandomAccess, Cloneable, java.io.Serializable
 
     // 成员变量
@@ -13,7 +13,7 @@ public class MyArrayList_01<E> { // extends AbstractList<E>  implements List<E>,
     private int size;
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
-    // 构造方法
+    // 构造方法 - 初始化真正存储元素的数组
     public MyArrayList_01() {
         elementData = EMPTY_ELEMENT_DATA;
     }

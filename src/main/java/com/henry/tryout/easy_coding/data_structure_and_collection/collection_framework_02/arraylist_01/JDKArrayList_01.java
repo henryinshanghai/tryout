@@ -176,7 +176,7 @@ public class JDKArrayList_01<E> extends AbstractList<E>
             newCapacity = minCapacity;
 
         /* 对极限的情况进行分类讨论👇 */
-        // 如果 计算出的新容量 比 数组所能允许的最大容量 还要大，则：
+        // 如果 计算出的新容量 比 警戒容量 还要大，则：
         if (newCapacity - MAX_ARRAY_SIZE > 0)
             // 根据 需要扩容到的容量 来更新 新容量的大小 - 新容量至多不能超过 Integer.MAX_VALUE
             newCapacity = hugeCapacity(minCapacity);
@@ -189,7 +189,7 @@ public class JDKArrayList_01<E> extends AbstractList<E>
         if (minCapacity < 0) // overflow
             // 抛出错误 - 内存溢出
             throw new OutOfMemoryError();
-        // 如果 需要扩容到的容量 比起 最大允许容量 还要大，则：返回 Integer的最大值。否则：返回 最大允许容量
+        // 如果 需要扩容到的容量 比起 警戒容量 还要大，则：返回 Integer的最大值。否则：返回 警戒容量
         return (minCapacity > MAX_ARRAY_SIZE) ?
                 Integer.MAX_VALUE :
                 MAX_ARRAY_SIZE;
