@@ -5,6 +5,7 @@ import com.henry.tryout.easy_coding.data_structure_and_collection.collection_fra
 import java.util.Arrays;
 import java.util.List;
 
+// 把列表对象 转化成为 数组对象 - list.toArray(arr)
 public class ListToArray_03 {
     public static void main(String[] args) {
 
