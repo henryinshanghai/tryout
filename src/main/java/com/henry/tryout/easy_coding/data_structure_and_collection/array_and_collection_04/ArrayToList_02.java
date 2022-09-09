@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// 把数组转化成为 list - 手段：Arrays.asList(<array>)
 public class ArrayToList_02 {
     public static void main(String[] args) {
         String[] stringArray = new String[3];

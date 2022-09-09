@@ -14,7 +14,7 @@ public class EqualsList {
         arrayList.add(1);
 
         /*
-            手段1：xxx.equals(ooo)
+            手段1：list1.equals(list2)
             equals()方法会返回什么值？
             答：主要取决于 equals()方法的实现
 
@@ -22,7 +22,7 @@ public class EqualsList {
             所以这里会返回 true
          */
         if (arrayList.equals(linkedList)) {
-            System.out.println("equals is true");
+            System.out.println("equals is true"); // list对象相等
         } else {
             System.out.println("equals is false");
         }
