@@ -2,7 +2,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.map_08.treeMa
 
 import java.util.TreeMap;
 
-public class TreeMapRepeat_01 {
+public class TreeMapRepeatItem {
     public static void main(String[] args) {
         // 使用TreeMap来创建 map对象
         TreeMap map = new TreeMap(); // 2 - 说明 TreeMap是通过 Comparable或者Comparator来实现去重的
@@ -16,12 +16,12 @@ public class TreeMapRepeat_01 {
     }
 }
 
-// TreeMap中Key的定义 - 判断元素是否是重复元素的手段 - 两个元素是否可以视为相等
+// TreeMap中Key的定义 - 判断元素是否是重复元素的手段 - 相等的元素视为重复元素
 class Key implements Comparable<Key> {
 
     @Override
     public int compareTo(Key o) {
-        // 不管当前对象与任何传入的参数相比，都认为当前对象更小 - 这种方法实现最终决定了 map的size=2
+        // 不管传入的对象是什么，当前对象 与 任何传入的参数相比，都认为当前对象更小 - 这种方法实现最终决定了 map的size=2
         return -1;
     }
 
@@ -37,15 +37,15 @@ class Key implements Comparable<Key> {
 }
 /*
 启示：
-1 TreeMap是通过 Comparable或者Comparator来实现去重的；
+1 TreeMap是通过 Comparable或者Comparator 来 实现去重的；
 2 HashMap是通过 hashCode 与 equals来实现去重的；
-3 TreeMap对Key进行排序所使用的方法：
+3 TreeMap 对Key进行排序 所使用的方法：
     final int compare(Object k1, Object k2) {
         return comparator==null ? ((Comparable<? super K>)k1).compareTo((K)k2)
             : comparator.compare((K)k1, (K)k2);
     }
     三目运算符的含义：
-        如果comparator不为null，则：有限使用比较器的compare()方法；
-        如果为null，则使用 Key中所实现的 Comparable接口中的compareTo()方法。
+        如果comparator不为null，则：优先使用 比较器的compare()方法；
+        如果为null，则：使用 Key中所实现的compareTo()方法。
         而如果两者都无法满足？？？则：抛出ClassCastException异常
  */

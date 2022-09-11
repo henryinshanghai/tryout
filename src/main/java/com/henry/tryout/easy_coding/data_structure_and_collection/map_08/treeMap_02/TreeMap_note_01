@@ -13,11 +13,11 @@ TreeMap
                         因此，key不能为null(null无法参与比较)，但是value可以为null
 
             NavigableMap接口：
-                接口提供的能力
+                接口提供的能力：
                     支持 根据指定的搜索条件 返回 最匹配的Key-Value元素；
                 特征：可导航的接口 继承了 SortedMap接口；
     去重原理：
-        TreeMap不是使用(hashCode + equals)来确定对象的唯一性的 - 从而实现元素去重.
+        TreeMap不是使用(hashCode + equals) 来 确定对象的唯一性的 - 从而实现元素去重.
         具体原理：通过 Comparable或者Comparator 来 实现去重
 
     应用：在 对Key有排序要求 的场景下，使用 TreeMap；

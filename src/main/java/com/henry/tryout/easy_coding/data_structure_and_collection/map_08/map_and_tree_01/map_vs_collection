@@ -32,9 +32,3 @@ HashMap
 结论：
     1 多数情况下，使用 ConcurrentHashMap 替代 HashMap没有任何问题 - 性能区别不大，而且更安全。
     2 在任何Map类中，都需要尽量避免给KV被置为 null值；
-
-
-
-
-
-
