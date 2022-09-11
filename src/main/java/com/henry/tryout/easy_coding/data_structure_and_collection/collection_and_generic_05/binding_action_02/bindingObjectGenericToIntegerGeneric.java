@@ -4,7 +4,8 @@ package com.henry.tryout.easy_coding.data_structure_and_collection.collection_an
 import java.util.ArrayList;
 import java.util.List;
 
-public class bindingObjectGenericToIntegerGeneric_03 {
+// 验证：把Object泛型的对象 绑定到 Integer泛型的变量上
+public class bindingObjectGenericToIntegerGeneric {
     public static void main(String[] args) {
         List<Object> a1 = new ArrayList<>();
         a1.add(new Object());
@@ -20,7 +21,8 @@ public class bindingObjectGenericToIntegerGeneric_03 {
         a3.add(222);
         a3.add(333);
 
-        /* 把 Integer泛型的引用 绑定到 Object泛型的引用上 - 编译报错 */
+        /* 如果数值类型放宽呢？
+            手段：把 Integer泛型的引用 绑定到 Object泛型的引用上 - 编译报错 */
         // 原因：集合不是协变的; aka, Integer is an Object, List<Integer> is not List<Object>
 //        List<Object> a4 = a3;
     }

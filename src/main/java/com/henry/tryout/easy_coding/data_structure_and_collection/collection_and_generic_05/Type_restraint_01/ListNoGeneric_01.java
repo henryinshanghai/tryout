@@ -4,6 +4,7 @@ import com.henry.tryout.easy_coding.data_structure_and_collection.collection_fra
 
 import java.util.List;
 
+// 没有类型约束的集合 - List xxx
 public class ListNoGeneric_01 {
     public static void main(String[] args) {
 
@@ -43,6 +44,6 @@ public class ListNoGeneric_01 {
      2 List<?> 类型变量 能够接受 任何类型的集合引用；
      3 List<?> 变量，不能够添加元素，但可以remove() 与 clear()。
      List<?>应用：
-        1 作为参数类型 接收外部传入的集合；
+        1 作为方法参数的类型 来 接收外部传入的集合；
         2 返回一个 不知道元素类型具体是什么的集合。
  */
