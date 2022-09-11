@@ -1,19 +1,19 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06.sort_algorithm_02;
 
 /*
-    任务描述：完整地排序数组 = 把数组中的每一个元素都排定到其正确的位置
+    任务描述：完整地排序数组 = 把数组中的每一个元素 都排定到 其正确的位置
     算法描述：
-        #1 使用归并操作先小范围地得到很多个小的有序数组,
-        #2 对得到的有序数组进行持续的归并操作 - 最终得到完整的有序数组
-    思路：排序的任务能够 用递归的方式解决吗？
+        #1 使用归并操作 先小范围地 得到很多个 小的有序数组;
+        #2 对 得到的有序数组 进行持续的归并操作 - 最终得到完整的有序数组
+    实现思路：排序的任务能够 用递归的方式 解决吗？
         递归的要素：
             1 原始任务 能够分解成为 规模更小的同类型任务；
             2 解决 规模更小的任务（的结果）能够帮助解决原始任务。
 
         对排序任务来说, 什么是规模更小的任务？
-            排序数组的一部分
+            排序 数组的一部分
 
-        排序数组的一部分，能够帮助 “完全排序整个数组”吗？
+        如果排序了数组的一部分，能够帮助 “完全排序整个数组”吗？
             答：不尽然，因为即使数组的局部被排序了 但元素本身离 它的正确位置 还会有一些距离
             但局部排序的结果(小问题的答案) 有可能帮助 完全排序整个数组(原始问题的答案)， 但是必然需要其他操作的支持 - 比如手中的牌是 JQKA 2345
             对于归并排序，这里的“其他操作” ———— 归并操作。
@@ -66,7 +66,7 @@ public class Merge_TopToDown {
         merge(a, leftBar, middle, rightBar);
     }
 
-    // 归并 a[leftBar, middle] 与 a[middle+1, rightBar] - 特征：两个子区间都已经是有序数组了
+    // 归并 a[leftBar, middle] 与 a[middle+1, rightBar] - 特征：两个子区间都已经是有序数组了;  原地归并?
     private static void merge(Comparable[] a, int leftBar, int middle, int rightBar) {
         // 准备左区间的指针 与 右区间的指针 - 初始位置放在最左侧
         int leftHalfCursor = leftBar;
@@ -79,7 +79,7 @@ public class Merge_TopToDown {
 
         // 比较aux中的左右两半部分, 并逐个拷贝元素回去原数组
         for (int cursor = leftBar; cursor <= rightBar; cursor++) {
-            // 如果左半部分元素用尽，则：逐个拷贝 右半边部分的元素
+            // 如果左半部分元素用尽，则：逐个拷贝 右半边部分的元素 到 原始数组对应的位置
             if(leftHalfCursor > middle) a[cursor] = aux[rightHalfCursor++];
             // 如果右半部分元素用尽，则：逐个拷贝 左半部分的元素
             else if(rightHalfCursor > rightBar) a[cursor] = aux[leftHalfCursor++];
