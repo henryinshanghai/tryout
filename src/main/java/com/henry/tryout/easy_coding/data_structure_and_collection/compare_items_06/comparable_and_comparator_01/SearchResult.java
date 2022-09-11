@@ -1,5 +1,6 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection.compare_items_06.comparable_and_comparator_01;
 
+// 自定义类型时, 为了使类型可被比较 - 实现 Comparable接口
 public class SearchResult implements Comparable<SearchResult> { // 实现Comparable接口时，添加上泛型限定 - 这样在编译阶段，就能发现传入的参数是不是 SearchResult对象
     int relativeRatio;
     long count;
