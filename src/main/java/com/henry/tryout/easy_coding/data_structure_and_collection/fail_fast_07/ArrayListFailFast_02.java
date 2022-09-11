@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-// 验证：在对list中的item进行遍历时,更新item的数量。则：会快速失败
+// 验证：如果在对list中的item进行遍历时,更新item的数量。则：会快速失败
 public class ArrayListFailFast_02 {
     public static void main(String[] args) {
 
@@ -18,7 +18,7 @@ public class ArrayListFailFast_02 {
         List<String> list2 = new ArrayList<>(list);
 
         // 1 在遍历操作时，删除列表中的元素 - 预期：抛出并发修改异常
-        // 结果：打脸了，没有抛出异常 why?
+        // 结果：打脸了，没有抛出异常 why? - 因为这里删除的是 倒数第二个元素
         /*
             hasNext() - return cursor != size;
             next() - next() { checkForComodification(); ...}
@@ -32,7 +32,7 @@ public class ArrayListFailFast_02 {
                 list.remove(s);
             }
         }
-
+        System.out.println(list);
 
         // 2 在遍历时修改list中的item - 手段：使用iterator对象进行remove()操作
         Iterator<String> iterator = list2.iterator();
@@ -46,7 +46,7 @@ public class ArrayListFailFast_02 {
     }
 }
 /*
-结论：
-    #1 可以使用Iterator 机制 来进行 "遍历时的删除"；
-    #2 手段2：使用 COWList 见02
+实现"遍历时修改"的两种手段：
+    #1 显式地使用 Iterator机制；
+    #2 使用 COWList(而不是ArrayList)
  */
