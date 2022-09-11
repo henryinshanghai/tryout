@@ -1,6 +1,6 @@
 Java内存模型
 
-happen before规则：
+happen before规则(6条) - 其实是可见性的规则
 # 传递性
     a happen before b -> hb(a, b)
     如果 hb(a, b), 并且 hb(b, c),则：hb(a, c).这是一种传递性
