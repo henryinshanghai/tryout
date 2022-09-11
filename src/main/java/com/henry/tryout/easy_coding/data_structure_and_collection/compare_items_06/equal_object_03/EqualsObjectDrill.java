@@ -29,7 +29,7 @@ public class EqualsObjectDrill {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name); // 对于相同的输入，总会产生相同的输出
+        return Objects.hashCode(id, name); // 对于相同的输入(id, name)，总会产生相同的输出(hashCode)
 //        return 100;
     }
 

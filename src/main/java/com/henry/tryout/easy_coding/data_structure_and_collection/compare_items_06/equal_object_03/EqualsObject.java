@@ -5,7 +5,8 @@ import com.google.common.base.Objects;
 import java.util.HashSet;
 import java.util.Set;
 
-// 使用自定义的对象 作为 set的item
+// 目标：表示对象的唯一性 - 手段：自定义hashCode() + equals()方法
+// 验证手段：向 set对象中添加自定义的对象实例，查看set会不会 将对象视为同一个对象
 public class EqualsObject {
     private int id;
     private String name;
@@ -31,18 +32,21 @@ public class EqualsObject {
     @Override
     public int hashCode() {
         // 重写 hashCode()方法，不再是 返回对象地址
-        // 返回一个根据自定义对象属性值计算出来的结果    手段：Objects.hashCode()方法
-        return Objects.hashCode(id, name);
+        // 返回一个 根据自定义对象属性值 计算出来的结果    手段：Objects.hashCode()方法   特征：属性值相同时, 返回的hashCode的值就会相同
+        int hashResult = Objects.hashCode(id, name);
+        System.out.println("hash的结算结果为： " + hashResult);
+        return hashResult;
     }
 
     public static void main(String[] args) {
         Set<EqualsObject> hashSet = new HashSet<>();
 
-        // a, b, c是同一个对象吗？ 答：取决于 hashCode()有没有被根据对象属性重写 - 如果有，视为同一个对象； 如果没有，则：视为不同对象
+        // a, b, c是同一个对象吗？ 答：取决于 hashCode()有没有被根据对象属性重写 - 如果有，会被视为同一个对象； 如果没有，则：视为不同对象
         EqualsObject a = new EqualsObject(1, "one");
         EqualsObject b = new EqualsObject(1, "one");
         EqualsObject c = new EqualsObject(1, "one");
 
+        // 把对象a, b, c分别添加到set集合中
         hashSet.add(a);
         hashSet.add(b);
         hashSet.add(c);
@@ -51,7 +55,7 @@ public class EqualsObject {
             如果没有覆写/注释掉 hashCode()方法，则：a,b,c不会被视为同一个对象 size = 3
             原理：默认的 hashCode()方法 返回的是一个 跟对象地址相关的唯一值
 
-            如果覆写了 hashCode()，则：a,b,c会被视为同一个对象 size=1
+            如果覆写了 hashCode()并返回与属性相关的id，则：a,b,c会被视为同一个对象 size=1
          */
         System.out.println(hashSet.size());
 

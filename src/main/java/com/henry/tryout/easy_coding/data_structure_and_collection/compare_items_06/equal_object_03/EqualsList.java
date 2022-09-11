@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 
-// 判断两个list对象是不是相等的
+// 判断两个list对象是不是相等的 - 手段：Objects.equals(list1, list2)
 public class EqualsList {
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();
