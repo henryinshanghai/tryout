@@ -1,19 +1,19 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection.fail_fast_07;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-// 对COW类型的list执行写操作会很耗时 - 因为每次写都会拷贝出一个list的副本
-// 验证手段：构造一个场景，不断地向 COWList中写入新元素
-public class COW_copy_03 {
+// 验证：对COW类型的list执行写操作会很耗时 - 因为每次写操作时, 都需要拷贝出一个 当前list的副本
+// 手段：构造一个场景，不断地向 COWList中写入新元素
+public class COWListAdd_03 {
     public static void main(String[] args) {
-//        List<Long> copy = new CopyOnWriteArrayList<>(); // 总耗时： 16 s
-        List<Long> copy = new ArrayList<>(); // 20 ms
+        List<Long> list = new CopyOnWriteArrayList<>(); // 总耗时： 16 s
+//        List<Long> list = new ArrayList<>(); // 20 ms
 
         long start = System.nanoTime();
         for (int i = 0; i < 20 * 10000; i++) { // 20万次
             // 执行插入操作 - 对于COWList，每次add都会引起 原始集合的拷贝动作
-            copy.add(System.nanoTime());
+            list.add(System.nanoTime());
         }
         long end = System.nanoTime();
 
