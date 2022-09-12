@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-// 线程池 ThreadPoolExecutor的用法 - 7个参数
+// 使用线程池对象 来 处理任务
 public class UserThreadPool_05 {
     public static void main(String[] args) {
         // 设置缓存队列的长度为2 - 目的：快速地触发 rejectHandler
@@ -23,17 +23,12 @@ public class UserThreadPool_05 {
                 new ThreadPoolExecutor(1, 2, 60,
                         TimeUnit.SECONDS, queue, f1, handler);
 
-        // 线程池对象2： 利用第二个线程工厂 创建第二个线程池
-        ThreadPoolExecutor threadPoolSecond =
-                new ThreadPoolExecutor(1, 2, 60,
-                        TimeUnit.SECONDS, queue, f2, handler);
-
         /* 使用线程池对象 来 执行线程任务； 手段：调用线程池对象的execute()方法，传入待执行的任务 👇 */
         Runnable task = new Task();
         for (int i = 0; i < 5; i++) {
             // 线程池的最大线程数为2 & 阻塞队列的大小为2 - 如果交给线程池5个任务/线程去执行，就会引发 拒绝策略
             threadPoolFirst.execute(task);
-//            threadPoolSecond.execute(task);
+
         }
     }
 }
@@ -45,6 +40,4 @@ public class UserThreadPool_05 {
 - 线程池的最大线程数 已经被占用了；
 - 任务的阻塞队列 已经被占满了；
 - 这时候，仍旧再添加任务时，就会引起 线程池的拒绝策略
-
-喝多了，不知道是啥了
  */
