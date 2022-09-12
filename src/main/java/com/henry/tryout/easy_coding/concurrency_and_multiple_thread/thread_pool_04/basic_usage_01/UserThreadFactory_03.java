@@ -4,24 +4,25 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-// 自定义线程工厂
+// *线程池的构造器参数1 - 自定义线程工厂
+// 特征：能够为生产的线程, 配置一个有意义的名字 - 方便后期排查
 public class UserThreadFactory_03 implements ThreadFactory { // #1 implements ThreadFactory
 
-    private final String namePrefix;
-    private final AtomicInteger nextId = new AtomicInteger();
+    private final String namePrefix; // #1 持有线程组的名称
+    private final AtomicInteger nextId = new AtomicInteger(); // #2 持有线程id的名称
 
     // 定义线程组的名称； 作用：在使用jstack来排查线程问题时，有意义的线程名称会很有帮助
     UserThreadFactory_03(String whatFeatureOfGroup) {
         namePrefix = "UserThreadFactory's " + whatFeatureOfGroup + "-Worker-";
     }
 
-    // #2 创建线程任务 - 手段：重写 newThread()方法，传入 Runnable参数,返回 Thread对象
+    // #3 根据构造出的 有意义的名称 + 传入的task 来 创建出线程对象
     @Override
     public Thread newThread(Runnable task) {
         // 为线程指定一个有意义的名字
         String name = namePrefix + nextId.getAndIncrement();
-        // 使用这个名字来 构造出线程对象
-        Thread thread = new Thread(null, task, name, 0); // 5个参数的构造方法取消了？
+        // 使用这个名字(组名 + 线程id) 来 构造出线程对象
+        Thread thread = new Thread(null, task, name, 0);
         // ① 打印 当前线程的名称
         System.out.println(thread.getName());
         return thread;
