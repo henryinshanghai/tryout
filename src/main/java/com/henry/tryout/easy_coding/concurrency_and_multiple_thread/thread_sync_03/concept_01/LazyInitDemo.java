@@ -1,5 +1,6 @@
 package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_sync_03.concept_01;
 
+// 验证：多线程条件下，使用双重检查锁的方式，无法得到有效的唯一实例
 public class LazyInitDemo {
     private static TransactionService service = null;
 
@@ -26,11 +27,10 @@ public class LazyInitDemo {
 
     public static void main(String[] args) {
         TransactionService service = getService();
-
         TransactionService service1 = getService();
 
-        if (service == service1) {
-            System.out.println("单例模式使用成功！");
+        if (service == service1) { // 单线程条件下，双重检查锁的方式能够得到有效的单例
+            System.out.println("单例模式使用成功！TransactionService类唯一的实例是： " + service);
         }
     }
 }

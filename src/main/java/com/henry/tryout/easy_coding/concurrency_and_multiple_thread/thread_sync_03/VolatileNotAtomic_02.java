@@ -1,5 +1,8 @@
 package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_sync_03;
 
+// 验证：使用volatile修饰变量, 无法保证 变量操作的原子性
+// 如果对count的操作具有原子性，则：count的最终值应该是 0
+// 结论：只有在 为临界区加锁后，才能得到预期的结果(加锁 与 原子性之间有什么关系呢？)
 public class VolatileNotAtomic_02 {
     // #1 volatile修饰的变量 - 作用：保证这个变量的更新 对多个线程都是立马可见的
     private static volatile long count = 0L;
@@ -16,12 +19,14 @@ public class VolatileNotAtomic_02 {
             synchronized (VolatileNotAtomic_02.class) {
                 count++;
             }
+
+//            count++;
         }
 
         // 等待减法线程结束
         while(subtractThread.isAlive()){}
 
-        System.out.println("count变量最终的值为： " + count); // 这里count的值不是一个固定的结果
+        System.out.println("count变量最终的值为： " + count); // 预期：count=0. 实际上：count的结果是一个随机值
     }
 
     // 自定义的线程类 - 手段： extends Thread
@@ -34,6 +39,8 @@ public class VolatileNotAtomic_02 {
                 synchronized (VolatileNotAtomic_02.class) {
                     count--;
                 }
+
+//                count--;
             }
         }
     }
