@@ -3,6 +3,7 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 import java.util.concurrent.ThreadLocalRandom;
 
 // 使用 ThreadLocal 来 让每个线程都有自己的变量副本
+// 手段： 定义 ThreadLocal类型的成员变量，然后在线程的run()方法中使用它们。
 public class CsGameByThreadLocal_01 {
     // 静态成员变量 - 被类的所有实例共享
     public static final Integer BULLET_NUMBER = 1500;
