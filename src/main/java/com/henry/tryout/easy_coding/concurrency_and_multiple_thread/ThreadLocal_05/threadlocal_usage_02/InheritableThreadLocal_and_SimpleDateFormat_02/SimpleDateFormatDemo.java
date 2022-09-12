@@ -3,6 +3,7 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+// 使用 ThreadLocal 来封装 想要被线程私有的对象 - simpleDateFormat
 public class SimpleDateFormatDemo {
     public static void main(String[] args) {
         /*
