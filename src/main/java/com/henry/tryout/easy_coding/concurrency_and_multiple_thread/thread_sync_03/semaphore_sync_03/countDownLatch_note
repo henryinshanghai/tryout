@@ -8,3 +8,10 @@
     step2 把latch对象 作为参数 传入自定义线程的构造器中
     step3 依次启动三个线程 - 在线程的run()方法中，调用 countDown()方法
     step4 在代码中 调用 countDownLatch对象的await()方法 - 以等待所有的线程执行完成
+
+业务场景：
+    翻译平台，收到 某一语言翻译成多种语言的请求。
+    把目标语种拆分成为多个子线程，使用线程对翻译引擎发起请求。
+    翻译完成后，把结果同步给调用方。
+报错：由于 countDown()方法抛出异常，引发故障
+Demo: CountDownLatchUsage

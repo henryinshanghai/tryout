@@ -13,4 +13,12 @@
                 1 只有在调用 Semaphore对象的acquire()方法成功后，才可以继续往下执行。
                 2 完成后, 执行release()方法 来 释放掉 "线程所持有的信号量（占据的窗口）" - 这样下一个线程就能够获取到信号量(走到窗口前)开始执行。
         Usage Demo:
-            CustomCheckWindow
+            SemaphoreUsage
+
+信号量同步
+    是：使用信号量这种手段 来 协调多个线程的执行次序。
+    特征：信号量是手段；同步多个线程是目标；
+
+分类：时间维度 + 信号维度；
+具体类型： CountDownLatch、Semaphore；
+

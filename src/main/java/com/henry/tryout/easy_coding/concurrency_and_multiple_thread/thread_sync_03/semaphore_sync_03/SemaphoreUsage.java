@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 
 // 使用信号量 来 同步多个线程
 // 场景：使用信号量 来 并行处理多个线程排队执行的情况
-public class CustomCheckWindow_02 {
+public class SemaphoreUsage {
     public static void main(String[] args) {
         // #1 设置大小为3的信号量 - 3个检票窗口
         Semaphore semaphore = new Semaphore(3);

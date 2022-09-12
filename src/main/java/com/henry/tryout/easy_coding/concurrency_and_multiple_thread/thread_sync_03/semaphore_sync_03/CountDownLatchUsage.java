@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 // 使用 countDownLatch 来 同步多个线程
 // 场景：主线程需要等待 其他多个线程执行结束，再继续执行 - 手段：countDownLatch
-public class CountDownLatchTest {
+public class CountDownLatchUsage {
     public static void main(String[] args) throws InterruptedException {
         // #1 准备一个 countDownLatch对象
         CountDownLatch count = new CountDownLatch(3);
