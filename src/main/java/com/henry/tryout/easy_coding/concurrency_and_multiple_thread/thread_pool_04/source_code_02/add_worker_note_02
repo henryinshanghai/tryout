@@ -10,7 +10,7 @@ addWorker()解析
         在workerCount加一成功后，则：直接退出两层循环。
 
 第二处：
-为了方便阅读代码，更可读的编写方式如下：
+为了方便阅读代码，更可读的编写方式如下 - 引入一个名字有意义的boolean变量：
 Boolean isNotAllowedToCreateTask =
     runStateAtLeast(c, SHUTDOWN) && (runStateAtLeast(c, STOP)
         || firstTask != null || workQueue.isEmpty());
