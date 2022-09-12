@@ -2,6 +2,9 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 
 import java.util.WeakHashMap;
 
+// 验证：WeakHashMap中的key的引用类型 是 弱引用；
+// 原理：对于 WeakHashMap来说，如果某个entry的key所指向的对象上只存在弱引用，则：该entry就会被自动回收掉
+// 手段：把某个entry的key 设置仅存在弱引用，然后 打印map的size
 public class WeakHashMapTest_04 {
     public static void main(String[] args) {
         House seller1 = new House("1号卖家房源");
