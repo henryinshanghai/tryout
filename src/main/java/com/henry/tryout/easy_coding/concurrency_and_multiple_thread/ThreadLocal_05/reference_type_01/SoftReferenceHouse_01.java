@@ -4,6 +4,8 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
+// 验证：当堆内存空间紧张时，仅被软引用指向的对象 会被回收掉
+// JVM运行参数： -Xms20m -Xmx20m
 public class SoftReferenceHouse_01 {
     public static void main(String[] args) {
 //        List<House> houses = new ArrayList<>(); // 方案1 集合中的元素是强引用
@@ -64,5 +66,4 @@ JVM运行参数： -Xms20m -Xmx20m
     2 buyer2被集合 ArrayList的强引用所劫持；
 
 结果：不断循环执行 houses.add()，在 i=347219 时，终于产生了OOM。
-
  */
