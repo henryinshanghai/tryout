@@ -5,6 +5,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+// JDK中的 threadPoolExecutor 构造方法参数(7个)说明 👇
 public class MyThreadPoolExecutor_01 {
     // 线程池的7个成员变量
     // 线程池中的常驻 核心线程数量 - 特征：任务完成后，核心线程会被保留。
@@ -15,11 +16,11 @@ public class MyThreadPoolExecutor_01 {
     long keepAliveTime;
     // 时间单位
     TimeUnit unit;
-    // 缓存队列 - 如果请求的线程数量 > maximumPoolSize，则：新的任务会进入 Blocking Queue阻塞队列
+    // *缓冲/等待队列 - 如果请求的线程数量 > maximumPoolSize，则：新的任务会进入 Blocking Queue阻塞队列
     BlockingQueue<Runnable> workQueue;
-    // 线程工厂 - 用于生产一组 完成相同任务的线程。 特征：能够给线程命名 - 从而在分析虚拟机栈时，就能够知晓 线程任务是由哪个线程工厂产生的
+    // *线程工厂 - 用于生产一组 完成相同任务的线程。 特征：能够给线程命名 - 从而在分析虚拟机栈时，就能够知晓 线程任务是由哪个线程工厂产生的
     ThreadFactory threadFactory;
-    // 执行拒绝策略的对象 - 随着任务逐渐增多，连 阻塞队列/任务缓存区也到达了最大上线。对于新的请求，线程池就会使用此策略处理请求
+    // *执行拒绝策略的对象 - 随着任务逐渐增多，连 阻塞队列/任务缓存区也到达了最大上线。对于新的请求，线程池就会使用此策略处理请求
     /*
         常见的拒绝策略：
         1 保存到数据库，以此实现 削峰添谷 - 在空闲的时候，再提取出来执行
