@@ -1,10 +1,14 @@
-Executors 与 ThreadPoolExecutor之间的关系
+Executors 与 ThreadPoolExecutor 之间的关系
 
 Executor接口 -> ExecutorService接口
                     作用：定义管理线程任务的方法；
 ExecutorService接口 -> AbstractExecutorService抽象类
                         作用：提供了 submit()、invokeAll()方法的实现
                         特征：抽象类中没有实现execute()方法
+关系：
+    #1 Executors的很多静态方法 都返回了 ExecutorService 的返回值类型；
+    #2 ExecutorService接口 继承自 AbstractExecutorService抽象类；
+    #3 ThreadPoolExecutor 实现了 AbstractExecutorService抽象类。
 
 Executors类：
 高层用法：通过静态工厂方法 来 创建线程池的包装对象；

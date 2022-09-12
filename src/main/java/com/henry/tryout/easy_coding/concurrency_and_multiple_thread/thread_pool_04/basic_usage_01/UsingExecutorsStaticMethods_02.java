@@ -2,6 +2,8 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.thread_pool
 
 import java.util.concurrent.*;
 
+// 使用 Executors工具类的静态方法 来 创建线程池的包装对象
+// 结论：不推荐使用，因为存在着 OOM的风险(使用无界队列的锅)
 public class UsingExecutorsStaticMethods_02 {
     public static void main(String[] args) {
         // 怎么查看类的继承关系？
