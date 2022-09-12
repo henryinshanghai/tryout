@@ -10,12 +10,12 @@ public class CountDownLatchTest {
         // #1 准备一个 countDownLatch对象
         CountDownLatch count = new CountDownLatch(3);
 
-        // 作为参数传入自定义线程的构造器中
+        // #2 把latch对象 作为参数传入自定义线程的构造器中
         Thread thread1 = new TranslateThread("1st content", count);
         Thread thread2 = new TranslateThread("2nd content", count);
         Thread thread3 = new TranslateThread("3rd content", count);
 
-        // note:先处理子线程异常的情况
+        // 模板代码:先处理子线程异常的情况
         thread1.setUncaughtExceptionHandler((Thread t, Throwable e) -> {
             System.out.println(t.getName() + ": " + e.getMessage());
         });
@@ -26,12 +26,12 @@ public class CountDownLatchTest {
             System.out.println(t.getName() + ": " + e.getMessage());
         });
 
-        // 依次启动三个线程 - 在线程的run()方法中，操作 CountDownLatch对象
+        // #3 依次启动三个线程 - 在线程的run()方法中，操作 CountDownLatch对象
         thread1.start();
         thread2.start();
         thread3.start();
 
-        // #4 调用 countDownLatch对象的await()方法 - 以等待 所有的线程（所有的, 就是使用 countDownLatch对象定义的） 执行完成
+        // #4 调用 countDownLatch对象的await()方法 - 以等待 所有使用 countDownLatch对象定义的的线程执行完成
         count.await(10, TimeUnit.SECONDS);
         System.out.println("所有线程执行完成");
         // 给调用方返回翻译的结果
@@ -42,7 +42,7 @@ public class CountDownLatchTest {
 class TranslateThread extends Thread {
     private String content;
     // #2 子线程中 持有 倒计数门闩变量
-    private final CountDownLatch count; // 成员变量的初始化应该交给使用者 - via 构造方法
+    private final CountDownLatch count; // "成员变量的初始化"应该交给使用者 - via 构造方法
 
     public TranslateThread(String content, CountDownLatch count) {
         this.content = content;

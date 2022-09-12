@@ -1,10 +1,10 @@
 Ⅰ CountDownLatch：
 作用：同步 多个线程的执行顺序；
 特征：
-    1 基于执行时间；
+    1 基于执行时间的维度；
     2 在实际编码中，可能会需要处理 基于空闲信号的同步情况。
 用法：
     step1 在代码中 准备一个 countDownLatch对象
-    step2 作为参数传入 自定义线程的构造器 中
+    step2 把latch对象 作为参数 传入自定义线程的构造器中
     step3 依次启动三个线程 - 在线程的run()方法中，调用 countDown()方法
     step4 在代码中 调用 countDownLatch对象的await()方法 - 以等待所有的线程执行完成
