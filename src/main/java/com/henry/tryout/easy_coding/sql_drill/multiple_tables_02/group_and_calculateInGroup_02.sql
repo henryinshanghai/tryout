@@ -1,4 +1,4 @@
--- 每个学校答过题的用户 平均答题数量情况
+-- 每个学校 答过题的用户的 平均答题数量情况
 SELECT university,
        count(*)/count(DISTINCT q.device_id) avg_answer_cnt -- 答题数量 / 学生数量
 FROM question_practice_detail q -- 把问题表作为主表
