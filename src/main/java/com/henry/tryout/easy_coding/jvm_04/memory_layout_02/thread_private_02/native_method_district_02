@@ -9,3 +9,8 @@
       aka，有和JVM相同的能力与权限 —— 这会削弱JVM对系统的控制能力。
 用法：
     最出名的本地方法 System.currentTimeMillis.
+
+wrap up:
+1 native方法调用时，会形成本地方法栈。
+2 native方法通过JNI 来 实现方法的执行；
+3 System.currentTimeMills()是一个native方法。
