@@ -14,7 +14,7 @@ CMS回收器（Concurrent Mark Sweep Collector）：
     特征：
         1 回收停顿时间比较短；
         2 比较常用的GC回收器；
-        3 实现的是 标记-清除 算法，所以会产生大量的内存空间碎片。
+        3 使用的是 Mark-remove算法，所以会产生大量的内存空间碎片。
     步骤：
         1 初始标记； // 会引发 STW
         2 并发标记；
@@ -32,8 +32,8 @@ G1回收器：
         3 使用的是 Mark-Copy算法， 因此不会产生大量的空间碎片。
         4 在JDK11中， G1垃圾回收器已经成为默认的垃圾回收器了。
     原理：
-        1 把 Java的堆空间 分成了 很多个大小相同的区域(region) - Eden, SUrvivor, Old, Humongous.
+        1 把 Java的堆空间 分成了 很多个大小相同的区域(region) - Eden, Survivor, Old, Humongous.
             Humongous是特殊的Old类型，用于放置大的对象；
         2 把空间分为多个区域中，优先回收 垃圾最多的区域；
 
-
+wrap up:
