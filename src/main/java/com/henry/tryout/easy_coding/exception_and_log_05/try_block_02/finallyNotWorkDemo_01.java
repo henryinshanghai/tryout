@@ -1,10 +1,11 @@
 package com.henry.tryout.easy_coding.exception_and_log_05.try_block_02;
 
-// finally在 return表达式之后执行的 - 执行finally的时候会把 return表达式暂存起来
+// 验证： finally代码块  在return表达式之后 执行的 - 原理：执行finally的时候会 把return表达式暂存起来
+// 在 catch{}代码块中return 变量temp, 并在finally{}代码块中 给temp变量重新赋值
 public class finallyNotWorkDemo_01 {
     public static void main(String[] args) {
         int result = finallyNotWork();
-        System.out.println(result);
+        System.out.println(result); // 结果：10001 - 说明：在return语句之后，finally代码块仍会执行（此时return表达式被暂存起来了）
     }
 
     private static int finallyNotWork() {
@@ -12,9 +13,10 @@ public class finallyNotWorkDemo_01 {
         try {
             throw new Exception();
         } catch (Exception e) {
-            return ++temp; // 10001
+            return ++temp; // 预期：10001
         } finally {
-            temp = 99999;
+            System.out.println("change temps value to 99999");
+            temp = 99999; // 预期：99999
         }
     }
 }
@@ -30,7 +32,6 @@ public class finallyNotWorkDemo_01 {
     22 ireturn
 
     启示：
-    1 finally代码块的职责不是 对变量进行赋值，而是
-        清理资源、释放连接、关闭管道流等
+    1 finally代码块的职责不是 对变量进行赋值，而是 - 清理资源、释放连接、关闭管道流等
     2 不要在 finally代码块中做 return操作。
  */

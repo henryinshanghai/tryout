@@ -1,5 +1,6 @@
 package com.henry.tryout.easy_coding.exception_and_log_05.try_block_02;
 
+// 验证：finally代码块中的return表达式 会覆盖掉 try代码块中的return表达式
 public class ReturnInFinallyDemo_02 {
     static int x = 1;
     static int y = 10;
@@ -9,18 +10,18 @@ public class ReturnInFinallyDemo_02 {
         int value = finallyReturn();
 
         System.out.println("value: " + value);
-        System.out.println("x: " + x);
-        System.out.println("y: " + y);
-        System.out.println("z: " + z);
+        System.out.println("x: " + x); // 结果：2
+        System.out.println("y: " + y); // 结果：10
+        System.out.println("z: " + z); // 结果：101
     }
 
     private static int finallyReturn() {
         try {
-            return ++x;
+            return ++x; // 预期：x = 2
         } catch (Exception e) {
-            return ++y; // 11
+            return ++y; // 预期： y = 10
         } finally {
-            return ++z; // 101
+            return ++z; // 预期：z = 101 - finally中的return会作为方法的返回点
         }
     }
 }

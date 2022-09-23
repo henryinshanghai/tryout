@@ -1,18 +1,17 @@
 try代码块 与 锁的关系
 
-已知： 调用lock()方法可能会抛出 unchecked异常；
-如果在 try代码块中隐式地调用了 lock()方法，并引起了异常。则：
-    必然触发 finally中的unlock()方法执行。
-
-对没有加锁的对象，如果进行解锁操作 则：
+已知：
+#1 调用lock()方法时，可能会抛出 unchecked异常；
+#2 如果 在try代码块中 隐式地调用了lock()方法，并引起了异常。则：
+    必然会触发 finally代码块中的unlock()方法执行。
+#3 对没有加锁的对象，如果进行解锁操作 则：
     会抛出unchecked异常 - 如 IllegalMonitorStateException
 
-结果：
+基于以上3个事实，会导致如下结果👇：
     1 由于加锁失败(aka 调用lock()方法)导致了程序中断 - root cause;
     2 但是程序抛出的错误原因，却是解锁失败(调用 unlock()方法) - 覆盖了root cause.
 
 启示：
-    应该在 try代码块之前 调用lock()方法，从而 避免由于加锁失败而导致 finally调用unlock()时抛出异常。
-
-Lock、ThreadLocal、InputStream这些个 需要强制释放与清除的对象，都需要
-程序员在 finally代码块中进行显式的清除 - 以此避免内存泄漏，或者资源消耗。
+    #1 应该 在try代码块之前 调用lock()方法，从而避免 由于加锁失败而导致的 finally调用unlock()时抛出异常。
+    #2 对于Lock、ThreadLocal、InputStream这些个 需要强制释放与清除的对象，都需要
+        程序员在 finally代码块中进行显式的清除 - 以此避免内存泄漏，或者资源消耗。
