@@ -3,12 +3,12 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.collection
 import java.util.Arrays;
 
 /*
-    默认容量 = 5
-    扩容的规则 = 旧容量+3
-    警戒容量 = 11
-    最大容量 = 15
+    默认容量 defaultCapacity = 5
+    扩容grow的规则 = 旧容量+3
+    警戒容量MAX_ARRAY_SIZE  = 10
+    最大容量Integer.MAX_VALUE = 15
  */
-public class MyArrayListDrill<E> {
+public class MyArrayList_01<E> {
     // 成员变量
     private Object[] elementData;
     private static final Object[] EMPTY_ELEMENT_DATA = {};
@@ -17,7 +17,7 @@ public class MyArrayListDrill<E> {
     public int size;
 
     // 构造方法
-    public MyArrayListDrill() {
+    public MyArrayList_01() {
         elementData = EMPTY_ELEMENT_DATA;
     }
 
@@ -46,14 +46,16 @@ public class MyArrayListDrill<E> {
 
     private void grow(int needCapacity) {
         int oldCapacity = elementData.length;
-        int newCapacity = oldCapacity + 3; // 扩容规则：每次+3
+        int newCapacity = oldCapacity + 3; // 默认的扩容规则：每次+3
         if (needCapacity > newCapacity) {
             newCapacity = needCapacity;
         }
 
-        // 根据needCapacity 来 调整 newCapacity的值
+        // 在计算新容量newCapacity超过 警戒容量时，调整 计算新容量newCapacity
+        // 手段：根据needCapacity 来 调整 newCapacity的值
         if (newCapacity > MAX_ARRAY_SIZE) {
-            System.out.println("预期的新容量已经超过警戒容量，先扩容到警戒容量(需要时扩容到最大容量) 当前所需的数组容量为： " + needCapacity);
+            System.out.println("预期的新容量" + newCapacity
+                    + "已经超过警戒容量" + MAX_ARRAY_SIZE + "，先扩容到警戒容量(需要时扩容到最大容量)。当前所需的数组容量为： " + needCapacity);
             newCapacity = adjustCapacityBasedOn(needCapacity);
         }
 
