@@ -1,0 +1,5 @@
+To view all exit points of a method, place the caret at one of them,
+for example the return statement, and press Ctrl+Shift+F7
+
+查看 方法所有的退出点；
+手段：把光标放在某一个退出点上，然后按下 Ctrl + Shift + F7
