@@ -3,6 +3,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.collection
 import java.util.HashMap;
 
 // 查看 put(k, v)的源码 - set for another day🤭
+// 参考：https://segmentfault.com/a/1190000018156976?sort=votes
 public class HashMapDemo {
     public static void main(String[] args) {
         HashMap<String, String> map = new HashMap<>();
@@ -13,5 +14,8 @@ public class HashMapDemo {
         map.put("alicia", "28");
         map.put("quinta", "32");
 
+
+        String henryAge = map.get("henry");
+        System.out.println(henryAge);
     }
 }
