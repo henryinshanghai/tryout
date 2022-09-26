@@ -4,7 +4,8 @@ import com.henry.tryout.easy_coding.data_structure_and_collection_06.collection_
 
 import java.util.List;
 
-// 没有类型约束的集合 - List xxx
+// 验证：无泛型约束的集合，什么东西都能往集合中添加; 有泛型约束的集合，编译器会阻止添加不正确的类型;
+// 验证：通配符约束的集合，不能再向其中添加任何元素； - 应用：方法参数类型 + 方法返回值类型
 public class ListNoGeneric_01 {
     public static void main(String[] args) {
 
