@@ -1,0 +1,39 @@
+public V get(Object key) {
+    Node<K,V> e;
+    return (e = getNode(hash(key), key)) == null ? null : e.value;
+}
+
+final Node<K,V> getNode(int hash, Object key) {
+    // 局部变量：tab是散列表的副本 first是链表节点的头指针 n为tab数组的长度 k?
+    Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
+
+    --- 从散列表的哈希桶中查找节点 - 分类讨论 {哈希槽节点, 非哈希槽节点} ---
+    // 如果散列表不为空 & 哈希槽上的节点不为null
+    if ((tab = table) != null && (n = tab.length) > 0 &&
+        (first = tab[(n - 1) & hash]) != null) {
+        // 检查哈希桶中的第一个节点 是否是 待查询的节点
+        if (first.hash == hash && // always check first node
+            ((k = first.key) == key || (key != null && key.equals(k))))
+            return first; // 如果是，则：返回节点
+
+        --- 从非哈希槽节点中查找节点 - 分类讨论 {哈希槽节点是树节点, 哈希槽节点是链表节点} ---
+        // 如果头节点的下一个节点不为null
+        if ((e = first.next) != null) {
+            // 检查头节点是不是树节点，如果是，则：
+            if (first instanceof TreeNode)
+                // 从树中查找 指定key对应的树节点
+                return ((TreeNode<K,V>)first).getTreeNode(hash, key);
+            // 否则，哈希桶中一定是一个链表。则：沿着链表节点一路向下查找 - 手段：do-while循环
+            do {
+                // 如果当前节点就是要查找的节点(key与待查询的key相同)，则：返回当前节点
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    return e;
+                // 否则，继续查找下一个节点 - e = e.next
+            } while ((e = e.next) != null);
+        }
+    }
+    --- 找不见节点时， 返回 null ---
+    // 实在找不到，则：返回null
+    return null;
+}
