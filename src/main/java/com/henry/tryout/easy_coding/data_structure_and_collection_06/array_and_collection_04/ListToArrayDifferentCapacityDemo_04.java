@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 验证：调用 list.toArray(arr)时，对于不同大小的arr，方法执行的耗时是不相同的 - 因为执行的代码是不一样的
+// 手段：对于同一个list对象，调用toArray()时传入不同的小的arr参数，并计算执行耗时
 public class ListToArrayDifferentCapacityDemo_04 {
     public static final int COUNT = 100 * 100 * 100;
 

@@ -5,7 +5,9 @@ import com.henry.tryout.easy_coding.data_structure_and_collection_06.collection_
 import java.util.Arrays;
 import java.util.List;
 
-// 把列表对象 转化成为 数组对象 - list.toArray(arr)
+// 语法：把列表对象 转化成为 数组对象 - list.toArray(arr)
+// 验证：如果指定的数组对象的容量不足够的话，数组对象中会被填满null
+// 使用方式：传入的arr参数的大小等于列表对象的大小
 public class ListToArray_03 {
     public static void main(String[] args) {
 
@@ -58,6 +60,5 @@ public class ListToArray_03 {
                 客户端再使用 readObject()实现 集合的反序列化，此时 会把集合中的item都存储到新对象的 elementData中去。
             所以，elementData这个字段不再需要通过二进制流传输了。
             #2 为什么要忽略 这个真正用于存储item的数组字段呢？
-                答：因为 elementData数组容量 一般会大于 真实存储的item数量。所以在传输时，只需要发送 真正有实际值的数组元素(是什么?)就行了
-
+                答：因为 elementData数组容量 一般会大于 真实存储的item数量。所以在传输时，只需要发送 真正有实际值的数组元素(via writeObject())就行了
  */

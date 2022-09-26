@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// 把数组转化成为 list - 手段：Arrays.asList(<array>)
+// 语法：把数组转化成为 list - 手段：Arrays.asList(<array>)
+// 验证：转换后得到的list 其实只是原始数组的一个视图(适配器模式)
+// 安全的使用方式：使用转换得到的list作为参数，手动new出一个新的list对象
 public class ArrayToList_02 {
     public static void main(String[] args) {
         String[] stringArray = new String[3];
@@ -57,5 +59,4 @@ public class ArrayToList_02 {
             }
     3 UnsupportedOperationException 异常是从哪儿跑出来的？
         李鬼的父类： AbstractList
-
  */
