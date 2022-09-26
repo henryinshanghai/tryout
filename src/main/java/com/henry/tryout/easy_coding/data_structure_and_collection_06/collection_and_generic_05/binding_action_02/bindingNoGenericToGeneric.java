@@ -5,7 +5,7 @@ import net.sf.json.JSONObject; // 来自于 net.sf.json-lib依赖
 import java.util.ArrayList;
 import java.util.List;
 
-// 验证：把非泛型的对象 绑定到 泛型约束的集合上
+// 验证：非泛型集合（List / JSONArray）可以赋值给任何 泛型集合 - 但可能会导致运行时的报错
 // 手段：把 JSONArray类型(List的子类型, 由getJSONArray()方法返回)  绑定到 List<Integer> intList变量上
 public class bindingNoGenericToGeneric {
     public static void main(String[] args) {

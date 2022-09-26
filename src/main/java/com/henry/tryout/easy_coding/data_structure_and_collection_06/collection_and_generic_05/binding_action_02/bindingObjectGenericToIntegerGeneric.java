@@ -4,7 +4,8 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.collection
 import java.util.ArrayList;
 import java.util.List;
 
-// 验证：把Object泛型的对象 绑定到 Integer泛型的变量上
+// 验证：Object泛型集合 不能绑定到 具体类型泛型集合上 - 会有编译报错
+// 具体类型泛型集合 也不能绑定到 Object泛型集合上 - 也会有编译报错
 public class bindingObjectGenericToIntegerGeneric {
     public static void main(String[] args) {
         List<Object> a1 = new ArrayList<>();
