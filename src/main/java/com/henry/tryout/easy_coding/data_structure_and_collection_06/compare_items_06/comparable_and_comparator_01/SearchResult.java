@@ -1,6 +1,7 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection_06.compare_items_06.comparable_and_comparator_01;
 
-// 自定义类型时, 为了使类型可被比较 - 实现 Comparable接口
+// 对象之间的大小比较 - 手段1：使自定义的类 可被比较(Comparable)
+// 具体做法：自定义类型时, #1 实现 Comparable接口
 public class SearchResult implements Comparable<SearchResult> { // 实现Comparable接口时，添加上泛型限定 - 这样在编译阶段，就能发现传入的参数是不是 SearchResult对象
     int relativeRatio;
     long count;
@@ -11,9 +12,9 @@ public class SearchResult implements Comparable<SearchResult> { // 实现Compara
         this.count = count;
     }
 
-    // 给当前对象，添加比较的逻辑 - 手段：重写compareTo()方法 正数表示更大
+    // #2 重写compareTo()方法 - 作用：指定比较的逻辑
     @Override
-    public int compareTo(SearchResult o) {
+    public int compareTo(SearchResult o) { // 参数：同一类型的其他对象o
         // 先比较相关度
         if (this.relativeRatio != o.relativeRatio) {
             return this.relativeRatio > o.relativeRatio ? 1 : -1;

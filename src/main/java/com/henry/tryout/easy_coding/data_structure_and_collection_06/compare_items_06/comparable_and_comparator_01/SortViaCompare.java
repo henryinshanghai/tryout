@@ -2,7 +2,8 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.compare_it
 
 import java.util.Arrays;
 
-// 在排序时使用 比较器的经典案例 - Arrays.sort(collection, comparator)
+// 验证：对象之间大小比较的两种手段 - #1 自定义类型实现Comparable; #2 自定义比较器，在对象进行比较时传入
+// 对象之间大小比较的应用场景 - 数组元素的排序； Arrays.sort(arr，<comparator>)
 public class SortViaCompare {
     public static void main(String[] args) {
         SearchResult[] searchResultArr = new SearchResult[4];
@@ -12,7 +13,7 @@ public class SortViaCompare {
         searchResultArr[3] = new SearchResult(5, 150);
 
         System.out.println("按照 SearchResult中定义的比较规则(相关度)进行排序 👇");
-        // #1 按照 自定义类型中定义的比较规则，对集合元素排序
+        // #1 对数组元素进行排序 - 手段：数组元素的类型中，定义了对象的比较逻辑
         Arrays.sort(searchResultArr);
 
         for (SearchResult searchResult : searchResultArr) {
@@ -21,8 +22,8 @@ public class SortViaCompare {
 
         System.out.println("按照比较器的比较规则(浏览量)进行排序 👇");
 
-        // #2 在比较时，传入自定义的比较器。从而按照比较器中的规则 对集合元素进行排序
-        Arrays.sort(searchResultArr, new SearchResultComparator()); // 这里也可以使用匿名类 - 直接new Comparator接口类型
+        // #2 对数组元素进行排序 - 手段：在调用sort()方法时，传入自定义的比较器。比较器中定义了对象的比较逻辑
+        Arrays.sort(searchResultArr, new SearchResultComparator()); // note: 这里也可以使用匿名类 - 直接new Comparator接口类型
 
         // 检查数组中的元素 是否按照需要进行排序了 - 需要 自定义类型重写toString()方法
         for (SearchResult searchResult : searchResultArr) {
