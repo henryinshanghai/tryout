@@ -4,8 +4,8 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_
 import java.util.ArrayList;
 import java.util.List;
 
-// 验证：从原始列表中获取到的子列表 会如如下特性:
-// 1 其CRUD会受到原始列表的影响 - 如果原始列表发生了元素个数相关的改动，则：branchList的CRUD都会快速失败；
+// 验证：从原始列表中获取到的子列表 会有如下特性:
+// 1 其CRUD的操作 会受到原始列表的影响 - 如果原始列表发生了元素个数相关的改动，则：branchList的CRUD都会快速失败；
 // 2 对branchList的改动 也会反映到 原始列表masterBranch上
 public class SubListFailFast_01 {
     public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class SubListFailFast_01 {
         List branchList = masterList.subList(0, 3);
         System.out.println(branchList.size()); // 预期：3
 
-        /* 以下代码会导致branchList操作出现异常 👇 */
+        /* 以下代码会导致 branchList的CRUD操作 出现异常 👇 */
         // 原因：masterList任何 关于元素个数的修改操作 都会导致branchList的增删改查 抛出ConcurrentModificationException
         // 为了使 对sublist的修改不报错,这里不能够修改原始list 👇
 //        masterList.remove(0);

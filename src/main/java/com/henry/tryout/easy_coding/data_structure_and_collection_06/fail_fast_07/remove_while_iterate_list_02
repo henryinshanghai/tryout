@@ -1,4 +1,4 @@
-ArrayList在遍历操作时删除元素, 为什么没有抛出 ConcurrentModificationException异常呢？
+ArrayList在遍历操作时删除倒数第二个元素, 为什么没有抛出 ConcurrentModificationException异常呢？
 demo: ArrayListFailFast_02
 原理：
     #1 遍历集合时，会使用一个cursor游标 来标识当前扫描到的位置；
