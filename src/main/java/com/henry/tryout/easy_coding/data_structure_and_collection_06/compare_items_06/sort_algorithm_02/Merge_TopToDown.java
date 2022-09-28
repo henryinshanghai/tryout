@@ -72,7 +72,7 @@ public class Merge_TopToDown {
         int leftHalfCursor = leftBar;
         int rightHalfCursor = middle + 1;
 
-        // 拷贝区间[leftBar, rightBar](闭区间)之间的元素 到 aux
+        // 拷贝原始数组[leftBar, rightBar]闭区间之间的元素 到 aux辅助数组中
         for (int cursor = leftBar; cursor <= rightBar; cursor++) {
             aux[cursor] = a[cursor];
         }
