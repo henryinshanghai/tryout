@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07;
+package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07.cowList_03;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 // 验证：如果在对list中的item进行遍历时,更新item的数量。则：会快速失败
+// 结果：使用for循环，删除two时，并没有快速失败; 使用iterator方式，删除one时，也没有快速失败
 public class ArrayListFailFast_02 {
     public static void main(String[] args) {
 
@@ -47,5 +48,5 @@ public class ArrayListFailFast_02 {
 /*
 实现"遍历时修改"的两种手段：
     #1 显式地使用 Iterator机制；
-    #2 使用 COWList(而不是ArrayList)
+    #2 使用 COWList(而不是ArrayList) 参考： COWListWontFail_02
  */
