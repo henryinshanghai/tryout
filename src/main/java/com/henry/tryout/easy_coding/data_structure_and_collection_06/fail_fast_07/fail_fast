@@ -11,5 +11,8 @@ fail-fast:
         fail-fast: 在班长点名的时候，如果有同学进入班级。则：点名要被迫中断，班长不得不重新点名
         fail-safe: 班长拿出手机快速拍照，然后根据照片点名，而不关心同学们的进进出出。
 
-    demo: ArrayList.subList(); // 方法返回的是一个视图
+    demo: SubListFailFast_01
+    ArrayList.subList(); // 方法返回的是一个视图
     主列表 master、子列表 branch - 如果主列表上元素的增加或删除，则：会导致子列表的遍历、增加、删除 -> 从而产生 fail-fast异常。
+
+    demo2: ArrayListFailFast_02

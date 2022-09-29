@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07;
+package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07.expect_fast_fail_01;
 
 
 import java.util.ArrayList;

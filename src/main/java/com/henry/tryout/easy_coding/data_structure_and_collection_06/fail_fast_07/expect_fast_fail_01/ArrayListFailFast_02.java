@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07;
+package com.henry.tryout.easy_coding.data_structure_and_collection_06.fail_fast_07.expect_fast_fail_01;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +35,7 @@ public class ArrayListFailFast_02 {
         System.out.println(list);
 
         // 2 在遍历时修改list中的item - 手段：使用iterator对象进行remove()操作
+        // 结果：使用 iterator对象的方式, 操作能够顺利完成
         Iterator<String> iterator = list2.iterator();
         while (iterator.hasNext()) {
             String item = iterator.next();
