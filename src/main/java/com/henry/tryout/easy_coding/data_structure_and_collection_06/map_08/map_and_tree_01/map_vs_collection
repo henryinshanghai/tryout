@@ -3,10 +3,10 @@ Map：
     是：一个接口；
     高层特征：
         1 与Collection类平级 的接口；
-        2 Map有部分方法会返回 Collection视图；- 比如 values()返回所有value构成的列表
+        2 Map有部分方法 会返回Collection视图；- 比如 values()返回所有value构成的列表
         3 Map中存储单位是 KV键值对/Entry；
     原理：
-        #1 先使用一定的哈希算法 来 产生一组比较均匀的哈希值 作为Key；
+        #1 先使用一定的哈希算法 来 产生一组比较均匀的哈希值 - 作为Key；
         #2 Value值 关联在 Key上面。
     用法特征：
        1 Key不能重复，但Value可以重复；
@@ -20,10 +20,10 @@ Map：
 ------
 是否能够将KV设置成为 null - 取决于实现类提供的约束
 
-ConcurrentHashMap -
+ConcurrentHashMap
     特征：
-        1 Key不允许为null，Value也不允许为null。
-        2 锁分段技术(before JDK1.8) / CAS（JDK1.8）
+        1 Key不允许为null，Value也不允许为null;
+        2 锁分段技术(before JDK1.8) / CAS（JDK1.8）;
 HashMap
     特征：
         1 Key允许为null，Value也允许为null。
