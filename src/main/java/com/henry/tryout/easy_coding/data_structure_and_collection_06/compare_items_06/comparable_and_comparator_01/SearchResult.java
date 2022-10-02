@@ -15,17 +15,17 @@ public class SearchResult implements Comparable<SearchResult> { // 实现Compara
     // #2 重写compareTo()方法 - 作用：指定比较的逻辑
     @Override
     public int compareTo(SearchResult o) { // 参数：同一类型的其他对象o
-        // 先比较相关度
+        // 先比较相关度 - 如果不相等，则：根据具体大小，返回 1/-1
         if (this.relativeRatio != o.relativeRatio) {
             return this.relativeRatio > o.relativeRatio ? 1 : -1;
         }
 
-        // 相关度相等时, 再比较浏览数
+        // 相关度相等时, 再比较浏览数 - 如果不相等，则：根据具体大小，返回 1/-1
         if (this.count != o.count) {
             return this.count > o.count ? 1 : -1;
         }
 
-        // 完全相等，则：返回0
+        // 如果运行到此处，说明relativeRatio 与 count都相等，则：返回0 - 表示对象的属性一模一样
         return 0;
     }
 
