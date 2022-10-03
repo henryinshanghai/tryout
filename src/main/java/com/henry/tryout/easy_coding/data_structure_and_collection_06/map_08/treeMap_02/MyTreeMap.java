@@ -2,6 +2,10 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.map_08.tre
 
 import java.util.*;
 
+// 验证：#1 红黑树中的节点需要记录3个链接信息 - 左子节点、右子节点、父节点
+// #2 插入节点的分类讨论 {向空树中插入节点, 向非空树中插入节点}
+// #3 向非空树插入节点的分类讨论 {传入了比较器, 未传入比较器}
+// #4 插入节点的高层次步骤：① 先找到节点的插入位置(BST规则); ② 插入节点后，再通过重新着色、旋转等手段恢复平衡
 public class   MyTreeMap<K, V> { // extends AbstractMap<K, V>
     // implements NavigableMap<K, V>, Cloneable, java.io.Serializable
 
@@ -142,6 +146,10 @@ public class   MyTreeMap<K, V> { // extends AbstractMap<K, V>
         // 如果新节点是根节点 或者 新节点的父节点是黑色时，则：插入红节点不会破坏红黑树的约束条件 不需要调整
         // 如果出现了连续的红色节点，则：需要进行旋转或者变色操作 - 直到父节点是黑色，或者到达根节点
         // 终止调整的三个条件：#1 新节点为根节点； #2 新节点的父节点是黑色； #3 当前节点为null- 说明树中的节点已经调整完毕；
+        // 分类讨论（结构特性） - {新增节点的父亲是爷爷的左子节点, 新增节点的父亲是爷爷的右子节点}
+        // 分类讨论（颜色特性） - {右叔为红色(全部重新着色), 右叔为黑色}
+        // 右叔为黑色的情况下 - 如果插入节点是父节点的右子节点，则：左旋转父节点
+
         while (x != null && x != root && x.parent.color == RED) {
             // Ⅰ - 如果新增节点的父亲 是爷爷的左子节点
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
