@@ -2,7 +2,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.map_08.tre
 
 import java.util.TreeMap;
 
-// 特性：Map的key有序，并且不能重复；- 怎么实现去重的呢？
+// 特性：TreeMap中的key是排列有序的，并且不能重复；- 怎么实现去重的呢？
 // 验证：TreeMap是通过 Comparable或者Comparator 来 实现去重的 - 根据key的排序结果 来 实现去重. aka compareTo()返回0，则：认为重复
 // 手段：#1 自定义“Key对象相等/Key对象排序”的规则 - 手段：实现Comparable接口; #2 向map中添加key相同的key-value； #3 获取到map的size
 public class TreeMapRepeatKey_02 {
