@@ -1,0 +1,51 @@
+// 验证：第4次元素复制完成之后，哈希桶中的元素 被逆序排列到新表中
+
+void resize(int newCapacity) {
+    Entry[] newTable = new Entry[newCapacity];
+
+    // 注：JDK8中移除了计算hashSeed的步骤 - 因为这会调用 Random.nextInt(),而这个方法存在性能问题
+    transfer(newTable, initHashSeedAsNeeded(newCapacity));
+    // 把新表对象绑定到table变量上 - 在这个步骤完成之前，旧表上仍旧能够进行元素的添加操作。 这可能会导致 旧表上新添加的元素丢失
+    table = newTable;
+    // MAX是 1<<30
+    threshold = (init)Math.min(newCapacity * loadFactor, MAXIMUM_CAPACITY + 1);
+}
+
+// 从旧表中迁移数据到新表中
+void transfer(Entry[] newTable, boolean refresh ) {
+    // 外部参数传入时，指定新表的大小为： oldTable.length * 2
+    int newCapacity = newTable.length;
+    // 遍历哈希表
+    for(Entry<K, V> e : table) {
+        while(null != e) {
+            Entry<K, V> next = e.next;
+
+            // 把当前元素 放在哈希槽中，而不是放在链表的最后
+            if(refresh) {
+                e.hash = ((null == e.key) ? 0 : hash(e.key));
+            }
+            int i = indexFor(e.hash, newCapacity);
+
+            // 把原来slot上的元素 作为当前元素的下一个
+            e.next = newTable[i];
+            // 新迁移过来的节点 直接放在哈希槽上
+            newTable[i] = e;
+
+            // 继续向下遍历链表
+            e = next;
+        }
+    }
+}
+
+代码可能引发的问题：
+p1: 数据迁移时,丢失新添加的元素： - for(Entry<K, V> e : table) {...}
+    #1 线程A执行transfer()，然后由于CPU时间片用尽而被挂起；
+    #2 线程B执行put()方法 {addEntry, createEntry}，并成功添加元素到哈希表中的某个哈希槽 - 这个哈希槽在#1中可能已经被遍历过了
+    #3 线程A重新获取到CPU时间片，继续执行transfer()方法 -> 这样线程B新增的entry就无法被迁移到newTable中
+
+p2: 多个线程同时执行resize()时，可能会出现 线程之间操作的相互覆盖 -
+    #1 每个线程在执行resize()的时候，都会：创建一个属于自己的数组对象 - Entry[] newTable = new Entry[newCapacity];
+    #2 但是在更新table时，使用的却是线程之间共享的变量 - table = newTable; // table是线程共享变量,而newTable却是局部变量
+    -> 多线程条件下，执行resize()时，会出现线程操作之间的覆盖。
+
+

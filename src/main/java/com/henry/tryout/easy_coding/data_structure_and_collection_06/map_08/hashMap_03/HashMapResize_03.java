@@ -2,7 +2,8 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.map_08.has
 
 import java.util.HashMap;
 
-public class HashMapSimpleResize {
+// 验证：HashMap的扩容动作 会发生在 size > capacity * factor时
+public class HashMapResize_03 {
     private static HashMap map = new HashMap();
 
     public static void main(String[] args) {
@@ -21,7 +22,7 @@ class UserKey {
         return 1;
     }
 
-    // 在hash值相同的情况下，为了new能够产生不同的对象。- 手段：equals()方法返回false
+    // 在hash值相同的情况下，为了使new出的对象逻辑上不相等。- 手段：equals()方法返回false
     // 用法：e.hash == hash && ((k = e.key) == key || key.equals(k)) 为 false
     public boolean equals(Object obj) {
         return false;

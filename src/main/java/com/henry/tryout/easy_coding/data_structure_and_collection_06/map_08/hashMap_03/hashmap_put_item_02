@@ -10,8 +10,8 @@ hashmap's size = 所有哈希桶中的元素的总和。
 ------
 HashMap 新增元素的过程：
     put()
-    addEntry()
-    createEntry()
+        - addEntry()
+            - createEntry()
     新添加的元素直接放在 slot槽上，使新添加的元素 能够在下次提取时，可以被更快地访问到。
     分析：如果两个线程同时执行的话，在createEntry()方法中，会出现 线程之间的赋值覆盖 - 这就是对象丢失的原因。
 
