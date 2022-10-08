@@ -4,7 +4,7 @@ public V put(K key, V value) {
 
     // 找到数组对应下标的位置 - 手段：使用hashCode
     // 是要覆盖旧的元素 or 添加新的元素 - 手段：根据equals()方法所返回的boolean类型结果
-    for(Entry<K, V> e = table[i]; e !+ null; e = e.next) {
+    for(Entry<K, V> e = table[i]; e != null; e = e.next) {
         // 如果key的hash是相同的，则：判断key是不是相同的key - 手段：等值判断 或者 equals()判断；
         if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
             V oldValue = e.value;
