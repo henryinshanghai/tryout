@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Menu {
 
+    // 在getMenu()中初始化 菜单 - 方便demo复用菜单
     public List<Dish> getMenu() {
         return Arrays.asList(
                 new Dish("pork", false, 800, Dish.Type.MEAT),
