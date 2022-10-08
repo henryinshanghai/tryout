@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+// 验证: 借助Stream - 可以使用指定的条件 来 尝试从集合元素中查找出结果；
+// 手段：filter(<boolean_condition>) + findXxx()
+// 特征: findXxx()本身没办法指定 <boolean_condition>，因此需要和 filter()一起配合使用
 public class Search_02 {
     public static void main(String[] args) {
         List<Dish> menu = new Menu().getMenu();
