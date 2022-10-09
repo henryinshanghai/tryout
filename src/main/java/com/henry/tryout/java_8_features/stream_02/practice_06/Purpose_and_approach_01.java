@@ -6,35 +6,33 @@ import com.henry.tryout.java_8_features.stream_02.Transaction;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// 验证：利用Stream - 可以以声明式的方式 来 处理集合中的元素
 public class Purpose_and_approach_01 {
     public static void main(String[] args) {
         List<Transaction> transactions = prepareData();
 
-        // 找出2011年的所有交易，并按照交易额从低到高排序
+        // 找出2011年的所有交易，并按照交易额从低到高排序 - sorted()方法
         printTransactionIn2011(transactions);
 
-        System.out.println("++++++++++++++++++++");
-
-        // 找出所有交易员工作的城市集合
+        // 找出所有交易员工作的城市集合 - collect(Collectors.toSet())方法
         printCities(transactions);
 
-        System.out.println("======================");
         // 找出所有来自于剑桥的交易员
         printTraderFromCambridge(transactions);
 
-        // 找到所有的交易员，并把名字字符串连到一起
+        // 找到所有的交易员，并把名字字符串连到一起 - reduce("", (name1, name2) -> name1 + name2)
         printTraderNames(transactions);
 
         // 有没有交易员在米兰工作
         printAnyTraderWorkInMilan(transactions);
 
-        // 获取在剑桥的交易员的所有交易的金额
+        // 获取在剑桥的交易员的所有交易的金额 - .forEach(System.out::println);
         printTransactionValueFromTraderInCam(transactions);
 
-        // 获取到最高交易额
+        // 获取到最高交易额 - highestValue.orElse(null)
         printTheMaxTransactionValue(transactions);
 
-        // 获取到交易额最低的交易
+        // 获取到交易额最低的交易 - item与item之间的操作
         printTheMinTransaction(transactions);
     }
 
@@ -75,7 +73,7 @@ public class Purpose_and_approach_01 {
         String traderNames = transactions.stream()
                 .map(transaction -> transaction.getTrader().getName())
                 .distinct()
-                .reduce("", (name1, name2) -> name1 + name2);
+                .reduce("", (name1, name2) -> name1 + name2); // 这里需要一个原始的空字符串
 
         System.out.println("拼接得到的姓名字符串： " + traderNames);
     }
