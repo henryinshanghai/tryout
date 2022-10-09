@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+// 验证: 借助Stream - 可以从集合元素中归约出一个结果；
+// 手段：reduce(<repeatable_operation>) - <reduce_function>：min, max
+// 语法：方法引用 Integer::min
 public class calculateMax_02 {
     public static void main(String[] args) {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
