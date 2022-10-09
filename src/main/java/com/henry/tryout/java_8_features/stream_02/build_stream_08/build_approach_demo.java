@@ -8,13 +8,20 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+// 验证：创建一般流的3种方式 - {字面值, 数组, 文件}
+// 字面值 - 手段： Stream.of(字面值)
+// 数组(数值流) - 手段： Arrays.stream(arr)
+// 文件(一般流) - 手段: Files.lines(path)
 public class build_approach_demo {
     public static void main(String[] args) {
 
+        // 使用字面值 来 创建流
         buildStreamViaLiteralValue();
 
+        // 使用数组 来 创建流
         buildStreamViaArray();
 
+        // 使用文件 来 创建流
         buildStreamViaFile();
     }
 
@@ -24,7 +31,9 @@ public class build_approach_demo {
         // 写在 try()中，流会自动关闭
         // 读取静态文件的手段 - Paths.get(<path_string>)
         try (Stream<String> lines =
-                     Files.lines(Paths.get("E:\\development_project\\tryout\\src\\main\\java\\com\\henry\\tryout\\java_8_features\\stream_02\\build_stream_08\\data"), Charset.defaultCharset())) {
+                     Files.lines(
+                             Paths.get("E:\\development_project\\tryout\\src\\main\\java\\com\\henry\\tryout\\java_8_features\\stream_02\\build_stream_08\\data"),
+                             Charset.defaultCharset())) {
             uniqueWords = lines
                     .flatMap(line -> Arrays.stream(line.split(" ")))
                     .distinct() // 去除重复项
