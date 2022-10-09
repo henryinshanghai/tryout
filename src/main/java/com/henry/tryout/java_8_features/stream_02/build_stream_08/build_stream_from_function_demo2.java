@@ -2,16 +2,19 @@ package com.henry.tryout.java_8_features.stream_02.build_stream_08;
 
 import java.util.stream.Stream;
 
+// 验证：使用JDK提供的静态方法 能够创建出一些常见的流
+// 无限流 - 手段：Stream.iterate(seed, formula)
+// 斐波那契流 - 手段：Stream.iterate(seed, formula)
+// 定制流 - 手段：Stream.generate(lambda_expression)
 public class build_stream_from_function_demo2 {
     public static void main(String[] args) {
+        // 创建无限流
         buildUnlimitedStreamWithIterateMethod();
 
-        System.out.println("=============");
-
+        // 创建斐波那契数列
         buildFibonacciNumbers();
 
-        System.out.println("+++++++++++++");
-
+        // 创建满足特定条件的流
         buildStreamWithGivenDemand();
     }
 
