@@ -10,22 +10,25 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.*;
 
-public class groupItem_collect_from_subGroup_03 {
+// 验证：在使用groupingby()对集合进行分组后，可以使用 快捷函数 来实现快速统计/汇总
+// 手段：collectingAndThen()、summingInt()等
+public class groupItems_then_calculate_03 {
     public static void main(String[] args) {
         List<Dish> menu = new Menu().getMenu();
 
         // 按照type分组，并获取到每个子组中热量最高的Dish
+        // 手段：collect(groupingby(<group_rule>, collectingAndThen(xxx, ooo)))
         groupByTypeAndRetrieveHottestDish(menu);
 
+        // 先按照type分组，再使用收集器进行汇总操作
         groupingByAndItsBuddiesCollector(menu);
     }
 
     private static void groupingByAndItsBuddiesCollector(List<Dish> menu) {
-        // 求每个子组中的菜品热量总和
-        // 传入的收集器是为了执行 进一步的归约操作
+        // 分组后，计算每个子组的总热量 - 手段：collect(groupingby(<group_rule>, <calc_method>))
         calculateTotalCaloriesPerSubgroup(menu);
 
-        // 抽象作用 & 实际作用
+        // 分组后，计算每个子组的卡路里水平 - 手段：???
         calculateCaloriesLevelPerSubgroup(menu);
     }
 

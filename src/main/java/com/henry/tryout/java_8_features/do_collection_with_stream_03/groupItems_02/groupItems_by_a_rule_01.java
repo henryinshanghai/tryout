@@ -8,7 +8,9 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class groupItems_basic_01 {
+// 验证：可以用 collect() + groupingby(<group_rule>) 来实现 对集合中元素的分组
+// #2 groupingby(<self_define_rule>)的参数 允许传入自定义的分组规则
+public class groupItems_by_a_rule_01 {
     public static void main(String[] args) {
         List<Dish> menu = new Menu().getMenu();
 
@@ -16,6 +18,7 @@ public class groupItems_basic_01 {
         // 获取到分组收集器 - 手段：groupingBy(<group_rule>)
         groupByDishType(menu);
 
+        // 按照自定义的rule进行分组 - 手段：collect(groupingby(<self_rule>))
         groupBySelfDefineRule(menu);
     }
 
