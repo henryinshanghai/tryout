@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
+// 验证：使用Stream的collect() OR reduce()方法，能够对集合中的元素执行归约的操作
 public class availableCollector_in_Collector_02 {
     public static void main(String[] args) {
         // Collector类中提供了工厂方法 - 从这些工厂方法中可以直接创建收集器  用于collect()方法的参数
@@ -26,34 +27,36 @@ public class availableCollector_in_Collector_02 {
 
     private static void generateAResultFromItemsInStream() {
         List<Dish> menu = new Menu().getMenu();
-        // 计数 purpose
+        // 收集菜单中有多少菜品 - 计数目的
         howManyDishesInMenu(menu);
 
-        // 最x purpose
+        // 收集菜单中热量最高的菜品 - 最值 purpose
         getTheDishWithHighestCalories(menu);
 
-        // 汇总 purpose
+        // 收集菜单中所有菜品的总热量/平均热量 - 统计 purpose
         calculateTotalCaloriesOfMenu(menu);
         calculateAverageCaloriesOfMenu(menu);
 
-        // 统计 purpose
+        // 收集菜单中所有菜品的一般统计值 - 统计 purpose
         calculateAllAspectOfMenu(menu);
 
-        // 连接字符串 purpose
+        // 收集菜单中所有菜品的名称到一个字符串 - 连接字符串 purpose
         joinDishNameTogether(menu);
 
-        // 使用更一般性的手段 实现相同的目的
+        // 使用更一般性的手段 实现相同的目的 - 计算菜单中所有菜品的总热量 collect(reduce(xxx))
         calculateTotalCaloriesOfMenuWithReducing(menu);
 
-        // collect() VS. reduce() - 很多时候，殊途同归   获取菜总热量的N种方式
+        // 计算菜单中菜品的总热量 collect() VS. reduce() - 很多时候，殊途同归   获取菜总热量的N种方式
         calculateTotalCaloriesOfMenuWithReduceMethod(menu);
     }
 
     private static void calculateTotalCaloriesOfMenuWithReduceMethod(List<Dish> menu) {
+        // reduce approach
         Integer totalCalories = menu.stream()
                 .map(Dish::getCalories)
                 .reduce(0, (i, j) -> i + j);
 
+        // data stream approach
         totalCalories = menu.stream()
                 .mapToInt(Dish::getCalories)
                 .sum();
