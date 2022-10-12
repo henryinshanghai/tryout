@@ -7,3 +7,8 @@ A —— B —— C(master)
 
 手段1：merge；
 手段2：rebase；
+
+执行后的commit图：
+    D —— E —— F(feature)
+  /         /
+A —— B —— C(master) master可以快速地包含 commit F

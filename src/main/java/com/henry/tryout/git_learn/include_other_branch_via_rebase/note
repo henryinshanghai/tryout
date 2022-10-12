@@ -1,0 +1,11 @@
+(feature/books) git rebase master
+rebase commits in current branch to master branch's tail.
+把当前分支上的commits，变基到 master分支的commit上.
+
+commit的初始情况：
+    D —— E(feature)
+  /
+A —— B —— C(master)
+
+执行命令(git rebase master)后的commit情况：
+A —— B —— C(master) —— D —— E(feature) master分支可以快速地包含 commit D, commit E
