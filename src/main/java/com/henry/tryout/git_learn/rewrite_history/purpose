@@ -1,0 +1,9 @@
+把master分支上的最新commits,合并到自己的开发分支feature上来
+
+初始的提交&分支：
+    D —— E(feature)
+  /
+A —— B —— C(master)
+
+手段1：merge；
+手段2：rebase；
