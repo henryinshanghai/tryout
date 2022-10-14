@@ -1,0 +1,5 @@
+IntelliJ IDEA Community can generate getter and setter methods for fields in your class.
+With the caret inside the class, press Alt+Insert (Code | Generate).
+
+为类中的字段生成 getter() 与 setter()方法；
+手段：把光标放在类中，按下 Alt + Insert快捷键(或者使用菜单导航 Code | Generate).
