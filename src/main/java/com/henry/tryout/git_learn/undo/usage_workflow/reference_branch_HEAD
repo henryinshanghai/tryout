@@ -1,0 +1,54 @@
+fact:
+    在 Git 中我们将 SHA-1 值用做提交对象（以及 tree 和 blob 对象）的 ID;
+        特征：
+            #1 通过 ID 操作提交对象以及提交对象引用的文件快照。
+            #2 但大部分时候，记住一个 ID 是非常困难的，因此：
+                Git 用一个文件来保存 SHA-1 值，这个文件的名字即作为「引用（refs）」来替代原始的 SHA-1 值。
+                aka 使用对象引用 来 代替使用对象的ID。 file_name -> file_content = (ref -> SHA-1)
+                特征：所有的这类文件都存放在 .git/refs目录下。
+
+---
+git中对象的引用：
+    作用：方便操作 git中的各类对象，尤其是commit对象；
+    特征：
+        #1 所有的这类文件都存放在 .git/refs目录下；
+
+---
+git中的分支：
+    作用：表示一个独立的开发方向；
+    特征：
+        #1 能够在需要的时候合并回到主体分支（或者放弃）；
+        #2 每个分支都会有一个自己的名字 - 这个名字是由开发者指定的，作为分支的引用；
+        #3 git会把分支的名字 作为引用存放在 .git/refs/heads 目录下；
+    原理：
+        git中，分支其实就是 指向一个commit序列的最后一个commit的引用；
+    验证：在master分支下，查看 .git/refs/heads/master文件中的内容；
+        预期：master分支最后一个commit的ID；60f827a
+        结果：60f827ac5333601fa92fd96bb6a533a2ea33ca4f
+        证明：
+            #1 git会把分支的名字 作为引用 以文件的形式存放到 .git/refs/heads/ 目录下；
+            #2 文件的内容就是 引用所代表的commit的ID；
+
+---
+git中的HEAD引用
+    是：一个commit的引用 - fixed符号引用
+    作用：用来引用 当前分支的最后一次提交；
+    特征：
+        #1 由于引用最后一次提交，因此HEAD引用的内容一般会是 当前分支的名字；
+            验证：.git/HEAD文件中存储的是不是当前分支的名称；
+            预期：master
+            结果：ref: refs/heads/master
+            解释：引用的链条 HEAD -> master -> last commit's id
+        #2 通过命令，开发者可以移动HEAD指向任何的commit - 这时候HEAD文件中存储的就是commit的id。
+            命令： git checkout <commit_id>
+            验证：HEAD文件中存储的内容是 commit_id
+            恢复原样：再checkout回来???
+
+综上，对于master分支来说。有以下方式表示它：
+    #1 使用分支名称master；
+    #2 使用master分支最后一个提交的commit id；
+    #3 使用 HEAD这个符号引用
+
+此处应该贴一张图: 🤭
+
+---

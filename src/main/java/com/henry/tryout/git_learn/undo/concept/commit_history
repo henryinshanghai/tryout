@@ -1,0 +1,28 @@
+提交历史：
+    作用：工作区中的所有被管理的文件 在某一时刻的快照(即文件或文件夹在特定时间点的状态，包括内容和元信息)。
+    验证手段：查看当前分支的提交历史 - git log
+    特征：
+        #1 提交历史由1到多次提交组成；
+        #2 每次commit中会 记录此次提交所包含的文件；
+        #3 每个commit都会有一个ID - 这个ID是 根据对象内容做SHA-1计算得到的哈希值，所以不同内容(所有文件吗?)一定会得到不同的结果
+            应用：#1 作为commit的唯一标识符； #2 用作./git/objects 目录中的文件名 - 可以用来找到对应的对象，并打印内容
+    验证：查看最近一次的commit的ID中有什么内容；
+        git log --oneline -n5 => 60f827a
+        git cat-file -p 60f827a
+            tree b98b895debb7ac7da80cb336eb4e71aca99da303
+            parent 2284e6b01bbeca3b0df469a3ef5d45b4998d16f6
+            author HenryInSH <2291972433@qq.com> 1665721181 +0800
+            committer HenryInSH <2291972433@qq.com> 1665721181 +0800
+
+            idea tips:
+
+            #1 选中矩形区域的代码 - Alt + 鼠标拖拽;
+            #2 生成getter/setter方法 - Alt + Insert
+        语法解释：
+            tree - commit中的tree对象，代表 项目的完整的目录；
+                 这个tree类型的commit不断展开就能看到所有文件。aka
+                    #1 一个 tree 对象即可表示整个工作区中所有已提交目录及文件的内容;
+                    #2 每个commit对象中都会包含有一个 tree对象； - 因此 每一个提交都包含着一份完整的某一时刻的文件快照。
+            parent - 当前commit的父commit
+            commit的作者 & 提交者、提交信息 这些个与提交相关的元信息
+    应用：通过多个commit(顺着时间轴的连续快照)组成的历史，就能够 管理时间轴上目录中所有文件的变更。
