@@ -1,0 +1,34 @@
+$ git checkout 2284e6b
+Note: switching to '2284e6b'.
+
+You are in 'detached HEAD' state.
+You can look around, make experimental changes and commit them,
+and you can discard any commits you make in thisstate without impacting any branches by switching back to a branch.
+
+你现在 detached HEAD 状态，
+你现在可以四下看看, 做一些实验性的修改。
+并且你可以再当前状态下丢弃这些commits - 当前切换回到其他分支时，你的改动不会影响到其他任何分支。
+
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+
+Or undo this operation with:
+
+  git switch -
+
+如果你想要创建一个新的branch来保留你所创建的新的commit。可以通过以下方式来实现：
+	git switch -c <new-branch-name>
+
+或者 撤销这个操作，使用：
+	git switch -
+
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+设置配置变量advice.detachedHead为false 来 关闭这个建议
+
+HEAD is now at 2284e6b --- 重新组织目录: /rebase + /undo ---
