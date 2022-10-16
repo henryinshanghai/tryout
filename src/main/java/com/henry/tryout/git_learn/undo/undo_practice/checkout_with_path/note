@@ -1,2 +1,14 @@
 如果在checkout命令后添加具体文件的路径，则：
     Git会从commit中找到此文件，并使用找到的文件 覆盖掉 工作区&暂存区的同名文件
+
+验证手段：
+    #1 添加chapter_03，并创建提交 chapter03 first commit - <commit_id1>;
+    #2 向chapter_03中添加新的内容，添加chapter_04，然后创建提交 chapter03(add more content) + chapter04(add new file) - <commit_id2>
+    #3 有了以上两个commit之后，再在工作区 向chapter_03文件中添加新的内容：
+    #4 从 <commit_id1>中 checkout出 chapter_03文件的内容，以应用到 工作区 & 暂存区：
+        语法： git checkout <commit_id> <file_path>
+        命令： git checkout 02bd437 src/main/java/com/henry/tryout/git_learn/undo/undo_practice/checkout_with_path/chapter_03
+结果：工作区 & 暂存区中的chapter_03文件 就只有 <commit_id1>提交时的内容。
+说明：checkout出的文件快照 会覆盖到 暂存区 & 工作区。
+恢复初始状态（#3中新增的内容是回复不来了）：git checkout <commit_id2> <file_path>
+
