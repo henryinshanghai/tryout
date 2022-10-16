@@ -1,0 +1,11 @@
+checkout的操作 不会影响到 工作区与暂存区的文件变更。
+验证：在master分支上创建一个commit后，再添加新的文件进入到暂存区。然后checkout回去上一个commit
+观察 工作区 与 暂存区的变更是不是还在 - YES
+
+如果 工作区变更的文件中含有 在commit中存在的文件，则：
+    checkout的操作会失败。所有区域都会保留在checkout之前的状态
+验证：修改chapter_01(这个文件已经被commit了)，添加chapter_02。然后再执行checkout的操作：
+    #1 checkout到上一个commit - 失败,提示工作区对chapter_01的变更会被覆盖
+    #2 checkout到 feature/my-novel分支 - 失败,提示工作区对chapter_01的变更会被覆盖
+
+结论：如果是新增的文件，则：checkout的操作就不会被Git阻止 - 因为从commit恢复暂存区、工作区不会有任何风险
