@@ -1,0 +1,13 @@
+To preview code without actually scrolling to it,
+hover your mouse pointer over a warning, error stripe,
+or just some section of source code on the scrollbar,
+and you will see a lens:
+为了能够查看代码而不用真正地滚动到代码上，
+把你的鼠标箭头悬停到一个warning, error 条纹(右侧滚动条)上,
+或者滚动条上任意一个代码段，这样就能够看到一个放大镜：
+xxx（图示）
+
+To disable the lens, right-click the code analysis marker at the top of the scrollbar
+and clear the Show code lens on scrollbar hover checkbox.
+如果你想要禁用这个放大镜，右击滚动条上方的code analysis marker,
+并且取消勾选 Show code lens on scrollbar hover。// 这里的on表示的是 在xxx条件下
