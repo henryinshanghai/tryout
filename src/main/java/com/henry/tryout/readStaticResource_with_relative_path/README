@@ -1,0 +1,39 @@
+相关知识：
+1 编写完成的.java文件，是如何能够被计算机执行的？
+参考：https://www.liaoxuefeng.com/wiki/1252599548343744/1255878730977024
+过程：
+    1 .java文件经过 Java编译器的编译(javac命令)，得到其对应的.class文件； - Java编译器
+    2 .class文件会在JVM中被执行(java命令)； - JVM虚拟机
+
+
+2 在IDEA中，是怎么样完成1中的所有步骤的？
+参考：https://www.jetbrains.com/help/idea/creating-and-running-your-first-java-application.html
+过程：
+    1 创建一个项目 - 设置JDK、创建package、helloworld.java文件；
+    2 编写代码 - 添加main方法(动态模板)、调用println()方法(代码补全)；
+    3 build并运行项目：
+        1 在点击Run的时候，IDEA会创建一个 运行时配置 - 用来执行一系列的动作👇
+        2 构建你的项目 - 这个阶段，会使用javac来 把java源码编译成为JVM字节码(class文件)；
+        3 放置class文件到特定目录 - 一般来说，会放到橘色的/out目录下；
+        4 最后，JVM会运行这些个class文件 - java命令。
+
+3 对于项目中的静态文件(这些个文件不需要编译成字节码)，IDEA又是怎么处理的呢？
+过程：
+    1 创建一个maven项目； OR 使用Maven作为编译工具 来 创建一个Java EE项目； OR 打开一个已经存在的Maven项目
+    OR 在打开一个新项目前配置Maven的设置项信息 OR 在已经存在的项目中添加一个maven项目 OR 配置一个多模块的Maven项目
+        IntelliJ IDEA creates a Maven project with the pom.xml file
+            that includes compiler and target versions of Java, dedicated Maven tool window, and all the necessary dependencies to start you work.
+        IDEA使用pom.xml文件 来 创建一个Maven项目；
+            这个pom.xml文件中包含 编译器与Java的目标版本， 专用的Maven工具窗口，以及开始你工作所需要的所有依赖项。
+
+        The version of Java specified in the pom.xml file overrides
+            the version specified in the JDK for Importer option, located in the Maven settings.
+            在pom.xml文件中所指定的Java版本 会覆盖 通过Importer option所指定的JDK版本(这个版本在Maven的settings中)
+
+    2 访问到Maven的配置信息：
+    3 使用Maven wrapper 或者 定制的Maven版本
+
+    改变Maven所使用的JDK版本；
+
+    等等，像是“拷贝资源文件到指定的目录下” 这到底是Maven完成的工作，还是IDEA完成的工作呀？
+    看起来是Maven的工作 - see u in the afternoon.
