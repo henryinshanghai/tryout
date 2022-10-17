@@ -1,0 +1,19 @@
+作用：使用指定commit的指定文件内容 来 更新暂存区 - 以此来取消暂存区添加的文件变更；
+手段：git reset <file_path>
+完整语法： git reset [<tree-ish>] <pathspec>
+原理：
+    #1 从 <tree-ish> 提取 <pathspec> 对应的文件快照；
+    #2 更新到暂存区；
+        特征：<tree-ish>可以是提交或分支，默认值为 HEAD - 因此默认会将暂存区的指定路径恢复到 HEAD 提交的状态。
+命令：git reset src/main/java/com/henry/tryout/git_learn/undo/undo_practice/git_reset_staging_file/poem_01
+执行过程：
+    #1 从 HEAD 提交中匹配 poem_01 对应的文件快照。
+    #2 将匹配到的文件快照 复制到暂存区。
+特征：
+    #1 当我们修改了某个文件(poem_01)添加到暂存区，reset 后会被替换成原本的文件版本；
+        git reset src/main/java/com/henry/tryout/git_learn/undo/undo_practice/git_reset_staging_file/poem_01
+        怎么查看暂存区中文件的内容？？？
+
+    #2 新增的文件(poem_03)会从暂存区中移除（因为上一次提交中没有该文件） - 实际实现了将文件取消暂存的效果。
+        git reset src/main/java/com/henry/tryout/git_learn/undo/undo_practice/git_reset_staging_file/poem_03
+        由于HEAD这个commit中没有poem_03这个文件，因此暂存区中此文件也会被清除掉 - 只剩下工作区
