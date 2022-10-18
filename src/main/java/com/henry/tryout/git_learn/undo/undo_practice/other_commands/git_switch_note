@@ -1,0 +1,9 @@
+作用：切换分支；
+用法：
+    #1 创建并切换到指定分支；
+        git switch -C <new_branch>
+    #2 切换到已经存在的分支；
+        git switch <existed_branch>
+验证：
+    git switch -c feature/books
+    git switch master
