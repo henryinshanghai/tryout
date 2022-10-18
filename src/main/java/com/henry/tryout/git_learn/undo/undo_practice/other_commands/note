@@ -15,4 +15,16 @@ restore
         #2 把工作区对note文件的变更添加到暂存区中；
         #3 使用 git restore 来 取消对note文件的暂存；
             src/main/java/com/henry/tryout/git_learn/undo/undo_practice/other_commands/note
-        预期：note文件被从暂存区取消；
+        预期：note文件被从暂存区取消； -- pass
+
+    验证2：
+        #1 工作区添加 poem_01文件；
+        #2 把 poem_01文件添加到暂存区中；
+        #3 使用 git restore命令 来 取消暂存区 & 丢弃工作区的修改；
+            git restore --staged src/main/java/com/henry/tryout/git_learn/undo/undo_practice/other_commands/poem_01
+            git restore src/main/java/com/henry/tryout/git_learn/undo/undo_practice/other_commands/poem_01
+        预期：
+            工作区中的poem_01文件消失 -- PASS
+            结果：无法对 新增的poem_01文件执行 git restore 的命令。因为git 还没有对它进行管理
+            尝试：先add到暂存区，然后再执行 git restore的命令。
+            还是不行。 结论：对于新增文件，无法使用git restore命令来丢弃工作区的变更。
