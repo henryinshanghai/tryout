@@ -1,0 +1,18 @@
+git中的命令存在着 一个命令，多个用途的情况 - 这使得有些命令表意不清晰。比如checkout
+
+git为此提供了表意更清晰的一些替代命令：
+restore
+    作用： 还原工作区/暂存区中指定文件/文件集合；（还原文件 = 取消变更）
+    语法：git restore [--source=<tree>] [--staged] [--worktree] <pathspec>…
+        #1 还原即恢复到“过去某一状态”，意味着该命令需要指定已有的某个文件快照（提交、分支等）作为数据源 - 通过 source 选项设置。
+        #2 可以选择对工作区（--worktree ）、暂存区（--staged ）或两者同时生效 - 默认值为仅工作区。
+            #1 当指定的区域 为工作区时，默认数据源为暂存区的文件快照；
+            #2 当指定的区域 包含暂存区时，默认数据源为 HEAD。
+        #3 可以选择对指定的文件或一些文件生效，通过 <pathspec> 参数指定。
+    启发：不同区域的文件快照 决定了所有命令的执行效果。
+    验证1：
+        #1 工作区修改 note文件；
+        #2 把工作区对note文件的变更添加到暂存区中；
+        #3 使用 git restore 来 取消对note文件的暂存；
+            src/main/java/com/henry/tryout/git_learn/undo/undo_practice/other_commands/note
+        预期：note文件被从暂存区取消；
