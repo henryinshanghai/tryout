@@ -28,3 +28,5 @@ restore
             结果：无法对 新增的poem_01文件执行 git restore 的命令。因为git 还没有对它进行管理
             尝试：先add到暂存区，然后再执行 git restore的命令。
             还是不行。 结论：对于新增文件，无法使用git restore命令来丢弃工作区的变更。
+
+        结论：对于工作区中已经存在的文件的变更，可以使用 git restore来丢弃
