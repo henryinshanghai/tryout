@@ -8,3 +8,8 @@ rebase：
     简化语义：
         rebase current branch's commits onto parameter branch.
         把 当前分支的commits给 rebase到参数分支上去。
+    特征：
+        #1 不会产生一个merge commit；
+        #2 结果是一个线性的提交历史 - 原始的commit会被remove掉；
+        #3 被移动的commits 原始的上下文信息被丢弃了。
+
