@@ -1,0 +1,7 @@
+rebase：
+    过程/原理：
+        #1 找到两个分支的最近公共祖先 - 从而确定需要rebase哪些commits；
+        #2 把需要rebase的所有commits，基于当前分支的HEAD，再重新应用一次。
+    语义：(feature) git rebase master👇
+        rebase commits that feature branch exclusively have
+        onto master's last commit(as base commit).
