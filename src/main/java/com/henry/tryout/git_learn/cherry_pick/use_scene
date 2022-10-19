@@ -1,0 +1,40 @@
+Git工作流的常见情况：
+#1 存在一个发布分支 & 一个开发的主分支；
+
+当出现bug时，开发者需要：
+#1 向已经发布的产品提供修复补丁；
+#2 把修复后的补丁代码 整合/添加到 开发主分支中。
+
+发布分支：release/poems
+开发主分支：master
+
+情形：
+    #1 已经发布了一个版本；
+    #2 正在进行新功能的开发 - 在开发新功能时，发布的版本报了bug；
+处理手段：
+    #1 产生一个紧急的修复提交 - 对bug进行修复；
+    #2 在主开发分支master上，进行集成测试；
+    #3 在master上测试成功后，就可以：
+        直接把 补丁commit整合到发布分支release/poems上去 - 使用cherry-pick
+图示：
+    B - C (release)  F - G(bugfix2)
+  /                /        \
+A - D(bugfix1) - E - H - I - J(master)
+
+master分支上：
+    #1 合入了 bugfix1分支 - D
+    #2 进行了新功能开发 - E, H, I
+    #3 合入了 bugfix2分支 - F, G
+在这种场景下，怎么办？
+方案1
+    #1 在master分支上做bugfix；
+    #2 然后使用cherry-pick 把bugfix快速地合并到release分支上去;
+方案2
+    #1 从release分支上创建出新的bugfix分支；
+    #2 在bugfix上修复完成bug之后，合进入 release分支；
+    #3 最后再把bugfix给cherry-pick到master分支上去。
+
+
+
+
+
