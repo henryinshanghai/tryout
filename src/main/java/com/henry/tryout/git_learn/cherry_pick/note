@@ -1,0 +1,57 @@
+cherry-pick的危险性：
+
+master分支：
+commit A：新增 你侬我侬
+
+切出新分支 feature/drill-cherry-pick
+commit B：新增短歌行 & 你侬我侬添加了一行
+commit C：新增蒹葭 & 你侬我侬添加了一行
+
+现在 cherry-pick commit C到master分支上，会得到什么效果？
+fact：cherry-pick一个commit时，Git只会把该commit所引入的变更 pick过来。
+commit C中所引入的变更：
+    #1 新增蒹葭；
+    #2 你侬我侬添加了一行；
+预期：
+    #1 对于新增的文件（蒹葭），应该能够直接pick过来到master上；
+    #2 对于添加内容的文件(你侬我侬)，应该会出现问题 - 因为commit C引入的改动是基于第8行的内容添加的，但master分支中的你侬我侬第8行是没有内容的
+    #3 由于 短歌行是commit B中添加的，应该不会被pick到master上
+实际结果：
+    你侬我侬的文件出现了冲突： master中此文件只有7行，但是pick过来的文件有13行。需要自己做出抉择
+
+
+原理：执行cherry-pick时，其实是对
+    #1 master分支的HEAD，
+    #2 被pick的commit C
+    #3 以及commit C的父提交(commit B) 做了一次三路合并。
+三路合并的算法：
+算法描述的对象(三个提交) - 最古早的提交BASE、当前分支的最新提交LOCAL、待合并分支的最新提交REMOTE；
+    #1 如果BASE与LOCAL相同，则：说明变更发生在REMOTE中 - 最终保留 REMOTE的提交；
+    #2 如果BASE与REMOTE相同，则：说明变更发生在LOCAL中 - 最终保留 LOCAL的提交。
+    #3 如果LOCAL与REMOTE相同，则：说明 LOCAL与REMOTE基于BASE做了相同的变更 - 保留任意一个即可；
+    #4 如果BASE, LOCAL, REMOTE都相同，则：说明没有发生任何变更 - Git什么都不用做
+    #5 如果BASE, LOCAL, REMOTE某个文件的某一行都不相同，则：说明发生了冲突 - 交给开发者手动处理
+具体到当前的case，有：BASE = commit B，LOCAL = commit A, REMOTE = commit C
+
+（cherry-pick时发生了三路合并）验证手段：
+#1 修改Git的配置 - 把发生冲突时的展示方式更新为 diff3; 这样能够清楚地看到三路合并是哪三路？
+#2 尝试在master分支上，cherry-pick commit C中的变更到master中来
+    这会发生三路合并，从而引起冲突 - 因为commit A, commit B, commit C中的第8，9行内容都不相同 👇
+查看工作区中的文件👇：
+    <<<<<<< HEAD
+    我与你生同一个衾，死同一个椁。
+    ||||||| parent of 482f9c5 (commit C) // 这里可以证明：BASE提交就是 commit C的父提交
+    我与你生同一个衾，死同一个椁。
+
+    小燕子，穿花衣。年年春天来这里
+    =======
+    我与你生同一个衾，死同一个椁。
+
+    小燕子，穿花衣。年年春天来这里
+
+    小老鼠，上灯台。偷油吃，下不来
+    >>>>>>> 482f9c5 (commit C)
+
+注：使用 IDEA提供的compare功能(双击changList中的文件本身)也能清楚地看到，三路commit中你侬我侬文件的不同之处。
+
+处理冲突：三选一
