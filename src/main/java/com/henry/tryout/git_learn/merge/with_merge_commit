@@ -1,0 +1,13 @@
+三路归并：
+    过程：
+        归并时，根据：
+            #1 master分支的HEAD commit、
+            #2 feature分支的最后一个commit、
+            #3 master与feature分支的最近公共祖先commit
+        来 确定归并后的结果。
+    特征：
+        #1 Git会对归并后的结果创建一个 Merge commit；
+        #2 merge commit会有两个parent - 可以通过 git cat-file -p <commit_id> 来查看commit中包含的内容；-p: pretty print
+        #3 大量使用merge commit，可能会使提交历史有些杂乱。
+        #4 对于fast-forward形式的合并，默认情况下不会产生 merge commit。
+
