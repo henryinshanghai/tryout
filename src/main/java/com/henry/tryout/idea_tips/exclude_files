@@ -1,0 +1,16 @@
+You can exclude any file from your project so that it is ignored by indexing, inspections, and code completion.
+In the Project tool window,
+    #1 right-click the file you want to exclude,
+    #2 select Override File Type from the context menu,
+    #3 and then select Plain text from the Choose File Type list.
+
+If necessary, you can always revert the file to its original type
+    #1 by selecting Revert File Type Override from the context menu.
+
+你可以从项目中排除任意文件 - 这样这些文件就不会被index，inspect以及代码补全；
+在 Project tool windows中：
+    #1 右击你想要排除的文件，
+    #2 从上下文菜单中选择 Override File Type；
+    #3 然后从 Choose File Type 选择 Plain text；
+
+如果想要的话，你可以使用 Revert File Type Override 来把文件恢复到原始的type。
