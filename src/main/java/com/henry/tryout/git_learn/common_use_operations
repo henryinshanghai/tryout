@@ -1,0 +1,15 @@
+git修改文件名/文件重命名：git mv readme readme.md
+
+查看.git/index文件的内容：git ls-files --stage
+
+在文件管理器中，按照修改日期来倒序排列文件：
+	右键 - 排序方式 - 修改日期
+
+管道命令（plumbing） - xxx
+
+Linux中查找某一类型的文件 - find .git/objects -type f // f表示普通文档
+
+查看当前分支上最近的一次tree对象： git cat-file -p "feature/poem^{tree}"
+
+--- 暂存区：git add命令会： #1 向.git/objects中添加新的blob对象； #2 更新index中文件的id为新的blob对象的SHA-1 ---
+--- blob(单一文件的内容) -> tree(多个文件某一时刻的快照) -> commit(包含提交的元信息) 三种对象可以独立存在 ---
