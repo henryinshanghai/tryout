@@ -1,0 +1,61 @@
+现在，让我们用来创建一个新的数据对象，并手动将其存储在新的Git数据库中：
+    $ echo 'test content' | git hash-object -w --stdin
+    d670460b4b4aece5915caf5c68d12f560a9fe3e4
+#结论： 可以在不向工作区添加文件的情况下，在 .git/objects中生成一个 blob对象；
+
+hash-object 在其最简单的形式中，它将：
+    #1 获取您提交给它的内容，并仅返回将用于将其存储在Git数据库中的惟一键。
+    #2 然后，-w该选项告诉命令不只是返回键，而是将该对象写入数据库。
+    #3 最后，--stdin该选项告诉我们 从stdin中获取要处理的内容;
+        否则，该命令将期望 在命令末尾有一个filename参数 - 其中包含要使用的内容。
+
+上面命令的输出是一个40个字符的校验和散列(checksum hash) - 这是SHA-1 hash， aka 由“存储的内容 + 标头”所生成的校验和(checksum)。
+    稍后您将了解到这一点。
+
+现在您可以看到Git是如何存储数据的:
+    $ find .git/objects -type f
+    .git/objects/d6/70460b4b4aece5915caf5c68d12f560a9fe3e4
+
+如果您再次检查您的目录，您可以看到它现在包含一个用于新内容的文件。
+这就是Git最初存储内容的方式————作为每个内容片段的单个文件，以 内容及其头文件的SHA-1校验和 命名。
+    #1 子目录以SHA-1的前2个字符命名，
+    #2 文件名为剩下的38个字符。
+
+一旦对象数据库中有了内容，就可以使用该命令 git cat-file 检查该内容。
+这个命令有点像瑞士军刀，用于检查Git对象。传递 -t 来指示命令首先找出内容的类型，然后适当地显示它：
+    $ git cat-file -p d670460b4b4aece5915caf5c68d12f560a9fe3e4
+    test content
+
+现在，您可以向Git添加内容并再次将其取出。您也可以对文件中的内容进行此操作。
+例如，您可以对文件进行一些简单的版本控制。
+首先，创建一个新文件并将其内容保存在数据库中:
+    $ echo 'version 1' > test.txt
+    $ git hash-object -w test.txt
+    83baae61804e65cc73a7201a7252750c76066a30
+然后，向文件中写入一些新的内容，并再次保存它:
+    $ echo 'version 2' > test.txt
+    $ git hash-object -w test.txt
+    1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+您的对象数据库现在包含这个新文件的两个版本(以及您存储在其中的第一个内容)：
+    $ find .git/objects -type f
+    .git/objects/1f/7a7a472abf3dd9643fd615f6da379c4acb3e3a
+    .git/objects/83/baae61804e65cc73a7201a7252750c76066a30
+    .git/objects/d6/70460b4b4aece5915caf5c68d12f560a9fe3e4
+此时，您可以：
+    #1 删除该文件的本地副本，然后：
+    #2 使用Git从对象数据库检索保存的第一个版本:
+        $ git cat-file -p 83baae61804e65cc73a7201a7252750c76066a30 > test.txt
+        $ cat test.txt
+        version 1
+        或者第二个版本：
+        $ git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a > test.txt
+        $ cat test.txt
+        version 2
+但是记住文件的每个版本的SHA-1密钥是不实际的(isn't practical);
+另外，您并没有在系统中存储文件名———目前就只是存储内容。
+这种对象类型称为blob。您可以让Git告诉您Git中任何对象的对象类型，给定它的SHA-1键：
+    $ git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+    blob
+
+recap:
+    blob对象 用来存储单一文件的内容；不会存储文件其他的元信息

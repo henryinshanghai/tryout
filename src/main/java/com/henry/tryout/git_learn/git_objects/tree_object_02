@@ -1,0 +1,107 @@
+------
+Tree对象
+
+我们将研究的下一种Git对象的类型是树，它：
+#1 解决了存储文件名的问题，
+#2 还允许将一组文件存储在一起。
+
+Git以类似于UNIX文件系统的方式存储内容，但稍微简化了一些。
+所有内容都存储为树和blob对象：
+    #1 树对应UNIX目录项；
+    #2 blob或多或少对应inode或文件内容。
+特征：
+    #1 单个树对象包含一个或多个条目；
+    #2 每个条目都是blob或子树的SHA-1散列，及其关联的模式、类型和文件名。
+例如，假设您有一个项目，其中最近的树看起来像这样
+    $ git cat-file -p master^{tree}
+    100644 blob a906cb2a4a904a152e80877d4088654daad0c859      README
+    100644 blob 8f94139338f9404f26296befa88755fc2598c289      Rakefile
+    040000 tree 99f1a6d12cb4b6f19c8655fca46c3ecf317074e0      lib
+该语法指定了分支上最后一次提交所指向的树对象。注意，子目录不是一个blob，而是指向另一棵树的指针
+    $ git cat-file -p 99f1a6d12cb4b6f19c8655fca46c3ecf317074e0
+    100644 blob 47c6340d6459e05787f644c2447d2595f5d3a54b      simplegit.rb
+
+注意：
+    根据使用的shell不同，在使用syntax.master^{tree}时可能会遇到错误。
+
+    这种行为及其原因因平台而异：
+    在Windows上，在powershell和cmd.exe中，^字符用于转义。因此，作为替代方案，您可以编写git cat-file -p master^^{tree}
+    在zsh中，^字符用于globbing
+    在bash中，该命令不带引号
+    git-bash中可以工作的命令：git cat-file -p "feature/poem^{tree}"
+
+从概念上讲，Git存储的数据看起来像这样:
+    tree
+  /   |   \
+blob  blob  tree (blob是文件，tree是子目录)
+              |
+             blob
+
+您可以相当容易地创建自己的树。
+Git通常通过获取 “staging area或index”的状态， 并从中写入一系列tree对象来创建树。
+因此，要创建树对象，首先必须通过staging一些文件 来建立index。
+
+要使用单个条目(文件的第一个版本)创建index，可以使用管道命令。
+您可以使用 update-index命令 人为地将较早版本的文件添加到新的staging area。
+您必须将该 --add选项 传递给它，因为该文件还不存在于staging area中(您甚至还没有设置staging area)，而且您添加的文件不在目录中，而是在数据库中。
+然后，指定模式、SHA-1和文件名:
+git update-index --add --cacheinfo 100644 83baae61804e65cc73a7201a7252750c76066a30 test.txt
+
+语法说明：
+    --add选项： 如果指定的文件不在索引中，则添加该文件。默认行为是忽略新文件。
+    --cacheinfo <mode> <object> <path>选项：
+        直接插入指定的信息到索引。
+        为了向后兼容，还可以将这三个参数作为三个单独的参数提供，但建议新用户使用单参数形式。
+
+在本例中，您指定的模式是 100644，这意味着它是一个普通文件。
+其他选项是：
+    #1 100755 - 这意味着它是一个可执行文件;
+    #2 和120000 - 它指定一个符号链接。
+该模式来自普通的UNIX模式，但灵活性要低得多————这三种模式是唯一对Git中的文件(blob)有效的模式(尽管其他模式用于目录和子模块)
+
+现在，您可以将staging区域写到树对象中。
+不需要任何选项————如果树还不存在，调用 git write-tree-w命令 会自动从索引的状态创建一个tree对象
+    $ git write-tree
+    d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+    $ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+    100644 blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
+您还可以使用 cat-file命令 来验证这是否是一个树对象:
+    $ git cat-file -t d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+    tree
+现在你将创建一个新的树，包含第二个版本和一个新文件test.txt:
+    $ echo 'new file' > new.txt
+    $ git update-index --cacheinfo 100644 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a test.txt
+    $ git update-index --add new.txt
+你的新版本（test.txt）和新文件(new.txt)现在都在暂存区。写出该树(记录 暂存区域/树对象索引 的状态)并查看它的样子：
+    $ git write-tree
+    0155eb4229851634a0f03eb265b69f5a2d56f341
+    $ git cat-file -p 0155eb4229851634a0f03eb265b69f5a2d56f341
+    100644 blob fa49b077972391ad58037050f2a75f74e3671e92      new.txt
+    100644 blob 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a      test.txt
+注意，这个树有两个文件条目，而且SHA-1是前面()中的“version 2”SHA-1。
+只是为了好玩，我们将 第一个树 作为子目录添加到这个树中。
+你可以通过调用read-tree--prefix 把树读进你的staging area。
+在这种情况下，你可以使用下面的命令 将一个现有的树作为子树读入你的staging区域:
+    $ git read-tree --prefix=bak d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+    $ git write-tree
+    3c4e9cd789d88d8d89c1073707c3585e41b0e614
+    $ git cat-file -p 3c4e9cd789d88d8d89c1073707c3585e41b0e614
+    040000 tree d8329fc1cc938780ffdd9f94e0d364e0ea74f579      bak
+    100644 blob fa49b077972391ad58037050f2a75f74e3671e92      new.txt
+    100644 blob 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a      test.txt
+如果您从刚刚编写的新树中创建了一个工作目录，那么您将:
+    在工作目录的顶层获得两个文件和一个名为包含该文件的第一个版本的子目录。
+你可以把Git为这些结构所包含的数据想象成这样:
+        tree
+    /    |                      \
+new.txt  test.txt(version02)    tree(/bak)
+                                   |
+                                test.txt(version01)
+
+疑问：tree中文件的布局，什么时候/怎么能显示到工作区中？
+答：根据tree对象 生成commit对象之后，并且HEAD指向该commit对象即可。
+
+recap:
+    #1 tree对象 用来 组织多个文件；
+    #2 tree对象 能够存储 文件的元信息(比如文件名，文件类型)；
+    #3 git update-index 可以把blob对象添加到暂存区 & git write-tree 可以产生一个tree对象；

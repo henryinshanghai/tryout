@@ -1,0 +1,99 @@
+======
+commit对象：
+如果您已经完成了上述所有操作，那么您现在就拥有了三棵树，它们表示您想要跟踪的项目的不同时刻的快照。
+但是前面的问题仍然存在:
+    您必须记住所有三个SHA-1值，以便回忆起快照。
+    您也没有关于：
+        #1 谁保存了快照；
+        #2 保存快照的时间
+        #3 以及保存快照的原因的任何信息。
+这是提交对象为您存储的基本信息。
+
+要创建提交对象，您需要调用 commit-tree命令 并指定：
+    #1 单个tree对象的SHA-1；
+    #2 将要创建的commit对象的前驱commit(如果存在的话)。
+
+根据你写的第一个树对象开始(来创建对应的commit对象):
+    $ echo 'First commit' | git commit-tree d8329f
+    fdf4fc3344e67ab068f836878b6c4951e3b15f3d
+注意：
+    由于创建时间和作者数据不同，您将得到不同的哈希值。
+    此外，虽然原则上给定这些数据，任何提交对象都可以精确地复制，但本书构造的历史细节意味着 打印的提交散列 可能与给定的提交不一致。
+    在本章中，用你自己的"校验和(checksum)" 来替换提交和标记散列值。
+现在你可使用git cat-file命令 来查看你新产生的commit对象：
+    $ git cat-file -p fdf4fc3
+    tree d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+    author Scott Chacon <schacon@gmail.com> 1243040974 -0700
+    committer Scott Chacon <schacon@gmail.com> 1243040974 -0700
+
+    First commit
+
+提交对象的格式很简单:
+    #1 给 当前时间点的项目快照 指定顶级树(top-level tree);
+    #2 如果有，父对象提交(上面描述的提交对象没有任何父对象);
+    #3 作者/提交者信息(使用您的和配置设置和时间戳);
+    #4 空行，然后是提交消息。
+
+接下来，您将编写另外两个提交对象，每个对象都引用直接在它之前的提交:
+    $ echo 'Second commit' | git commit-tree 0155eb -p fdf4fc3
+    cac0cab538b970a37ea1e769cbbde608743bc96d
+    $ echo 'Third commit'  | git commit-tree 3c4e9c -p cac0cab
+    1a410efbd13591db07496601ebc7a059dd55cfe9
+
+这三个提交对象都指向您创建的三个快照树中的一个。
+奇怪的是，如果您在最后一次提交SHA-1时运行 git log --stat命令，就可以使用git log命令 来查看真正的Git历史记录:
+    $ git log --stat 1a410e
+    commit 1a410efbd13591db07496601ebc7a059dd55cfe9
+    Author: Scott Chacon <schacon@gmail.com>
+    Date:   Fri May 22 18:15:24 2009 -0700
+
+    	Third commit
+
+     bak/test.txt | 1 +
+     1 file changed, 1 insertion(+)
+
+    commit cac0cab538b970a37ea1e769cbbde608743bc96d
+    Author: Scott Chacon <schacon@gmail.com>
+    Date:   Fri May 22 18:14:29 2009 -0700
+
+    	Second commit
+
+     new.txt  | 1 +
+     test.txt | 2 +-
+     2 files changed, 2 insertions(+), 1 deletion(-)
+
+    commit fdf4fc3344e67ab068f836878b6c4951e3b15f3d
+    Author: Scott Chacon <schacon@gmail.com>
+    Date:   Fri May 22 18:09:34 2009 -0700
+
+        First commit
+
+     test.txt | 1 +
+     1 file changed, 1 insertion(+)
+很神奇的。您刚刚完成了构建Git历史记录的低级操作，而没有使用任何前端命令。
+这就是Git在运行xxx 和 ooo命令时所做的事情————它：
+    #1 为更改的文件存储blobs；
+    #2 更新index；
+    #3 写出tree；
+    #4 并写出 引用顶级树 和 紧接在它们之前的提交（-p） 的commit对象。
+这三个主要的Git对象————blob、tree和commit————最初作为单独的文件存储在目录中。
+下面是示例目录中的所有对象，注释了它们所存储的内容:
+    $ find .git/objects -type f
+    .git/objects/01/55eb4229851634a0f03eb265b69f5a2d56f341 # tree 2
+    .git/objects/1a/410efbd13591db07496601ebc7a059dd55cfe9 # commit 3
+    .git/objects/1f/7a7a472abf3dd9643fd615f6da379c4acb3e3a # test.txt v2
+    .git/objects/3c/4e9cd789d88d8d89c1073707c3585e41b0e614 # tree 3
+    .git/objects/83/baae61804e65cc73a7201a7252750c76066a30 # test.txt v1
+    .git/objects/ca/c0cab538b970a37ea1e769cbbde608743bc96d # commit 2
+    .git/objects/d6/70460b4b4aece5915caf5c68d12f560a9fe3e4 # 'test content'
+    .git/objects/d8/329fc1cc938780ffdd9f94e0d364e0ea74f579 # tree 1
+    .git/objects/fa/49b077972391ad58037050f2a75f74e3671e92 # new.txt
+    .git/objects/fd/f4fc3344e67ab068f836878b6c4951e3b15f3d # commit 1
+图示：
+commit01 -> tree01 -> blob/file
+commit02 -> tree02 -> blob/file
+commit03 -> tree03 -> blob/file
+
+recap:
+    #1 commit对象 用来 封装tree对象，并包含commit的元信息(如 committer, commit_time等)；
+    #2 使用 git commit-tree命令 可以从tree对象生成一个commit对象。

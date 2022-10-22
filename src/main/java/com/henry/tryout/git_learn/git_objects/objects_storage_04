@@ -1,0 +1,72 @@
+对象存储
+我们前面提到过，提交到Git对象数据库的每个对象都有一个header。
+让我们花一分钟来看看Git如何存储它的对象。
+您将看到如何存储一个blob对象———在本例中，是字符串“what is up, doc?”————手段：在Ruby脚本语言中进行交互(不熟悉Ruby的话，不太好复现)。
+
+您可以使用irb命令启动交互式Ruby模式：
+    $ irb
+    >> content = "what is up, doc?"
+    => "what is up, doc?"
+
+Git首先构造一个header，它：
+    #1 首先标识对象的类型————在本例中是blob。
+        对于header的第一部分，Git：
+            #1 添加了一个空格，
+            #2 后跟内容的大小(以字节为单位)，
+            #3 并添加了最后一个空字节:
+        >> header = "blob #{content.bytesize}\0"
+        => "blob 16\u0000"
+    #2 Git将头文件和原始内容连接起来，然后计算新内容的SHA-1校验和。
+        在Ruby中，可以通过：
+            #1 使用xxx命令 来包含SHA1摘要库， // requireDigest::SHA1.hexdigest()
+            #2 然后使用该字符串调用
+        来计算字符串的SHA-1值.
+        >> store = header + content
+        => "blob 16\u0000what is up, doc?"
+        >> require 'digest/sha1'
+        => true
+        >> sha1 = Digest::SHA1.hexdigest(store)
+        => "bd9dbf5aae1a3862dd1526723246b20206e5fc37"
+    #3 让我们把它和的输出进行比较 - 这里我们用git hash-object echo -n 来防止在输入中添加换行符。
+        $ echo -n "what is up, doc?" | git hash-object --stdin
+        bd9dbf5aae1a3862dd1526723246b20206e5fc37
+
+    #4 Git使用zlib压缩新内容 - 这在Ruby中可以使用zlib库完成。
+        #1 首先，你需要要求库 zlib，
+        #2 然后在内容上运行 Zlib::Deflate.deflate().
+        >> require 'zlib'
+        => true
+        >> zlib_content = Zlib::Deflate.deflate(store)
+        => "x\x9CK\xCA\xC9OR04c(\xCFH,Q\xC8,V(-\xD0QH\xC9O\xB6\a\x00_\x1C\a\x9D"
+
+    #5 最后，您将把zlib压缩的内容写入磁盘上的对象。
+        您需要确定要写入的对象的路径(SHA-1值的前两个字符是子目录名，后38个字符是该目录中的文件名)。
+        在Ruby中：
+            #1 如果子目录不存在，您可以使用xxx函数来创建它。
+            #2 然后，使用xxx打开文件，
+            #3 并通过调用生成的文件句柄将之前的zlib压缩内容写到文件中: // FileUtils.mkdir_p()File.open()write()
+        交互过程：
+        >> path = '.git/objects/' + sha1[0,2] + '/' + sha1[2,38]
+        => ".git/objects/bd/9dbf5aae1a3862dd1526723246b20206e5fc37"
+        >> require 'fileutils'
+        => true
+        >> FileUtils.mkdir_p(File.dirname(path))
+        => ".git/objects/bd"
+        >> File.open(path, 'w') { |f| f.write zlib_content }
+        => 32
+
+    #6 让我们来检查blob对象的内容： git cat-file
+    ---
+    $ git cat-file -p bd9dbf5aae1a3862dd1526723246b20206e5fc37
+    what is up, doc?
+    ---
+
+就是这样————您已经创建了一个有效的Git blob对象。
+
+所有Git对象都以相同的方式存储，只是类型不同：
+    对于其他类型的对象，header将以commit或tree开头，而不是字符串blob。
+另外，虽然blob内容几乎可以是任何内容，但提交和树的内容是专门格式化过的。
+
+recap:
+    一个对象是怎么最终被存储成为 <2位SHA-1>/<38位SHA-1>文件的形式的？
+    答：生成可校验的SHA-1 + 压缩对象 + 存储到磁盘；

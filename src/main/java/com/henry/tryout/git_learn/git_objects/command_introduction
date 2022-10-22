@@ -1,0 +1,29 @@
+https://www.bookstack.cn/read/git-tutorial/README.md
+
+git hash-object // 计算一个文件的git对象ID，即SHA1的哈希值
+demo:
+    $ echo "hola" | git hash-object -w --stdin
+说明：
+    #1 -w 将对象写入对象数据库
+    #2 --stdin 表示从标准输入读取，而不是从本地文件读取。
+
+查看最近一次的tree对象(文件集合快照)的情况： git cat-file -p "<branch_name>^{tree}"
+git cat-file -p "master^{tree}"
+
+查看index二进制文件： git ls-files --stage
+
+把暂存的信息，以暂存文件的形式添加到暂存区中 - $ git update-index --add --cacheinfo 100644 5c1b14949828006ed75a3e8858957f86a2f7e2eb hola.txt
+结果：index文件中会包含进指定的 SHA-1
+
+git write-tree命令用于根据当前缓存区域，生成一个树对象。
+demo: $ git write-tree
+
+生成tree对象的模式：
+#1 读取暂存信息到 暂存区中的文件中；- git update-index
+#2 根据暂存区的文件 来 产生一个tree对象；- git write-tree
+
+git commit-tree // 根据一个树对象，生成新的commit对象。
+demo: $ git commit-tree 16e19f -m “First commit”
+根据tree对象，且引用父commit 来创建当前的commit对象 // git commit-tree <tree_SHA> -p <parent_commit_SHA>
+
+查看commit的历史记录(包含详细的元信息) // git log --stat <commit_SHA>

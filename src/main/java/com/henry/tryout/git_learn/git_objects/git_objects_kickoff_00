@@ -1,0 +1,28 @@
+https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+
+Git对象 - {blob对象, tree对象, commit对象}
+Git是一个内容可寻址的文件系统。太好了。这是什么意思?
+这意味着Git的核心是一个简单的键值数据存储。
+    这意味着您可以将任何类型的内容插入到Git存储库中，Git将:
+    为此返回给您一个唯一的键，您可以稍后使用它检索该内容。
+
+作为演示，让我们看看管道(plumbing)命令 - 它:
+    #1 接受一些数据;
+    #2 将其存储在您的目录(对象数据库)中,
+    #3 并返回 现在引用该数据对象的惟一键。
+
+首先，初始化一个新的Git存储库，并验证目录中(可以预见的)没有任何内容:
+    $ git init test
+    Initialized empty Git repository in /tmp/test/.git/
+    $ cd test
+    $ find .git/objects // 查找自定目录下的内容
+    .git/objects
+    .git/objects/info
+    .git/objects/pack
+    $ find .git/objects -type f // 在指定目录下查找普通类型的文档
+
+Git已经初始化了目录并在其中创建了一个子目录（subdirectories ），但是没有常规的文件。
+
+NEXT: blob object;
+NEXT: tree object;
+NEXT: commit object.
