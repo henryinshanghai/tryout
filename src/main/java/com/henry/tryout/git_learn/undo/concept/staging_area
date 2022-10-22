@@ -1,35 +1,61 @@
 暂存区(Staging Index)：
     是：一个名叫index的二进制文件；
-    作用：暂时存储 待提交的文件；
+    作用：暂时存储 待提交的被变更的文件集合；
     特征：
-        #1 (原理) 文件内容是一个有序列表 -  列表的item 由 #1 路径名称、#2 权限和 #3 blob 对象的 SHA-1 值 三部分组成；
-        #2 (用法) 如果改动文件a.txt并添加到暂存区后，对它又做了新的变更。则：需要重新把a.txt添加到暂存区中
-            因为暂存区index中保存的blob对象只是 文件添加到暂存区时，文件的内容 - 因此需要手动来更新
-        #3 index文件中保存了 对所有被管理的文件的快照；
-            所以当工作区文件发生变更时，就可以 通过对比index中的SHA-1 来 快速找到 工作区 与 暂存区之间的不同文件。
-    原理：
-    验证手段：
-        查看 /.git/index 文件中的内容 - 命令：git ls-files --stage
-        结果：
-            100644 1d115c306429412ab3419da6b41adc58f548fd7d 0       src/test/java/com/henry/tryout/springBootInBlue/spring4/HelloWorld.java
-            100644 30eec2f3b3b67170d28699e64e33ae7567f9e9ed 0       src/test/java/com/henry/tryout/springBootInBlue/spring4/test_07/DemoBeanIntegrationTests_03.java
-        语法含义：表示文件内容的blob对象的SHA-1值 + 权限 + 文件路径
+        #0 由于是二进制文件，所以不能直接使用编辑器打开 - 手段：git ls-files --stage
+        #1 当工作区中的文件发生变更时，Git能够直接显示出 工作区相对于暂存区发生了那些变更；
+            原理：index文件中保存了 所有被管理文件的快照 - 手段：保存了所有被管理文件的SHA-1值。
+        #2 (用法) 如果改动文件a.txt并添加到暂存区后，对a.txt又做了新的变更。则：需要重新把a.txt添加到暂存区中
+            原理：在执行 git add 命令时，Git会 #1 在.git/objects中创建新的blob对象(来记录a.txt的新版本)； #2 更新index文件 来 引用新的blob对象的SHA-1
 
-        查看blob对象 - tree .git/objects -L 2
-        结果：
-            .git/objects
-            ├── 30
-            │   └── d74d258442c7c65512eafab474568dd706c430
-            ├── 9c
-            │   └── 1cab9a57432098de869e202ed73161af33d182
-            ├── info
-            └── pack
-        blob：
-            是：一个对象；
-            作用：保存文件内容；
-            特征：
-                #1 可以使用ID获取到对应的blob对象; - 怎么找到文件对应的id?
-                #2 可以使用 git cat-file命令来打印文件内容；- git cat-file -p 30d74d258442c7c65512eafab474568dd706c430
-            验证特征：git cat-file -p ff013a1beb6b6fc8f3e4886e581c660e77dfc8b0
+            验证：执行 git add的操作时，Git会做哪些事情？
+            预期：
+                #1 先 .git/objects目录中添加新的 blob对象 - 手段：以2位SHA-1为名字的目录 + 以38位SHA-1为名字的文件
+                #2 更新 index文件的内容 来 引用新的blob对象的SHA-1 - 手段：查看index文件的内容 git ls-files --stage
+            验证手段：# 修改文件的内容，执行 git add henry.txt，然后观察 .git/相关目录的变化
+            验证结果：
+                #1 .git/objects目录下，多出一个新的对象 id 517da1e3368cc43f8a37b734d369f673b6747f07
+                    查看对象的类型 与 内容：
+                        git cat-file -t 517da1e3368cc43f8a37b734d369f673b6747f07 // blob对象
+                        git cat-file -p 517da1e3368cc43f8a37b734d369f673b6747f07 // 更新后的文件内容
+                #2 上一个版本的henry.txt还在吗？
+                    8408f2686e5a9a42397964103415efaea804a4f2 // 当然还在的
+                #3 index文件的内容 更新为 blob对象最新的SHA-1;
+            验证结论：
+                #1 更新文件并添加到暂存区时，Git会创建一个新的blob对象；
+                #2 git add操作会更新 index文件的内容；
+            衍生结论：blob对象会先于commit对象产生(在add的时候就会产生)
 
-this is not sold, need further support
+
+            验证：执行git commit命令时，Git会做哪些事情？- 记录最新的文件快照
+            预期：
+                #1 Git会产生一个commit对象 - 包含本次提交的内容以及元信息；
+                #2 Git会产生一个新的tree对象 - 包含本次提交引入的变更后的文件集合 以及 文件的元信息；
+                #3 Git会把当前分支的 分支名引用、HEAD引用的值，都更新到最新commit对象的SHA-1；
+            验证手段：执行git commit产生一个新的commit对象，观察 .git/相关目录的变化
+            验证过程(checklist)：
+                在产生了feature/poem分支中唯一的commit之后，查看 /.git/objects目录下的内容：
+                    commit对象的id ee0f53f03f229a45ec5a53e70c00907c9c4c86ce // √
+                    tree对象的id 994e83d84286e3c4caee666b0a98b808187152dc // √
+                    hello.txt对应的blob对象的id a0423896973644771497bdc03eb99d5281615b51 // √
+                    herny.txt对应的blob对象的id 8408f2686e5a9a42397964103415efaea804a4f2 // √
+            验证结论：
+                #1 .git/objects目录下多出的两个新对象为 - 新的commit对象 以及 新的tree对象(文件集合的快照)
+                #2 分支名引用(/refs/heads/feature/poem文件内容)，HEAD引用(HEAD文件内容)都会被更新为最新commit的SHA-1；
+
+                #1 对于一个新建的Git仓库，最初是没有 index文件的 而且 /refs/head中也不存在任何文件；
+                #2 当添加文件，并执行git add之后，Git会：
+                    #1 在 objects/目录下生成 sha-1为名称的目录&文件名，用来 记录所add的文件；
+                    #2 在.git/目录下生成index二进制文件，用来引用#1中生成的git对象(blob类型的对象)；
+
+            其他已经验证了结论：
+                #1 只有在切换新分支，并且新分支中产生新的commit之后，Git才会在 /refs/head/目录下创建新分支的相关信息；
+                #2 如果只是修改了文件名并产生了一个新的commit，则：Git不会单独创建一个新的blob对象。
+                #3 每次产生一个新的commit对象时，Git都会为之创建一个关联的tree对象。
+
+命令recap:
+#1 查看 /.git/index 文件中的内容 - 命令：git ls-files --stage
+#2 Linux中查找某一类型的文件 - find .git/objects -type f // f表示普通文档
+
+追问：获取文件内容的引用链是 commit -> tree -> blob，所以为什么会需要一个 tree对象？
+参考：https://git-scm.com/book/en/v2/Git-Internals-Git-Objects 译文
