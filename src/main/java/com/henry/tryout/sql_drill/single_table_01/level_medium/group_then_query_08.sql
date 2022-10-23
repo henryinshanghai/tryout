@@ -1,4 +1,5 @@
 -- 找到每个学校（#1） gpa最低的同学（#2）
+-- 手段1：先分组查询出最小gpa，再用原始表连接子查询 - 从而得到原始表中legit的数据行
 select
     device_id,
     user.university,
