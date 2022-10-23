@@ -8,7 +8,7 @@ from
   user_profile
 where
   university = '山东大学' -- #01 筛选条件：山东大学
-union all -- 特性：结果不会去除重复记录
+union all -- 特性：结果不会去除重复记录。如果直接 where condition1 or condition2,则：重复记录会被过滤掉
 select
   device_id,
   gender,
