@@ -1,8 +1,7 @@
 -- 提取博客URL中的用户名
 select
--- 字段切割法 substring_index(string, '切割标志', 位置数（负号：从后面开始）)
 device_id,
-substring_index(blog_url,'/',-1) as user_name
+substring_index(blog_url,'/',-1) as user_name -- -1表示从右边数第一个分隔符，往右的内容
 from user_submit;
 
 device_id   profile blog_url
