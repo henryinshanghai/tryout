@@ -1,0 +1,21 @@
+常用函数：
+
+#1 聚合函数(用来 从结果集中 提取出一个统计结果)：
+    avg(column_name): 计算结果集中 所有记录指定列的值的平均结果
+    count(column_name): 统计结果集中的记录行数
+    sum(column): 计算结果集中 所有记录指定列的值的求和结果
+
+#2 时间日期函数：
+    DATA(日期表达式)： 提取出参数中的日期部分；
+    EXTRACT(unit from date): 取出日期中的指定部分；
+    date_add(date, interval): 为指定的日期 添加指定的时间间隔
+    datediff(date1, date2) 返回两个日期之间相间隔的天数
+    date_format(date, format): 按照指定格式 来 输出指定的日期
+
+#3 数学函数：
+    abs(column): 求绝对值
+    pi(): 返回常量 3.14
+    正弦、余弦、正切、平方根...
+
+recap：
+    SQL语句中经常使用到的函数 {聚合函数, 日期处理函数, 数学函数}

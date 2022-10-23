@@ -1,4 +1,4 @@
-增删改查语句 - DML语句
+增删改查语句 - DML（data manipulation language）语句
 
 DML语句包括：数据的插入、数据的修改、数据的删除。
 
@@ -26,16 +26,18 @@ DML语句包括：数据的插入、数据的修改、数据的删除。
             1 只会展示出各个分组中 排在第一个的条目/记录 - 组中的其他记录会被隐藏；
             2 如果不显式指定排序字段，默认会使用分组字段进行排序；
             3 在分组后，需要使用统计函数得到 组的统计指标 - 否则分组本身没有意义。
-    7 Having子句
-        特征：不管是 分组或是排序，都是基于 where子句执行后所返回的结果集。也就是 where子句筛选已经结束
+    7 having子句
+        fact：不管是 分组或是排序，都是基于 where子句执行后所返回的结果集。aka where子句筛选已经结束
         如果对于分组后的结果集还有筛选的需求，怎么办？ - having子句
+        作用：对分组或者排序后的结果集再做筛选
 
+recap:
 完整的查询语法模板：
-select columns
-from table
-where conditions
-group by column
-having conditions
-order by column // 老末
+    select columns
+    from table
+    where conditions
+    group by column
+    having conditions
+    order by column // 老末是 order by
 
 
