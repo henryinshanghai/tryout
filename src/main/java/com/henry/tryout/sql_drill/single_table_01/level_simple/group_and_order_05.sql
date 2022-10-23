@@ -4,4 +4,4 @@ select
     avg(question_cnt) avg_question_cnt -- #2 平均发帖情况
 from user_profile
 group by university -- #1 先使用 university字段分组
-order by avg_question_cnt asc -- #3 再使用 平均答题数量 排序
+order by avg_question_cnt asc -- #3 再使用 平均答题数量 排序(having中可以直接使用聚合字段)
