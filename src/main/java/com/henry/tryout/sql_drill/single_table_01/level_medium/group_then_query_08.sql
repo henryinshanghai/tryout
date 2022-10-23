@@ -8,10 +8,10 @@ user_profile as user
 join (
     select 
         university,
-        min(gpa) as gpa -- #2
+        min(gpa) as gpa -- #2 在子查询中查询出 每个university子组中最小的gpa是多少
     from user_profile
     group by university -- #1 先用分组查询，得到 每个大学中gpa最小的记录 - 作为子查询
 ) as group_result 
 on group_result.university = user.university
-and group_result.gpa = user.gpa -- #3 从user表中 join子查询 - 用以生成匹配的结果集
+and group_result.gpa = user.gpa -- #3 从user表中 join子查询 - 用以找到当前表中的legit记录行
 order by university
