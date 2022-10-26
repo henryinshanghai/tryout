@@ -1,0 +1,11 @@
+You can override IDE code style settings with settings from EditorConfig (https://editorconfig.org/).
+To use EditorConfig settings, install and enable the EditorConfig plugin.
+
+To configure the style in EditorConfig, open settings (Ctrl+Alt+S), navigate to Editor | Code Style,
+and select the Enable EditorConfig support checkbox.
+To export the current IDE code style settings into the .editconfig file, click Export.
+
+你可以使用 EditorConfig（https://editorconfig.org/）中的settings 来 覆盖IDE的代码风格设置:
+为了使用 EditorConfig的settings， 安装并启用 EditorConfig插件。
+为了在EditorConfig中配置样式，打开 settings对话框，导航到 Editor | Code Style,然后勾选 Enable EditorConfig support的选择框。
+为了把当前IDE代码样式的settings导出到 xxx.editorconfig文件中，点击 Export
