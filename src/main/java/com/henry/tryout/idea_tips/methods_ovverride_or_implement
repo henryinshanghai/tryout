@@ -1,0 +1,5 @@
+You can easily override methods of the base class by pressing Ctrl+O (Code | Override Methods).
+通过按下 Ctrl + O(Code | Override Methods), 你可以轻松地重写父类中的方法。
+
+To implement methods of the interfaces (or of the abstract base class) that the current class implements, press Ctrl+I (Code | Implement Methods).
+为了实现 当前类所实现的接口（或者抽象父类）中的方法，按下 Ctrl + I(Code | Implement Methods)
