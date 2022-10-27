@@ -1,0 +1,5 @@
+Get access to the most common breakpoint actions and filters through intention actions (Alt+Enter).
+
+通过"意图操作"(Alt+Enter) 来 访问最常见的断点操作 和 过滤器。
+
+note: 在某一行上添加断点(breakpoint)后, 执行 Alt + Enter时，IDEA在suggestion列表中会提供 breakpoint相关的actions。
