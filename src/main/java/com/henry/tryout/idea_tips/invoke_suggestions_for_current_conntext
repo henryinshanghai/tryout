@@ -1,0 +1,9 @@
+Press Alt+Enter in the editor to fix a highlighted error or warning, improve, or optimize a code construct.
+For some intention actions, you can open a preview by pressing Ctrl+Shift+I (View | Quick Definition).
+
+在编辑器中按下 ALt + Enter来 修复高亮的错误或警告 或者 优化代码结构；
+对于一些有特定意图的动作，你可以通过按下 Ctrl + Shift + I(View | Quick Definition) 来打开一个预览窗口
+
+note:这有一个交互式的教程 Lesson
+
+使用 Alt + Enter，IDEA会列表显示出当前上下文中可以使用的所有命令(包括代码补全、变量重构等等)，编码过程会变得更流畅
