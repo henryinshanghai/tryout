@@ -1,0 +1,4 @@
+Press Shift twice and search for a Git branch, tag, commit hash, or message to jump to it in the Log view:
+连续按下 Shift两次， 然后就可以搜索 Git分支/标签/commit哈希值/提交信息，并跳转到对应的log视图中。
+
+手段： 先切换到 Git这个tab，然后再在Filter中选择想要使用的过滤规则。
