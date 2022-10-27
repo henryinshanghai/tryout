@@ -1,0 +1,12 @@
+Adjust the IntelliJ IDEA Community tool windows layout to make better use of your screen area.
+
+Toggle between the vertical and side-by-side placement of the tool windows
+by pressing Ctrl+Click (on Windows and Linux) / ⌘+Click (on macOS) on the splitter.
+
+
+调整 IDEA的工具窗口布局，来更好地使用你的屏幕区域。
+通过在 splitter(分割器)上按下 Ctrl+Click (on Windows and Linux) / ⌘+Click (on macOS)，
+来在工具窗口的垂直(vertical)与并排位置(side-by-side)之间来回切换。
+
+作用：切换多个编辑器窗口的布局（水平布局、上下布局）。
+目前快捷键不好使，但是可以通过右击找到相应的菜单选项实现效果 - Change Splitter Orientation
