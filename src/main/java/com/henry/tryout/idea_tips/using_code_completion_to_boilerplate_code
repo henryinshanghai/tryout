@@ -1,0 +1,5 @@
+You can generate boilerplate code such as getters and setters and implement interface methods using code completion.
+Just start typing the would-be name of a method, for example, gn to generate getName() or ct to implement compareTo().
+
+你可以 使用代码补全(code completion) 来生成样板代码(boilerplate code), 比如getter/setter 以及实现接口中的方法。
+只需要键入方法可能的名字，例如，键入gn来生成getName()方法，或者键入ct来实现compareTo()方法。
