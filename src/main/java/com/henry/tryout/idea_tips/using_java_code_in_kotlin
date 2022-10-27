@@ -1,0 +1,7 @@
+IntelliJ IDEA allows you to easily call a Java code from Kotlin:
+and vice versa:
+
+IDEA允许你在Kotlin(.kt文件)中方便地调用java代码
+反之亦然
+
+demo: 暂时不做了，没有写kotlin代码的需求
