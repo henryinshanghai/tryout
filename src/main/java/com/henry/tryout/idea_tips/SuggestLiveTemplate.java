@@ -8,6 +8,7 @@ public class SuggestLiveTemplate {
     public static void main(String[] args) {
         List<String> names = Arrays.asList("henry", "jianmei", "jimmy");
 
+        // 按下Ctrl + J - IDEA就能建议出inn的缩写
         if (names != null) {
             System.out.println("names list is not null");
         }
