@@ -1,0 +1,5 @@
+You can easily convert any Java class to Kotlin with the same semantics.
+To do that, select Code | Convert Java File to Kotlin File from the main menu.
+
+你可以很容易地把任何Java类转换成为 具有相同语义的Kotlin代码。
+为了实现这个目标， 从主菜单中选择 Code | COvert Java File to Kotlin File
