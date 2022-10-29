@@ -1,0 +1,6 @@
+If you notice that IntelliJ IDEA Community works slowly,
+consider reducing the number of folders under antivirus protection.
+This may significantly improve performance.
+
+如果你发现 Intellij IDEA 社区版工作地非常缓慢，
+考虑减少 antivirus protection（抗病毒保护）下地文件夹数量(?), 这可能会显著地提升IDEA的表现
