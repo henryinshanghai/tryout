@@ -1,0 +1,5 @@
+You can copy text from the editor as rich text to paste it into any other editor that recognizes RTF.
+Make sure the Copy as rich text checkbox is selected on the Editor | General page of the Settings/Preferences dialog Ctrl+Alt+S.
+
+你可以从编辑器中把文本拷贝成为富文本，并把拷贝结果粘贴到 任何其他能够识别 RTF的编辑器中。
+确保你IDEA Settings/Performance中的 Editor | General 页面中的 Copy as rich text勾选框是选中的状态
