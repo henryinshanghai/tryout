@@ -1,0 +1,14 @@
+You can edit a language injection in your code using a dedicated editor.
+For example, to edit a regular expression, start typing it, press Alt+Enter and choose Edit RegExp Fragment.
+The regular expression opens in a separate tab in the editor, where you can type backslashes as is.
+
+
+All changes are synchronized with the original regular expression, and escape characters are presented automatically.
+When ready, press Esc to close the regular expression editor.
+
+你可以使用专用的编辑器 来 变基你代码中的language injection.
+例如， 如果想要编辑一个正则表达式，按下 Alt + Enter，然后选择 Edit RegExp Fragment。
+正则表达式会在编辑器里一个新的tab中被打开 - 在这里你可以直接键入反斜杠（而不需要手动做任何的转义处理）
+
+所有的变更与原始的正则表达式都是同步的，并且转义字符会自动出现。
+当准备好正则表达式后，按下 Esc来关闭 "正则表达式编辑器".
