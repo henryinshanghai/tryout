@@ -15,6 +15,7 @@ import javax.validation.Valid;
 // #2 给Student的字段添加上校验规则 - Spring提供的注解;
 // #3 在接口中开启对参数的校验 - 手段：在参数前添加@Valid注解
 // phase Ⅰ：校验失败后，给Postman的响应是 "error": "Bad Request", 校验注解中指定的error message只是在IDEA控制台打印了出来
+// phase Ⅱ：定义Controller增强器，在其中配合@ExceptionHandler，拦截到exception。- 从而把error message添加到 response中，返回给UI
 @RestController
 public class TestController {
 
