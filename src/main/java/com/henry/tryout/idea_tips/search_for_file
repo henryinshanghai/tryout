@@ -1,0 +1,10 @@
+You can jump to a file located in a deeply nested directory
+by pressing Ctrl+Shift+N and typing several characters of the enclosing directories and filename.
+
+Use either a slash or a backslash as a delimiter.
+
+通过按下 Ctrl+Shift+N 并且键入子目录与文件名的几个字符，你可以跳转到一个很深的子目录中的文件
+使用斜杠 或者 反斜杠 来作为分隔符号
+
+demo: /idea_tips
+好处：不用刻意记住 文件的所属目录,节省脑力
