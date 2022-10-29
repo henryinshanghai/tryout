@@ -1,0 +1,5 @@
+To quickly run all methods in a test class, click   in the gutter and select Run '<TestClass>':
+想要快速运行 测试类中所有的测试方法，点击 边槽上的 绿色的双三角 按钮，并选择 Run '<TestClass>'
+
+To run a single method, click   in the gutter.
+想要运行单个方法，点击边槽上的 绿色的单三角按钮
