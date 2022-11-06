@@ -1,0 +1,57 @@
+下载nodejs;
+下载hexo；
+对hexo的部署地址做配置；
+添加新博客文章后：
+    hexo clean // 清除掉本地的 /public目录
+    hexo g // 根据/source/_posts目录下的博客文章，重新生成 /public目录
+    hexo s // 本地运行hexo博客 - 用作预览
+
+note: 本地md文件重写后，需要重新生成 /public目录，否则资源不会更新到远端博客上。
+
+手动处理index文件的冲突不是一个解决方案，想想其他的办法。
+能不能把之前的仓库，放在码云上，作为一个独立的gittee网页博客???
+参考：https://zhuanlan.zhihu.com/p/420368532
+
+先把 henryinshanghai.github.io 这个项目回退到先前的状态;
+命令： git reset --hard <commit_id>
+
+结果：Gitee上开启 pages服务需要实名认证，具体需要多少时间不清楚。
+
+换一个托管仓库 GitLab，然后在GitLab上部署 已经丢失了原始博客文章的Hexo源码；
+需要使用信用卡来开启CI/CD的基础设施能力。
+结果：
+    CI/CD执行job失败，报错 - throw new TypeError('Console expects a writable stream instance');
+    参考：https://ask.csdn.net/questions/1092767
+    原因： 可能是因为 GitLab的CICD服务器上使用的nodeJs版本太低???
+
+===
+不管了，换个思路 - 不再更改旧的Hexo源码了。
+直接使用 GitLab来创建一个新的博客~~~
+
+现在是晚上1点20分，经过N多次的CI/CD失败后，终于GitLab的博客运行成功；
+#1 脚本中指定的node版本；
+#2 不要添加一些不了解的命令；
+#3 一些没用的干扰博客...
+参考（英文版本官网教程）：https://hexo.io/docs/gitlab-pages.html
+GitLab pages上运行的Hexo博客： https://henryinshanghai.gitlab.io/
+特征：
+    #1 md源文件会被存储到远端；
+    #2 生成博客html的动作由GitLab完成，不需要再本地手动执行hexo g等命令；
+    #3 耗时会稍微久一点，但完全自动化了
+
+睡觉~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
