@@ -1,0 +1,18 @@
+查看一个文件的提交记录（文件的版本历史）：
+Git -> show history;
+
+习惯：IDEA只用来看提交记录；
+其他的动作还是使用git bash来做。
+
+对待开源项目的步骤：
+#1 clone项目后，把项目的环境搭建好。在本地能跑起来；
+#2 到Github的issues中用关键词搜索一下；
+#3 根据issue的comment找到一些线索 - {Snapshot Jar 或者 #PR}
+    # 如果是snapshot jar, 则：根据添加comment的时间信息，在项目的提交历史中查找到具体commit；
+    # 如果是#PR，则：直接查看PR中所提交的内容。
+#4 定位到具体的commit之后，再找到关键文件；
+#5 在IDEA中，就能查看文件本身的提交历史 git history;
+    分析commit引入的改动...
+#6 剩下看代码的改动到底什么意思，那就要看代码经验了
+
+call it a day~
