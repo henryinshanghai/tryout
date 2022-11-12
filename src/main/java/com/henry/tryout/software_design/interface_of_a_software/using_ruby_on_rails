@@ -1,0 +1,10 @@
+#1 安装ruby & rails; - https://www.cnblogs.com/blshuidi/p/13654976.html
+#2 安装SQLite; - https://www.cnblogs.com/oukele/p/9540293.html
+#3 使用Ruby; - https://guides.rubyonrails.org/getting_started.html
+
+#1 使用命令行初始化一个Rails项目 - rails new blog
+    查看生成的Rails项目 /blog中的内容；
+#2 启动web服务器 - bin/rails server
+    Fail to do so...
+TBD~
+
