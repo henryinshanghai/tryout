@@ -1,0 +1,27 @@
+Spring框架中的模型 - DI容器
+
+作用：创建&组装对象；
+开发步骤：
+    #1 在service中引入repository的成员变量；
+    #2 为repository变量注入数据库连接的connection对象；
+        ArticleServiceWithNewRepo
+    #3 准备编写测试：
+        由于成员变量的写法，运行service -> 先运行repository -> 先准备好数据库连接
+        -> 在数据库中准备一些测试数据 {验证查询、更新等操作}
+感觉为测试所做的工作也太多了，已经超出测试service的scope了...
+原因在于：在service中，使用new做了对repository的手动初始化。
+解决手段：把创建对象的过程 从代码中移出去，不再在代码中显式地创建对象。
+    - ArticleServiceWithoutNew
+这种编码方式的好处：
+    #1 由于没有显式new的代码，所以测试时只需要用一个对象把 repository的行为给模拟出来就可以了
+对象创建的代码移出去了，但是对象的创建要怎么完成呢？
+    方案：把所有对象的创建与组装工作都集中在同一个地方完成。
+    具体实现：一个容器 MyNewAndAssembleContainer
+
+DI容器的扩展/增强 - AOP；
+
+recap:
+#1 认识软件，从软件提供的模型入手；
+#2 查看模型提供了什么样的能力；
+#3 查看模型发展的前世今生。
+

@@ -232,7 +232,13 @@
             <scope>test</scope>
         </dependency>
 
-    </dependencies>
+		<!-- 轻量级DI容器: Guice 支持bind().to()的简单用法 -->
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
