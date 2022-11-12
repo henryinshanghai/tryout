@@ -5,6 +5,81 @@
 #1 使用命令行初始化一个Rails项目 - rails new blog
     查看生成的Rails项目 /blog中的内容；
 #2 启动web服务器 - bin/rails server
-    Fail to do so...
-TBD~
+    Could not find gem 'webdrivers' in locally installed gems.
+    缺少什么，用gem安装什么就行了 - https://blog.csdn.net/weixin_44079228/article/details/88834273
+    http://127.0.0.1:3000
+
+#3 在项目中添加 控制器，用来处理页面的请求 - rails generate controller Welcome index
+$ rails generate controller Welcome index
+      create  app/controllers/welcome_controller.rb // 控制器文件
+       route  get 'welcome/index'
+      invoke  erb
+      create    app/views/welcome
+      create    app/views/welcome/index.html.erb // 视图文件
+      invoke  test_unit
+      create    test/controllers/welcome_controller_test.rb
+      invoke  helper
+      create    app/helpers/welcome_helper.rb
+      invoke    test_unit
+=== 创建了控制器和视图 👆 ===
+
+#4 告诉Rails什么时候显式 Hello, Rails - 希望访问 http://localhost:3000 时显示.
+    default: 访问跟地址，显示的是默认的Rails欢迎页面。
+    编辑 路由文件 config/routes.rb如下:
+        Rails.application.routes.draw do
+          get 'welcome/index' // 告诉 Rails，对根路径的访问请求，应该发往 welcome 控制器的 index 动作
+
+          root 'welcome#index' // 告诉 Rails，对 http://localhost:3000/welcome/index 的访问请求, 应该发往 welcome 控制器的 index 动作
+        end
+
+    再次访问 http://localhost:3000，会看到之前添加到 app/views/welcome/index.html.erb 文件 的“Hello, Rails!”信息，这说明：
+        #1 新定义的路由确实 把访问请求发往了 WelcomeController 的 index 动作；
+        #2 并正确渲染了视图。
+=== 创建控制器、动作和视图 ===
+
+在 Blog 应用中
+#1 添加一个资源（resource）。
+    资源是一个术语，表示一系列类似对象的集合，如文章、人或动物。
+    资源中的项目可以被创建、读取、更新和删除，这些操作简称 CRUD（Create, Read, Update, Delete）。
+
+    Rails 提供了 resources 方法，用于声明标准的 REST 资源。
+    手段： #1 把 articles 资源添加到 config/routes.rb 文件 - resources :articles
+
+#2 根据资源来生成路由 - rails routes
+    手段：执行 routes命令，就能够看到 所有标准REST动作所对应的路由。
+    特征：Rails根据article的单数形式，推导到它的复数形式。
+
+#3 为资源添加控制器；- rails generate controller Articles
+    结果：生成了 app/controllers/articles_controller.rb 文件
+
+#4 在控制器中添加 针对资源的具体动作；
+    class ArticlesController < ApplicationController
+      def new
+      end
+    end
+
+#5 在views中，添加视图文件new.html.erb；
+    <h1>New Article</h1>
+
+=== note：添加了视图文件后，不需要重启server ===
+
+TBD
+5.2 第一个表单
+5.3 创建文章
+5.4 创建 Article 模型
+5.5 运行迁移
+5.6 在控制器中保存数据
+5.7 显示文章
+5.8 列出所有文章
+5.9 添加链接
+5.10 添加验证
+5.11 更新文章
+5.12 使用局部视图去掉视图中的重复代码
+5.13 删除文章
+
+6 添加第二个模型
+6.1 生成模型
+6.2 模型关联
+6.3 为评论添加路由
+6.4 生成控制器
 
