@@ -1,0 +1,54 @@
+函数式编程拾遗：
+编程技巧：
+#1 惰性求值；
+    把求值的过程 推迟到 真正需要这个值的时候；
+    默认情况下，什么时候会做求值操作？
+    应用： 在Proxy模式中使用惰性求值；
+        原因：真正的计算部分可能会会产生很大的消耗；
+        为了能够避免重复这种消耗很大的计算，在计算完成后，就把计算的结果给缓存起来 - 术语叫做"记忆"
+        特征：对应相同的输入, 记忆总是能够给出一样的输出。
+        参考：
+
+#2 无限流 Infinite Stream;
+    为什么能够做到无限流？啥家庭呀？
+    原理：因为元素不是被预置到集合中的，而是在需要的时候计算出来的
+    特征：
+        #1 惰性求值；
+        #2 预置的不是元素本身，而是 元素的产生规则；
+    用法：
+        #1 产生一个自然数的集合；natural number
+            Stream.iterate(<集合中的第一个元素>, <后继元素的推导规则>)
+            Stream.iterate(1, number -> number + 1)
+            特征：
+                #1 只有在需要某个元素的时候，才会计算出此元素；
+                #2 只有调用 终结操作时，才会 触发真正的计算
+            参考：build_stream_from_function_demo2
+    应用：
+        在设计大数据平台时，可以把它视为一个无限流 - 比如Flink
+
+#3 Optional：
+    作用：解决可能的空指针问题；
+    Java8中的Optional：
+        是：一个数据容器；
+        特征：可以用来存储一个null值 或者 非null值；
+        应用：代码中，任何需要使用对象的地方都可以使用Optional来替换对象本身；
+        用法参考： optional_06
+        原理：
+            如果存储的对象为null, 则：能够获取到存储的对象本身；
+            如果存储的值为null, 则：会得到一个空的Optional对象。
+        代码示例：
+            public Optional<Country> getBirthCountry() {
+                return Optional.ofNullable(this.birthPlace)
+                    .flatMap(Place::getCity)
+                    .flatMap(City::getProvince)
+                    .flatMap(Province::getCountry); // 直接取值，而不需要担心可能会出现NPE
+            }
+
+======
+note from a reader:
+#1 记忆化无法取代Proxy模式 -
+    # Proxy模式主要用于 方法调用的分发(dispatch), 在分发的时候可以做些额外的事情(比如记忆化);
+        Java中实现动态分发的手段 - 反射；
+#2 Optional的价值 在于类型，而不是对象；
+    类型的特性 - 在编译期间，编译器就可以进行检查。 而不需要依赖程序员在运行时进行检查(或IDE自动检查)
+    Optional的特性 - 开发者在进行中间处理的时候，不需要单独处理empty的值，只需要保证类型正确即可。
