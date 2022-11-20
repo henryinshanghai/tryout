@@ -1,5 +1,6 @@
 package com.henry.tryout.java_8_features.optional_06.deal_with_null_01;
 
+// 验证：避免NPE的2种方式 - {使用if语句进行防御性编程, 在参数为null时使用return提前返回}
 public class client_code_01 {
     public static void main(String[] args) {
         Person henry = new Person();

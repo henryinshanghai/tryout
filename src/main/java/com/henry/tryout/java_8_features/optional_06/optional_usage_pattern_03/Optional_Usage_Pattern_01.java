@@ -6,15 +6,16 @@ import com.henry.tryout.java_8_features.optional_06.optional_in_java_02.Person;
 
 import java.util.Optional;
 
+// 验证：创建Optional对象的几种方式 - {Optional.empty(), Optional.of(car), Optional.ofNullable(car1)}
+// 验证：从Optional对象中获取其封装信息的几种方式 - {optInsurance.map(Insurance::getName), .flatMap(), {get(), orElse(), orElseGet(), ifPresent()}}
 public class Optional_Usage_Pattern_01 {
     public static void main(String[] args) {
 
-        // 在client代码中，创建一个 Optional对象；
+        // 演示：在client代码中，创建一个 Optional对象的多种方式；
         Optional<Car> optionalCar = createAnOptionalObject();
 
-        // 安全地获取信息
+        // 演示：从Optional对象中安全地获取其封装的对象
         getInformationViaOptional();
-
 
     }
 
@@ -26,6 +27,7 @@ public class Optional_Usage_Pattern_01 {
         // 链接多个 optional对象，从最后面的optional对象中获取信息
         getInformationUsingSequentialOptional();
 
+        // 从optional对象中获取信息的几种方式 - get(), orElse(), orElseGet(), ifPresent()
         getInformationFromOptional();
     }
 
@@ -72,7 +74,7 @@ public class Optional_Usage_Pattern_01 {
         Insurance insurance = new Insurance();
         Optional<Insurance> optInsurance = Optional.ofNullable(insurance);
 
-        // 从 optional对象中获取信息
+        // 从 optional对象中获取信息 - 手段：optional对象.map()方法
         Optional<String> name = optInsurance.map(Insurance::getName);
         System.out.println("name: " + name);
     }
