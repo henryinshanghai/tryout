@@ -1,4 +1,4 @@
-package com.henry.tryout.software_design.design_pattern_and_principle;
+package com.henry.tryout.software_design.design_pattern_and_principle.single_responsibility;
 
 // 原始的用户类
 // 验证：这个User类其实承载了逻辑上不同的概念

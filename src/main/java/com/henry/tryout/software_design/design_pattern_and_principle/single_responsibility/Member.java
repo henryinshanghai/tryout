@@ -1,4 +1,4 @@
-package com.henry.tryout.software_design.design_pattern_and_principle;
+package com.henry.tryout.software_design.design_pattern_and_principle.single_responsibility;
 
 // 集中项目管理需求 - 项目成员类
 public class Member {
