@@ -1,0 +1,13 @@
+In IntelliJ IDEA Community, you can configure different copyright notices for different sets of files.
+For convenience, you can use variables.
+在IDEA中，你可以 为不同的文件来配置不同的版权标识。
+方便起见，你还可以使用 变量。
+
+For example, use $today.year to keep the year up to date.
+比如说，使用 $today.year 来 保持year能够是最新的。
+
+In the Settings/Preferences dialog Ctrl+Alt+S,
+select Editor | Copyright | Copyright Profiles,
+create a new profile, and add the text for your copyright notice using variables.
+在偏好对话框中，选择 Editor | Copyright | Copyright Profiles,
+创建一个新的profile，并使用变量在你的版权notice中添加文本。
