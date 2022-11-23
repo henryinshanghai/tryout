@@ -1,0 +1,34 @@
+Java中多个类之间能够通过extends, implements等关键字形成继承关系。
+Liskov 替换原则指出 - 一个好的继承体系需要遵守如下原则：
+    在client代码中，子类型(sub-type)应该能够完全地替换父类型(base type) - 替换后client代码的行为不会有任何变化。
+
+违反Liskov替换原则的代码示例：ClientCode
+结论：任何使用了 RTTI(运行时类型识别)的代码，很可能就已经破坏了Liskov替换原则。
+
+===
+对继承关系的描述：B is a A; eg. dogs is an animal. chickens is a bird.
+
+实践：如果在设计时，把A设计成为B的子类，则：需要满足A is a B(A能够完全替换B / A拥有B的全部行为);
+
+is-a的实例验证：
+#1 正方形是一个长方形吗？
+答：根据Liskov替换原则，如果 square is a rectangular,则：它就应该具有正方形的所有行为。
+但事实是 正方形并不具有长方形的所有行为 -> 因此 square is NOT a rectangular.
+
+#2 素材是一个商品吗？
+    如果是"创作者素材"，则：不是一个商品；
+    如果是"可销售素材", 则：不是一个商品。
+
+Liskov Substitute 原则所提出的要求：
+#1 同一个继承体系中的所有类型，需要有一个统一的接口；- 这样才能够在client code中做替换
+#2 子类 is a 父类
+
+使用is-a规则来审查常见的编码设计：
+#1 方法参数是List<xxx> ooo,从is-a的角度来看, ooo真的是一个List吗？
+    如果ooo只是为了读取操作的话，则：ooo并不是一个List -> 因此这种设计违反了LSP；
+#2 在定义一个Students类型时，extends ArrayList<Student>, 但是Students真的是一个List吗？
+    并不是，所以这种继承关系 直接地违反了LSP；
+
+======
+recap：
+Liskov Substitute原则给开发者的启示：从父类的角度看问题，设计出行为一致的子类型。
