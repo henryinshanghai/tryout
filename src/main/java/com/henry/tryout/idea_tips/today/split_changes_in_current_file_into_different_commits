@@ -1,0 +1,9 @@
+To split changes made to the same file between different commits, in the Commit tool window Alt+0 click Diff.
+Select the checkbox next to each chunk of modified or new code that you want to commit and click Commit.
+Unselected changes will stay in the current changelist.
+
+为了把某一个文件中所作出的不同改动，分离到不同的commits中。在Commit的工具窗口中，点击 Diff
+选择那些你想要提交的、紧挨在修改/新增的代码傍边的checkbox，然后点击Commit
+未被选中的改动会被保留在当前的修改列表中。
+
+还没有动手practice过~
