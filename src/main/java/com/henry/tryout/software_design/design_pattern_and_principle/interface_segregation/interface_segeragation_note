@@ -1,0 +1,91 @@
+单一职责 -> 类的变化来源应该是单一的
+开闭原则 -> 不要随意修改一个类
+Liskov替换原则 -> 设计好类的继承关系
+
+设计接口的原则： 接口隔离原则(Interface Segregation Principle)
+No client should be forced to depend on methods that it does not use.
+
+对于接口，有如下的角色：
+    #1 接口的设计者；
+    #2 接口的使用者。
+真实情况下，两个角色很可能是同一个人扮演的。
+
+什么是接口？
+广义上来讲，接口是 模型之间交互的手段；
+特征：
+    #1 接口 相当于汽车的操纵杆，为了能够让使用者摆脱实现细节(转向架、引擎、制动系统等)
+    #2 如果代码中没有显示地声明接口，则：类本身就承担了接口的功能。
+
+使用ISP来指导 胖接口减肥👇
+现有的一个系统：银行系统；
+系统的能力：存取款、转账；
+暴露能力的方式：单一的一个接口 - user需要传入"不同的请求" 来 表示自己想要使用的能力。
+
+目标：设计一个表示"用户请求/业务请求"的类；
+设计结果1： TransactionRequest 类型；
+特征：在这个类中，每一个请求类型都会对应有自己的专属的方法；
+
+目标：每种操作类型都会对应着一个业务处理的模块 - 它会根据自己的需要，来获取信息；
+设计结果：
+    #1 添加一个通用接口 TransactionHandler，接口中添加一个抽象方法 handle();
+    #2 添加具体的业务实现类{DepositHandler...}，实现通用接口TransactionHandler，添加处理请求类型的代码；
+
+基于以上的设计结果，clientCode中的用法：
+    #1 准备 typeToHandler的map集合；
+    #2 获取请求参数中的type属性；
+    #3 从map集合中，使用type属性，找到正确的handler对象；
+    #4 调用handler的handle()方法 来 真正地处理请求
+参考：ClientCode
+
+隐藏的问题：TransactionRequest这个“接口”太胖了
+分析原因：
+    这个类中包含了如下操作 - {获取操作类型, 获取存款金额, 获取取款金额, 获取转账金额}
+    这个类的作用是什么？为啥需要包含这么多的操作？
+    #1 类的作用：表示业务请求；
+    #2 当把它作为参数传递给 TransactionHandler的时候，它就成为了 业务处理接口的一部分。
+    #3 当开发者没有设计具体的接口时，具体类就会成为接口 - 模型之间交互的手段
+    #4 不同业务类 {DepositHandler...}中只使用了 request参数的某一个方法，但 TransactionRequest中却包含了所有这些方法
+胖接口中有多个方法，这有什么不好来？
+答：胖接口通常是不稳定的，比如 需要添加一个生活缴费的功能。
+手段：在 胖接口TransactionRequest中添加一个 获取生活缴费金额的方法；
+按照现有设计，则需要开发者：
+    #1 在 TransactionRequest中，添加一个 获取生活缴费金额的方法；
+    #2 添加一个业务处理类，具体实现 生活缴费的方法。
+
+影响：由于 TransactionRequest的修改，先前的业务类 {DepositHandler...}都会被重新编译。因为它们都引用了 TransactionRequest
+
+===
+按照ISP(只给每个使用者提供它们所关心的方法)新的设计：
+#1 设计一个接口 TransactionRequest；- 作用：统一所有真正的业务请求接口；
+#2 添加多个瘦的接口 {DepositRequest, WithdrawRequest, TransferRequest} 来 具体规定业务请求所需要的方法；
+#3 添加一个类 ActualTransactionRequest 来 作为真实的业务请求类；
+#4 设计一个接口 TransactionHandler - 添加处理具体业务的方法；
+#5 添加多个类{DepositHandler, WithdrawHandler, TransferHandler} 来 具体实现业务的处理；
+
+基于以上的设计，特征 - 每个业务处理方法就只关心 自己相关的业务请求；
+对于新增的需求：生活缴费。
+手段：
+    #1 添加一个新的请求接口 LivingPaymentRequest;
+    #2 在真实的业务请求类 ActualTransactionRequest上，实现#1中新增的接口；
+    #3 添加一个用于业务处理的Handler；
+
+对比新旧设计，对于新增需求时，开发者需要做的事情：
+旧设计：由于 TransactionRequest发生了改动，因此 所有Handler(引用了/依赖了Request)都会被重新编译。
+新设计：ActualTransactionRequest会被修改，但是 所有的Handler其实都没有依赖/引用 ActualTransactionRequest，所以不会被重新编译。
+结论：使用新设计时，新需求对应的改动引起的影响变得更小了。
+
+新设计的回顾：
+#1 TransactionRequest这个大接口被拆分成为很多个小的接口 - 每个接口就只会为特定的使用者服务；
+接口之所以稳定，是因为它只承担单一的职责。
+ISP可以理解为 接口设计维度的SRP；
+
+ISP的拓展：不要依赖于任何自己不需要的东西；
+作为一个系统，依赖了自己不需要的东西，会引入一些本可以避免的麻烦。
+最小索取，只吃草莓尖尖。
+
+Recap:
+#1 接口隔离原则 - 接口应该是小小的；
+#2 接口：模型/类之间交互的手段；
+#3 设计接口时，关注接口会被谁使用 - 这样才能最小化依赖。
+
+设计：改变全局的组件。
