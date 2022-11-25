@@ -1,0 +1,5 @@
+To see the inheritance hierarchy for the selected class, press Ctrl+H (Navigate | Type Hierarchy).
+You can also invoke the hierarchy view directly from the editor to see the hierarchy for the currently edited class.
+
+如果想要查看所选择的类的 继承层次，按下Ctrl + H(Navigate | Type Hierarchy)
+你也可以从编辑器中调用 hierarchy view 来查看当前编辑类的继承层次。
