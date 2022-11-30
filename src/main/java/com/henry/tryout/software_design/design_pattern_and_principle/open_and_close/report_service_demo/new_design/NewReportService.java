@@ -4,7 +4,7 @@ import org.apache.commons.collections.ListUtils;
 
 import java.util.List;
 
-// client代码 - 设计的受益者
+// #3 client代码 - 设计的受益者
 public class NewReportService {
     // 持有新添加的模型 作为成员属性
     private List<OrderStatisticsConsumer> consumers;
