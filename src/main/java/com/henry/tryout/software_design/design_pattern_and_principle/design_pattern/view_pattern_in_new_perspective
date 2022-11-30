@@ -1,0 +1,29 @@
+对模式进行分类
+
+#1 为了弥补语言的局限性而出现的设计模式；
+对于C++, Java这类语言的单分发特性 -> Visitor模式；
+
+设计模式的局限性：
+#1 Singleton模式；
+相关技巧：{#1 构造方法私有化; #2 多线程条件下的单例模式 - 双重检查锁}
+从“可测试性”的角度来看，单例模式不是一个好的设计模式；
+替换手段：不要手动写单例，DI容器默认情况下创建的对象就已经是单例了。
+
+设计模式的登堂入室：
+三个阶段： {#1 遵守设计模式的client代码; #2 封装进入好用的程序库; #3 荣升语言自身的程序库甚至语法}
+示例：#2 Observer模式；
+第一阶段：JDK1.0中，需要client使用代码实现它；
+第二阶段：Google的程序库Guava提供了对它的支持 - EventBus;
+第三阶段：JDK9.0中，PropertyChangeSupport?
+
+Annotation是消灭设计模式的一大利器
+
+#3 Builder设计模式； - client could just use @Builder from Lombok library
+#4 Decorator设计模式； - client could user @Transactional from Spring framework
+#5 Command设计模式； - 使用lambda语法 对使用它的client代码进行简化
+
+======
+Recap:
+#1 学习设计模式，首先熟悉使用它的场景 - 不要贪多求全；
+#2 设计模式其实是 设计原则在某些场景中的具体化结果；
+#3 随着语言的发展，有些设计模式已经被内置到 语言本身中了
