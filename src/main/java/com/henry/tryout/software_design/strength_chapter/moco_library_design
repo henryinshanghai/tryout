@@ -1,0 +1,137 @@
+Moco是怎么解决集成问题的？
+好的实践：学习软件设计，可以从程序库开始；
+程序库：Moco；
+作用：作为一个模拟服务器；
+多种用法：
+    #1 作为程序库引入，然后在自动化测试中使用；
+    #2 把Moco单独部署，作为一个独立的服务器访问；
+怎么在当前的tryout项目中，引入Moco，并使用Moco编码呢？？？
+
+===
+集成的问题
+
+开发中经常遇到的场景：在当前系统中，集成其他厂商提供的服务；
+这时候，就需要测试 当前系统与第三方系统的集成是否是成功的；
+手段：使用一个dummy服务，来模拟第三方服务。
+
+---
+从问题到需求，再到解决方案：
+
+模拟服务应该有哪些功能？
+#1 使用者应该能够配置这个模拟服务 - 可配置
+#2 这个模拟服务应该能够独立部署(而不需要依赖于应用服务器才能启动)
+#3 这个模拟服务应该作为一个通用的解决方案
+#4 拥有一个有表达性的DSL // 加分项
+
+模拟服务的关键点是什么？
+#1 开发者要能够表达出自己的期望；
+#2 模拟服务应该能够给出返回结果。
+像是下面这行代码：
+    server.request("foo").response("bar");
+
+把模拟服务添加到单元测试中：
+public void should_return_expected_response() {
+    HttpServer server = httpServer(12306);
+    server.request("foo").response("bar");
+    running(server, new Runnable() {
+        Content content = Request.Post("http://localhost:12306")
+            .bodyString("foo", ContentType.TEXT_PLAIN)
+            .execute()
+            .returnContent();
+
+        assertThat(content.asString(), is("foo"));
+    })
+}
+
+有了单元测试之后，下面就是需要 让单元测试通过。
+
+
+===
+基础设计的诞生
+
+Moco要做什么事情，取决于Moco本身是什么工具 - 一把剪刀，就应该能剪开材料；
+Moco是什么？
+    HTTP的模拟服务器；
+HTTP模拟服务器需要做些什么？
+    支持各种HTTP的元素 - HTTP协议版本、URI、HTTP方法、HTTP头、HTTP内容
+对Moco的预期：一个通用的解决方案；
+怎么能够实现”通用“？
+手段：使用者需要有 任意地组合上述的各种HTTP元素 的能力；
+具体手段：设计可组合的接口；
+代码示例：
+文字描述：请求 /foo 这个URI，请求的内容是foo时，则：返回一个 bar
+server
+    .request(and(by("foo"), by(uri("/foo")))) // 传给request的就是 元素的组合，而不是简简单单的文本
+    .response(and(with(text("bar")), status(200)))
+
+模型建立：
+#1 传给request()方法的东西 -> RequestMatcher
+    作用：对请求进行匹配，如果匹配成功，则：返回true。否则返回false
+#2 传给response()方法的东西 -> ResponseHandler
+    作用：对应答进行处理 aka 设置应答中的各种元素
+这两个模型，就是Moco最核心的模型。
+
+interface RequestMatcher {
+    boolean match(Request request);
+}
+
+interface ResponseHandler {
+    void writeToResponse(Response response);
+}
+
+===
+对设计的扩展
+
+#1 使用者希望能够有一个外部的配置文件 - 以此来定制Moco的行为；
+Moco的实现：
+    #1 增加一个配置文件；
+    #2 建立从 配置文件 -> 核心模型 之间进行一个映射；// 这并不会改变核心模型
+这相当于 给Moco添加了一个外部DSL - 具体来说 JSON语法。
+
+JSON配置文件衍生的Moco新用法 - 把Moco作为一个独立的模拟服务器。
+Moco原始的用法 - 在单元测试中使用，模拟对第三方服务的集成；
+特征：如果Moco独立部署成为模拟服务器的话，则：client就不需要是Java了。 任何应用 都能和一个模拟服务器进行交互
+
+=== 功能性需求 ===
+#1 被模拟的服务不稳定 // Moco不是一个dummy服务吗？为什么管 被模拟的服务怎么样？
+手段：Moco提供一个proxy功能 - 把请求转发给被模拟的服务器(如果服务器失效了，则：使用本地缓存信息)
+
+#2 使用者想要 应答字段能够根据请求内容 定制
+手段：moco提供了template功能 - 让使用者自行决定怎样使用 某部分信息；
+
+#3 使用者想要 能够处理一类请求，而不只是单独的一个请求
+手段： Moco提供了 match功能 - 使用者能够编写正则表达式，按照自己的需求对请求进行匹配
+
+#4 使用者希望 把所有应答内容都放在同一个目录下
+手段：Moco提供了 mount功能 - 用来把某一个目录挂载到一个URI上
+
+#5 使用者想要 以流行的REST方式 使用Moco
+手段：Moco支持了 REST能力 - 能够定义资源
+
+template功能对核心模型的影响：
+需求：根据请求的内容 来 决定应答的内容；// 这让原本独立的 request、response，相互之间有了关联
+代码改动：在response中，包含request的信息。
+class SessionContext {
+    private final Request request;
+    private final Response response;
+
+}
+
+interface ResponseHandler {
+    void writeToResponse(SessionContext context);
+}
+
+---
+录制回访◀ 这是什么能力？
+server
+    .request(by(uri("/record")))
+    .response(record(group("foo")))
+
+server
+    .request(by(uri("/replay")))
+    .response(replay(group("foo")));
+
+最终说来，Moco就只是 - 根据请求，给出应答。
+
+======
+Recap：从学习程序库开始学习软件设计；
