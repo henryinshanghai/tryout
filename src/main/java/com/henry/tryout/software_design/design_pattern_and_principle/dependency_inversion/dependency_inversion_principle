@@ -75,6 +75,7 @@ DI(Dependency Injection)容器 = IoC(Inversion of Control)容器
 由于高层模块 与 低层模块没有直接的依赖，因此 可以使用注入的方式 来 注入低层模块。
 
 DIP的解读：don't call us, we'll call u.
+框架 与 Jar包的差异
 框架的特性：
     #1 框架 提供了稳定的抽象(定义了接口)；
     #2 框架会调用 有开发者提供的各种代码实现；比如Spring
