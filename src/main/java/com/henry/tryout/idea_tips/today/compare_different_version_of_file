@@ -1,0 +1,8 @@
+IntelliJ IDEA Community lets you examine（检查） the differences between two versions of the same file.
+You can compare the following:
+    #1 a file modified locally with its repository version
+        比较 本地修改的文件版本 和 该文件的仓库版本
+    #2 any two revisions of the same file (in the same or in different branches)
+        相同文件的任意两个版本（相同分支或者不同分支）
+    #3 a local file with its versions in Local History
+        本地文件 在本地历史列表中的任何版本
