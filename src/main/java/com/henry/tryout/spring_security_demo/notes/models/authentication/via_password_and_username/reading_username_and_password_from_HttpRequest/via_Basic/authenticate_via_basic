@@ -1,0 +1,49 @@
+via basic 是什么意思？
+答：The 'Basic' HTTP Authentication Scheme；
+作用：定义 Basic 超文本传输协议的认证 schema - RFC7617
+
+在 Spring Security中 HTTP基础认证是怎么工作的？
+术语：WWW-Authenticate
+作用：The "WWW-Authenticate" header field indicates the authentication
+      scheme(s) and parameters applicable to the target resource.
+翻译：WWW-Authenticate 这个header字段 用来表明 应用到目标资源上的 认证的schema 以及 参数；
+
+认识：这个认证流程 是基于 SecurityFilterChain 的图构建的。
+
+--- 访问未授权的页面 👇 ---
+#1 用户发送 未认证的请求 到一个未授权的资源；
+#2 请求被Spring Security拒绝 - FilterSecurity_Interceptor 抛出一个 AccessDeniedException 来 拒绝请求；
+#3 用户未被认证，所以 ExceptionTranslation_Filter 会 开始认证过程：
+     BasicAuthenticationEntryPoint（AuthenticationEntryPoint子类） 会发送一个 WWW-Authenticate header；
+     NullRequestCache（RequestCache子类）不会保存请求 - 因为客户能够再次发送它开始时发出的请求
+
+--- 用户提供认证信息后，对这些信息进行认证 ---
+#1 BasicAuthenticationFilter 根据 HttpServletRequest中 用户提供的认证信息，来 创建 UsernamePasswordAuthenticationToken对象；
+#2 把 token对象(Authentication类型) 传递到 AuthenticationManager中(具体哪一个实现，取决于 user信息的存储方式)；
+#3 认证失败 - {123}
+#4 认证成功 - {123}
+
+---
+认证失败：
+#1 清除 SecurityContextHolder;
+#2 调用 RememberMeServices.loginFail()方法 - 如果remember me没有被配置，则：不会进行任何操作(no-op);
+#3 调用 AuthenticationEntryPoint 来 触发 再次发送WWW-Authenticate;
+
+---
+认证成功：
+#1 把 Authentication 设置到 SecurityContextHolder中；
+#2 调用 RememberMeServices.loginSuccess()方法；- 如果remember me没有被配置，则：不会进行任何操作(no-op);
+#3 BasicAuthenticationFilter 调用 FilterChain.doFilter(request, response) 来 继续完成 剩余的应用逻辑。
+
+特征：默认情况下， Spring Security的 HTTP basic认证支持是开启的。
+但是，如果 开发者提供了任何的 基于servlet的配置，则：必须要显式地提供 HTTP Basic。
+
+最小化的、显式的(explicit)配置：
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        http
+            // 使用的方法是 httpBasic()
+            .httpBasic(withDefaults());
+        return http.build();
+    }
+

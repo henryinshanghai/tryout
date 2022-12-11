@@ -1,0 +1,25 @@
+#1 请求/要求 用户提供凭据； 手段：AuthenticationEntryPoint
+#2 处理认证请求：
+    #1 从 待被认证的HttpServletRequest 请求中，创建出 Authentication;
+        特征：所创建出的 Authentication的类型 取决于 AbstractAuthenticationProcessingFilter的实现子类；
+        比如 UsernamePasswordAuthenticationFilter 就会 从 request对象中创建出一个 UsernamePasswordAuthenticationToken 对象；
+    #2 Authentication对象 被传递给 AuthenticationManager中 - 从而开始认证；
+        #1 认证失败；- {123}
+        #2 认证成功；- {12345}
+
+
+======
+认证失败：
+#1 清除 SecurityContextHolder;
+#2 调用 RememberMeServices.loginFail()方法 - 如果remember me没有被配置，则：不会进行任何操作(no-op);
+#3 调用 AuthenticationFailureHandler;
+
+======
+认证成功：
+#1 通知 SessionAuthenticationStrategy 有新的登录动作；
+#2 把 Authentication 设置到 SecurityContextHolder中； - 随后，SecurityContextPersistenceFilter 会把 SecurityContext 保存进去 HttpSession中
+#3 调用 RememberMeServices.loginSuccess()方法；- 如果remember me没有被配置，则：不会进行任何操作(no-op);
+#4 发布 InteractiveAuthenticationSuccessEvent 事件； - via ApplicationEventPublisher
+#5 调用 AuthenticationFailureHandler;
+
+

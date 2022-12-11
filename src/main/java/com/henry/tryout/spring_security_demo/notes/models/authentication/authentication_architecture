@@ -1,0 +1,63 @@
+讨论的scope： Servlet authentication;
+高层次模型： client -> [filter_chain] -> servlet
+
+关于认证 feature的组件：
+#1 SecurityContextHolder
+    作用：Associates a given SecurityContext with the current execution thread.
+    翻译：关联 当前执行线程 到 指定的 SecurityContext；
+
+#2 SecurityContext
+    作用：Interface defining the minimum security information associated with the current thread of execution.
+    翻译：定义 与当前执行线程关联的最小安全信息
+
+#3 Authentication
+    作用：Represents the token for an authentication request or for an authenticated principal once the request has been processed by the AuthenticationManager.authenticate(Authentication) method.
+    翻译：表示 认证请求的代币 或者 一个已经被认证过的主体(一旦请求被 AuthenticationManager.authenticate(Authentication) 处理之后)
+
+#4 GrantedAuthority
+    作用：Represents an authority granted to an Authentication object.
+    翻译：表示 为Authentication对象所授予的权限。
+
+#5 AuthenticationManager
+    作用：Processes an Authentication request.
+    翻译：处理 Authentication 请求；
+
+#6 ProviderManager
+    作用：Iterates an Authentication request through a list of AuthenticationProviders.
+    翻译：在一个 AuthenticationProviders列表中，迭代 Authentication对象
+
+#7 AuthenticationProvider（接口）
+    作用：Indicates a class can process a specific Authentication implementation.
+    翻译： 表明一个类 能够处理 特定的Authentication实现。
+
+#8 AuthenticationEntryPoint
+    作用： Used by ExceptionTranslationFilter to commence an authentication scheme.
+    翻译： 被 ExceptionTranslationFilter 用来 开始 认证的schema
+    作用(官网)： 用来从client处 请求凭据；
+
+#9 AbstractAuthenticationProcessingFilter
+    作用：Abstract processor of browser-based HTTP-based authentication requests.
+    翻译：基于浏览器、基于HTTP的认证请求 的 抽象处理器；
+    作用（官网）：认证时所使用到的一个 基础的 Filter；
+    特征： #1 揭示高层次的认证流程； #2 揭示各个组件如何配合工作的
+
+===
+组件分类：
+
+#1 核心模型/抽象/概念：
+    Authentication - 表示 认证请求的代币 或者 一个已经被认证过的主体
+    AuthenticationManager - 处理 Authentication 请求
+
+#2 扩展模型(实现类、依赖等)：
+    Authentication的扩展模型 -
+        往外扩展（注入/被组合）：{SecurityContext, SecurityContextHolder}
+        往内扩展（依赖？）：{Principal, Credentials, Authorities}
+
+    AuthenticationManager的扩展模型
+        向下扩展（实现类&依赖） - {ProviderManager, AuthenticationProvider}
+
+#3 功能的入口组件：
+    AbstractAuthenticationProcessingFilter - 认证时所使用到的一个 基础的 Filter；
+
+    依赖模型：AuthenticationEntryPoint - 用来从client处 请求凭据；
+    认证工作的流程：参考 - authentication_workflow_of_AbtractAuthenticationProcessingFilter

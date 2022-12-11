@@ -1,0 +1,27 @@
+组件列表：
+#1 UserDetails；（接口）提供核心的user信息
+#2 UserDetailsService；（接口）加载用户具体的数据
+#3 DaoAuthenticationProvider；（具体类）用于从 UserDetailsService中获取到 user详情； - 是 AuthenticationProvider 的实现类
+#4 PasswordEncoder: (接口) 用来对密码进行编码
+
+---
+组件之间的关系：
+#1 UserDetailsService 会返回 UserDetails；
+    特征： Security 为 UserDetailsService 提供了 in-memory 以及 JDBC的实现
+    用法： 开发者 可以 通过把 自定义的UserDetailsService 暴露成一个 Bean实例，来 定制认证逻辑。
+#2 DaoAuthenticationProvider 使用 UserDetailsService - 来 获取username、password 以及 其他认证所需要的属性；
+#3 DaoAuthenticationProvider 校验 UserDetails， 然后返回
+    包含有 principal（其实就是 UserDetailsService所返回的 UserDetails）的 Authentication；
+
+#4 Security对 servlet的支持 包括 通过集成 PasswordEncoder 来 安全地存储密码；
+通过暴露一个 PasswordEncoder Bean实例， 开发者可以 定制PasswordEncoder的具体实现（编码密码的具体逻辑）
+
+
+---
+note：这种做法只会在 {#1 AuthenticationManagerBuilder 没有被填充; #2 并且 没有 AuthenticationProviderBean 被定义} 时，被使用.
+定制认证逻辑的代码示例：
+    @Bean
+    CustomUserDetailsService customUserDetailsService() {
+        return new CustomUserDetailsService();
+    }
+

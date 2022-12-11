@@ -1,0 +1,47 @@
+目的：认证当前用户；
+手段：要求用户 通过HTML表单 提供自己的用户名 & 密码；
+
+认知：这个流程是 从 SecurityFilterChain的流程中，扩展出来的
+    #1 [Client -> (Filters) -> Servlet];
+    #2 Delegating_Filter_Proxy -> FilterChain_Proxy -> Security_FilterChain
+        #1 Delegating_Filter_Proxy 在 org.springframework.web.filter包下；
+        #2 FilterChain_Proxy 在 org.springframework.web.filter包下。
+        #3 Security_FilterChain 在 org.springframework.security.web 包下。
+
+Spring Security中的 表单形式的登录 流程：
+--- 访问未授权的页面 👇 ---
+#1 用户在未登录状态下 向一个没有被授权的资源发起请求；
+#2 #1中的请求会被拒绝 - 手段： FilterSecurityInterceptor 会抛出一个 AccessDeniedException， 以此来表示请求被拒绝；
+#3 向client发送一个重定向 并 开启认证 - 手段：ExceptionTranslationFilter 会 使用 AuthenticationEntry 来要求用户输入认证信息；
+#4 浏览器向 登录页面发起重定向请求；
+#5 渲染登录页面，返回给 client。
+
+认识：
+    核心模型#1 Authentication - 表示 认证请求的代币 或者 一个已经被认证过的主体
+    核心模型#2 AuthenticationManager - 处理 Authentication 请求
+
+--- 用户提供认证信息后，对这些信息进行认证 ---
+入口类： UsernamePasswordAuthenticationFilter (作为 SecurityFilterChain中的某一个 Filter)；
+#1 把用户提供的认证信息，创建成为一个 UsernamePasswordAuthenticationToken对象（Authentication的子类型）；
+#2 #1中的token对象 被传递给 AuthenticationManager实例 来 进行认证；
+#3 认证失败 - {123}
+#4 认证成功 - {12345}
+
+特征：默认情况下， Spring Security的表单登录是启用的。
+但是 如果开发者提供了 任何基于Servlet的配置，则：必须要显式地 提供 基于表单的登录；
+
+显式配置 基于表单的登录 代码：
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        http
+            .formLogin(withDefaults());
+        // ...
+    }
+
+在使用 Spring MVC时，把 GET /login请求 映射到 登录模板上：
+    @Controller
+    class LoginController {
+        @GetMapping("/login")
+        String login() {
+            return "login";
+        }
+    }
