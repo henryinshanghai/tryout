@@ -1,0 +1,74 @@
+“Servlet Web应用”处理 HTTP请求的流程：
+
+#1 client 使用浏览器发出 HTTP请求；
+#2 请求经过一个 由Filter组成的链条，最终到达 Servlet被其处理（发生在Web容器中）；
+
+特征：
+#1 对于 Spring MVC应用来说，Servlet的实例是 DispatcherServlet；
+#2 一个 Servlet 只能用来 处理一个 HttpServletRequest 和 HttpServletResponse；
+#3 Filter可以有多个，作用  - {#1 阻止下游的 Filter实例或者Servlet被调用； #2 修改 HttpServlet 或者 HttpResponse}
+
+===
+components:
+#1 DelegatingFilterProxy: D_F_P
+特征：由 Spring提供；
+作用（注释）：一个标准的 Servlet Filter的代理, 把请求委派到 一个Spring管理的Bean实例（实现了 Filter接口）
+作用（官网）：以标准的 Servlet容器机制 注册到Servlet容器中，并把请求委派到 Spring的Filter Bean上；
+
+#2 FilterChainProxy: F_C_P
+特征：由Spring Security提供；
+作用（注释）：把 Filter的请求 委派到 一个 由Spring所管理的filter bean构成的list上；
+作用（官网）：把 请求 委派到 很多的Filter实例上（通过 SecurityFilterChain）；
+
+#3 SecurityFilterChain: S_F_C
+特征：被 FilterChainProxy使用；
+作用（注释）：定义一个 能够匹配到 HttpServletRequest的 过滤器链条；
+作用（官网）：决定一个 Security的Filter实例 是不是应该 被当前的request 调用；
+
+#4 UsernamePasswordAuthenticationFilter: UP_A_F
+特征：通过 FilterChainProxy 来 注册到 Spring容器中；-
+    好处 {
+        #1 作为 Security对 Servlet进行支持的起始点；
+        #2 作为一个核心类，提供一些必须执行的通用操作 {清除 SecurityContext；应用防火墙等}；
+        #3 在决定 SecurityFilterChain是否会被调用时，提供了更多的灵活性（根据 HttpRequest中的信息） （相比于 Servlet容器中Filter被调用的规则 - URI是否匹配）}
+作用（注释）：处理 认证表单的提交；
+作用（官网）：认证 用户名与密码；
+
+#5 ExceptionTranslationFilter:
+特征：会注册进去 FilterChainProxy, 作为一个 Security Filter;
+作用（注释）：处理 过滤器链条中抛出的 任何 AccessDeniedException 与 AuthenticationException；
+作用（官网）：允许 把 AccessDeniedException 与 AuthenticationException 转化为 HTTP响应。
+
+#6 RequestCache：
+特征：由 RequestCacheAwareFilter所使用；
+作用（注释）：实现 “保存的请求”这个逻辑，从而允许 能够获取单一的request 并且 在重定向到认证机制后重新开始请求。
+作用（官网）：当用户认证成功后，它用来 重新开始 原始的请求；
+
+#7 RequestCacheAwareFilter
+特征：默认会使用 HttpSessionRequestCache 实现类；
+作用（注释）：如果 request被缓存，并且能够匹配到当前的请求，则：由它负责来 重新组成请求。
+作用（官网）：它使用 RequestCache 来 保存 HttpServletRequest;
+
+===
+组件分类：
+
+高层级组件/模型：
+    Filter in Servlet Container
+        DelegatingFilterProxy
+        作用（官网）：以标准的 Servlet容器机制 注册到Servlet容器中，并把请求委派到 Spring的Filter Bean上；
+    Beans chain in Spring
+        FilterChainProxy
+        作用（官网）：把 请求 委派到 很多的Filter实例上（通过 SecurityFilterChain）
+
+扩展模型：
+    用于匹配请求的组件
+        SecurityFilterChain {决定一个 Security的Filter实例 是不是应该 被当前的request 调用}
+    Filter的实现类 -
+        UsernamePasswordAuthenticationFilter， {认证 用户名与密码}
+        ExceptionTranslationFilter， {把 AccessDeniedException 与 AuthenticationException 转化为 HTTP响应}
+        RequestCacheAwareFilter {使用 RequestCache 来 保存 HttpServletRequest}
+
+辅助组件：
+    RequestCache - {当用户认证成功后，它用来 重新开始 原始的请求}
+
+
