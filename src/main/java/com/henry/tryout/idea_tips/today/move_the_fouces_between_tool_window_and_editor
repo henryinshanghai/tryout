@@ -1,0 +1,7 @@
+Esc in any tool window moves the focus to the editor.
+Shift+Esc moves the focus to the editor and hides the current or the last active tool window.
+F12 moves the focus from the editor to the last focused tool window.
+
+按 Esc键 来 从工具窗口，把焦点移动到编辑器中；
+Shift + Esc 来 把焦点移动到编辑器中 并 隐藏当前或者最后一个活跃的 工具窗口。
+F12 来 把焦点从编辑器 移动到最近聚焦的工具窗口
