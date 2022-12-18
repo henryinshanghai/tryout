@@ -1,0 +1,73 @@
+认证：一个过程，用来验证访问资源的用户的身份。
+常见的认证方式：要求用户提供用户名与密码（一种认证身份的方式）
+
+常见的应用分类： Servlet应用 + WebFlux应用；
+
+======
+这个讨论 扩展了 Servlet Security：高层级视角 来 描述 Security 用于 Servlet认证的主要组件(architectural components)。
+如果想要知道 更具体的 这些组件怎么在一起工作的话，请查看 认证机制 具体的章节。
+
+#1 SecurityContextHolder （具体类）
+作用（官网）：Security用来存储 当前谁被认证的详情；
+作用（注释）：把指定的 SecurityContext 与 当前执行线程相关联；
+
+#2 SecurityContext （接口）
+特征：从 SecurityContextHolder中获取到的
+作用（官网）：包含 当前被认证的user的 Authentication；
+作用（注释）：用于定义 与当前执行线程 相关联的最小安全信息。
+
+#3 Authentication（接口）
+特征：作为 AuthenticationManager 的输入；
+作用（官网）：#1 提供 user用于认证的凭证 或者 #2 从 SecurityContext中的当前user
+作用(注释)：表示一个 认证请求的代币 或者 认证后的主体（一旦认证请求 被 AuthenticationManager.authenticate(Authentication) 方法处理后）
+
+#4 GrantedAuthority（接口）
+特征：要么是 String的形式，要么 由 AccessDecisionManager实现类单独地支持；
+作用（官网）：在一个 Authentication中 被授予给主体的权限（比如 角色、scopes等等）
+作用（注释）：表示 被授予给 Authentication对象的一个权限
+
+#5 AuthenticationManager（接口）
+作用（官网）：用于定义 Security中的Filter 会怎样执行认证；
+作用（注释）：处理一个认证请求
+
+#6 ProviderManager （实现类）
+作用（官网）：AuthenticationManager 最常见的实现类；
+作用（注释）：从 AuthenticationProviders的列表中，来 迭代 认证请求；
+
+#7 AuthenticationProvider
+特征：被 ProviderManager 使用；
+作用（官网）：执行具体的某一种形式的认证；
+作用（注释）：表明一个类 可以用来处理 一个具体的Authentication实现类。
+
+#8 AuthenticationEntryPoint（接口）
+特征：由 ExceptionTranslationFilter 所使用；
+作用（官网）：用于 从client处 来 索要身份凭据（也就是讲，重定向到登陆页面, 发送一个WWW-Authenticate响应等）
+作用（注释）：用于 开始（commence）一个认证的方案（scheme）
+
+#9 AbstractAuthenticationProcessingFilter(抽象类)
+特征：其中展示了认证的高层次流程 & 各个组件是怎么一起工作的（aka 工作原理）
+作用（官网）：用于认证的一个基础过滤器；
+作用（注释）：一个抽象的处理器，用于 基于浏览器的、基于HTTP的认证请求
+
+======
+分类：官网上给出的作用更偏向于用法层面
+
+高层级组件/模型/概念：
+    #3 Authentication（接口） - {表示一个 认证请求的代币 或者 认证后的主体}
+    #5 AuthenticationManager（接口） {用于定义 Security中的Filter 会怎样执行认证}
+    #4 GrantedAuthority（接口）作用（官网）：在一个 Authentication中 被授予给主体的权限（比如 角色、scopes等等）
+
+扩展组件/模型:
+    #1 SecurityContextHolder （具体类） {Security用来存储 当前谁正在被认证的详情}
+    #2 SecurityContext （接口）{包含 当前被认证的user的 Authentication}；
+
+    #6 ProviderManager （实现类）{AuthenticationManager 最常见的实现类；}
+    #7 AuthenticationProvider {执行具体的某一种形式的认证；}
+
+辅助组件：
+    #8 AuthenticationEntryPoint（接口） {用于 从client处 来 索要身份凭据（也就是讲，重定向到登陆页面, 发送一个WWW-Authenticate响应等）}
+
+入口类：
+    #9 AbstractAuthenticationProcessingFilter(抽象类) {作用（官网）：用于认证的一个基础过滤器；}
+
+
