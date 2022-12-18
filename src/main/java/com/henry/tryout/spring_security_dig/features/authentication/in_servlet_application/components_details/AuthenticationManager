@@ -1,0 +1,11 @@
+详情（官网）：
+
+AuthenticationManager
+    是：一个 API；
+    作用：用于定义 Security的 Filter是怎么样 执行认证；
+    特征：
+        #1 所返回的 Authentication 紧接着就会被 调用AuthenticationManager的controller （也就是 Security中的Filter实例）
+            给设置到 SecurityContextHolder 中。
+        #2 如果你的应用 没有集成 Security的Filter实例的话，则：
+            开发者也可以 直接使用 SecurityContextHolder（这种方式不要求使用 AuthenticationManager）
+        #3 它最为常见的实现类是 ProviderManager

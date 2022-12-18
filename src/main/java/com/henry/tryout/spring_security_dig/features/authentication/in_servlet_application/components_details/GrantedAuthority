@@ -1,0 +1,23 @@
+详情（官网）：
+GrantedAuthority
+    是：user 所被授予的高层级权限；
+    应用：常见的两个例子是 roles, scopes;
+
+    用法：
+        #1 开发者可以通过 Authentication.getAuthorities()方法 来 获取到 GrantedAuthority的实例；
+        这个方法 提供了 GrantedAuthority对象{授予给主体的一个权限} 的一个集合。
+            特征：
+                #1 这样的权限通常是 ”roles“，比如 ROLE_ADMINISTRATOR 或者 ROLE_HR_SUPERVISOR
+                这些角色 随后会被配置用来做 {#1 web授权，#2 方法授权以 及 #3 领域对象的授权}
+
+                #2 Security的其他部分 会解释（interpret）这些权限，并期望它们被提供（present）
+                #3 当使用 username/password这种认证方式的时候， GrantedAuthority实例 通常是 由 UserDetailsService加载的
+
+        #2 通常，GrantedAuthority对象 用来 表示应用层的权限 - 它们不具体到 指定的领域对象。
+            特征：
+                #1 开发者不应该 使用一个 GrantedAuthority 来 表示 对一个Employee对象#54 的权限
+                    如果存在很多个 authorities对象，那你会很快用光你的内存（或者, 至少你的应用会花很长时间来认证用户）
+
+                #2 Security 特意地(expressly) 针对这种通用需求 做了设计 -
+                    这种情况下 你应该使用 项目的领域对象安全能力(domain object security capabilities)。
+

@@ -1,0 +1,17 @@
+详情（官网）：
+作用：
+    #1 作为 AuthenticationManager 的输入 来 提供用户所输入用于认证的凭据； - 这种情况下， 它的isAuthenticated()方法会返回false
+    #2 表示已经被认证过的当前 user； - 开发者可以从 SecurityContext中获取到 当前的Authentication
+
+Authentication中包含的信息：
+    principal(主体)：
+        作用：用于识别 user；
+        特征：当使用 username/password的形式做认证时， principal通常是 UserDetails的实例；
+    credentials(凭据):
+        作用：通常是一个密码；
+        特征：很多情况下，它会在user通过认证后被清除 - 以此来确保 密码不会被泄漏
+    authorities(权限)：
+        是： user所被授予的高层级权限(GrantedAuthority实例);
+        特征：常见的两个例子是 roles, scopes;
+
+
