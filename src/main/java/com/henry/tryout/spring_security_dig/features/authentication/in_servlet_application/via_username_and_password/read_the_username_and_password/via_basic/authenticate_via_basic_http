@@ -1,0 +1,43 @@
+在 Servlet应用中，以 Http Basic的方式 来 执行对user的认证
+
+扩展自 SecurityFilterChain的图表
+--- 给未认证的user 发送一个 WWW-Authenticate header ---
+#1 user 向一个他没有被授权的资源 发送一个未被认证的请求；
+#2 Security的 FilterSecurityInterceptor（拦截器） 通过抛出一个 AccessDeniedException 来 表示 未认证的请求被拒绝了；
+#3 由于 user还没有被认证， 因此： ExceptionTransactionFilter 会 开始认证；
+    🐖 这里， AuthenticationEntryPoint 是一个 BasicAuthenticationEntryPoint的实例；
+    🐖 这里， RequestCache 是一个 NullRequestCache - 它不会存储请求，因为 user能够重新发送 他最初发送的请求。
+
+
+--- user接收到了 WWW-Authenticate header，然后使用 username + password 来重试 ---
+#1 BasicAuthentication 会从 HttpServletRequest中，创建出一个token对象（Authentication实例）；
+#2 把#1中的token对象传递给 AuthenticationManager；
+    🐖 具体会使用 AuthenticationManager的实现类 取决于 user信息的存储方式；
+#3 如果认证失败，则： {123}
+#4 如果认证成功，则：{123}
+
+===
+失败时的{123}
+#1 清除 SecurityContextHolder；
+#2 调用 RememberMeServices.loginFail()方法 - 如果没有配置 remember me, 则：什么都不会做
+#3 调用 AuthenticationEntryPoint 来 触发 再次发送 WWW-Authenticate。
+
+===
+成功时的{123}
+#1 把 Authentication 设置到 SecurityContextHolder中去；
+#2 调用 RememberMeServices.loginSuccess()方法
+#3 BasicAuthenticationFilter会调用 FilterChain.doFilter(request, response) 来 继续剩余的应用逻辑。
+
+===
+用法（开发者）：
+Security默认开启了 对 HTTP Basic认证方式的支持。
+但如果开发者提供了任何 基于servlet的配置，则：开发者就必须要显式配置 HTTP Basic；
+
+#1 最简单的配置代码
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) {
+	http
+		// ...
+		.httpBasic(withDefaults());
+	return http.build();
+}
