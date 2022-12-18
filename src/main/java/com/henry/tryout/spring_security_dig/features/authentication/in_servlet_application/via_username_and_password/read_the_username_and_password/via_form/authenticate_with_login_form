@@ -1,0 +1,72 @@
+在 Servlet中，以HTML登录表单的方式 执行 对user的认证：
+
+扩展自 SecurityFilterChain的图表
+--- user被重定向到登录表单 ---
+#1 user 向一个他没有被授权的资源 发送一个未被认证的请求；
+#2 Security的 FilterSecurityInterceptor（拦截器） 通过抛出一个 AccessDeniedException 来 表示 未认证的请求被拒绝了；
+#3 由于 user还没有被认证， 因此： ExceptionTransactionFilter 会 开始认证 并 使用 AuthenticationEntryPoint 发送一个 到登录页的重定向；
+    🐖 多数情况下， AuthenticationEntryPoint 是一个 LoginUrlAuthenticationEntryPoint的实例；
+#4 浏览器按照重定向的指示，来请求登录页；
+#5 应用程序的某个部分 会渲染登录页。
+
+--- user通过登录表单提供了自己的username 与 密码 ---
+#1 UsernamePasswordAuthenticationFilter（继承自 AAPF 参考：workflow_of_AbstractAuthenticationProcessingFilter）
+    根据 HttpRequest 来 创建出 token对象（Authentication实例）；
+#2 把 #1中的token对象 传入到 AuthenticationManager中；
+    🐖 具体会使用 AuthenticationManager的实现类 取决于 user信息的存储方式；
+#3 如果认证失败，则：{123}
+#4 如果认证成功，则：{12345}
+
+======
+用法（开发者）：
+#1 一旦提供了任何 基于servlet的配置，则：开发者就必需显式提供 基于表单的登录；
+最简配置代码：
+public SecurityFilterChain filterChain(HttpSecurity http) {
+	http
+		.formLogin(withDefaults());
+	// ...
+}
+
+#2 配置一个自定义的登陆页面；
+2-1 配置 自定义的登录表单
+public SecurityFilterChain filterChain(HttpSecurity http) {
+	http
+		.formLogin(form -> form
+			.loginPage("/login")
+			.permitAll()
+		);
+	// ...
+}
+
+2-2 编写页面模板（Thymeleaf）
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>Please Log In</title>
+	</head>
+	<body>
+		<h1>Please Log In</h1>
+		<div th:if="${param.error}">
+			Invalid username and password.</div>
+		<div th:if="${param.logout}">
+			You have been logged out.</div>
+		<form th:action="@{/login}" method="post">
+			<div>
+			<input type="text" name="username" placeholder="Username"/>
+			</div>
+			<div>
+			<input type="password" name="password" placeholder="Password"/>
+			</div>
+			<input type="submit" value="Log in" />
+		</form>
+	</body>
+</html>
+
+2-3 配置 请求 /login -> 登录表单模板的映射【使用 SpringMVC时】：
+@Controller
+class LoginController {
+	@GetMapping("/login")
+	String login() {
+		return "login";
+	}
+}
