@@ -1,4 +1,4 @@
-在 Servlet中，以HTML登录表单的方式 执行 对user的认证：
+在 Servlet应用中，以HTML登录表单的方式 执行 对user的认证：
 
 扩展自 SecurityFilterChain的图表
 --- user被重定向到登录表单 ---
