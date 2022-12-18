@@ -1,0 +1,30 @@
+基础认证组件 AbstractAuthenticationProcessingFilter 的工作流程：
+
+是：Filter链条中的一个base Filter;
+作用：认证 user的凭据；
+特征：
+    #1 Security 会 先使用 AuthenticationEntryPoint 来 向user索要凭据；
+
+流程：
+#1 从 user提交的 HttpServletRequest请求中， 创建出一个 Authentication对象；
+    注：Authentication实例具体是什么类型， 取决于 AAPF的子类是什么 -
+        如果是 UsernamePasswordAuthenticationFilter的话，就会创建出一个 UsernamePasswordAuthenticationToken的Authentication实例
+#2 把 #1中的 Authentication对象 传给 AuthenticationManager 进行认证；
+#3 如果认证失败，则：{123}
+#4 如果认证成功，则：{12345}
+
+===
+失败时：
+#1 清除 SecurityContextHolder；
+#2 调用 RememberMeServices.loginFail()方法 - 如果没有配置 remember me, 则：什么都不会做
+#3 调用 AuthenticationFailureHandler；
+
+===
+成功时：
+#1 通知 SessionAuthenticationStrategy 有新的登录行为；
+#2 在 SecurityContextHolder 设置 认证成功的 Authentication对象；
+    随后， SecurityContextPersistenceFilter 会把 其对应的 SecurityContext实例 保存到 HttpSession中。
+#3 调用 RememberMeServices.loginSuccess()方法
+#4 ApplicationEventPublisher 会发布 InteractiveAuthenticationSuccessEvent；
+#5 调用 AuthenticationSuccessHandler；
+
