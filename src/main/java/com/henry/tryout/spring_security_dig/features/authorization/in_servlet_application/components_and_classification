@@ -1,0 +1,44 @@
+Security所提供的高级授权能力 是它如此(compelling)流行的重要原因之一
+
+不管你选择了什么样的认证方式（不管是 使用 Security所提供的认证机制&provider，还是 与一个容器集成， 或者 其他的非Spring Security的认证授权）
+你都可以 简单并且一致地 在你的应用中使用 授权服务。
+
+这一部分，我们会探索 不同的 AbstractSecurityInterceptor 实现（在第一部分介绍过）
+然后学习 怎样通过使用 domain access control lists 来 微调 授权动作
+
+===
+Security 用于认证的组件
+
+--- 权力/权限 ---
+
+所有的 Authentication 实现类 都会存储 一个 GrantedAuthority 列表；
+它们用于表示 授予到主体上的权限。
+这些 GrantedAuthority 对象 会被 AuthenticationManager 插入到 Authentication 对象中。
+并且 随后 被 AccessDecisionManager实例 读取， 用来 做出一个授权决定。
+
+GrantedAuthority（接口）中的方法:
+String getAuthority();
+
+AccessDecisionManager 使用这个方法发 来 获取到 GrantedAuthority 精准的字符串表示。
+通过返回一个 字符串表示，大多数AccessDecisionManager的实现类 能够轻松地 读取GrantedAuthority
+
+如果一个 GrantedAuthority 不能够使用 字符串来 精确地表示，则：
+这个GrantedAuthority就有点子复杂，getAuthority()方法应该返回 null
+
+复杂的 GrantedAuthority 例子是，存储： #1 一堆的操作； #2 适用于不同用户账号的权限门槛 的实现。
+表示这样的复杂 GrantedAuthority 成一个 字符串会相当困难
+
+所以，getAuthority() 方法应该返回 null.
+这表示说，对于任何的 AccessDecisionManager，都需要 支持具体的 GrantedAuthority实现 才能 理解它的内容。
+
+Security中包含有一个具体的 GrantedAuthority实现： SimpleGrantedAuthority
+这个实现 允许任何 具体于user的字符串 转换成为 GrantedAuthority。
+所有 安全架构下（包）的 AuthenticationProvider实例  都是 用 SimpleGrantedAuthority 来 填充 Authentication对象的。
+
+--- 调用前的处理 ---
+
+--- 采用 AccessDecisionManager and AccessDecisionVoters【过时做法】---
+
+--- 有等级的角色 ---
+
+--- 遗留的授权组件 ---
