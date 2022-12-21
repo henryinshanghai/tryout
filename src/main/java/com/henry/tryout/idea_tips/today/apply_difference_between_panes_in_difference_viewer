@@ -1,0 +1,8 @@
+Apply the differences between panes in the Differences viewer using the chevron buttons:    
+To append the contents of the current pane to the other pane, keep Ctrl pressed. The buttons will change to    .
+
+To revert changes, keep Shift pressed. The chevrons turn into  .
+
+使用 chevron按钮 来 在 异同比较视图中的不同panes中 来 应用 不同点；
+想要 把当前 pane的内容 添加到 另一个pane时，保持 Ctrl被按下。按钮会变成 ???
+想要回退变更，按下 Shift键，按钮会变成 ???
