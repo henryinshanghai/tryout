@@ -1,0 +1,73 @@
+--- 调用前的处理 ---
+Security提供了 拦截器 来 控制对安全对象(比如说， 方法调用 或者 web请求)的访问
+预调用的决定（也就是决定是否允许调用继续）通常是由 AccessDecisionManager 做出的
+
+-- AuthorizationManager 组件 --
+AuthorizationManager 用于取代 AccessDecisionManager 与 AccessDecisionVoter
+
+新组件：对于那些已经使用了 AccessDecisionManager 或者 AccessDecisionVoter的应用程序，Security鼓励开发者 将之换成 AuthorizationManager
+
+作用：负责 对访问控制 做出最终的决定；
+特征：AuthorizationManagers 由 AuthorizationFilter 组件 调用；
+
+-- 方法详情 👇 --
+AuthorizationManager 接口包含有两个方法：
+AuthorizationDecision check(Supplier<Authentication> authentication, Object secureObject);
+
+default AuthorizationDecision verify(Supplier<Authentication> authentication, Object secureObject)
+        throws AccessDeniedException {
+    // ...
+}
+
+check()方法
+作用：传入了它所需要的所有相关信息 来 做一个权限决策。
+    尤其是，传入一个 secure对象 使得 那些包含在真正的secure对象调用 中的参数 被检查(inspected)
+    实例：
+        例如，假设 现在的secure对象 是 MethodInvocation.
+        开发者可以：
+            #1 很容易地从其中查询出 任何的Customer参数，然后
+            #2 再在 AuthorizationManager 中实现某种 安全逻辑 来 确保 主体被允许在customer上进行操作。
+特征：
+    #1 当访问被授予时，具体的实现类需要 返回一个 positive的 AuthorizationDecision；
+    #2 当访问被拒绝时，返回 negative AuthorizationDecision
+    #3 当弃权(abstain)时，返回 null AuthorizationDecision
+
+verify()方法 调用 check(), 随后 当出现 negative AuthorizationDecision时，抛出 AccessDeniedException
+
+
+-- 基于委派的 AuthorizationManager 的实现类 --
+尽管 开发者 可以实现他们自己的 AuthorizationManager 来 控制 授权的方方面面。
+Security仍旧装备了(ship with) 一个 委派AuthorizationManager， 它用来与单独的 AuthorizationManagers 合作。
+
+作用：RequestMatcher_DelegatingAuthorizationManager 会 将请求匹配到 最合适它的 委派AuthorizationManager
+
+对于方法的保护，开发者可以使用 AuthorizationManager_BeforeMethodInterceptor 与 AuthorizationManager_AfterMethodInterceptor
+
+相关的类：图略
+
+通过这种方式，AuthorizationManager实现类的 组合/群组(composition) 可以用来 在授权决策上投票(poll)
+
+-- Security 所提供的其他 AuthorizationManager --
+AuthorityAuthorizationManager
+作用：查找当前的Authentication；
+特征：
+    #1 Security 所提供的 最常见的 AuthorizationManager实现类；
+    #2 由 指定的权限集合 所配置；
+    #3 如果 Authentication 中包含有 任何所配置的权限，则：它会返回 positive AuthorizationDecision.
+        否则的话，会返回 negative AuthorizationDecision.
+
+
+AuthenticatedAuthorizationManager
+作用：它可以用来 区分 匿名的、完全授权的 以及 remember-me的 这些不同认证类型的认证用户。
+
+web网站特性：
+许多站点 在 remember-me认证的情况下，会允许用户 进行有限制的访问。
+但如果用户要进一步访问的话，就会要求用户通过登录 来 确认自己的身份。
+
+-- 自定义的授权管理器 --
+
+显然，开发者也可以实现一个 自定义的授权管理器，并且 在其中添加 任何的 访问控制逻辑。
+比如授权逻辑 - 访问资源A 需要{1 || 2 || 3}的权限，访问时，检查 用户是否包含有其中之一的权限。
+
+这个授权逻辑，可能是专属于你的应用程序的，或者实现一些 安全管理的逻辑。
+例如，开发者可以 创建一个实现类 - 它能够 查询 Open Policy Agent 或者 自定义的授权数据库
