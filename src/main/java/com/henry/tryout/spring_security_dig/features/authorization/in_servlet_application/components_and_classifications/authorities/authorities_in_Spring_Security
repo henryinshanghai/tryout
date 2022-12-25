@@ -1,0 +1,24 @@
+--- 权力/权限 ---
+
+所有的 Authentication 实现类中 都会存储 一个 GrantedAuthority 列表(用于表示 授予到主体上的权限)；
+这些 GrantedAuthority 对象 会:
+    #1 被 AuthenticationManager 插入到 Authentication 对象中。
+    #2 并且 随后 被 AccessDecisionManager实例 读取， 用来 做出一个授权决定。
+
+GrantedAuthority（接口）中的方法:
+String getAuthority();
+
+作用：AccessDecisionManager 使用这个方法 来 获取到 "GrantedAuthority 精准的字符串表示"。
+特征：
+    #1 通过返回一个 字符串表示，大多数AccessDecisionManager的实现类 能够轻松地 读取GrantedAuthority.
+    #2 如果一个 GrantedAuthority 不能够使用 字符串来 精确地表示，则：
+        认为这个GrantedAuthority就有点子复杂，getAuthority()方法应该返回 null
+        实例：
+            比如 某个 GrantedAuthority需要存储： #1 一堆的操作； #2 适用于不同用户账号的权限门槛 的实现。
+            把这样的复杂 GrantedAuthority 表示成一个 字符串 会相当困难
+            这时候getAuthority() 方法应该返回 null.
+            - 这表示说，对于任何的 AccessDecisionManager，都需要 支持具体的 GrantedAuthority实现 才能 理解它的内容。
+
+    #3 Security中包含有一个具体的 GrantedAuthority实现： SimpleGrantedAuthority
+        作用：这个实现 允许任何 具体于user的字符串 转换成为 GrantedAuthority。
+        应用：所有 安全架构下（包）的 AuthenticationProvider实例  都是 用 SimpleGrantedAuthority 来 填充 Authentication对象的。
