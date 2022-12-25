@@ -1,0 +1,40 @@
+--- 遗留的授权组件 ---
+Security 中包含有一些遗留的组件。
+由于它们还没有被移除，因此 文档中仍旧包含有它们。
+对它们的替换组件如上所示。
+
+-- AccessDecisionManager 组件 --
+
+由 AbstractSecurityInterceptor 调用，用于 做出权限控制的最终决定。
+AccessDecisionManager接口中 包含如下3个方法：
+
+    void decide(Authentication authentication, Object secureObject,
+        Collection<ConfigAttribute> attrs) throws AccessDeniedException;
+
+    boolean supports(ConfigAttribute attribute);
+
+    boolean supports(Class clazz);
+
+decide()方法 会被传入它所需要的相关信息 来 做出一个授权决定。
+尤其是，传入 secure对象 会允许 真正的secure对象 invocation中所包含的参数 被检查。
+
+例如，假设这里的 secure object是一个 方法调用。
+你可以 从中查询出 任何关于Customer的参数，然后 在 AccessDecisionManager中 实现 某种安全逻辑
+- 以此来确保主体被允许在此customer上执行操作。
+如果访问被拒绝的话，则：预期实现类会抛出一个 AccessDeniedException
+
+supports(ConfigAttribute)方法 被 AbstractSecurityInterceptor 在启动时间调用，
+来 决定 当前AccessDecisionManager 能否处理 传入的 ConfigAttribute
+
+supports(Class)方法 被 安全拦截器的实现类 调用，
+来 确保 所配置的 AccessDecisionManager 支持 由安全拦截器所提供的 secure object的类型。
+
+
+-- 基于投票的 AccessDecisionManager实现类 --
+尽管开发者可以自己实现 自定义的AccessDecisionManager 来 控制授权的方方面面。
+Security仍旧包含了 几个 基于投票的 AccessDecisionManager实现类。
+Voting Decision Manager（超链接） 描述了具体的相关类.
+
+接下来的图片 展示了 AccessDecisionManager接口：
+
+（太长不看）
