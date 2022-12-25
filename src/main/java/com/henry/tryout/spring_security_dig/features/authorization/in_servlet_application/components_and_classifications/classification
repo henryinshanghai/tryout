@@ -1,0 +1,44 @@
+#1 GrantedAuthority {用于表示 授予到主体上的权限}
+
+#2 SimpleGrantedAuthority - {允许任何 具体于user的字符串 转换成为 GrantedAuthority}
+
+#3 AuthorizationManager {负责 对访问控制 做出最终的决定 / 决定一个 Authentication 是否能够访问到某个具体的对象}
+
+#4 AuthorizationFilter {一个授权过滤器，用来 约束对URL的访问（通过 AuthorizationManager）}
+
+#5 RequestMatcherDelegatingAuthorizationManager {根据 RequestMatcher的评估结果 来 将请求匹配到 最合适它的 委派AuthorizationManager}
+
+#6 AuthorityAuthorizationManager {查找当前的Authentication}
+
+#7 AuthenticatedAuthorizationManager {用来 区分 匿名的、完全授权的 以及 remember-me的 这些不同认证类型的认证用户}
+
+#8 AccessDecisionManager {做出关于最终访问控制(权限)的决定 - 已经过时 请使用 AuthorizationManager}
+
+#9 AccessDecisionVoter {表明一个类 负责在 进行一个授权决定时进行投票 - 投票的协调工作是由 AccessDecisionManager 执行的}
+
+#10 RoleHierarchy {表示角色等级的一个简单接口}
+
+#11 RoleHierarchyVoter {使用 RoleHierarchy的定义 来 在投票之前，决定分配给当前user的角色}
+已废弃 使用 AuthorityAuthorizationManager.setRoleHierarchy
+
+===
+分类：
+
+#1 核心：
+    GrantedAuthority {用于表示 授予到主体上的权限}
+    AuthorizationManager {负责 对访问控制 做出最终的决定 / 决定一个 Authentication 是否能够访问到某个具体的对象}
+    AuthorizationFilter {一个授权过滤器，用来 约束对URL的访问（通过 AuthorizationManager）}
+
+#2 扩展：
+    SimpleGrantedAuthority - {允许任何 具体于user的字符串 转换成为 GrantedAuthority}
+
+    RequestMatcherDelegatingAuthorizationManager {根据 RequestMatcher的评估结果 来 将请求匹配到 最合适它的 委派AuthorizationManager}
+    AuthorityAuthorizationManager {查找当前的Authentication}
+    AuthenticatedAuthorizationManager {用来 区分 匿名的、完全授权的 以及 remember-me的 这些不同认证类型的认证用户}
+
+#3 历史遗留组件：
+    AccessDecisionManager {做出关于最终访问控制(权限)的决定 - 已经过时 请使用 AuthorizationManager}
+    AccessDecisionVoter {表明一个类 负责在 进行一个授权决定时进行投票 - 投票的协调工作是由 AccessDecisionManager 执行的}
+    RoleHierarchy {表示角色等级的一个简单接口}
+    RoleHierarchyVoter {使用 RoleHierarchy的定义 来 在投票之前，决定分配给当前user的角色}
+    已废弃 使用 AuthorityAuthorizationManager.setRoleHierarchy
