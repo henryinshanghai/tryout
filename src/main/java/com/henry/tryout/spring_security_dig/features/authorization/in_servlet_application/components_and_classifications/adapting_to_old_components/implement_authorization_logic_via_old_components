@@ -1,0 +1,56 @@
+--- 采用 AccessDecisionManager and AccessDecisionVoters【过时做法】---
+在 AuthorizationManager 之前， Security 发布了 AccessDecisionManager 以及 AccessDecisionVoter
+
+在有些场景中（比如从一个旧的应用迁移到新的应用），
+引入 AuthorizationManager 来 调用 AccessDecisionManager/AccessDecisionVoter 有可能是可取的（desirable）
+
+想要调用一个已经存在的 AccessDecisionManager，可以使用如下方法：
+@Component
+public class AccessDecisionManagerAuthorizationManagerAdapter implements AuthorizationManager {
+    private final AccessDecisionManager accessDecisionManager; // 已存在的 accessDecisionManager
+    private final SecurityMetadataSource securityMetadataSource;
+
+    @Override
+    public AuthorizationDecision check(Supplier<Authentication> authentication, Object object) {
+        try {
+            Collection<ConfigAttribute> attributes = this.securityMetadataSource.getAttributes(object);
+            // 使用 已存在的accessDecisionManager 来 实现 AuthorizationManager的check()方法
+            this.accessDecisionManager.decide(authentication.get(), object, attributes);
+            return new AuthorizationDecision(true);
+        } catch (AccessDeniedException ex) {
+            return new AuthorizationDecision(false);
+        }
+    }
+
+    @Override
+    public void verify(Supplier<Authentication> authentication, Object object) {
+        Collection<ConfigAttribute> attributes = this.securityMetadataSource.getAttributes(object);
+        // 使用 已存在的accessDecisionManager 来 实现 AuthorizationManager的 decide()方法
+        this.accessDecisionManager.decide(authentication.get(), object, attributes);
+    }
+}
+
+recap: 适配器本质上做了两件事 - {#1 任务转发； #2 接口对齐}
+
+然后，把它编织到(wire)到你的 SecurityFilterChain中。
+或者仅仅用来 用如下方式 来 调用 AccessDecisionVoter。
+@Component
+public class AccessDecisionVoterAuthorizationManagerAdapter implements AuthorizationManager {
+    private final AccessDecisionVoter accessDecisionVoter;
+    private final SecurityMetadataSource securityMetadataSource;
+
+    @Override
+    public AuthorizationDecision check(Supplier<Authentication> authentication, Object object) {
+        Collection<ConfigAttribute> attributes = this.securityMetadataSource.getAttributes(object);
+        int decision = this.accessDecisionVoter.vote(authentication.get(), object, attributes);
+        switch (decision) {
+        case ACCESS_GRANTED:
+            return new AuthorizationDecision(true);
+        case ACCESS_DENIED:
+            return new AuthorizationDecision(false);
+        }
+        return null;
+    }
+}
+
+然后再把它编织到你的 SecurityFilterChain中。
