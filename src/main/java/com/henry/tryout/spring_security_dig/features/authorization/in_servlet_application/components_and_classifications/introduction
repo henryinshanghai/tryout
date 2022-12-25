@@ -1,0 +1,8 @@
+Security所提供的高级授权能力 是它如此(compelling)流行的重要原因之一
+
+不管你选择了什么样的认证方式（#1 不管是 使用 Security所提供的认证机制&provider，#2 还是 与一个容器集成，
+#3 或者 其他的非Spring Security的认证授权）
+你都可以 简单并且一致地 在你的应用中使用 授权服务。
+
+这一部分，我们会探索 不同的 AbstractSecurityInterceptor 实现（在第一部分介绍过）
+然后学习 怎样通过使用 domain access control lists 来 微调 授权动作.
