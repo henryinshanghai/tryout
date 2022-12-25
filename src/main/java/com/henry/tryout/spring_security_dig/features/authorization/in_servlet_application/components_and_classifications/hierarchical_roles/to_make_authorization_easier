@@ -1,0 +1,38 @@
+--- 有等级的角色 ---
+
+常见的需求是，应用程序中的某一个角色A，应该自动地包含其他角色{BCD}
+比如说，应用程序中存在有 两种类型的角色 {admin, user}，
+作为开发者，你可能想要 admin角色的用户 能够执行 user角色的用户 所能做到的一切。
+
+为了实现这种特性，你可以：
+#1 要么 确保所有 admin角色的用户，都被指派了 user的角色；
+#2 或者 你可以修改 每一个 需要user角色的访问约束，让它们也包含 admin角色。
+
+当你的应用中存在很多不同的角色时，这么做可能会相当复杂。
+
+使用 "有等级的role" 使得开发者能够 配置某个role(权限) 应该包含其他的role.
+Security的 RoleVoter, RoleHierarchyVoter 的一个扩展版本（通过 RoleHierarchy 来 配置）
+- 从其中包含有 一个user所被指派的 所有可到达的权限。
+
+典型的配置长这样 👇
+@Bean
+AccessDecisionVoter hierarchyVoter() {
+    RoleHierarchy hierarchy = new RoleHierarchyImpl();
+    hierarchy.setHierarchy("ROLE_ADMIN > ROLE_STAFF\n" +
+            "ROLE_STAFF > ROLE_USER\n" +
+            "ROLE_USER > ROLE_GUEST");
+    return new RoleHierarchyVoter(hierarchy);
+}
+
+这里再角色体系中存在有四个角色： ROLE_ADMIN ⇒ ROLE_STAFF ⇒ ROLE_USER ⇒ ROLE_GUEST
+一个被认证为 ROLE_ADMIN的用户，
+当 针对一个 采用了上述RoleHierarchyVoter的AuthorizationManager 来计算其安全约束时， 它的表现得会像 它拥有所有四个角色一样。
+
+> 标识 可以被认为成 “包含”；
+
+“有等级的角色”这个特性 为开发者提供了一个简单的手段 来
+#1 简化应用中的 访问控制的配置代码；
+#2 减少 需要指派给user的权限/角色数量；
+
+对于更加复杂的需求，你可能想要 在 应用所需要的具体访问权力 与 分配给用户的角色 之间 来 定义一个 逻辑上的映射关系。
+并 在加载用户的时候，在两者之间进行转换。
