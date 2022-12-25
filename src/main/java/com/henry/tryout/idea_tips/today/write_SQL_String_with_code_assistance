@@ -1,0 +1,5 @@
+You can inject SQL into a string literal (Alt+Enter | Inject language or reference | <SQL dialect>)
+and then use coding assistance for SQL.
+
+你可以把 SQL 添加到 字符串字面量中(Alt+Enter | Inject language or reference | <SQL dialect>)
+然后为SQL使用 代码辅助。
