@@ -1,0 +1,11 @@
+开发者可以很轻易地 通过 自动订正它们被使用的所有地方 来 重命名你的类、方法名、变量名；
+把光标定位到 你想要重命名的symbol上，然后按下 Shift + F6 快捷键组合。
+输入新的名字，然后按下 Enter。
+
+
+You can easily rename your classes, methods,
+and variables with automatic correction of all places where they are used.
+
+Position the caret at the symbol you want to rename,
+and press Shift+F6 (Refactor | Rename). Type the new name and press Enter.
+
