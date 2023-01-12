@@ -1,0 +1,6 @@
+You should format a patch in Git any time
+you want to send one or more commits to another person by email.
+This could simply be to get their input or review on your proposed code changes.
+
+It could also be to share a commit with a project maintainer
+for them to integrate into their own branch.
