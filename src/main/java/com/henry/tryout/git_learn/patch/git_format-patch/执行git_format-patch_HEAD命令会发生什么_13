@@ -1,0 +1,12 @@
+You might notice that
+if you try to run git format-patch on its own
+or git format-patch HEAD, you won't get any output and no patch will be created.
+
+That's because
+there are no differences
+between the specified patch (HEAD)
+and the current commit (which is also HEAD).
+
+So you are confused by this, just realize you need to
+specify a commit earlier on in the branch history.
+
