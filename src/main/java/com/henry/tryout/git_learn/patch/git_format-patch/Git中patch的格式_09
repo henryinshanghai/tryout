@@ -1,0 +1,24 @@
+Earlier in this post, we showed a sample format for a email patch in Git.
+Let's expand on that.
+You can think of each patch file as being a message
+- and it really is since it's meant to be emailed as a message to another dev.
+
+
+This message
+starts with an email header that includes the "From:", "Date:", and "Subject:" fields.
+Note that the subject field
+contains the first line from the commit message of the corresponding commit.
+
+Next comes
+the remaining lines (if there are any) of the commit message.
+
+Our example format above does not include more lines in the commit log message.
+
+After this, there is a 3-hyphen delimiter,
+separating the commit message from the patch content itself.
+
+Lastly, we have the actual diffstat output,
+which represents the meat(核心内容) of the patch.
+
+This is actually the output of the “diff -p --stat” command.
+Feel free to check out our git diff article for more details.
