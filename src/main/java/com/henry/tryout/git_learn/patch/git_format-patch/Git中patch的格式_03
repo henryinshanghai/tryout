@@ -1,0 +1,44 @@
+Git patch format
+
+Git creates each patch
+in a new file with a .patch extension in your current directory.
+
+Git patches have the following format: demo.patch
+
+This may look a bit complicated, but really it is just a way for Git
+to understand the following information directly from the patch itself:
+
+#1 The commit id that the patch was derived from:
+From 21e6b1b3700970fdc2382e01d6da723e51b007b5 ...
+
+#2 The commit author and email (sender of the email patch):
+From: Jacob Stopak <jacob@initialcommit.io>
+
+#3 The date the patch was generated:
+Date: Thu, 20 Oct 2022 22:12:00 -0700
+
+#4 The subject line of the email, which is set to [PATCH] followed by the commit message:
+Subject: [PATCH] Update filename
+
+#5 A diffstat representing the changes between the commit and its parent:
+---
+ filename | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/filename b/filename
+index 01a9f34..b9022e5 100644
+--- a/nf
++++ b/nf
+@@ -1,3 +1,4 @@
+ asdf
++asdf
+--
+
+#6 The Git version that was used to generate the patch:
+2.38.0
+
+When this patch is sent to another developer over email,
+they can use Git on their end
+to reconstruct the commit
+and apply to a branch in their repository.
+
