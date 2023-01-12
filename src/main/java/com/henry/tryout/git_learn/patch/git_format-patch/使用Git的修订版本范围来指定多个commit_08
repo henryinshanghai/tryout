@@ -1,0 +1,10 @@
+Another way to generate multiple patches is to
+specify a range of revisions, as follows:
+
+$ git format-patch <commit1>..<commit2>
+
+This will create patches for all commits
+between <commit1> and <commit2>.
+
+See Git's documentation on "specifying revision ranges"
+for more examples of valid revision range syntax.
