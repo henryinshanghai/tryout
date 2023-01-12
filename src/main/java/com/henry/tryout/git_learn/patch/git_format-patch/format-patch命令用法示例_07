@@ -1,0 +1,23 @@
+You can format Git patches for one commit at a time, or for multiple commits at once.
+
+We'll start with formatting patches for multiple commits
+since that is a more common scenario.
+
+--- Git-Format Patch(格式化打包) Multiple Commits ---
+By default, when you run the standard “git format-patch <commit>”,
+a patch will be created for each commit
+starting at the one you specified with <commit>,
+up until the current HEAD is reached.
+
+Therefore, you'll usually end up with more than 1 patch being created,
+unless you start generating at HEAD^ (aka HEAD~1),
+which is the commit previous to the currently checked out HEAD.
+
+Note that this means no patches will be created
+for commits previous to the <commit> that you specified.
+
+Alternatively, you can use the --root flag to instead
+create patches for all commits
+from beginning or your commit history,
+up until the specified <commit>.
+
