@@ -1,0 +1,23 @@
+<!-- #1 定义一个 Servlet对象（Spring MVC中的 DispatcherServlet）- 用于分发请求 -->
+<servlet>
+    <servlet-name>sample</servlet-name>
+    <servlet-class>org.springframwork.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+</servlet>
+
+<!-- #2 为Servlet定义了 它所对应的URL映射 - 为Servlet指定 它所需要处理的HTTP请求 -->
+<servlet-mapping>
+    <servlet-name>sample</servlet-name>
+    <url-pattern>/*</url-pattern>
+</servlet-mapping>
+
+<!-- #3 指定Bean定义文件的位置 - Spring IoC容器会从中读取Bean的定义 -->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+</context-param>
+
+<!-- #4 把 ContextLoaderListener 定义成为一个监听器 - 它是Spring MVC的启动类，负责 完成IoC容器在Web环境中的启动工作 -->
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>

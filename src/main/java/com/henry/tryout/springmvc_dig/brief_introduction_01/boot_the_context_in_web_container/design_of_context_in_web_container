@@ -1,0 +1,29 @@
+--- Web容器中的上下文 ---
+agenda：
+#1 Web容器中的上下文设置；
+#2 从 ContextLoaderListener中，了解 容器的启动过程；
+
+-- 在Web环境中，使用IoC容器 --
+Spring所提供的组件支持：WebApplicationContext；
+作用：实现 IoC容器 在Web环境中的启动；
+特征：
+    #1 是 上下文的一个扩展；
+    #2 专用于 Web应用；
+
+-- WebApplicationContext 的类层次结构 --
+略
+太多不看
+
+--- 从 XmlWebApplicationContext 实现类 来 入手了解 更大的类层次结构 ---
+结论：
+    #1 从接口设计的角度，类层次体系 最终通过 ApplicationContext接口 来 与 BeanFactory接口进行对接；
+    #2 从具体实现类的角度，很多基础功能的实现 都是封装在 AbstractRefreshableWebApplicationContext中的；
+
+验证 👇
+-- WebApplicationContext组件 --
+    #1 ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE - 用于引用根上下文（存储在 ServletContext中）
+    #2 getServletContext() - 得到当前Web容器中的 Servlet上下文环境。
+        🐖 这个方法相当于 提供了一个 Web容器级别的 “全局环境”。
+
+结论：在启动IoC的过程中， Spring会默认使用一个WebApplicationContext的实现（XML...） 来作为IoC容器；
+-- XmlWebApplicationContext组件 （TBD）--
