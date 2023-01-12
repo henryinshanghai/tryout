@@ -1,0 +1,10 @@
+What is git format-patch?
+
+git format-patch is a Git command
+that automatically generates patches between each commit and it's parent,
+for a given set of commits.
+
+These patches are formatted
+such that they can easily be shared over email,
+so that the recipient can apply those commits to their own repository.
+
