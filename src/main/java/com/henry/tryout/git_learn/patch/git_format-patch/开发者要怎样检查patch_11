@@ -1,0 +1,16 @@
+You can see your patch files in your current directory
+by running the ls command in Linux or MacOS.
+In Windows you can use the dir command.
+
+Alternatively, you can see your patches listed in your file explorer(文件管理器) in any operating system.
+
+Keep in mind that
+if you are generating a long patch series with many patches,
+you may want to put them in their own subdirectory（生成到一个子目录中） using the -o option:
+
+$ git format-patch -o <new-feature-subdirectory> <commit>
+The specified subdirectory will be created if it doesn't yet exist.
+
+This can be useful for
+grouping together（汇集） patches related to a specific feature,
+so you can make sure to only mail out those patches together and no others by accident（无意地）.
