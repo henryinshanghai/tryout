@@ -1,0 +1,7 @@
+What is a Git patch?
+
+A patch in Git is a textual representation of the changes in a commit(commit中的变更),
+formatted in a way
+that Git can：
+#1 reconstruct the commit；
+#2 and apply it on a branch in another repository.
