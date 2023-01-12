@@ -1,0 +1,24 @@
+
+
+
+Most development teams sync commits directly between their local and remote repositories
+using the git push and git pull commands.
+
+When using these commands, Git uses either the SSH or HTTPS protocol
+to perform data transfers between the two endpoints.
+
+However, some project maintainers
+- including major open source projects such as Linux and Git itself
+- prefer to work via email instead.
+
+Git has a set of subcommands that
+are specifically designed for distributed collaboration via email(通过email 进行分布式合作).
+
+For commits to be relayed（接力、传递） effectively over email,
+they need to be formatted as text entities in a standardized format.
+The git format-patch command assists with this process.
+
+In this article, we explain
+how to use the git format-patch command
+to prepare one or more commits
+to be transferred by email.
