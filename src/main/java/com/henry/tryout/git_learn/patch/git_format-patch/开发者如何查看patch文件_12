@@ -1,0 +1,8 @@
+查看内容：view
+
+Since Git patches are just
+text files with a .patch extension,
+you can view them with any text editor（文本编辑器）.
+
+This could be a command-line text editor like Vim or your favorite GUI editor.
+
