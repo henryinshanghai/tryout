@@ -1,0 +1,15 @@
+In this article, we described
+the purpose Git's format patch command
+and explained how it works.
+
+We learned how to format a Git patch
+and when to do so.
+We saw that a patch in Git is just
+a textual representation of a diff between a commit and its parent.
+
+These diffs are formatted
+in a standardized way
+that makes them convenient to send over email.
+
+If you've never tried Git email collaboration,
+why not give it a try and see if it suits your team's workflow?
