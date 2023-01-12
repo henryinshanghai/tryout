@@ -1,0 +1,14 @@
+By default, running git format-patch
+will generate a patch for each commit
+starting with the specified commit, and ending with the currently checked-out commit.
+
+One patch is generated per commit
+based on the diff between each commit and its parent.
+
+Note that patches are not generated for merge commits,
+so ideally you should
+rebase your feature into a single line of history
+to generate a clean set of patches.
+
+As mentioned, one .patch file is generated for each commit
+in your patch series.
