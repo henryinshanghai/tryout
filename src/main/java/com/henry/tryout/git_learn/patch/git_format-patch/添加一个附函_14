@@ -1,0 +1,37 @@
+In addition to creating your patches,
+you can generate a "Git cover letter"
+which you can email as an overarching(包罗一切的) summary of your patch series.
+
+The cover letter is also a .patch file
+created with filename 0000-cover-letter.patch by default.
+
+It contains the following information:
+
+#1 Custom description of the patch series
+#2 The git shortlog output
+#3 The full patch series diffstat
+#4 The Git version used to generate the cover letter
+
+Here is an example cover letter,
+for which you can fill in the fields with asterisks（星号）:
+
+$ git format-patch --cover-letter HEAD~2
+0000-cover-letter.patch
+0001-Revert-Revert-Add-qwer.patch
+0002-Revert-Add-qwer.patch
+
+$ cat 0000-cover-letter.patch
+From c1033c71d0a6f136dab2abeaea4eae9c200dae6d Mon Sep 17 00:00:00 2001
+From: Jacob Stopak <jacob@initialcommit.io>
+Date: Wed, 26 Oct 2022 09:30:39 -0700
+Subject: [PATCH 0/2] *** SUBJECT HERE ***
+
+*** BLURB HERE ***
+
+Jacob Stopak (2):
+  Revert "Revert "Add qwer""
+  Revert "Add qwer"
+
+
+--
+2.38.0
