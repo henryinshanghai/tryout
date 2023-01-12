@@ -1,0 +1,4 @@
+Now let's move on to formatting patches for a single commit.
+You can generate exactly one patch for the specified commit by using the -1 flag:
+
+$ git format-patch -1 <commit>
