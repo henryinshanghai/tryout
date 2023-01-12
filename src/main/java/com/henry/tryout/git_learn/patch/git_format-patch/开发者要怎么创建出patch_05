@@ -1,0 +1,20 @@
+How to create a Git patch?
+
+Creating a patch is a simple as
+running git format-patch <commit> in your local Git repo.
+
+You can specify the commit
+using it's commit id, any branch or tag name,
+or a variation of Git HEAD such as HEAD^ for the previous commit.
+
+After running the command, you'll see one or more .patch files
+generated in your current directory
+containing the patch data.
+
+The file names are prefixed with a 4-digit number
+indicating their order in the patch series,
+followed by a hyphen-separated string
+created using the commit message.
+
+For the format used above, this would be:
+0001-Update-nf-again.patch
