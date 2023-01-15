@@ -1,0 +1,13 @@
+Git's diff algorithm can be used to check(检查) the results of a merge commit:
+
+$ git diff <merge-commit> <parent-commit>
+In this example, the first commit argument
+must be the commit ID of the merge commit.
+Subsequent(随后的) commit arguments
+refer to the list of parent commits.
+
+The list of parent commits can be automatically generated using ^@ syntax:
+git diff master master^@
+
+This is equivalent to "git show master"[extend].
+
