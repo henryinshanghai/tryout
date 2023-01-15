@@ -1,0 +1,32 @@
+The git diff command outputs
+a text based representation
+known as the unified format.
+
+Here is an example of the git diff default usage and output:
+$ git diff
+结果参考： attachment/diff_output_demo.txt
+
+The output structure is easily explained,
+but can be tricky to fully grasp.
+Note that the following sections may refer to "left" and "right" versions.
+You can think of this as essentially being the previous and current version.
+
+The output may be broken down into the following sections: (3)
+#1 Comparison input (header)
+Displays the left and right files (prefixed with a and b) and the left and right commit hashes
+
+#2 Sections
+   Section header
+       #1 Set off by（用...分隔开） @@ symbol (@@ -1,3 +1,3 @@)
+       #2 The left and right files are denoted by - and + (@@ -1,3 +1,3 @@)
+       #3 Section start line number（行数） for both versions
+        are the first number（第一个数字） in each comma delimeted pair（由逗号分隔的对子） (@@ -1,3 +1,3 @@)
+       #4 Section length for both versions（长度） is the second number (@@ -1,3 +1,3 @@)
+
+   Changes
+       #1 Lines only in the left version（仅仅存在于左边的版本中的行） start with -
+       #2 lines only in the right version（仅仅存在于右边的版本中的行） start with +
+       #3 Lines in both versions start（在两边版本中都存在的行） with a space
+       #4 You can control the number of context lines
+        with git diff -UN, where N is the number of lines
+
