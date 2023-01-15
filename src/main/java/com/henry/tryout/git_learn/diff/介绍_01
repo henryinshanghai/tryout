@@ -1,0 +1,19 @@
+Introduction
+
+You may have heard that Git is a great way to store version history.
+But how useful is it when you want to
+compare two or more versions in a repository?
+
+In this article we will explore
+the ins and outs of the git diff command
+and how to use it.
+
+As you will see, this command is particularly flexible and useful
+at every stage in the git life cycle.
+Additionally, Git diff has many options for
+comparing data between commits and branches.
+
+Let's break it down.
+
+"A basic understanding of Git version control"(文章)
+is recommended to get the most out of this article.
