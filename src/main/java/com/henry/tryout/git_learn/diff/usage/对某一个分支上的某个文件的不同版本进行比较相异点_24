@@ -1,0 +1,7 @@
+One possible solution would be to
+use git log
+to figure out the hash of the relevant commit
+that changed the specified file
+in the specified time frame,
+and then use the regular git diff commands after that (6):
+$ git log --before="yyyy-MM-dd" --after="yyyy-MM-dd" --follow -- <PATH-TO-FILE>"
