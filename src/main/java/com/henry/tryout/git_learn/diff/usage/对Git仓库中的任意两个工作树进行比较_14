@@ -1,0 +1,9 @@
+It can be useful to
+diff any two trees(啥意思？) from your Git repo
+so you may see the differences in data.
+
+Trees can be inferred from a commit ID,
+a branch name, HEAD, or a tag.
+This also supports the HEAD~ and HEAD^ syntax.
+
+git diff <left tree> <right tree>
