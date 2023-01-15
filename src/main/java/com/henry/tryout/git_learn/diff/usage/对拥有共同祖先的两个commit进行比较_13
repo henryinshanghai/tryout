@@ -1,0 +1,35 @@
+In certain situations, it may be useful to
+compare two commits based on a common ancestor（基于共同祖先）,
+so that it is clear that certain changes
+were not introduced by one of the commits being compared（被比较的commit）.
+
+For example, consider the below command,
+which is synonymous(同义的) with the more common form
+covered in the "Git Diff Comparing Files Between Two Different Commits" section above:
+git diff <commit>..<commit>
+
+The diff from this command may be misleading（误导的）.
+Say you have a master and a feature branch,
+and the master branch has since gained a new commit（新增了一个commit）.
+If you added a line to a file on the latest master branch commit,
+then this diff command will make it seem
+as if the feature branch deleted the line（像是 feature branch删除了这一行）.
+
+This is caused by Git directly
+comparing the snapshots（文件快照/集合照） of the latest commits（最新的commit）
+from both the feature and master branch.
+
+Usually, what you want to see
+are only changes added to the feature branch.
+i.e. the work you will introduce（引入）
+if you merge this branch with master.
+You do that by comparing your feature branch（feature branch）
+with the first common ancestor（最近公共祖先commit） between the feature branch and master.
+
+You can do this using the ... operator as follows:
+git diff master...feature
+
+
+
+
+
