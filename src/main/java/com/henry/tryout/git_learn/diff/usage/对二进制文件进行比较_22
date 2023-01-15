@@ -1,0 +1,28 @@
+It is possible to
+diff(找出相异点) various（多种的） non-text files
+using Git Attributes.
+Essentially you configure a custom diff program（自定义的diff程序）
+that converts the binary to text first.
+Think of it like a plugin.
+Take Microsoft Word documents for example:
+
+Create the .gitattributes file and add the following data:
+*.docx diff=word
+
+Install and configure "docx2text"(一个插件):
+$ pip install docx2txt
+$ git config diff.word.textconv docx2txt
+
+Git diff will now show the text changes
+when comparing MicroSoft Word documents.
+However, formatting changes（格式上的变化） will not show up.
+
+Image files（图片文件） may be diffed in a similar way,
+by configuring Git to compare the EXIF metadata:
+
+*.png diff=exif
+$ git config diff.exif.textconv exiftool
+
+Similar things can be done for Excel files and other binary files.
+
+
