@@ -1,0 +1,9 @@
+There are many different ways
+you can Git diff for comparison（比较变化） purposes,
+such as：
+#1 comparing (known as diffing) local unstaged changes（尚未暂存的变更） to the previous commit（上一次commit）,
+#2 comparing staged changes（已经暂存的变更） to the previous commit（上一次commit）,
+#3 comparing any two files（任意的两个文件） on our machine, and more.
+
+Let's go through some of these examples now.
+
