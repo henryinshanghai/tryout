@@ -1,0 +1,3 @@
+To return to a clean git diff,
+#1 clean up the working directory using git reset;
+#2 and remove any untracked files.
