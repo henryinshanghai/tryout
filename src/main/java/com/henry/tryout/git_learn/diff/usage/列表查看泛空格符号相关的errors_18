@@ -1,0 +1,31 @@
+Git tracks whitespace data and will produce warnings.
+You can configure(进行配置) if you want these changes（与泛空格符号相关的改动） to show in your output.
+$ git diff --check # identify and list possible whitespace errors
+
+For Windows users, automatically convert（转换） line endings to CRLF on checkout,
+and convert back to LF on checkin:
+$ git config --global core.autocrlf true
+
+For Linux and Mac (OSX) users, automatically convert CRLF to LF on checkin.
+This is useful if one of your contributors is on Windows and forgot to set the last command:
+$ git config --global core.autocrlf input
+
+Here are some git config --global core.whitespace settings:
+
+- prepended(-前缀) indicates to disable the option
+Omit（省略） options to use their default value
+Options are comma delimited（逗号分隔）
+
+Enabled by default:
+#1 blank-at-eol: looks for spaces at the end of a line
+#2 blank-at-eof: notices blank lines at the end of a file
+#3 space-before-tab: looks for spaces before tabs at the beginning of a line
+
+Disabled by default:
+#1 indent-with-non-tab
+    looks for lines that begin with spaces instead of tabs (and is controlled by the tabwidth option)
+#2 tab-in-indent
+    watches for tabs in the indentation（缩进） portion of a line
+#3 cr-at-eol
+    tells Git that carriage（？） returns at the end of lines are OK
+
