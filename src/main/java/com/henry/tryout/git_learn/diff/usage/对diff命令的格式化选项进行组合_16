@@ -1,0 +1,7 @@
+By default, git diff command options
+will display the unified（统一的） diff format between two commits.
+
+The combined(组合的) diff format
+shows two or more user-specified files（开发者指定的多个文件） with one file（某一个文件）
+and shows how that file is different from each of the specified files.
+You can use the -c or --cc option to produce a combined diff.
