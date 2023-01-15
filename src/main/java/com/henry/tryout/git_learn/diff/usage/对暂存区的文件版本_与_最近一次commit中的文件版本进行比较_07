@@ -1,0 +1,8 @@
+$ git diff --staged
+
+You can add the --staged flag
+if you want to
+compare staged changes to the last commit,
+instead of unstaged changes.
+
+Note that git diff --staged flag is the same as using git diff --cached.
