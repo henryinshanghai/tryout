@@ -1,0 +1,8 @@
+In this article, we discussed the git diff command,
+how it works,
+how to use it to track(追踪) changes in data,
+and a variety of different scenarios to apply it.
+
+You can use git diff
+at any point in the git life cycle
+to track changes in files（文件）, working directories（工作目录）, committed changes（commit）, and more.
