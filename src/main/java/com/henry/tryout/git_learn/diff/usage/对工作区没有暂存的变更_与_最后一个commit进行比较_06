@@ -1,0 +1,14 @@
+$ git diff
+You can think of this as the git diff default form.
+Usually it is run with the simple command "git diff" and no options.
+This use case only shows
+local changes that you made in your repo since the last commit (Git HEAD),
+that have not been staged.
+After you have staged all of your changes, git diff will return no output.
+
+
+When a branch name, commit ID, other ref, or filename
+is not specified in the git diff command,
+Git will default to
+comparing your changes to the HEAD commit (currently checked out commit).
+
