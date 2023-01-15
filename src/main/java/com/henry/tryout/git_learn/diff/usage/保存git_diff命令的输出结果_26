@@ -1,0 +1,2 @@
+To actually save the changes shown by git diff,
+use git commit or git stash.
