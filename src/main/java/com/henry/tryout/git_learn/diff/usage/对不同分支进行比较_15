@@ -1,0 +1,7 @@
+Comparing files from two Git branches is easy:
+
+git diff branch1 branch2
+This will display the unified(统一标准的) diff
+between the commit ID's referenced by the two branch tips.
+
+
