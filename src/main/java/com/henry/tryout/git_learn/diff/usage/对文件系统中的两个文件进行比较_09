@@ -1,0 +1,10 @@
+$ git diff --no-index
+
+This form allows the comparison of data
+between files
+that aren't in the working directory
+or aren't tracked by Git at at all.
+
+The --no-index flag
+is optional (and implied)???
+when one or more of the files is outside of the working directory(工作目录).
