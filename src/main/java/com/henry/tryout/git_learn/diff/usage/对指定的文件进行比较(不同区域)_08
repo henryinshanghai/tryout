@@ -1,0 +1,11 @@
+By default, Git will include changes to all available files in the diff output.
+
+If you want to diff(找出相异点) only a few files at a time,
+then use the -- <paths> argument.
+
+All of the different flavors（风味） of git diff support filtering files like this:
+$ git diff -- myfile.txt
+
+You can pass multiple files at a time.
+The example above will only display changes (if any) present in the myfile.txt file.
+
