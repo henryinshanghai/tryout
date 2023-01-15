@@ -1,0 +1,8 @@
+$ git diff <commit>
+
+Compare unstaged changes in the working directory with a named commit.
+Can use HEAD or a branch name for commit
+instead of a commit hash if desired.
+Use HEAD to view changes since last commit.
+
+The diff output will contain a cumulative（累积的） list of all files and changes implemented.
