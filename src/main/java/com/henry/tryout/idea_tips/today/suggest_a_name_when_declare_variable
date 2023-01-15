@@ -1,0 +1,7 @@
+代码补全功能 能够在你声明一个变量的时候，建议一个变量的名字。
+例如说，键入 private FileOutputStream, 并按下 Ctrl + 空格按键。
+
+
+Code Completion can suggest a name for a variable when you declare it.
+
+For example, start typing private FileOutputStream and press Ctrl+空格.
