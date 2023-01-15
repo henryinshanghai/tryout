@@ -1,0 +1,21 @@
+When merging or rebasing in Git, you may have noticed references（引用名称） to "ours" and "theirs".
+When merging, "ours" refers to the currently checked out branch（当前分支）,
+and "theirs" refers to the branch you are merging from(所要合并的改动 所在的源头分支):
+$ git checkout merge-into-ours（当前分支）
+$ git merge from-theirs （所要合并的改动 所在的源头分支）
+
+When rebasing in Git, they are flipped（反转）.
+The "ours" keyword refers to an anonymous branch(匿名的分支)
+that holds the result of the rebase so far（包含当前的变基结果）,
+and "theirs" refers to the original branch being rebased(被变基的原始分支).
+
+变基：把他们的commits 添加到 我们的当前分支上；
+
+You can run these commands in the middle of a merge or rebase
+to help orient yourself with（使你了解） respect to the changes being made:
+$ git diff --ours
+$ git diff --theirs
+$ git diff --base
+
+
+
