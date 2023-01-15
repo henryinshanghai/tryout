@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm_04.object_instance_03;
+package com.henry.tryout.easy_coding.jvm_04.object_instantiation_03;
 
 // 验证：new对象时,JVM中到底发生了什么？
 // 手段：查看new 所对应的字节码指令
