@@ -1,0 +1,14 @@
+The git diff --submodule flag can be used to
+show what actually changed in a submodule,
+instead of merely indicating that something changed.
+$ git diff --submodule
+
+If you don't want to type --submodule every time you run git diff,
+you can set it as the default format
+by setting the diff.submodule config value to "log":
+$ git config diff.submodule log
+
+Another way to accomplish this is
+with the submodule foreach command:
+$ git submodule foreach 'git diff'
+
