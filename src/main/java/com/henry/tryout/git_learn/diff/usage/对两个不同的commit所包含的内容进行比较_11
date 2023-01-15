@@ -1,0 +1,13 @@
+$ git diff <commit1> <commit2>
+Compare changes between two arbitrary(任意的) commits.
+They don't have to belong to the same branch.
+
+$ git diff test
+As opposed to（不同于） comparing the tip of the current branch（当前分支）,
+you may compare a branch to the tip of a "test" branch（另一个分支） using “Git diff test”.
+
+$ git diff HEAD^ HEAD
+You can compare the last commit（最后一个commit）
+to the version before the last commit
+using git diff head.
+
