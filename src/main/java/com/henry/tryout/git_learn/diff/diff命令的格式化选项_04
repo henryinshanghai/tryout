@@ -1,0 +1,21 @@
+You can modify the text output to suit your needs.
+
+#1 Use --color-words
+    to highlight changes on a per-word basis using only colors: git diff --color-words
+#2 Use --no-prefix
+    to hide the source and destination prefix: git diff --no-prefix
+#3 Use --src-prefix
+    to specify a custom source prefix instead of "a/": git diff --src-prefix <prefix>
+#4 Use --dst-prefix
+    to specify a custom destination prefix instead of "b/": git diff --dst-prefix <prefix>
+#5 Use --word-diff
+    to show a word diff, using the <mode> to delimit changed words: git diff --word-diff
+#6 Use --ignore-space-change
+    to ignore changes in amount of whitespace.
+    This ignores whitespace at line end,
+    and considers all other sequences of one or more whitespace characters
+    to be equivalent: git diff -b, or --ignore-space-change
+#7 Use the GIT_DIFF_OPTS environment variable - this is a bit of a misnomer(用词不当).
+    The only valid values are -u\<n> or --unified=\<n>,
+    which controls the number of context lines shown in a git diff command.
+
