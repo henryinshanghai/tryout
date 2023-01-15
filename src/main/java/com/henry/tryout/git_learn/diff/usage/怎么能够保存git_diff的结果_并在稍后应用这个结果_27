@@ -1,0 +1,33 @@
+The diff output（diff命令的输出结果） is also called a patch(补丁).
+It can be used as input to other Git commands
+to actually apply those changes.
+This is called applying a patch（应用一个补丁） in Git.
+
+To save a patch from git diff, run one of the following:
+$ git diff > myfile.patch
+$ git format-patch -k --stdout HEAD^1..HEAD > myfile.mbox
+
+If the patch was generated
+using git diff or the Unix diff command,
+then it can be applied
+using git apply myfile.patch.
+This will make changes to the working directory.
+The command is transactional（具有事务性的）, meaning it will either apply completely or abort.
+
+If the patch was generated
+using the "git format-patch" command,
+then your job is easier
+because the patch already contains the commit author and commit message information.
+Apply the patch
+using the "git am" command.
+This command is able to automatically create commits
+instead of just changing the working directory(更新工作目录).
+
+As an aside（题外话）,
+the "git am" command is built
+to read an mbox（电子邮件格式） file,
+which is a simple, plain-text format
+for storing one or more email messages in one text file.
+This is one possible way to collaborate with git over（使用） email,
+rather than using git on a server.
+
