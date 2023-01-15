@@ -1,0 +1,9 @@
+diff --git a/demo.rb b/demo.rb
+index 16755f9..a474330 100644
+--- a/demo.rb
++++ b/demo.rb
+@@ -1,3 +1,3 @@
+ puts 'hello'
+-puts 'cruel'
++puts 'nice'
+ puts 'world!'
