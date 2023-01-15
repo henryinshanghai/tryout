@@ -1,0 +1,8 @@
+"My favorite way to log commits is git log -p" -Harvard CS
+
+$ git log -p
+Using the -p flag with the Git log command
+is a great way
+to include the patch (diff output) inline(行内的)
+in the git log output.
+
