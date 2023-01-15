@@ -1,0 +1,48 @@
+Git diff is a command-line tool
+used to determine（确定） the differences between two things,
+per line or even per character（每行，甚至于每个字符）.
+
+It provides more detail than git status or git log,
+and is much more flexible in its applications.
+
+"After every merge by default
+git will do a diffstat of everything that changed
+as a result of that merge
+because I do care about that.
+When I merge from somebody, I trust them
+but on the other hand, hey they might have stopped using their medication,
+so I trust them but, let's just be honest here,
+they might have been ok yesterday, but today might not be a good day,
+so I do diffstat（对相异点进行统计） and git does that by default" - Linus Torvalds
+
+
+What do we mean by two "things"?
+Almost anything that you want:
+working directory, staging tree, HEAD, committed changes, branches, or tags
+
+Furthermore, Git diff is especially useful for fixing bugs.
+In the case of a bug in your application,
+you may run the "git bisect" command
+to help identify which commit introduced the bug.
+The git diff can then be used for
+listing the changes
+between the commit or branch that introduced the bug
+and the previously working commit.
+
+You can also use git diff
+to compare one or more files that aren't tracked by Git,
+or are even outside of the working directory.
+This is one of the few Git commands
+that doesn't even need to be used within an existing Git repo.
+Most Git commands such as git add and git commit
+will throw an error like fatal:
+    not a git repository (or any of the parent directories): .git if used outside of a Git repository.
+However, you can use git diff anywhere on your filesystem.
+
+In addition, the git diff output
+can be formatted to show file names only,
+instead of the full textual（文本性质的） diff.
+
+
+
+
