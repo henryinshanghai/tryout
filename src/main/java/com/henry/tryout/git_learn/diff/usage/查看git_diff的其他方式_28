@@ -1,0 +1,27 @@
+The text output（文本输出） of a diff can be hard to read.
+Many graphical or external diff viewing programs exist
+to make life easier
+by displaying diffs side by side（并排）.
+
+Common programs used are
+Sublime Text, Eclipse, VSCode, p4merge, Intellij, and Beyond Compare.
+
+Simply run "git difftool" instead of git diff
+to open an external viewing program(外部的用于查看的程序) of your choice.
+
+Run "git difftool --tool-help" to see what is available on your system.
+
+To configure an external diff tool run "git config --global diff.external <executable name>".
+You may need to wrap the executable in a shell script
+to get the arguments to be passed correctly.
+Git passes 7 arguments to the external git tool,
+but you usually only need arguments number 2 and 5 (old file and new file).
+
+
+Environment variables:
+GIT_EXTERNAL_DIFF is used
+as an override(覆写)
+for the "diff.external" configuration value.
+If it’s set, Git will invoke this program when git diff is invoked.
+
+
