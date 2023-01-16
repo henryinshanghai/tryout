@@ -1,0 +1,7 @@
+你可以使用 在不完整的语句上 使用抽取变量的重构手段。
+按下 Ctrl + Alt + V，然后选中一个表达式
+
+
+You can use the Extract Variable
+refactoring on incomplete statements.
+Press Ctrl+Alt+V and choose an expression.
