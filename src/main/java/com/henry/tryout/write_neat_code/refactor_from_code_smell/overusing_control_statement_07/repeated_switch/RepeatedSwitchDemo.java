@@ -1,4 +1,4 @@
-package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement.repeated_switch;
+package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement_07.repeated_switch;
 
 // 示例：getBookPrice() 与 getEpubPrice()方法中，出现了类似的代码
 // 重复的switch，通常都是因为缺少了一个模型; - 这里是用户级别的

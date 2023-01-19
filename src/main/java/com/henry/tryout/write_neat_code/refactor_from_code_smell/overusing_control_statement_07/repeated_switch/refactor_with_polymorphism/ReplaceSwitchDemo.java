@@ -1,8 +1,8 @@
-package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement.repeated_switch.refactor_with_polymorphism;
+package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement_07.repeated_switch.refactor_with_polymorphism;
 
 
-import com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement.repeated_switch.Book;
-import com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement.repeated_switch.Epub;
+import com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement_07.repeated_switch.Book;
+import com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement_07.repeated_switch.Epub;
 
 // #3 使用多态特性 来 替代先前重复的switch语句
 public class ReplaceSwitchDemo {
