@@ -1,0 +1,10 @@
+如果想要关闭所有的编辑器tab，右键其中的一个tab，然后选择 Close All Tabs；
+如果想要关闭除了当前编辑器tab之外的其他tabs，按下 Alt（对于 Windows与Linux系统） 或者 xxx（macOS系统）
+并且在活跃tab上，点击 Close按钮。
+
+
+To close all editor tabs, right-click a tab and select Close All Tabs.
+To close all tabs except the active one,
+press Alt (on Windows and Linux) / ⌥ (on macOS)
+and click the Close button on the active tab.
+
