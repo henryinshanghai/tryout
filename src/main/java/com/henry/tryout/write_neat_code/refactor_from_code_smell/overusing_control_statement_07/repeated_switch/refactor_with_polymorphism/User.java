@@ -2,9 +2,24 @@ package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_cont
 
 // #3 重新定义User - 让它持有UserLevel变量，以此来调用 业务方法
 public class User {
-    private UserLevel level;
+    private String name;
+    private UserLevel userLevel;
 
     public UserLevel getUserLevel() {
-        return level;
+        return userLevel;
     }
+
+    public void setUserLevel(UserLevel userLevel) {
+        this.userLevel = userLevel;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 }
