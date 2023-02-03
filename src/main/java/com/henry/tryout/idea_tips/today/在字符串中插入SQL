@@ -1,0 +1,7 @@
+开发者可以 在一个字符串中插入SQL（手段：Alt + Enter | Inject language aor reference | <SQL dialect>）
+然后为SQL使用代码补全功能
+
+
+You can inject SQL into a string literal (Alt+Enter | Inject language or reference | <SQL dialect>)
+and then use coding assistance for SQL.
+
