@@ -1,0 +1,7 @@
+拿下 Alt + F7 来 快速定位 光标所在的符号 所有的出现处（occurrence）,
+不管这个符号是类、方法、字段、参数或者其他语句的一部分
+
+
+Press Alt+F7 to quickly locate all occurrences of code referencing the symbol at the caret,
+no matter if the symbol is a part of a class, method, field, parameter, or another statement.
+
