@@ -18,5 +18,5 @@ Spring IoC是一个独立的模块，它不是在Web容器中直接发挥作用�
 
 -- #1 Web容器（Tomcat）的启动 --
 🐖 在Tomcat中， web.xml文件是 应用的部署描述文件；
-- 与 Spring相关的部署描述（片段）
+- 与 Spring相关的部署描述（片段）: web_clip_about_SpringMVC.xml
 
