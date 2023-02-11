@@ -1,0 +1,67 @@
+IoC容器的启动过程，也就是创建上下文的过程。
+    🐖 这里的“上下文” 指的就是 IoC容器在Web应用环境中的具体叫法；
+
+上下文的分类：
+#1 根上下文：
+    特征：由 ContextLoaderListener 来 启动；
+#2 与Web MVC相关的上下文：
+    作用：用于保存 控制器（DispatcherServlet）所需要的MVC对象；
+应用：子上下文 与 根上下文一起，组成了 “层次化的上下文体系”。
+
+结论：在 Web容器中，启动 Spring应用程序时，首先会- #1 先建立根上下文； #2 然后再建立起整个上下文体系。
+🐖 由 ContextLoader 来 建立起这个上下文体系。
+
+--- 在Web容器中，启动Spring应用程序的过程 ---
+组件依赖路径：
+    ContextLoaderListener -> ContextLoader -> XmlWebApplicationContext
+
+-- 组件说明 --
+#1 ContextLoaderListener：
+作用：用于在 Web容器中 建立IoC容器；
+特征：
+    #1 由Spring提供；
+    #2 实现了 ServletContextListener 接口；
+        注释：这个接口的实现类 会收到 它们所属于的web应用的 servlet context发生变化的通知。
+        为了能够接收到通知事件，其实现类必须要倍数在 web应用的部署描述符(deployment descriptor)中
+
+        作用：提供了 与Servlet生命周期各个阶段相结合/绑定的回调 - {contextInitialized(), contextDestroyed()}
+        特征：在”Servlet API规范“中被定义；
+        应用：
+            对于Web容器来说，它会在 contextInitialized()方法中 来 创建 WebApplicationContext;
+    #3 它会把 “载入IoC容器”的工作 委托给 ContextLoader（当前类的基类） 来完成
+
+
+#2 ContextLoader：
+作用（书本）：基本创建两个IoC容器 - {#1 在Web容器中建立起的 parent IoC容器； #2 生成对应的 WebApplicationContext并将之初始化}；
+
+作用#1：执行 ”根应用上下文“真正的初始化工作。
+特征：由 ContextLoaderListener来调用。
+执行原理：
+    它会 在 web.xml的 ”context-param层“ 来查找 "contextClass"参数， 从而 确定 上下文类的类型。
+    如果没有查找到的话，则：会默认回退到 XmlWebApplicationContext类型。
+    使用默认的 ContextLoader实现时，任何指定的上下文类 都需要实现 ConfigurableWebApplicationContext接口。
+
+作用#2：处理 contextConfiguration 上下文参数，并把它的值 传递给 上下文实例，
+    并将之解析为 可能的多个文件路径 - 这些路径可以被任意数量的逗号与空格分隔。
+    比如 WEB-INF/applicationContext1.xml, WEB-INF/applicationContext2.xml
+特征：
+    #1 也支持Ant类型的路径模式。比如 "WEB-INF/*Context.xml,WEB-INF/spring*.xml" or "WEB-INF/**/*Context.xml"
+    #2 如果没有显式地指定，上下文的实现 应该会使用一个默认的位置（with XmlWebApplicationContext: "/WEB-INF/applicationContext.xml"）
+    #3 🐖 如果存在有多个配置位置，则：
+        后来的bean定义 会覆盖 先前加载的文件中的bean定义 - 至少在使用 Spring默认的 ApplicationContext实现类时会是这样。
+    应用：可以使用这一特性 来 故意地通过额外的XML文件 来 故意地覆盖某些bean定义。
+
+作用#3：除了（above and beyond）加载 根上下文，这个类还能够可选地 加载/获取 共享的 parent上下文。
+以及 把共享的parent上下文 连接到 根应用上下文上。
+查看 loadParentContext(ServletContext) 来 了解更多信息。
+
+特征：从 Spring 3.1开始， ContextLoader 开始支持 通过 ContextLoader(WebApplicationContext)构造器 来 注入 根web应用上下文，
+应用：这样开发者就能够在 Servlet 3.0+的环境中，通过编写代码的方式 进行配置。
+验证：查看 org.springframework.web.WebApplicationInitializer 来 学习用例。
+
+
+-- 组件之间的关系 --
+ContextLoaderListener 的父类是 ContextLoader - 模板方法，提供创建IoC容器的基本步骤；
+ContextLoaderListener 实现了 ServletContextListener - 获得了管理Servlet生命周期的能力；
+
+
