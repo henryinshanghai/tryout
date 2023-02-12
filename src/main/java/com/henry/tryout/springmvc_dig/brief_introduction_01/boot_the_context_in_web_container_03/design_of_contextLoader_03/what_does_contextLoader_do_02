@@ -1,0 +1,38 @@
+// 初始化根Web应用上下文 - 具体的初始化工作，由ContextLoader来完成。
+public void contextInitialized(ServletContextEvent event) {
+    initWebApplicationContext(event.getServletContext());
+}
+
+-- initWebApplicationContext(ServletContext servletContext) in ContextLoader --
+注释：
+    作用：为给定的servlet上下文 来 初始化Spring的web应用上下文，
+    原理：
+        #1 使用 在构建时所提供的应用上下文 或者；
+        #2 根据 contextClass 以及 contextConfiguration 这样的上下文参数来创建一个新的应用上下文。
+书本：
+    作用：在Web容器中创建出/初始化 “根上下文”；
+    特征：
+        #1 这个根上下文（web应用的上下文）在Web容器中，只会存在一个实例。
+            如果在初始化过程中，Spring发现已经存在根上下文了，则：会抛出一个异常 来 提示创建失败；
+        #2 根上下文创建成功后，会被存储到 Web容器的ServletContext中，以便在需要的时候使用；
+        #3 #2中根上下文的存储路径，已经由Spring预先定义好了
+            代码中使用 WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE 来定义此路径；
+
+代码中的关键步骤：
+// 存储上下文到一个本地实例变量中，来 确保当ServletContext被关闭时，可以获取到上下文对象
+if (this.context == null) {
+    this.context = createWebApplicationContext(servletContext);
+}
+
+// 这里的context还没有被刷新 -> 提供一堆的服务：比如 设置父上下文、设置应用的上下文id等等
+if (cwac.getParent() == null) {
+    // 这里的上下文实例在没有显式的parent的情况下被注入 ->
+    // 如果存在parent上下文的话，这里会 决定 web应用的根上下文的parent。
+    ApplicationContext parent = loadParentContext(servletContext);
+    cwac.setParent(parent);
+}
+
+
+// 把创建出的根上下文 存储到 预设的路径中：WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
+// 作用：之后应用中的其他地方，就能够使用这个属性 来 获取到根上下文
+servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
