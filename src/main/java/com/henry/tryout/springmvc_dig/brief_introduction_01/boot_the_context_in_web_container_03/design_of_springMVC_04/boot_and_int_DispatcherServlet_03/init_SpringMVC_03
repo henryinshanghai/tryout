@@ -1,0 +1,64 @@
+fact: DispatcherServlet持有一个 使用自己的Servlet名称来命名的IoC容器（WebApplicationContext对象）；
+作用：IoC容器建立后，DispatcherServlet就有了自己的Bean定义空间；
+应用：开发者因此可以 使用各个独立的XML文件 来 配置MVC中的各个Bean。
+特征：
+    #1 在IoC容器初始化结束后，与Web容器相关的加载过程（web根上下文） 其实就已经结束了；
+    #2 因为#1，所以 Spring MVC的具体实现 与 普通的Spring应用程序的实现 基本相同；
+
+--- Spring MVC中，学习初始化DispatcherServlet的过程 ---
+手段：以 HandlerMapping初始化调用 作为过程的触发点；
+
+-- Spring MVC模块的初始化 & 方法的调用关系 --
+#1 触发“servlet的IoC容器”的初始化流程
+org.springframework.web.servlet.HttpServletBean.init()
+    HttpServletBean -> HttpServlet
+
+#2 完成对 “servlet的IoC容器”的初始化
+org.springframework.web.servlet.FrameworkServlet.initServletBean()
+    FrameworkServlet -> HttpServletBean
+
+    synchronized (this.onRefreshMonitor) {
+        onRefresh(wac);
+    }
+
+#3 启动整个 Spring MVC框架的初始化
+- org.springframework.web.servlet.DispatcherServlet.initStrategies() -
+作用：在这个方法中，启动整个 Spring MVC框架的初始化;
+手段：初始化 当前Servlet所使用的 策略对象
+特征：可能会在子类中被重写 来 初始化更进一步的策略对象
+关键代码：
+    protected void initStrategies(ApplicationContext context) {
+        ...
+        initHandlerMappings(context);
+        ...
+        initViewResolvers(context);
+        initFlashMapManager(context);
+    }
+
+综上，从调用关系中可以看出 “对Spring MVC的初始化” 是在 DispatcherServlet的initStrategies()中完成的。
+其中包含 对各种MVC框架的实现元素 -
+{#1 用于支持国际化的LocalResolver, #2 用于支持 Request映射的HandlerMappings, #3 用于支持视图生成的ViewResolver} 的初始化
+
+-- 认识初始化过程中的具体步骤 --
+手段：以 HandlerMappings为例， 它所对应的初始化步骤是 initHandlerMappings();
+Mapping关系的作用：为 HTTP请求 找到对应的Controller控制器（用于 执行设计好的数据处理工作）；
+HandlerMapping的作用：用于 定义&配置 MVC中的控制器；
+特征：在Web的应用环境中，这些个控制器 与具体的HTTP请求是相对应的。
+
+-- HandlerMappings的初始化过程 代码实现 --
+// 导入所有的HandlerMapping Bean
+// 特征：这些Bean可以是在 当前的DispatcherServlet的IoC容器中，也可以是在其 双亲上下文中
+// detectAllHandlerMappings的默认值为true - 默认情况下，会从所有的IoC容器中获取bean
+if (this.detectAllHandlerMappings) {...}
+
+// 根据名称，从当前的IoC容器中 使用getBean 来 获取 handlerMapping
+else {...}
+
+// 如果没有找到其他的mapping，则：通过 为Servlet注册一个默认的HandlerMapping 来 确保至少有一个 HandlerMapping；
+// 特征：这些默认的值 可以设置在 DispatcherServlet.properties中
+if (this.handlerMappings == null) {...}
+
+经过以上的读取过程， handlerMappings变量 就已经获取了 在BeanDefinition中所配置好的映射关系。
+其他的初始化过程 与 handlerMappings的比较类似 - 都是直接从IoC容器中读取配置。
+
+结论：MVC的初始化过程 是建立在 IoC容器已经完成初始化 的基础之上的。
