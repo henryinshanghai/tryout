@@ -1,0 +1,15 @@
+// 作用(注释)：使用给定的 XmlBeanDefinitionReader 来 加载 bean定义
+// 特征（注释）：
+    #1 职责范围 - 当前方法应该单纯地 加载 和/或 注册Bean定义;
+        因为bean工厂的生命周期 是 由refreshBeanFactory()方法来管理的
+    #2 会把 “解析路径模式以得到Resource实例” 的工作，委派给 ResourcePatternResolver；
+
+protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws IOException {
+    String[] configLocations = getConfigLocations();
+    if (configLocations != null) {
+        // 书本👇：如果当前上下文中，存在有多个 “用于定义BeanDefinition的文件”，则：reader会将它们逐个载入；
+        for (String configLocation : configLocations) {
+            reader.loadBeanDefinitions(configLocation);
+        }
+    }
+}
