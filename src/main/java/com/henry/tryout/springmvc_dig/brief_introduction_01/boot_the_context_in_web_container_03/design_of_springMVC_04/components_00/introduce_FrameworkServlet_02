@@ -1,0 +1,37 @@
+-- class FrameworkServlet extends HttpServletBean implements ApplicationContextAware --
+是：Spring的web框架中的一个 基础的servlet。
+高层次作用：它使用 基于Java Bean的整体方案 来 提供了与Spring应用上下文的集成。
+
+这个类提供了如下的功能：
+#1 为每一个servlet 都管理一个 WebApplicationContext；
+#2 这个servlet的配置 由 servlet命名空间中的bean 来决定；
+#3 在处理请求时发布事件（不管请求有没能被成功处理）；
+#4 子类必须要实现 doService()方法 来 处理请求；
+#5 bean的属性 能够自动映射到它上面 - 因为它是从 HttpServletBean扩展的。
+#6 子类可以覆盖 initFrameworkServlet()方法 来 提供自定义的初始化逻辑。
+#7 会在 servlet的 init-param层级上检测 contextClass参数；
+    如果没有发现这个参数的配置，则：会使用默认的上下文类 （XmlWebApplicationContext）
+#8 在使用默认的FrameworkServlet时，自定义的上下文类 需要实现 ConfigurableWebApplicationContext这个SPI。
+#9 接受一个可选的 contextInitializerClasses 的servlet初始化参数 来 指定一个或者多个 ApplicationContextInitializer类。
+    特征：所管理的web应用上下文 会被这些个 初始化器侦测到；
+    应用：这一特性 用于支持 额外的编程式配置。
+    应用实例：比如讲，为上下文环境添加属性源 或者 为上下文环境激活profile。
+
+    参考 ContextLoader类，它：
+        #1 支持一个叫做 contextInitializerClasses的上下文参数 - 这个参数 为 根web应用上下文 提供了与#8中参数相同的语义。
+        #2 传入一个 名称叫做 contextConfigLocation的servlet 初始化参数 给 上下文实例，来 将之解析为 可能的多个文件路径 。
+            这些个文件路径可以被任意多个逗号与空格分隔，比如 "test-servlet.xml, myServlet.xml"
+
+#10 如果没有显式指定的话，则：上下文的实现 会需要 从servlet的命名空间中 构建一个默认的路径。
+#11 对于存在多个配置路径的情况，后面的bean定义会
+    覆盖 前面所加载的文件中的bean定义（至少在使用 Spring默认的ApplicationContext实现的时候是这样）。
+    应用：开发者可以使用这一特性 来 使用一个额外的XML文件 故意地覆盖特定的bean定义。
+
+-- 知识卡 --
+默认的命名空间是 'servlet-name'-servlet，比如，对于 test这个servlet名称，它对应的命名空间是 test-servlet。
+这样的规则导致了：XmlWebApplicationContext上下文的Bean配置文件的默认位置为 /WEB-INF/test-servlet.xml。
+特征：命名空间 也可以使用 namespace这个servlet 初始化参数 来 显式配置。
+
+从 Spring 3.1开始，它可以使用一个web应用上下文来注入，而不是一定要在内部创建。
+对于 Servlet 3.0+的环境，这会非常有用 - 应用：支持 servlet实例的编程方式地注册。
+查看 FrameworkServlet(WebApplicationContext) 文档 了解细节。
