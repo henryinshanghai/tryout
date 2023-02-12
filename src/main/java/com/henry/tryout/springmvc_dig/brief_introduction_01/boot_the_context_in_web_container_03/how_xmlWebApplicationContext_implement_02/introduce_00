@@ -3,6 +3,14 @@
 // 继承自 Abstract_Refreshable_WebApplicationContext
 public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationContext {}
 
+继承层次：
+AbstractRefreshable_WebApplicationContext
+AbstractRefreshable_ConfigApplicationContext
+Abstract_Refreshable_ApplicationContext
+Abstract_ApplicationContext
+Default_ResourceLoader
+ResourceLoader
+
 是 WebApplicationContext的一个实现类。
 作用：用于 为web应用 来 提供配置；
 特征：
