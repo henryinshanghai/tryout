@@ -1,0 +1,67 @@
+--- class DispatcherServlet extends FrameworkServlet ---
+是：HTTP请求的处理器/控制器 的核心调度器。
+应用：比如，为 web UI控制器 或者 基于HTTP的远程服务导出器。
+作用：会在处理web请求时，发送给 注册了的处理器 - 从而提供方便的映射与异常处理设施。
+
+这个servlet非常灵活: 如果安装适当的适配器类，则：它可以用于任何工作流程。
+
+它提供了如下的功能（这些功能把它区分于其他的 请求驱动的web MVC框架）：
+#1 它是一种 基于JavaBean的配置机制；
+#2 它可以使用任何的 HandlerMapping的实现类 - 预先构建 或者 作为应用的一部分 - 来 控制从请求到handler对象的路由。
+    特征：
+        #1 默认的 handlerMapping实现是 BeanNameUrlHandlerMapping 与 RequestMappingHandlerMapping。
+        #2 在 servlet的应用上下文中， HandlerMapping对象可以被定义为bean：
+            手段：实现 HandlerMapping接口，重写默认的HandlerMapping（如果存在的话）
+        #3 HandlerMapping可以被赋予任何名称 （因为它们是通过类型进行测试的）
+#3 它可以使用任何的 HandlerAdapter；
+    特征：
+        #1 这允许使用任何的handler接口。
+        #2 对于 HttpRequestHandler 与 Controller（mvc包中的接口），它们默认的Adapter分别是
+            HttpRequestHandlerAdapter 与 SimpleControllerHandlerAdapter
+        #3 它也会注册一个默认的 RequestMappingHandlerAdapter。
+        #4 在 应用上下文中，HandlerAdapter对象可以被添加为一个bean，以此来覆盖默认的 HandlerAdapters。
+        #5 像 HandlerMappings一样， HandlerAdapters 也可以被赋予任何bean的名称（因为它们是通过类型被测试的）
+
+#4 可以使用一个 HandlerExceptionResolver 来 指定它的异常处理策略，例如把特定的异常 映射到错误页。
+    特征：
+        #1 默认的实现有： {ExceptionHandlerExceptionResolver，ResponseStatusExceptionResolver，DefaultHandlerExceptionResolver}
+        #2 这些个 HandlerExceptionResolvers 可以通过 应用上下文 来覆盖。
+        #3 HandlerExceptionResolver 也可以被赋予任何的bean名称（因为它们也是通过类型测试的）
+
+#5 使用 ViewResolver实现类 可以 指定它的视图解析策略，把符号化的视图名称 解析成为视图对象。
+    特征：
+        #1 默认实现是 InternalResourceViewResolver。
+        #2 在应用上下文中， ViewResolver对象可以被添加为一个bean，以此来 覆盖默认的 ViewResolver。
+        #3 ViewResolvers 可以被赋予任何bean的名称（它们是通过类别来测试的）
+        #4 如果 View对象 或者 view名称不是user提供的，则：
+            所配置的 RequestToViewNameTranslator 会把当前请求翻译成一个视图名称。
+                其对应的bean名称为 viewNameTranslator，默认的实现为 DefaultRequestToViewNameTranslator
+
+#6 它处理 multipart类别请求的策略 取决于 MultipartResolver的实现类（包括有 Apache Commons FileUpload的实现 以及 Servlet 3的实现）；
+    特征：
+        常见的选择是 CommonsMultipartResolver。
+        这个 MultipartResolver bean的名字是 multipartResolver；默认为 none。
+
+#7 它的 locale解决策略 取决于 LocaleResolver。
+    开箱即用的实现，使用 HTTP accept header, cookie 或者 session来工作。
+    这个 LocaleResolver bean的名字是 localeResolver。
+    默认的实现是 AcceptHeaderLocaleResolver。
+
+#8 它的theme解决策略 取决于 ThemeResolver。
+    包括有 固定主题、cookie与session存储 的实现。
+    ThemeResolver bean的名字是 themeResolver，
+    默认的实现是 FixedThemeResolver。
+
+note：
+只有 dispatcher中 存在有对应的HandleMapping（对于类级别的注解） 与/或 HandlerAdapter时，@RequestMapping注解 才会被处理。
+这是默认的情形。
+但是，如果你想要自定义的 HandlerMappings 或者 handlerAdapters，则：
+    如果你想要使用 @RequestMapping的话，就需要确保：同时也定义了 其所对应的  RequestMappingHandlerMapping 与/或 RequestMappingHandlerAdapter
+
+特征：
+    #1 一个web应用中可以定义 任意数量的 DispatcherServlet。
+    #2 每一个servlet 都会 在它自己的命名空间中做操作 - 使用mappings, handlers等 来 加载它自己的上下文。
+    #3 只有 根应用上下文 是使用 ContextLoaderListener加载的（如果存在，则：会被所有的 servlet共享）
+    #4 从 Spring 3.1开始，可以使用 web应用上下文 来 注入DispatcherServlet，不再需要在内部自己创建了。
+        这一特性可以用来 支持 servlet实例的编程式地注册。
+        更多详情，查看 DispatcherServlet(WebApplicationContext)
