@@ -1,0 +1,17 @@
+// 注释：根上下文的默认路径是 /WEB-INF/applicationContext.xml，
+而 “命名空间为test-servlet” 的上下文，其默认路径会是 /WEB-INF/test-servlet.xml
+比如 servlet名称为test的DispatcherServlet实例，它默认的配置路径就是 /WEB-INF/test-servlet.xml
+
+// 书本：这里是取得resource位置的地方，它使用了 默认的配置位置。
+默认配置的位置是 /WEB-INF/applicationContext.xml
+
+@Override
+protected String[] getDefaultConfigLocations() {
+    if (getNamespace() != null) {
+        return new String[] {DEFAULT_CONFIG_LOCATION_PREFIX + getNamespace() + DEFAULT_CONFIG_LOCATION_SUFFIX};
+    }
+    else {
+        return new String[] {DEFAULT_CONFIG_LOCATION};
+    }
+}
+
