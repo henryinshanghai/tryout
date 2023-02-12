@@ -1,0 +1,22 @@
+- class HttpServletBean extends HttpServlet implements EnvironmentCapable, EnvironmentAware -
+是：对 HttpServlet的一个简单扩展。
+作用：它会把 它的配置参数（web.xml文件中 servlet标签里的 init-param条目） 视为bean的属性。
+特征：
+    #1 对于任何类型的Servlet，都是一个很有用的超类。
+        原理：所配置参数的类型转换(conversion)是自动进行的 - 原理：使用转换后的值 来 调用对应的setter方法。
+
+    #2 子类也可以指定所需要的属性。
+        特征：没能匹配bean属性setter的参数 会被忽略掉。
+
+    #3 这个servlet 会把请求的处理 交给子类，它继承了 HttpServlet的默认行为（doGet, doPost, 等）
+    #4 这个通用的 servlet 不依赖于 Spring所提供的 ApplicationContext 上下文类。
+
+fact:
+    简单的servlet 通常不会加载 它们自己的上下文，
+    而是会 从 Spring根上下文中（能够通过 filter ServletContext来获取） 来 获取service bean。
+    参考 WebApplicationContextUtils
+
+扩展：
+    FrameworkServlet 是一个更加具体的servlet基类，
+    特征：它会加载它自己的 应用上下文/IoC容器；
+    应用：FrameworkServlet 会作为 Spring的功能丰富（full-fledged）的 DispatcherServlet的直接基类。
