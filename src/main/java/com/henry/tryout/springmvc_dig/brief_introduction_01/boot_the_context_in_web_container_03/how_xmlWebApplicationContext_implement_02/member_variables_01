@@ -1,0 +1,13 @@
+-- 成员变量 --
+// (注释) 根上下文的默认配置地址
+// （书本）设置BeanDefinition的地方 - 以下配置表明：默认情况下（开发者不明确指定时），BeanDefinition会在 /WEB-INF/applicationContext.xml中定义
+// 作用：Spring会从此文件中读取 BeanDefinition 来 初始化IoC容器
+public static final String DEFAULT_CONFIG_LOCATION = "/WEB-INF/applicationContext.xml";
+
+// （注释）对于命名空间的方面，构造”配置文件所在的路径“时，所使用的默认前缀
+// 作用：指定/设置/配置 配置文件在 /WEB-INF/目录下
+public static final String DEFAULT_CONFIG_LOCATION_PREFIX = "/WEB-INF/";
+
+// (注释)对于命名空间的方面，构造”配置文件所在的路径“时，所使用的默认后缀
+public static final String DEFAULT_CONFIG_LOCATION_SUFFIX = ".xml";
+
