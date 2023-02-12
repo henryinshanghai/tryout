@@ -1,0 +1,4 @@
+--- 在Web应用中使用 Spring MVC ---
+前置条件：
+    #1 在web.xml文件中，配置 ContextLoaderListener （用于创建&初始化 根web应用上下文）；
+    #2 在web.xml文件中，配置 DispatcherServlet （用于调度HTTP请求 到 对应的处理器上）；
