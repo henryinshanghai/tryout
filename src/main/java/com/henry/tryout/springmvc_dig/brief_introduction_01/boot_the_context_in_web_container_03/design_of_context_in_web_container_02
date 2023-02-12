@@ -16,9 +16,9 @@ Spring所提供的组件支持：WebApplicationContext（Web应用上下文）�
     #2 这个接口相比于 通用的 ApplicationContext接口：
         #1 添加了一个 getServletContext()方法，
         #2 并且定义了一个 著名的 应用属性名 - 在启动/引导（bootstrap）过程中，根上下文必须要绑定到这个属性上。
-    #3 与通用的应用上下文一样， web应用上下文也是 有层次的。
+    #3 与 ”通用的应用上下文“ 一样， ”web应用上下文“ 也是有层次的。
         #1 每个application，都会有一个单一的 根上下文，而
-        #2 应用中的每一个 servlet（包括 MVC框架中的 dispatcher servlet）也会有它们自己的子上下文。
+        #2 应用中的每一个 servlet（包括 MVC框架中的 dispatcher servlet）也会有它们自己专属的子上下文。
 
 作用#2：除了标准的 应用上下文的生命周期功能外， webApplicationContext的实现类还需要
 检测 ServletContextAware bean，并相应地调用 setServletContext()方法。
