@@ -1,0 +1,40 @@
+--- 在Web容器中，创建出IoC容器/上下文对象 ---
+--- createWebApplicationContext(ServletContext sc) in ContextLoader ---
+注释：👇
+    作用：为当前loader 来 实例化 根上下文(WebApplicationContext);
+    特征：
+        #1 要么使用 默认的上下文类 或者 一个自定义的上下文类（如果指定的话）；
+        #2 这个实现会预期“自定义的上下文类”要实现 ConfigurableWebApplicationContext 接口；
+        #3 可以在子类中被覆写；
+        #4 另外，customizeContext 会在 刷新上下文之前被调用；
+            应用：这个特性使得 子类能够 “对上下文执行自定义的修改”。
+    参数：当前的servlet上下文；
+    返回值：根应用上下文；
+
+书本（相关步骤）：
+    #1 对根上下文的参数设置： {设置双亲上下文、设置对ServletContext的引用等}
+    #2 重启整个IoC容器 - 手段：调用refresh()方法；
+
+关键代码：
+protected WebApplicationContext createWebApplicationContext(ServletContext sc) {
+    // #1 决定使用什么样的类 来 作为Web容器中的IoC容器/web应用根上下文
+    Class<?> contextClass = determineContextClass(sc);
+    if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
+        throw new ApplicationContextException("Custom context class [" + contextClass.getName() +
+                "] is not of type [" + ConfigurableWebApplicationContext.class.getName() + "]");
+    }
+    // #2 直接实例化 所需要生产的IoC容器/根上下文对象
+    return (ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
+}
+
+-- 决定使用什么样的类 来 作为Web容器的IoC容器 --
+-- determineContextClass(ServletContext servletContext) in ContextLoader --
+作用：返回 会被使用的 WebApplicationContext的实现；
+特征：
+    #1 要么是默认的 XmlWebApplicationContext；
+    #2 要么是 自定义的上下文类（如果指定的话）
+参数：当前的 servlet上下文；
+返回值：会被Web容器使用的 WebApplicationContext实现类。
+实现：
+    #1 如果开发者在web.xml中，配置了 contextClass参数，则：使用开发者配置的类 来 创建上下文对象；
+    #2 如果没有，则：使用默认的类（XmlWebApplicationContext）;
