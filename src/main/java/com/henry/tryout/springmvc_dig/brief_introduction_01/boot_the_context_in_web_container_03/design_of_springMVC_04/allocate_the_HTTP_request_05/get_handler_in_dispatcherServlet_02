@@ -1,0 +1,68 @@
+--- org.springframework.web.servlet.DispatcherServlet.getHandler() ---
+返回 当前请求的 HandlerExecutionChain；
+特征：会按照顺序 来 尝试所有的handler mappings；
+参数：当前的HTTP请求对象
+返回值：请求所对应的HandlerExecutionChain，如果没有找到任何的handler，则返回 null
+
+protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+    if (this.handlerMappings != null) {
+        // 从 HandlerMapping中获取handler -> 与前面“对handlerMapping的分析”刚好衔接
+        for (HandlerMapping mapping : this.handlerMappings) {
+            HandlerExecutionChain handler = mapping.getHandler(request);
+            if (handler != null) {
+                return handler;
+            }
+        }
+    }
+    return null;
+}
+
+书本（与真实实现有不同）：
+#1（新的实现中已删除） 在 DispatcherServlet 获取 handler的时候，会首先在 HttpRequest中获取 handler - 相当于获取到一个 缓存中的handler；
+#2（新的实现中已删除）这个 handler对应于 HTTP的 HANDLER_EXECUTION_CHAIN_ATTRIBUTE属性 - 这个属性的值是 DispatcherServlet.class.getName() + ".HANDLER"；
+#3 如果使用以上方式没能获取到一个handler，则： 会使用 DispatcherServlet所持有的handlerMappings 来 生成一个；
+    特征：
+        #1 使用 handlerMapping得到 handler时，会遍历当前持有的所有 handlerMapping；
+        #2 对于#1中的查找过程，只要找到了一个所需要的handler，查找过程就会停止；
+        #3 找到handler对象之后，通过handler所返回的是一个 HandlerExecutionChain对象 - 其中包含了最终的Controller & 定义的一个拦截器链。
+            详细的分析过程：参考 “对 SimpleUrlHandlerMapping的实现” - getHandler()方法是怎样获取到一个 HandlerExecutionChain的
+#4（新的实现中已删除）得到 HandlerExecutionChain以后，DS会使用HandlerAdapter 来 对这个Handler的合法性进行判断。
+最终返回适配的结果
+
+-- org.springframework.web.servlet.DispatcherServlet.getHandlerAdapter --
+为传入的handler对象 返回 其对应的HandlerAdapter
+参数：想要为其找到一个adapter的handler对象
+抛出异常： ServletException - 如果为这个handler对象找不到 HandlerAdapter，这是一个致命的 error
+
+关键步骤的代码：
+if (this.handlerAdapters != null) {
+    // 对持有的所有adapter进行匹配
+    for (HandlerAdapter adapter : this.handlerAdapters) {
+        if (adapter.supports(handler)) {
+            return adapter;
+        }
+    }
+}
+
+书本说明：
+通过supports()方法的判断，可以知道这个handler是不是 Controller接口的实现；
+    通过具体的HandlerAdapter的实现类，可以具体了解 这个匹配过程；
+    以 SimpleControllerHandlerAdapter 为例子进行分析。
+
+-- org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter.supports --
+// 判断当前handler对象 是不是 Controller的实例
+public boolean supports(Object handler) {
+    return (handler instanceof Controller);
+}
+
+
+===
+综上，经过上面一系列的处理，得到了handler对象。然后 就能够调用handler对象中的 “HTTP响应动作”了。
+在handler中封装了应用的业务逻辑 - 它们用于：
+    #1 对HTTP请求进行相应的处理，生成正确的响应数据；
+    #2 并把这些数据封装到 ModelAndView对象中去；
+        特征：#2中的数据封装 其实是 Spring MVC框架的要求；
+    原理：对于handler来说，这些都是通过调用 handler的handleRequest()方法 来 完成的。
+得到 ModelAndView对象之后，它会被转交给 MVC模式中的视图类；
+    作用：用于对 ModelAndView中的数据 进行呈现；
+    特征：调用入口 在 DispatcherServlet的doDispatch()方法中, aka, render()方法。
