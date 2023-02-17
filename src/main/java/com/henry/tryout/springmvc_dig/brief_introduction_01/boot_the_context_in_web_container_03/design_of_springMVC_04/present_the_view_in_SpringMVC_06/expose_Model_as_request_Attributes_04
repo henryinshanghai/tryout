@@ -1,0 +1,22 @@
+作用：汇集 ModelAndView对象 与 其他请求数据到一处，方便后继的使用。
+
+-- exposeModelAsRequestAttributes() in AbstractView --
+作用：把指定map中的model对象 暴露为 request属性。
+特征：
+    #1 属性的名称 会从model Map中获取。
+    #2 对于所有能够通过 RequestDispatcher获取到的资源来说，这个方法都是适用的
+
+关键代码：这里的model是一个map对象
+protected void exposeModelAsRequestAttributes(Map<String, Object> model,
+        HttpServletRequest request) throws Exception {
+
+    model.forEach((name, value) -> {
+        if (value != null) {
+            request.setAttribute(name, value);
+        }
+        else {
+            request.removeAttribute(name);
+        }
+    });
+}
+
