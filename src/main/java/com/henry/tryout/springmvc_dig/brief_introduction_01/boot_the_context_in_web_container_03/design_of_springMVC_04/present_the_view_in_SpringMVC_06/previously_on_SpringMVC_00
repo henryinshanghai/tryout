@@ -1,0 +1,62 @@
+前面分析了 Spring MVC中的 M（Model） 与 C（Controller）的相关实现。
+概括：
+    #1 M - ModelAndView对象的生成；
+    #2 C - DispatcherServlet & 与用户业务逻辑有关的handler实现。
+在 Spring MVC框架中， DispatcherServlet起到了非常重要的作用，它是整个MVC框架的调度中心。
+对于 “视图呈现”feature，它的调用入口同样在 DispatcherServlet中的doDispatch()方法里。
+更具体来说，“对视图呈现的处理” 是在 render()方法中完成的。
+
+有bear去看代码：
+为了完成视图呈现的工作，需要：
+#1 先从 ModelAndView对象中获取到 视图对象；
+#2 然后调用 视图对象的 render方法 - 由此来完成特定的视图呈现工作。
+特征：由于是在 Web环境中，因此 需要先完成 HTTP请求的响应。然后 render()方法会消费这个响应，最终呈现视图
+
+-- org.springframework.web.servlet.DispatcherServlet.render --
+注释：
+作用：为给定的 ModelAndView做渲染。
+特征：
+    #1 这是处理请求的最后一个阶段。可能会需要 通过名称来解析视图。
+参数： 待渲染的ModelAndView对象， 当前的HTTP servlet请求， 当前的HTTP servlet响应。
+抛出异常：ServletException（如果view缺失或者无法被解析），Exception（如果渲染视图时出错）
+
+关键代码：
+注释：决定请求的locale， 并把它应用到 响应中去
+书本：从request中读取 locale的信息，并设置 response中的locale的值
+Locale locale =
+        (this.localeResolver != null
+        ? this.localeResolver.resolveLocale(request)
+        : request.getLocale());
+
+
+if (viewName != null) {
+    // 我们需要解析出视图的名字
+    view = resolveViewName(viewName, mv.getModelInternal(), locale, request);
+    ...
+}
+
+else {
+    // 不需要查找： ModelAndView对象中 包含有 真正的View对象
+    view = mv.getView();
+    ...
+}
+
+// 渲染view对象
+if (logger.isTraceEnabled()) {
+    logger.trace("Rendering view [" + view + "] ");
+}
+try {
+    if (mv.getStatus() != null) {
+        response.setStatus(mv.getStatus().value());
+    }
+    // 调用view的render方法 来 对数据进行呈现 -  通过HTTPResponse 来 把视图呈现给HTTP客户端
+    view.render(mv.getModelInternal(), request, response);
+}
+
+视图呈现的过程：
+#1 如果在ModelAndView中找到了视图对象的逻辑名称，则：对这个名称进行解析，从而得到真正需要的View对象；
+#2 如果 ModelAndView中已经存在 View对象，则：可以直接使用；
+#3 最终，都是调用视图对象的render()方法 来 完成“数据的显示工作”的。
+
+特征：不同的视图类型，往往对应着 不同的视图对象实现。
+Next： DispatcherServlet是怎么 通过视图对象的逻辑名称 来 得到视图对象的。
