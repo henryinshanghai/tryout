@@ -1,0 +1,50 @@
+--- org.springframework.web.servlet.DispatcherServlet.resolveViewName ---
+从给定的view名称中 解析出一个 View对象（以便对它进行渲染）
+默认实现 会询问 当前dispatcher中所有的ViewResolvers。
+可以使用自定义的解析策略进行覆盖，比如基于特定的模型属性 或者 请求参数。
+参数：待解析的view的名字、传给view的model、当前的locale、当前的HTTP servlet请求
+返回值：View对象，null（如果啥都没找见的话）
+
+关键代码实现：
+if (this.viewResolvers != null) {
+    // 使用 viewResolver 对 view的名称进行解析
+    for (ViewResolver viewResolver : this.viewResolvers) {
+        View view = viewResolver.resolveViewName(viewName, locale);
+        if (view != null) {
+            return view;
+        }
+    }
+}
+return null;
+
+-- 解析具体实现： BeanNameViewResolver 的 resolveViewName() --
+使用给定view的名称 来进行解析。
+note：为了允许 ViewResolver能够组成链条，当给定名称的view没有在其中定义时，ViewResolver应该返回null。
+但这并不是强制要求的：
+有些 ViewResolvers 会一直尝试 使用给定的名字来创建 View对象，而没办法返回null(而是在 View对象创建失败时抛出一个异常)
+
+关键代码：
+public View resolveViewName(String viewName, Locale locale) throws BeansException {
+		ApplicationContext context = obtainApplicationContext();
+		if (!context.containsBean(viewName)) {
+		    // 允许 ViewResolver能够组成链条
+			return null;
+		}
+		if (!context.isTypeMatch(viewName, View.class)) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Found bean named '" + viewName + "' but it does not implement View");
+			}
+			// 既然我们在查找 通用的上下文对象，所以这里 我们也将之视为 “没有匹配”并且 也允许组成链条
+			return null;
+		}
+
+		// 从上下文中，使用Bean的名字 来 获取View Bean。
+		return context.getBean(viewName, View.class);
+	}
+
+得到了View对象后。
+Next： 分析 Spring MVC中 View的继承体系。
+
+
+
+
