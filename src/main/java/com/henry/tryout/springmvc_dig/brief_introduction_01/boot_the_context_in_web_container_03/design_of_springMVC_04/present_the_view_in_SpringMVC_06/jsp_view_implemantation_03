@@ -1,0 +1,84 @@
+fact: 使用JSP页面作为 Web UI，是使用Java开发Web应用时常见的选择（很多年前）。
+如果开发者想要 在JSP中使用 Jstl(JSP Standard Tag Library) 来 增强 JSP的功能。
+则：就需要在 Spring MVC中使用 JstlView来作为 View对象 - 进而呈现数据。
+
+--- render() in AbstractView ---
+作用：为指定的model 来 准备view。
+特征：
+    #1 如果有必要，则 把它与静态属性 与 RequestContext属性合并到一起。
+    #2 真正的渲染工作，会委托给 renderMergedOutputModel
+    #3 JstlView中没有实现 render()方法 - 因此使用的render()方法 其实是由它的基类（AbstractView）所提供的。
+
+关键代码：
+public void render(@Nullable Map<String, ?> model, HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+
+    if (logger.isDebugEnabled()) {
+        logger.debug("View " + formatViewName() +
+                ", model " + (model != null ? model : Collections.emptyMap()) +
+                (this.staticAttributes.isEmpty() ? "" : ", static attributes " + this.staticAttributes));
+    }
+
+    // 把所有的相关信息 都汇集到一个Map中
+    Map<String, Object> mergedModel = createMergedOutputModel(model, request, response);
+    prepareResponse(request, response);
+    // 把模型数据 展示到 视图中的方法
+    renderMergedOutputModel(mergedModel, getRequestToExpose(request), response);
+}
+
+-- renderMergedOutputModel() in AbstractView --
+特征：子类必须实现这个方法 来 真正地渲染view。
+实现步骤：
+#1 准备请求：对于JSP的情况，这意味着 把 model对象设置为 请求的属性；
+#2 真正地渲染视图，比如说 通过一个 RequestDispatcher 来 包含JSP。
+
+-- InternalResourceView 对 renderMergedOutputModel()的实现 --
+作用：为给定的model 来 渲染内部的资源。
+特征：这包括 把model设置为 request的属性。
+
+代码实现：
+protected void renderMergedOutputModel(
+        Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+    // 把model对象 暴露为 request的属性
+    exposeModelAsRequestAttributes(model, request);
+
+    // 如果存在有helper对象的话，把它也暴露为 requests的属性
+    exposeHelpers(request);
+
+    // 为请求委派器 决定具体的路径
+    String dispatcherPath = prepareForRendering(request, response);
+
+    // 为目标resource（一般来说是 JSP）来 获取到一个 RequestDispatcher
+    RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);
+    if (rd == null) {
+        throw new ServletException("Could not get RequestDispatcher for [" + getUrl() +
+                "]: Check that the corresponding file exists within your web application archive!");
+    }
+
+    // 如果已经包含了 或者 响应已经被提交了，则：执行 include。否则 执行 forward
+    if (useInclude(request, response)) {
+        response.setContentType(getContentType());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Including [" + getUrl() + "]");
+        }
+        rd.include(request, response);
+    }
+
+    else {
+        // 🐖 forwarded的资源 应该 自行决定它的 content type
+        if (logger.isDebugEnabled()) {
+            logger.debug("Forwarding to [" + getUrl() + "]");
+        }
+        rd.forward(request, response);
+    }
+}
+
+代码分析：
+#1 对模型数据进行处理；
+    特征：
+        #1 在exposeModelAsRequestAttributes()中实现的；
+        #2 它是一个设计在 AbstractView中的方法；
+            作用：把 ModelAndView中的模型数据 & 其他的请求数据 都放在 HttpServletRequest的属性中去 - 这样就能方便地使用这些数据了
+
+
