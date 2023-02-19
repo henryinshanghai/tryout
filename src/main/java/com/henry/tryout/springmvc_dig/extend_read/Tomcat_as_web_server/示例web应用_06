@@ -1,0 +1,12 @@
+示例应用程序已经打包为war文件，可以在这里下载(注意:确保您的浏览器没有更改文件扩展名或添加新的扩展名)。
+
+运行这个应用程序最简单的方法是: 将war文件 移动到 CATALINA_BASE/webapps目录。
+默认的Tomcat安装, 将自动展开并为您部署应用程序。
+您可以使用以下URL查看它(假设您在默认端口8080上运行tomcat):
+http://localhost:8080/sample
+
+如果只想浏览内容，可以使用jar命令解包war文件。
+Jar -xvf sample.war
+
+注意: CATALINA_BASE通常是解压缩Tomcat发行版的目录。
+有关CATALINA_HOME、CATALINA_BASE以及它们之间的区别的更多信息，请参阅解包Tomcat发行版目录中的RUNNING.txt。
