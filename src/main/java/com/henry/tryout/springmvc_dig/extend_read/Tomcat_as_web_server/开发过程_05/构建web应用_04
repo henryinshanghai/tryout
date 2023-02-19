@@ -1,0 +1,14 @@
+当你准备好编译应用程序时，发出以下命令(通常，你会希望打开一个设置为项目源目录的shell窗口，这样只需要最后一个命令):
+    cd {my home directory}
+    cd myapp        <-- Normally leave a window open here
+    ant
+
+Ant工具将会执行 你的build.xml文件中的默认的“compile”目标，该目标将编译任何新的或更新的Java代码。
+如果这是在“build clean”之后第一次编译，它将导致所有内容都被重新编译。
+
+如果想要”强制重新编译“”整个应用程序“，可以这样做:
+    cd {my home directory}
+    cd myapp
+    ant all
+
+这是一个非常好的习惯，可以在”签入更改“之前立即执行，以确保您没有引入”Javac条件检查“所没有捕捉到的任何微妙（subtle）问题。
