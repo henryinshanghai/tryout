@@ -1,0 +1,41 @@
+context-param标签：
+    用于定义web应用中被共享的、作为 上下文初始化参数的字符串常量 - 这些个常量可以被 安装应用的系统管理员自定义。
+
+    实际分配给这些参数的值可以在servlet或JSP页面中通过调用:
+        String value = getServletContext().getInitParameter("name"); 来获取到
+
+    其中“name”匹配这些初始化参数之一的<param-name>元素。
+    您可以定义任意数量的”上下文初始化参数“，包括零个。
+
+===
+servlet标签：
+
+用于组成web应用程序的”Servlet定义“，包括初始化参数。
+使用Tomcat，你也可以用如下的请求 来 ”向这里没有列出的servlet发送请求“:
+    http://localhost:8080 /{上下文路径}/servlet/{类名称}
+但是不能保证这种用法是可移植的。
+它还使对图像和servlet所需的其他资源的相对引用更加复杂，
+因此，建议定义所有servlet(并使用servlet映射元素定义到它们的映射)。
+
+Servlet初始化参数可以在Servlet或JSP页面中通过调用:
+        String value = getServletConfig().getInitParameter("name");
+其中“name”匹配这些初始化参数之一的<param-name>元素。
+您可以定义任意数量的servlet，包括零servlet。
+
+===
+servlet-mapping标签
+
+定义servlet容器使用的映射 来 将特定的请求URI(上下文相关)转换为特定的servlet。
+下面的示例与上面的servlet描述相对应。
+因此，像:http://localhost:8080/{contextpath}/graph这样的请求URI 将被映射到 “graph” servlet，
+而像:http://localhost:8080/{contextpath}/saveCustomer.do这样的请求 将被映射到“controller” servlet。
+
+您可以定义任意数量的servlet映射，包括零映射。
+如果您愿意，为同一个servlet定义多个映射也是合法的。
+
+===
+session-config标签
+
+定义应用程序的默认会话超时，单位为分钟。
+从servlet或JSP页面，开发者可以使用HttpSession.getMaxInactiveInterval() 来 动态地修改特定会话的超时。
+
