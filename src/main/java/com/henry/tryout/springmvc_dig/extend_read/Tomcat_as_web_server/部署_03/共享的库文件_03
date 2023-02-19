@@ -1,0 +1,14 @@
+与大多数servlet容器一样，
+Tomcat还支持 “一次性安装库JAR文件(或解包类)，并使它们对所有已安装的web应用程序可见(无需包含在web应用程序本身中)”的机制，
+
+Tomcat如何定位和共享此类类的详细信息在 “Class Loader How-To” 文档中有描述。
+在Tomcat安装中用于共享代码的位置通常是$CATALINA_HOME/lib。
+放在这里的JAR文件对 #1“web应用程序” 和 #2 “内部Tomcat代码” 都是可见的。
+这是放置“所需JDBC驱动程序”的好地方 - 用于应用程序或内部Tomcat使用(例如DataSourceRealm)。
+
+
+开箱即用的 标准Tomcat安装包括各种“预安装的”（pre-installed）共享库文件，包括:
+#1 Servlet 6.0;
+#2 JSP 3.1 api;
+
+它们是编写Servlet和JSP的基础。
