@@ -1,0 +1,28 @@
+ribbon框架中所提供的注解：LoadBalanced
+特征：它被 @Qualifier注解所修饰，因此它可以用作为一个 限定符 - 用于特指一类事物中的某一个实体
+
+注释：一个注解，用于标记 “其所配置的 RestTemplate 或者 WebClient” 来 使用“LoadBalancerClient”.
+
+xxx
+@Qualifier
+public @interface LoadBalanced {
+
+}
+
+应用：程序启动时，Spring的配置类 LoadBalancerAutoConfiguration 会
+筛选出/找到 所有 “被@LoadBalanced注解修饰的 RestTemplate对象”；
+    作用：用于 在执行http请求时，按照负载均衡规则 从list中选择某一个“限定/特定的restTemplate” 来 实际执行请求。
+    延伸作用：进而实现负载均衡。
+
+-- 验证：LoadBalancerAutoConfiguration --
+xxx
+public class LoadBalancerAutoConfiguration {
+
+	@LoadBalanced
+	@Autowired(required = false)
+	private List<RestTemplate> restTemplates = Collections.emptyList();
+
+    ...
+}
+
+
