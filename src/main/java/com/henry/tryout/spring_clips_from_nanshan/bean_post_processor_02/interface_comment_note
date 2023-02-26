@@ -1,0 +1,21 @@
+是：“工厂钩子”；
+作用：允许开发者能够自定义修改新bean实例；
+应用：“检查标记（marker）接口”或 “用代理来包装bean”。
+用法：
+    #1 ”使用标记接口等来填充bean的后处理器“ 会 实现 postProcessBeforeInitialization （初始化前的后处理动作）；
+    #2 ”使用代理包装bean的后处理器“ 通常会实现 postProcessAfterInitialization（初始化后的后处理动作）
+特征：
+    #1 （登记/注册）
+        ApplicationContext可以在”其bean定义“中：
+            #1 自动检测BeanPostProcessor bean，并
+            #2 将”这些后处理器“ 应用于 随后创建的任何bean。
+        普通的BeanFactory允许 ”对后处理程序的编程注册“，从而将它们应用到”通过bean工厂创建的所有bean“。
+
+    #2 排序（Ordering）
+        #1 ”在ApplicationContext中自动检测到“的BeanPostProcessor bean,
+            将会根据org.springframework.core.PriorityOrdered和org.springframework.core.Ordered语义 来 进行排序。
+        #2 相反，”以编程方式 向BeanFactory注册”的BeanPostProcessor bean 将按照注册的顺序 来应用;
+        特征：
+            #1 通过实现PriorityOrdered或Ordered接口表达的任何排序语义 将被”编程注册的后处理程序“所忽略。
+            #2 此外，对于BeanPostProcessor bean， @Order注释没有被考虑在内。
+

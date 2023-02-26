@@ -1,0 +1,51 @@
+在Bean的生命周期中，postProcessBeforeInitialization()方法 会在 每一个Bean对象的初始化方法调用之前 被调用；
+而 postProcessAfterInitialization()方法 会在 每一个Bean对象的初始化方法调用之后 被调用。
+
+通过 “Bean后处理器”这个组件， Spring提供给开发者一个能力 - 对Spring所管理的Bean进行再加工。
+应用：
+#1 修改bean的属性；
+#2 给bean生成一个动态代理实例。
+
+-- 调用入口：refresh() in AbstractApplicationContext --
+🐖 refresh()方法执行的过程中，会调用 👇方法（没有找到调用链路 TBD）
+
+-- initializeBean() in AbstractAutowireCapableBeanFactory --
+初始化给定的bean实例，应用“工厂回调” 以及 “init方法” 和 “bean后处理器”。
+对于“传统方式定义的bean”，从createBean()调用;
+对于“现有bean实例”，从initializeBean()调用。
+
+参数:
+    beanName—工厂中的bean名称(用于调试)
+    Bean——我们可能需要初始化的新Bean实例
+    MBD——创建bean时使用的bean定义(如果给定现有bean实例，也可以为空)
+返回:
+    初始化的bean实例(可能被包装)
+
+
+-- invokeInitMethods() in AbstractAutowireCapableBeanFactory --
+现在，bean的所有属性都设置好了，让它有机会能够：
+    #1 做出反应，并有机会 #2 了解它拥有的bean工厂(这个对象)。
+这意味着 “检查bean是否实现了InitializingBean” 或 “定义了自定义init方法”，如果实现了，则：调用必要的回调。
+
+参数:
+    beanName—工厂中的bean名称(用于调试)
+    Bean——我们可能需要初始化的新Bean实例
+    MBD——创建bean时使用的合并bean定义(如果给定现有bean实例，也可以为空)
+
+invokeInitMethods()用来 做一系列的初始化动作，比如 afterPropertiesSet、init-method等等
+在 invokeInitMethods()方法前后，会执行 applyBeanPostProcessorsBeforeInitialization() 与 applyBeanPostProcessorAfterInitialization();
+
+结论：BeanPostProcessor中方法调用的时机是在 "初始化bean实例"的时候。
+
+Error creating bean with name 'configurationPropertiesBeans' defined
+in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]:
+Post-processing of merged bean definition failed;
+nested exception is java.lang.IllegalStateException:
+Failed to introspect Class [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]
+from ClassLoader [sun.misc.Launcher$AppClassLoader@18b4aac2]
+
+Spring Boot的版本 与 starter-netflix-ribbon 的版本不匹配导致的。
+但是正确的版本映射关系没有找到~~~
+
+可能是Spring Boot版本选择的问题， 博客中的 RoutingBeanPostProcessor这个实现类找不见。
+原理： 检查Bean是不是 声明了 VersionInjected注解，如果是，则：为该属性 注入一个动态代理实例。

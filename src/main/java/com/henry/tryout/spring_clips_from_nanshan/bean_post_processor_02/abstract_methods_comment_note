@@ -1,0 +1,23 @@
+-- postProcessBeforeInitialization() --
+
+在任何bean初始化回调(如InitializingBean的afterPropertiesSet或自定义初始化方法)之前，将这个BeanPostProcessor应用到给定的新bean实例。
+bean将已经被属性值填充。
+返回的bean实例可能是原始bean实例的包装器。
+默认实现会“按原样返回”给定的bean。
+
+参数:
+    Bean—新的Bean实例
+    beanName—bean的名称
+返回:
+    要使用的bean实例，可以是原始的，也可以是封装后的;
+    如果为null，则不会调用后续的BeanPostProcessors
+
+-- postProcessAfterInitialization() --
+在任何bean初始化回调之后(如InitializingBean的afterPropertiesSet或自定义初始化方法), 将这个BeanPostProcessor应用到给定的新bean实例。
+bean将已经被属性值填充。
+返回的bean实例可能是原始bean实例的包装器。
+
+对于FactoryBean，这个回调将同时为“FactoryBean实例” 和 “由FactoryBean创建的对象” 所调用(从Spring 2.0开始)。
+“后处理程序”可以通过相应的bean instanceof FactoryBean检查 来决定 是否应用于FactoryBean 或 已创建的对象，或者两者都应用。
+
+
