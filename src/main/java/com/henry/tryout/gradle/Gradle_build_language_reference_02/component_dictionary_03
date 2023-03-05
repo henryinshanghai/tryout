@@ -1,0 +1,36 @@
+=== 核心类型 ===
+下面列出了一些在Gradle脚本中使用的核心类型:
+
+=== Publishing types ===
+
+=== Container types ===
+
+=== Build Cache types ===
+
+=== Input Normalization types ===
+
+=== Help Task types ===
+
+=== Task types ===
+
+=== Test types ===
+
+=== Reporting types ===
+
+=== Eclipse/IDEA model types ===
+
+=== Eclipse/IDEA task types===
+
+=== Xcode task types ===
+
+Visual Studio task types
+
+Artifact transform types
+
+Native tool chain types
+
+C++ component types
+
+Swift component types
+
+Native component task types
