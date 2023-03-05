@@ -1,0 +1,12 @@
+tasks.register('hello') {
+    doLast {
+        println 'Hello world!'
+    }
+}
+tasks.register('intro') {
+    // 声明当前任务 依赖于其他的任务
+    dependsOn tasks.hello
+    doLast {
+        println "I'm Gradle"
+    }
+}

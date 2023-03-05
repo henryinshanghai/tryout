@@ -1,0 +1,14 @@
+tasks.register('taskX') {
+    // 先依赖
+    dependsOn 'taskY'
+    doLast {
+        println 'taskX'
+    }
+}
+
+// 再声明
+tasks.register('taskY') {
+    doLast {
+        println 'taskY'
+    }
+}
