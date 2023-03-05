@@ -1,0 +1,33 @@
+=== Delegation ===
+
+--- 未限定属性的来源 ---
+#1 “属性部分”列出了可能找到非限定属性（unqualified）的地方 - 一个常见的位置是在Project对象上。
+#2 但是对于块内那些“未限定的属性和方法”，还有另一种来源 - 块的委托对象（delegate object）。
+
+--- block的委托类型 ---
+为了帮助解释这个概念，考虑上一节的最后一个例子:
+copy {
+    into "$buildDir/tmp"
+    from 'custom-resources'
+}
+
+本例中的所有方法和属性都是“未限定的”(unqualified)。
+你可以很容易地在 Project API文档中找到copy() 和 buildDir，但是into()和from()呢?
+这些是针对“copy{}块的委托” 进行解析的。
+至于委托的具体类型是什么? 开发者需要“检查对应的API文档”。
+
+--- 查看block的委托类型 ---
+根据block方法的签名，有两种方法来“确定委托类型”:
+    #1 对于Action参数，请查看类型的形参。
+        在上面的例子中，方法签名 是copy(Action<? super CopySpec>)；
+            它是尖括号内的位，这会告诉你“委托类型” - 在这里是CopySpec。
+
+    #2 对于 Closure参数，文档将在描述中，
+        显式地说明“正在配置的类型” 或 “委托的类型”(同一事物的不同术语)。
+
+因此，你可以在CopySpec上找到into()和from()。
+您甚至可能注意到，这两个方法都有 “以Action作为最后一个参数”的变体，这意味着您可以“对它们使用块语法”。
+
+--- block的整体特征---
+所有新的Gradle api都声明了“Action参数类型”而不是 “Closure”，这使得 “选择委托类型” 变得非常容易。
+甚至更老的api除了“旧的闭包变体”之外，还有一个Action变体。
