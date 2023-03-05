@@ -1,0 +1,11 @@
+蚂蚁任务是Gradle中的一等公民。
+Gradle 仅依靠Groovy就 “为Ant任务提供了出色的集成”。
+Groovy是与 出色的AntBuilder 一起发布的。
+“从Gradle中使用Ant任务” 比 “从build.xml文件中使用Ant任务” 更方便、更强大。
+它也可以从Kotlin中使用。
+从下面的示例中，您可以了解 “如何执行Ant任务以及如何访问Ant属性” :
+
+-- 使用 AntBuilder 来 执行 ant.loadfile目标 --
+/使用Ant任务
+
+在构建脚本中，您可以使用Ant完成更多的工作。您可以在Ant中找到更多信息。
