@@ -1,0 +1,48 @@
+<obj>.<name>                // 获取属性的值
+<obj>.<name> = <value>      // 为属性设定一个新的值
+"$<name>"                   // 在一个字符串中嵌入一个属性值
+"${<obj>.<name>}"           // 字符串中引用属性的值
+
+代码示例：
+    version = '1.0.1'
+    myCopyTask.description = 'Copies some files'
+
+    file("$buildDir/classes")
+    println "Destination: ${myCopyTask.destinationDir}"
+
+属性用于表示对象的某些状态。
+#1 =号的出现清楚地表明您正在“查看属性”。
+#2 否则，一个限定名称————它以<obj>开头。
+#3 没有任何其他装饰也是一种属性。
+
+如果名称是不合格的(unqualified)，那么它可能是下列之一:
+#1 具有该名称的task实例。
+#2 Project上的属性。
+#3 在项目其他地方所定义的额外属性。
+#4 block内隐式对象的属性。
+#5 在前面的构建脚本中定义的局部变量（local variable）。
+
+
+请注意，插件可以向Project对象上“添加自己的属性”。
+API文档列出了核心插件所添加的所有属性。
+如果您难以找到属性的来源，请查看“构建所使用的插件”的文档。
+
+🐖 当在构建脚本中引用“由非核心插件所添加的项目属性”时，开发者应该考虑用project作为前缀。———— 很明显，这样的属性属于项目对象。
+
+=== API文档中的属性 ===
+“Groovy DSL参考” 显示在构建脚本中使用的属性，但“Javadocs” 只显示方法。
+这是因为“属性”在幕后是“作为方法实现的”:
+    #1 如果有一个名为get<PropertyName> 且 返回“与属性相同类型” 的零参数的方法，则: 可以读取属性。
+    #2 如果有一个名为set<PropertyName>的方法，其中一个参数具有 “与属性相同的类型”，并且 “返回类型为void”，则：可以修改属性。
+
+注意，“属性名”通常以小写字母开头，但在“方法名”中，该字母是大写字母。
+所以getter方法getProjectVersion()对应于属性projectVersion。
+当名称以至少两个大写字母开头时，此约定不适用 - 在这种情况下，不需要更改大小写。
+例如，getRAM()对应于属性RAM。
+
+project.getVersion()
+project.version
+
+project.setVersion('1.0.1')
+project.version = '1.0.1'
+
