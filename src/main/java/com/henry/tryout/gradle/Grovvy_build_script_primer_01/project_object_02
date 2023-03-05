@@ -1,0 +1,18 @@
+由于Groovy是一种基于Java的面向对象语言，因此它的属性和方法适用于对象。
+在某些情况下，对象是隐式的————特别是在构建脚本的顶层，即不在{}块内嵌套。
+
+考虑下面的构建脚本片段，它包含一个不合格的（unqualified）属性和块:
+    version = '1.0.0.GA'
+
+    configurations {
+        ...
+    }
+
+version 和 configuration{}都是org.gradle.api.Project的一部分。
+
+这个示例反映了每个“Groovy构建脚本” 是如何由 “Project的隐式实例” 支持的。
+如果你看到一个不合格的（unqualified）元素，你不知道它是在哪里定义的，总是检查 Project API文档，看看它是否来自那里。
+
+🐖 避免在构建脚本中使用“Groovy元类编程技术”。Gradle为“添加动态运行时属性”提供了单独的API。
+原因：使用groovy特定的元编程会导致构建在构建之间保留大量内存，最终导致Gradle守护进程内存不足。
+
