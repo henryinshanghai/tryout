@@ -1,0 +1,23 @@
+<obj>.<name>()              // 调用无参数的方法
+<obj>.<name>(<arg>, <arg>)  // 调用多参数的方法
+<obj>.<name> <arg>, <arg>   // 调用多参数的方法（不使用括号）
+
+示例代码：
+// 调用多参数的方法（不使用括号）
+myCopyTask.include '**/*.xml', '**/*.properties'
+
+// 调用无参数的方法
+ext.resourceSpec = copySpec()   // `copySpec()` comes from `Project`
+
+// 调用单参数的方法
+file('src/main/java')
+println 'Hello, World!'
+
+方法用于表示对象的某些行为，尽管Gradle也经常使用方法 来 配置对象的状态。
+方法可以通过参数或空括号 来 标识。
+请注意，有时需要使用圆括号，例如当一个方法没有参数时，因此您可能会发现“始终使用圆括号”是最简单的。
+
+Gradle有一个约定，如果一个方法与“基于集合的属性”具有相同的名称，那么：该方法会将其值“附加到该集合”。
+
+
+
