@@ -1,0 +1,16 @@
+├── .gradle
+│   ├── 4.8
+│   ├── 4.9
+│   └── ⋮
+├── build
+├── gradle
+│   └── wrapper
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle or settings.gradle.kts
+├── subproject-one
+|   └── build.gradle or build.gradle.kts
+├── subproject-two
+|   └── build.gradle or build.gradle.kts
+└── ⋮
