@@ -1,0 +1,14 @@
+语法示例：
+def <name> = <value>        // 没有具体类型的变量
+<type> <name> = <value>     // 有具体类型的变量
+
+代码示例：
+def i = 1
+String errorMsg = 'Failed, because reasons'
+
+局部变量 是“Groovy的构造”(与“额外属性”不同)，可用于在构建脚本中共享值。
+
+避免在“项目的根目录”中使用局部变量，即作为伪project属性。
+它们不能在构建脚本之外读取，Gradle也不知道它们。
+
+在较窄的上下文中(例如配置一个任务时)，局部变量偶尔会有帮助。
