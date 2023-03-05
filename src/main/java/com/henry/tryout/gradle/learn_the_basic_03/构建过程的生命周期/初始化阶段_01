@@ -1,0 +1,27 @@
+在初始化阶段，Gradle检测 “参与构建的项目集” 和 “包含的构建”。
+Gradle首先评估 settings文件。然后，Gradle为每个项目实例化 Project实例
+
+
+=== 检测（detect） settings文件 ===
+当您在包含文件的目录中运行Gradle时，Gradle会使用该文件初始化构建。
+你可以在“build的任何子项目”中运行Gradle。
+
+当你在一个不包含 settings.gradle 文件的目录下运行Gradle时，Gradle会：
+#1 Gradle在父目录中查找文件 settings.gradle(.kts)
+#2 如果Gradle找到一个settings.gradle(.kts)文件，Gradle会检查当前项目是否是“多项目构建的一部分”。如果是这样的话，Gradle将构建为“多项目”。
+#3 如果Gradle没有找到一个settings.gradle(.kts)文件，Gradle将构建为一个“单独的项目”。
+
+在标准的“Gradle项目布局”中，“项目路径” 与 “磁盘上的物理子项目布局”相匹配。
+“自动搜索设置文件”的特性 只适用于“具有标准项目布局的多项目构建”。
+若要构建“使用非标准布局的项目”，请从包含 settings.gradle(.kts)的目录 来 执行构建
+
+--- 评估settings文件 ---
+在设置文件评估期间，Gradle:
+#1 将库添加到构建脚本的类路径。
+#2 定义哪些“包含的构建” 会参与“组合构建”。
+#3 定义参与“多项目构建”的项目。
+
+Gradle为“构建中的每个项目” 创建一个 Project实例。
+默认情况下，每个目录的名称都 与 “其顶级目录的名称” 相等。
+除了根项目之外，每个项目都有一个父项目。任何项目都可以有子项目。
+
