@@ -1,0 +1,5 @@
+> gradle -q hello
+Hello Venus // doFirst{}
+Hello Earth
+Hello Mars // doLast{}
+Hello Jupiter // doLast{}

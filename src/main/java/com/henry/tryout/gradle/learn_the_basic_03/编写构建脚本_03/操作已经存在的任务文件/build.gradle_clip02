@@ -1,0 +1,22 @@
+tasks.register('hello') {
+    doLast {
+        println 'Hello Earth'
+    }
+}
+
+// 向存在的task中添加行为
+tasks.named('hello') {
+    doFirst {
+        println 'Hello Venus'
+    }
+}
+tasks.named('hello') {
+    doLast {
+        println 'Hello Mars'
+    }
+}
+tasks.named('hello') {
+    doLast {
+        println 'Hello Jupiter'
+    }
+}

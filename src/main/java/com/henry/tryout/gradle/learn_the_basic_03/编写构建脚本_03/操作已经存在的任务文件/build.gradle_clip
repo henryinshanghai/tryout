@@ -1,0 +1,10 @@
+4.times { counter ->
+    tasks.register("task$counter") {
+        doLast {
+            println "I'm task number $counter"
+        }
+    }
+}
+
+// 为 task0 来 添加依赖
+tasks.named('task0') { dependsOn('task2', 'task3') }
