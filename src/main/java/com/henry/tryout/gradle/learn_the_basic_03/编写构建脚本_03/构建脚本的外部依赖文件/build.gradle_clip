@@ -1,0 +1,9 @@
+buildscript { // 声明脚本类路径的块
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'
+    }
+}
