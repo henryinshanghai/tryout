@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+configurations {
+    assets
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+dependencies {
+    implementation project(':util')
+}
