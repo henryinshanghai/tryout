@@ -57,12 +57,14 @@ public class Optional_Usage_Pattern_01 {
                     .map(Car::getInsurance)
                     .map(Insurance::getName);
          */
-        // 手段：flatMap()方法；
+        // 手段：flatMap()方法； 由于 optPerson其实是一个空对象，因此在调用 flatMap()方法时会NPE
         String insuranceName = getCarInsuranceName(optPerson);
 
     }
 
     private static String getCarInsuranceName(Optional<Person> person) { // 方法可以接受一个空值
+        // flatMap()方法，如果参数是一个null的话，则：会抛出NPE的异常
+        // 🐖 为了能够得到一个 Optional的对象（而不是Optional<Optional<Car>>）, 这里需要使用 flatMap()方法
         return person.flatMap(Person::getCar)
                 .flatMap(Car::getInsurance)
                 .map(Insurance::getName) // Insurance::getName()的返回值类型是 String,所以这里使用的是map()方法
@@ -85,7 +87,7 @@ public class Optional_Usage_Pattern_01 {
 
         // 使用一个 非空值来创建一个 Optional对象 - 手段： 静态方法 Optional.of()
         Car car = new Car();
-        Optional<Car> optionalCar2 = Optional.of(car);
+        Optional<Car> optionalCar2 = Optional.of(car); // 传入 null的话，会得到一个运行时报错 NPE
 
         // 创建一个允许接受null作为参数的 Optional对象 - 手段： 静态方法 ofNullable()
         Car car1 = null;
