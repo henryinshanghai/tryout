@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+// 验证：对于Map，JDK接口原始的设计逻辑 - 当获取的key在map中不存在的时候，通过返回null 来 表示值的缺失
+// 验证：为了避免null所导致的NPE，可以使用 Optional.ofNullable() 对null进行封装 - 这样会得到一个 Optional.empty
+// 不过没啥卵用，使用get()取值的时候 会抛出异常 NoSuchElementException
 public class using_optional_to_capsule_possible_null_01 {
     public static void main(String[] args) {
         // JDK接口旧的设计策略 - 通过返回一个null 来表示 所需要的值的缺失
