@@ -6,6 +6,9 @@ import com.henry.tryout.java_8_features.optional_06.optional_in_java_02.Person;
 
 import java.util.Optional;
 
+// 验证：Optional类型的属性能够提供很好的语义 - 这个字段可能为null
+// 验证：当方法参数是 Optional类型时，可以使用 isPresent()进行非null判断 + 使用get()方法来获取其包装的值
+// 验证：什么时候该使用 flatMap(), 什么时候该使用 map() - 实践大于分析
 public class Optional_Usage_Pattern_02 {
     public static void main(String[] args) {
         Person person = new Person();
