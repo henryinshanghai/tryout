@@ -2,6 +2,7 @@ package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_cont
 
 import java.util.List;
 
+// 重构手段01 - 把for循环的body抽取成为一个单独的方法
 public class NestedConditionExtractForLoopBody {
 
     public void distributeEpubs(final long bookId) {
@@ -14,6 +15,7 @@ public class NestedConditionExtractForLoopBody {
         }
     }
 
+    // 分发电子书 - 这里仍旧有两个嵌套的if
     private void distributeEpub(Epub epub) {
         if (epub.isValid()) {
             boolean registered = this.registerIsbn(epub);

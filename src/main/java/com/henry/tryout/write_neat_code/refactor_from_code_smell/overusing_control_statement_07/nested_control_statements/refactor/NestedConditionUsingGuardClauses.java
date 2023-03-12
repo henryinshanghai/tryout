@@ -2,6 +2,7 @@ package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_cont
 
 import java.util.List;
 
+// 重构#2：使用卫语句（Guard Clauses）来 取代嵌套的条件表达式（Conditional）
 public class NestedConditionUsingGuardClauses {
 
     public void distributeEpubs(final long bookId) {
@@ -16,6 +17,7 @@ public class NestedConditionUsingGuardClauses {
 
     // 重构#2：使用卫语句（Guard Clauses）来 取代嵌套的条件表达式（Conditional）
     private void distributeEpub(Epub epub) {
+        // 卫语句 - 就是在flag为false时，提前返回的语句
         if (!epub.isValid()) {
             return;
         }

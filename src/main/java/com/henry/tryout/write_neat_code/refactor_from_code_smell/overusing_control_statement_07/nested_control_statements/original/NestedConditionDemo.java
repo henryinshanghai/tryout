@@ -2,6 +2,8 @@ package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_cont
 
 import java.util.List;
 
+// 业务：只有当电子书(epub)注册到了ISBN后，才“发送电子书”
+// 常见手段：在for循环中添加if判断语句
 // 代码坏味道：for循环中，嵌套if语句
 public class NestedConditionDemo {
 
