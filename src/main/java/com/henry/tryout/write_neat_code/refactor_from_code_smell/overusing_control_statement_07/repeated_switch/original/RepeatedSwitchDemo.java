@@ -1,7 +1,9 @@
 package com.henry.tryout.write_neat_code.refactor_from_code_smell.overusing_control_statement_07.repeated_switch.original;
 
-// 示例：getBookPrice() 与 getEpubPrice()方法中，出现了类似的代码
-// 重复的switch，通常都是因为缺少了一个模型; - 这里是用户级别的
+// 业务：售出纸质书（Book）与电子书（Epub）时，其价格根据 “购买者的等级” 不同会有不同的折扣
+// 组件设计：在 User中添加一个属性，表示 “用户的等级”
+// 设计结果：getBookPrice() 与 getEpubPrice()方法中，出现了类似的代码
+// 分析：重复的switch，通常都是因为缺少了一个模型（用来提供能力/行为）; - UserLevel
 // 重构手段：使用多态（Polymorphism） 来 取代条件表达式（Conditional）
 public class RepeatedSwitchDemo {
 
