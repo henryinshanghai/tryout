@@ -1,0 +1,4 @@
+To quickly complete a method call of a static method located anywhere in your project,
+a library or a JDK, enter a prefix and press Ctrl+空格 twice.
+
+You can press Alt+Enter to import the selected method.
