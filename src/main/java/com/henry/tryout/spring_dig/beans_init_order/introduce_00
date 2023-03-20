@@ -1,0 +1,9 @@
+source: https://mp.weixin.qq.com/s/Zx6UBza_OxCR9LAxGUZwcw
+
+开发者要怎么样才能 定义Spring的IoC容器 在初始化Bean时候的先后顺序？
+手段：@Order注解
+
+--- @Order注解认识 ---
+特征：
+    #1 包含有一个value属性，类型是整型。数值越小, 表示的优先级越高 {大当家, 二当家...}
+    #2 value的默认值 表示 最低优先级。
