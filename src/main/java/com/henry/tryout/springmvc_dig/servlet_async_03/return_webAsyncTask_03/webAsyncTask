@@ -1,0 +1,7 @@
+WebAsyncTask 相比于 Callable，提供了三个回调函数，给开发者使用。
+{onTimeout, onError, onCompletion}
+
+🐖
+有一点需要注意onError()并不是处理 “业务代码抛出的异常”，而是处理“执行Callable时出现的异常”，可以理解为是“系统异常”，
+在“业务代码抛出的异常” 会被onCompletion()处理
+验证：在上文解读 startCallableProcessing()方法时，大家可以看到callable.call()是在try catch中，业务异常都被捕获 “正常返回了”
