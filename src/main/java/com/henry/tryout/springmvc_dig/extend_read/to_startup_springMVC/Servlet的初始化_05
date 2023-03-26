@@ -1,0 +1,83 @@
+--- Servlet ---
+作用：定义所有servlet必须实现的方法。
+是：servlet是在Web服务器中运行的小型Java程序。
+应用：servlet通常通过HTTP(超文本传输协议)接收和响应来自Web客户端的请求。
+
+用法：为了实现这个接口，开发者可以编写一个
+    #1 扩展自 javax.servlet.GenericServlet 的通用servlet，
+    #2 或者一个扩展自 javax.servlet.http.HttpServlet 的 HTTP servlet。
+
+该接口定义了用于#1 初始化servlet、#2 服务请求 和 #3 从服务器删除servlet的方法。
+这些方法被称为“生命周期方法”，按以下顺序调用:
+    #1 servlet被构造，然后用init()方法初始化。
+    #2 客户端对service()方法的任何调用都将被处理。
+    #3 将servlet从服务中取出，然后使用destroy()方法销毁，然后进行垃圾收集并最终完成。
+
+除了生命周期方法之外，该接口还提供了：
+    #1 getServletConfig()方法 - servlet可以使用该方法获取任何启动信息;
+    #2 以及getServletInfo()方法 - 该方法允许servlet返回关于自身的基本信息，比如作者、版本和版权。
+
+
+-- Spring MVC所提供的Servlet： DispatcherServlet --
+作用：分发用户的请求，并返回响应。
+类的继承关系：
+    Servlet -> GenericServlet -> HttpServlet -> HttpServletBean
+    -> FrameworkServlet -> DispatcherServlet
+设计模式：模板方法模式；
+
+fact：Tomcat启动时，会调用 Servlet的init()方法 来 完成对Servlet的初始化；
+相关的核心方法：
+    #1 initServletBean() from FrameworkServlet;
+    #2 initWebApplicationContext() from FrameworkServlet;
+    #3 onRefresh() from DispatcherServlet;
+方法的依赖路径：
+    init() -> initServletBean() -> initWebApplicationContext() -> onRefresh()
+
+-- initWebApplicationContext() --
+作用：初始化并发布 “这个servlet”的WebApplicationContext。
+特征：
+    #1 委托createWebApplicationContext 来 实际创建上下文。
+    #2 可以在子类中重写。
+
+web应用的IoC容器 作为 “父容器”，而 DispatcherServlet的IoC容器作为 “子容器”。
+父子容器和类的继承一样，能够实现隔离，从而保证系统的安全性。
+
+关键代码：
+
+// 如果 当前Servlet 已经存在有一个 IoC容器，则：
+if (this.webApplicationContext != null) {
+    // #1 把 web应用的根IoC容器，设置为 servlet的IoC容器的parent
+    cwac.setParent(rootContext)
+    // #2 配置&刷新 servlet的IoC容器 - 来 初始化容器中定义的Bean
+    configureAndRefreshWebApplicationContext(cwac);
+}
+
+// 如果 当前Servlet 不存在 自己的IoC容器，则：
+if (wac == null) {
+    // 尝试查找一个
+    wac = findWebApplicationContext();
+}
+
+// 如果没有找到 servlet的IoC容器，则：
+if (wac == null) {
+    // 为 当前servlet 来 创建一个IoC容器
+    wac = createWebApplicationContext(rootContext);
+}
+
+以上， servlet的IoC容器就创建&初始化完成了。
+特征：servlet所管理的Beans 一般都只会被此Servlet使用；
+比如 Spring MVC中的各种重要组件 - {Controller、Interceptor、Converter、ExceptionResolver}
+
+-- onRefresh() in DispatcherServlet --
+是：模板方法；
+作用：可以重写该方法 来 添加 “特定于servlet/某个servlet”的刷新工作。
+特征：在成功“刷新上下文”后 会被调用。
+
+方法依赖：
+    onRefresh() -> initStrategies()
+具体作用：
+    初始化了一堆的 “Spring MVC所需要的重要组件” -
+    {#1 多块解析器、#2 本地化解析器、#3 主题解析器、#4 HandlerMapping处理器映射器、#5 HandlerAdapter处理器适配器、异常解析器、视图解析器}
+以上， Spring MVC的（组件）初始化全部完成。
+
+结论：在Tomcat初始化Servlet的过程中，完成了 Spring MVC(组件)的初始化。
