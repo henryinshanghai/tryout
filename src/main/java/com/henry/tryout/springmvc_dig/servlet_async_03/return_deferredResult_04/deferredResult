@@ -1,0 +1,24 @@
+特征：是可以灵活的控制 “异步调用的生命周期”。
+    什么时候开始执行，结束都可以由开发人员自己控制，方便我们处理一些比较复杂的异步场景
+
+=== 对“返回值类型为 deferredResult的请求”进行异步处理 ===
+特征：该函数方法是在deferredResult调用setResult()时 或者在超时后 被触发。
+应用：通过安排setResult()的调用时机，我们可以自由的控制异步的结束
+//方法路径 org.springframework.web.context.request.async.WebAsyncManager#startDeferredResultProcessing
+public void startDeferredResultProcessing(
+   final DeferredResult<?> deferredResult, Object... processingContext) throws Exception {
+    try {
+        interceptorChain.applyPreProcess(this.asyncWebRequest, deferredResult);
+        // 注册函数
+        deferredResult.setResultHandler(result -> {
+            result = interceptorChain.applyPostProcess(this.asyncWebRequest, deferredResult, result);
+            // 在异步结束后进行二次转发
+            setConcurrentResultAndDispatch(result);
+        });
+    }
+    catch (Throwable ex) {
+        setConcurrentResultAndDispatch(ex);
+    }
+}
+
+应用案例：usage05
