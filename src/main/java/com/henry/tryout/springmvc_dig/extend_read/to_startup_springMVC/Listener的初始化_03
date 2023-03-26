@@ -1,0 +1,89 @@
+组件实现：ContextLoaderListener
+
+是：引导监听器。
+作用：用于启动和关闭 Spring的”根WebApplicationContext“。
+原理：简单地委托给ContextLoader 和 ContextCleanupListener。
+特征：继承自 ContextLoader， 实现了 ServletContextListener 接口。
+
+--- ContextLoader ---
+作用：为”根应用程序上下文“ 执行实际的初始化工作。
+特征：由ContextLoaderListener调用
+
+--- ServletContextListener ---
+这个接口的实现会接收 “它们所在的web应用程序的servlet上下文” 发生变化的通知。
+如果想要接收”通知事件“，必须在”web应用程序的部署描述符（web.xml）“中 配置实现类。
+特征：与web应用生命周期的各个阶段绑定。
+
+推论：由于 ContextLoaderListener 实现了 ServletContextListener，
+所以 web应用初始化的时候，就会调用 其中的 contextInitialized()方法；
+
+contextInitialized()方法 中只是委托调用了 initWebApplicationContext()方法
+
+-- initWebApplicationContext() --
+作用：为”给定的servlet上下文“ 来 初始化Spring的”web应用程序上下文“，
+使用在构建时提供的应用程序上下文，或者根据“contextClass”和“contextConfigLocation”上下文参数 来 创建一个新的上下文。
+
+aka 创建web应用的“根IOC容器”；
+结论1：Tomcat在初始化 ContextLoaderListener的时候，完成了 对web应用的IoC容器的初始化。
+
+核心代码：
+    // 从servlet上下文（servletContext对象）中，尝试获取到web应用的根IoC容器
+    // 如果IoC容器已经存在，则：抛出异常，停止创建IoC容器
+    // 特征：因此 web.xml中只能存在一个 ContextLoader类 或 其子类的对象
+    if (servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE) != null) {
+        throw new IllegalStateException(
+                "Cannot initialize context because there is already a root application context present - " +
+                "check whether you have multiple ContextLoader* definitions in your web.xml!");
+    }
+
+
+    // 使用一个本地的实例变量来存储 IoC容器对象 - 这样能够保证 在 ServletContext关闭时，IoC容器是可用的
+    // 如果当前成员变量还没有绑定 IoC容器，则：创建一个，绑定到变量的上面
+    if (this.context == null) {
+        this.context = createWebApplicationContext(servletContext);
+    }
+
+    // 当前的IoC容器还没有被刷新 - 因此可以用于 提供一些基础的服务：#1 设置parent上下文; #2 设置application上下文的id等
+    if (cwac.getParent() == null) {
+        // 当前的IoC容器对象注入时没有显式指定一个parent
+        // 这里 如果根IoC容器存在parent的话，就为其设置 parent
+        ApplicationContext parent = loadParentContext(servletContext);
+        cwac.setParent(parent);
+    }
+
+    // 配置并刷新 web应用的根IoC容器
+    // 特征：这里会对Bean进行创建和初始化
+    configureAndRefreshWebApplicationContext(cwac, servletContext);
+
+    // 把 创建好的IoC容器 添加到 servletContext对象中，并设置key为 WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
+    // 应用：在JSP页面中，开发者就可以使用这个key 来 获取到web应用的根IoC容器，进而获取到需要的Bean
+    servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context)
+
+initWebApplicationContext()方法 👆 完
+
+结论2：在把根IoC容器添加到 servletContext对象中之前，Tomcat会对IoC容器进行配置&刷新的操作；
+-- configureAndRefreshWebApplicationContext() --
+作用：如方法名；
+步骤：
+    #1 获取 开发者在web.xml文件的 <context-param>标签中所配置的全局变量；
+    #2 在方法的最后，调用了 refresh()方法；
+
+-- refresh() --
+作用：加载或刷新“配置项”的持久表示，
+它可能来自于 #1 “基于java的配置”，#2 “XML文件”，#3 “属性文件”，#4 “关系数据库模式” #5 “或其他格式”。
+
+特征：
+    由于这是一个启动方法，因此 如果它失败的话，它应该销毁已经创建的单例对象 - 以避免悬空资源。
+    换句话说，在调用此方法之后，应该实例化全部的单例对象，要么没有任何一个单例对象被实例化。
+
+AbstractApplicationContext中提供的 refresh()实现:
+作用：创建&初始化 contextConfigLocation类 所配置的xml文件中 所定义的Bean。
+
+以上， ContextLoaderListener的启动过程结束。
+这个过程做了两件事：
+#1 创建出了 web应用的根IoC容器；
+#2 把 web应用的根IoC容器 添加到 servlet上下文中 - 供整个web应用使用。
+
+特征：根IoC容器中的Bean会是全局共享的；
+应用：因此一般配置 通用的Bean类型 - {数据库DataSource、DAO层、Service层、事务等}相关的Bean
+
