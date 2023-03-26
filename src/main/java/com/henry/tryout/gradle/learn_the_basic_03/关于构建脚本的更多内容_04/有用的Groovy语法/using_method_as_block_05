@@ -1,0 +1,6 @@
+repositories {
+    println "in a closure"
+}
+// 把闭包放在方法调用的后面？
+repositories() { println "in a closure" }
+repositories({ println "in a closure" })

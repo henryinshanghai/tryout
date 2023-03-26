@@ -1,0 +1,46 @@
+Groovy提供了许多特性来帮助创建DSL。
+这些特性可以帮助您编写更多惯用的构建脚本、插件和任务。
+    寻找有用的Kotlin语法?查看Kotlin参考文档和Kotlin Koans。
+
+-- 方便的方法 --
+Groovy在标准Java类中添加了“方便的方法”。
+例如，Iterable有一个each方法，它会迭代Iterable的元素:
+easier_method_01
+
+-- 自动属性访问器 --
+Groovy自动 将属性引用 转换为 “getter或setter方法调用”:
+refer_properties_02
+
+-- 方法调用的可选括号 --
+Groovy对方法调用 “不要求括号”:
+optional_parentheses_in_method_03
+
+-- list和map实例化的快捷方式 --
+Map<String, String> map = [key1:'value1', key2: 'value2']
+
+Groovy提供了 定义List和Map实例 的快捷方式。
+例如，考虑“apply”方法，它接受一个map参数。
+当你应用一个插件(apply plugin:'java')时，你不需要使用map字面量。
+插件应用程序使用“命名参数”代替。
+“命名参数” 和 “映射字面量” 使用类似的语法，但“命名参数”不使用包装括号。
+当调用apply时，Groovy将 “命名参数列表” 转换为 “映射”。
+shortcut_for_collection_04
+
+-- 最后闭包参数语法 --
+Gradle DSL在许多地方使用闭包。
+您可以在这里找到关于闭包的更多信息。
+当一个方法的最后一个参数是一个闭包时，你可以“把闭包放在方法调用之后”:
+using_method_as_block_05
+
+-- 闭包的委托 --
+每个闭包都有一个委托对象。
+
+Groovy使用这个委托 来 查找对 “非局部变量” 和 “闭包参数的变量” 和 “方法”引用。
+Gradle将此用于 “配置闭包”，其中“委托对象” 引用 “正在配置的对象”。
+
+dependencies {
+    assert delegate == project.dependencies
+    testImplementation('junit:junit:4.13')
+    delegate.testImplementation('junit:junit:4.13')
+}
+

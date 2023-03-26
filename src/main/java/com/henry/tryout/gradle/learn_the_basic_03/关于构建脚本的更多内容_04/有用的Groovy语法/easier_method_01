@@ -1,0 +1,2 @@
+// Iterable的 each()方法
+configurations.runtimeClasspath.each { File f -> println f }
