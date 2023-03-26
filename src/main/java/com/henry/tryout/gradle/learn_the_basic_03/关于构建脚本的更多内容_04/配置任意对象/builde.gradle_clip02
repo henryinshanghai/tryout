@@ -1,0 +1,14 @@
+class UserInfo {
+    String name
+    String email
+}
+
+tasks.register('configure') {
+    def userInfo = new UserInfo()
+    // 引用外部配置文件中的属性 来 配置对象
+    apply from: 'other.gradle', to: userInfo
+    doLast {
+        println userInfo.name
+        println userInfo.email
+    }
+}

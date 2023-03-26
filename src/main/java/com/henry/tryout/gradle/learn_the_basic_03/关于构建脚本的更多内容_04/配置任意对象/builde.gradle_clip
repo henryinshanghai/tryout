@@ -1,0 +1,18 @@
+// 自定义类型
+class UserInfo {
+    String name
+    String email
+}
+
+tasks.register('configure') {
+    // 配置自定义类型的对象?
+    def user = configure(new UserInfo()) {
+        name = "Isaac Newton"
+        email = "isaac@newton.me"
+    }
+    doLast {
+        println user.name
+        println user.email
+    }
+}
+
