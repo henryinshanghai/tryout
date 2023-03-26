@@ -1,0 +1,8 @@
+Script API
+
+当Gradle执行Groovy构建脚本(.gradle)时，它会将脚本编译为实现script的类。
+因此，构建脚本可以访问 “Script接口声明的所有属性和方法”。
+
+当Gradle执行Kotlin构建脚本(.gradle / .kts)时，它会 将该脚本编译为 KotlinBuildScript的一个子类。
+因此，构建脚本可以访问 “KotlinBuildScript类型声明的所有可见属性和函数”。
+
