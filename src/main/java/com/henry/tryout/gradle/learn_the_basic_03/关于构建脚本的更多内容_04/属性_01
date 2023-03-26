@@ -1,0 +1,21 @@
+属性
+
+构建脚本中的许多“顶级属性和块” 都是Project API的一部分。
+下面的构建脚本使用project.name属性 来 打印项目的名称:
+
+-- 访问项目属性 --
+/属性
+
+两个println语句输出相同的属性。
+第一种方法使用对 “Project对象的name属性” 的顶级引用。
+另一条语句使用 “任何构建脚本可用的项目属性”，该属性返回所关联的project对象。
+
+-- 标准项目属性 --
+Project对象在构建脚本中公开一组标准属性。
+下表列出了一些常用的属性:
+
+Project的属性：{project, name, path, description, projectDir, buildDir, group, version, ant}
+
+使用其他目标 来 编写脚本
+这里描述的构建脚本 以Project对象做为目标。
+还有settings脚本 和 init脚本分别针对 settings 和 Gradle对象。
