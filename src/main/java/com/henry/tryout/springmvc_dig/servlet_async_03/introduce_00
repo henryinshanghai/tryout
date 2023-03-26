@@ -1,0 +1,32 @@
+使用同步的方式处理请求时，如果耗时长的请求的访问量增加，则：会导致 Web容器的大量线程被占用。
+进而拖慢 其他所有接口的响应耗时。
+
+异步处理的应用
+适用于比较耗时而导致主线程长时间等待的场景。
+
+=== Servlet 3.0的异步处理特性 ===
+同步处理的流程：
+    对于每一个HTTP请求，都会 从Web容器的线程池中获取一个线程，专门处理它。
+
+异步处理的流程：
+    对于耗时的HTTP请求，主线程会把请求委托给其他线程去处理。委托完成后，主线程就会回到Web容器线程池中。
+
+代码示例： AsyncLongRunningServlet
+
+异步编程四部曲：
+#1 设置 @WebServlet的 asyncSupported属性为 true，表示支持异步处理；
+#2 启动异步处理： 调用 req.startAsync(request, response)方法， 来 获取 ”异步处理上下文“对象 AsyncContext;
+#3 执行异步处理：调用这个方法后，主线程就结束了 - Runnable会由 AsyncContext内部的Executor来处理;
+#4 调用complete()方法，表示请求处理完成，”工作线程“结束
+
+验证手段：
+通过日志可以看到主线程很快就被释放了，由工作线程来处理业务逻辑。
+
+Next：在 Spring MVC中使用异步处理；
+
+== Recap ==
+针对http请求进行异步编程：
+#1 开启异步处理 - @WebServlet(asyncSupported);
+#2 获取异步处理上下文对象 - req.startAsync(request, response);
+#3 把请求任务委托给 工作线程 执行 - asyncContext.start(xxx);
+#4 标识请求已经处理完成 - asyncContext.complete().
