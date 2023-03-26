@@ -1,0 +1,5 @@
+主要配置元素：{Listener, Filter, Servlet}
+
+与 Spring MVC的关联：
+Tomcat启动/Spring MVC应用/web应用启动时，会在此三大组件的初始化过程中，完成 对Spring & Spring MVC的初始化。
+
