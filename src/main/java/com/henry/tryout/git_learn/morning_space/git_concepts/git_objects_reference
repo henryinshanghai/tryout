@@ -1,0 +1,30 @@
+使用对象的几种方式 - {id, name(reference), alias}
+
+Git中的reference
+是：指向Git对象的一个指针/名称；
+作用：使用引用，开发者能够以 更接近自然语言的方式 来 认识Git对象；
+特征：
+    #1 开发者最常使用到的reference 就是 commit对象的reference；
+    #2 存储在 .git/refs目录下
+应用：
+    #1 由于它是 commit的名称，因此可以用reference 来 表示commit对象中所包含的文件集合；
+    #2 结合 commit历史的链表特性，因此，使用 链表末尾节点的reference就能够 标识整个commit历史。
+用法：
+    #1 branch引用 - 用于标识 某个分支(commit序列)；
+    #2 remote引用 - 用于指向 远程Git仓库对应分支下的最新提交。
+        特征：存储在 .git/refs/remotes/<ref_name>中
+
+符号引用：
+是：一个指针；
+作用：用于指向某一个reference；
+特征：不直接指向Git对象；
+应用： HEAD符号引用；
+    作用：用于表示 项目当前正在使用的分支；
+    特征：
+        #1 这个引用保存在 .git/HEAD文件中。
+        #2 HEAD只会指向某一个引用(也就是分支名)；
+        #3 当开发者切换分支时，HEAD的值会自动更新；
+
+
+
+
