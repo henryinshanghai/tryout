@@ -1,4 +1,4 @@
-package com.henry.tryout.view_sources_code_tips.idea_tip_tryout;
+package com.henry.tryout.view_sources_code_tips.idea_tip_tryout.source_code;
 
 // 查看Class的hierarchy - Ctrl + H
 public interface Vehicle {

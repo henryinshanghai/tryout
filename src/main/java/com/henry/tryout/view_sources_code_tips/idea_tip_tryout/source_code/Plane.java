@@ -1,4 +1,4 @@
-package com.henry.tryout.view_sources_code_tips.idea_tip_tryout;
+package com.henry.tryout.view_sources_code_tips.idea_tip_tryout.source_code;
 
 public class Plane implements Vehicle{
     @Override
