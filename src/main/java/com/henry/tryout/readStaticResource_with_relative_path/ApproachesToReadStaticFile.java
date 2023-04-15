@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+// 验证：在代码中指定 静态文件的路径时，应该拷贝 path from content root
 public class ApproachesToReadStaticFile {
     public static void main(String[] args) throws IOException {
         System.out.println("***** using approach01: File ********");
