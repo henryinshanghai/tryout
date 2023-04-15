@@ -1,0 +1,3 @@
+When you invoke Basic Completion Ctrl+空格,
+IntelliJ IDEA Community suggests the choices that are reachable from the current caret position(当前光标位置).
+Press Ctrl+空格 again to also see inaccessible classes and members（无法访问到的类与成员变量）.
