@@ -1,0 +1,10 @@
+You can create code constructs using statement completion.
+Start typing a method declaration, a method call or a statement such as
+if, do -while, try -catch, or return.
+Press Ctrl+Shift+Enter to complete the statement into a syntactically correct construct.
+
+使用语句补全地功能，你能够创建代码结构。
+开始键入方法声明、方法调用或者一个语句。
+比如 if, do-while, try-catch, 或者return。
+
+按下 Ctrl + Shift + Enter 来 把语句补全到 语法正确的结构中
