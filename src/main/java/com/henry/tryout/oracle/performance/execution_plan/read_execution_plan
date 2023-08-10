@@ -1,0 +1,56 @@
+== what is an execution plan? ==
+
+
+== how to read the plan tree ==
+feature:
+    #1
+    #2
+    #3
+    #4
+
+== adding rows(estimated & actual) info into the tree ==
+select *
+from   bricks b
+join   colours c
+on     b.colour = c.colour;
+
+select *
+from   table(dbms_xplan.display_cursor(:LIVESQL_LAST_SQL_ID, format => 'ROWSTATS LAST'));
+
+method: xxx
+feature:
+    #1 2 mode - {LAST - Only display the stats for the last execution.
+                 ALL - Cumulative stats for every execution. This is the default.}
+usage: xxx
+
+= Actual Row =
+approaches:
+#1 Hint the query - add the hint /*+ gather_plan_statistics */ to your query
+#2 Alter the session - Run alter session set statistics_level = all before the query
+
+usage:
+select /*+ gather_plan_statistics */*
+from   bricks b
+join   colours c
+on     b.colour = c.colour;
+
+select *
+from   table(dbms_xplan.display_cursor(:LIVESQL_LAST_SQL_ID, format => 'ROWSTATS LAST'));
+
+== explain starts info into the tree ==
+what is starts info?
+    function: to indicate that how many times the operation began while the query was running.
+
+demo:
+select /*+ gather_plan_statistics */c.rgb_hex_value,
+       ( select count (*)
+         from   bricks b
+         where  b.colour = c.colour
+       ) brick#
+from   colours c;
+
+select *
+from   table(dbms_xplan.display_cursor(:LIVESQL_LAST_SQL_ID, format => 'ROWSTATS LAST'));
+
+
+
