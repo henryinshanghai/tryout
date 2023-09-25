@@ -1,0 +1,7 @@
+git merge 与 git rebase的操作单位 都是branch。
+但有时候我只想要 把分支A中我的commit给添加到分支B中；
+具体做法：
+    #1 把分支A中，我所有的commit（最好连续）都打包成一个patch；
+    #2 在IDEA中，把当前分支切换到 分支B；
+    #3 把#1中的patch文件 应用到分支B中。
+
