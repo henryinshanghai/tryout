@@ -1,0 +1,49 @@
+SCORING
+
+10. keep a tally(计分) of each player's score, entering it after each turn（每轮结束后）.
+The score value of each letter（字母的分数值） is indicated by a number at the bottom of the tile（字母片下方的数字）.
+The score value of a blank is zero（空字母片的分数是0）.
+
+11. The score for each turn is
+the sum of the score values of all the letters in each word formed(组成的) or modified（改变的） in the play
+plus the premium values resulting from（由...导致的） placing letters on premium squares（高级方格）.
+
+12. Premium Letter Squares（高级字母方格）:
+A light blue square doubles（使翻倍） the score of a letter placed on it;
+a dark blue square triples（使三倍） the letter score（字母的分数）.
+
+13. Premium Word Squares（高级单词方格）:
+The score for the entire word is doubled when one of its letter is placed on a pink square（但单词的一个字母在粉色方格上）;
+it is tripled when a letter is placed on a red square（红色方格）.
+
+Include premiums for double or triple letter values（先计算字符的分数）, if any,
+before doubling or tripling the word score（再计算单词的分数）.
+
+If a word is formed that cover（覆盖了两个高级单词方格） two premium word squares,
+the score is doubled and then re-double(4 times letter count),
+or tripled and then re-tripled (9 times letter count), as the case may be.
+
+Note that the center star square（中心星星方格） is a pink square and
+therefore doubles the score（使分数翻倍） for the first word.
+
+14. The above letter and word premiums apply（生效）
+only in the turn in which they are first played（它们第一次被使用的轮次中）.
+In subsequent turns（后继的轮次中） letters count at face value（字面分值）.
+
+15. When a blank tile falls on a pink or a red square,
+the sum of the letters（字母分值总和） in the word is double or tripled
+even though the blank itself has no score value.
+
+16. When two or more words are formed（形成） in the same play,
+each is scored（每个单词都计分）.
+The common letter is counted(with full premium value, if any)
+in the score if each word.(See example, Turn 3 and 4 at end.)
+
+17. Any player who plays all seven of their tiles in a single turn
+scores a premium of 50 points（额外加50分）
+in addition to（除了） their regular score for the play.
+
+18. at the end of the game each player's score is reduced by（减去）
+the sum of their unplayed letters（没用掉的字母）, and, if one player
+has used all of their letters, their score is increased by
+the sum of the unplayed letters of all the other players（其他玩家的没用掉的字母分值要加给他）.
