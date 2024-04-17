@@ -1,5 +1,6 @@
 package com.henry.tryout.design_pattern.adapter_pattern;
 
+// #1 目标类
 public class RoundPeg {
     // 钉子的半径
     private double radius;

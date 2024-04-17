@@ -1,4 +1,4 @@
-package com.henry.tryout.design_pattern.adapter_pattern;
+package com.henry.tryout.design_pattern.adapter_pattern.jdk_instance;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.ArrayList;
