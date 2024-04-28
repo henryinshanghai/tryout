@@ -1,0 +1,58 @@
+Figure 01 can converse in natural language and execute commands based on it.
+Figure 01能够用自然语言进行交流，并根据指令执行命令。
+
+======
+Hey, figure one. What do you see right now（）?
+嘿图一你现在看到了什么
+
+I see a red apple on a plate in the center of the table,
+我看到桌子中央的盘子上放着一个红苹果
+a drying rack with cups and a plate,
+晾碗架上放着杯子
+and you standing nearby with your hand on the table（值得说出来的细节）.
+和盘子你站在旁边手放在桌子上 // human mannerisms 人的行为
+
+Great. Can I have something to eat?
+棒极了我能吃点东西吗
+
+Sure thing. 当然
+
+Great. Can you explain why you did what you just did
+棒极了你能解释一下你为什么在捡垃圾的时候
+while you pick up this trash 做这些事吗
+
+On it. 交给我 // lag(回答时有延迟) 曾经认为机器人做不出来的事情-推测出汉堡发生了什么 inductive reasoning
+So I gave you the apple, because it's the only edible item
+所以我把苹果给了你因为这是我能从餐桌上
+I could provide you with from the table.
+给你的唯一可食用的东西
+
+Great. So based on the scene right now,
+棒极了所以根据现在的场景你认为
+where do you think the dishes in front of you go next?
+你面前的盘子下一步会去哪里 // 这个就是 inductive reasoning（归纳推理）
+
+'''
+Figure 01 can perceive（感知并理解） its surroundings and respond to natural language（自然语言） commands in real-time（即时的）.
+It exhibits a level of autonomy（自主权）,
+intuition（直觉/对方的手） and inductive reasoning（归纳推理） that was previously believed impossible.
+Figure 01能够实时感知周围环境，并对自然语言命令做出响应。它展示了一种先前被认为不可能的自主性和归纳推理能力。
+'''
+
+The dishes on the table like that plate and cup are likely to
+桌子上的盘子和杯子很可能下一步就
+go into the drying rack next. 会进入晾碗架
+Great. Can you put them in? 棒极了你能把它们放进去吗
+Of course, 当然
+Alright, so... how do you think you did?
+行，那么你觉得你做得怎么样
+I.. I think I did pretty well. 我觉得我做得很好
+The apple found its new owner, 苹果找到了它的新主人
+ the trash is gone and the tableware is 垃圾不见了餐具也在它
+right where it belongs. 该在的地方
+I agree. 我同意
+Thanks, figure one. 谢谢图一
+You're welcome. 不客气
+If there's anything else you need help with.
+如果你还有什么需要帮忙的
+Just let me know. 让我知道
