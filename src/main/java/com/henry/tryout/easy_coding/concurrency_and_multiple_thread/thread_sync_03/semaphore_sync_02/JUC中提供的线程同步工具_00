@@ -1,0 +1,10 @@
+JDK中的线程同步三宝
+
+Ⅰ CountDownLatch：门闩
+Ⅱ Semaphore：信号量
+Ⅲ CyclicBarrier; 循环障碍
+
+高层用法：
+    开发者 要：
+    ① 尽量使用 并发包中所提供的 信号同步类，
+    ② 避免使用 对象本身的wait() 与 notify()方法 来 实现 多线程之间的同步。

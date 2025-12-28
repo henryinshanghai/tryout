@@ -1,0 +1,150 @@
+===
+Semaphore（信号量）是 Java 并发包（java.util.concurrent）中一个 强大的同步控制工具，
+它的核心作用是：
+    控制 同时访问某一资源 或 执行某段代码的 线程数量上限。
+
+你可以把它想象成一个**“许可证发放机”**：
+    ① 系统只有 N 个许可证（permits）；
+    ② 线程要执行任务，必须先获取许可证（acquire()）；
+    ③ 用完后归还许可证（release()）；
+    ④ 如果许可证用完了，新来的线程就得排队等待。
+
+🎯 核心作用一句话总结：
+Semaphore 实现的是 “限流” 或 “资源池”式的并发控制，而不是 互斥（虽然可以模拟互斥）。
+
+===
+🔧 基本原理
+    // 创建一个有 3 个许可证的信号量
+    Semaphore semaphore = new Semaphore(3);
+
+① 初始许可证数量 = 3 → 最多允许 3 个线程同时进入临界区。
+② 第4个线程 调用 acquire() 时 会被阻塞，直到 某个线程 调用 release() 归还许可证。
+
+===
+🌰 经典示例：限制数据库连接数
+假设你有一个数据库连接池，最多只允许 5个并发连接：
+
+public class DatabaseAccess {
+    // 最多5个线程 可同时访问 数据库
+    private static final Semaphore semaphore = new Semaphore(5);
+
+    public void query(String sql) throws InterruptedException {
+        semaphore.acquire(); // 获取许可证（可能阻塞）
+        try {
+            // 模拟数据库操作
+            System.out.println(Thread.currentThread().getName() + " 正在执行查询: " + sql);
+            Thread.sleep(2000);
+        } finally {
+            semaphore.release(); // 释放许可证（必须放在 finally！）
+        }
+    }
+}
+✅ 效果：即使有 100 个线程调用query()，也最多只有5个在 真正执行 数据库操作，其余 排队等待。
+
+===
+✅ Semaphore 能实现哪些同步效果？
+同步效果	             |        如何实现        	| 说明
+. 限流（Throttling）	 | new Semaphore(N)，N > 1	| 控制 并发度，保护资源（如 API 调用、文件读写）
+. 互斥锁（Mutex）	 | new Semaphore(1)	        | 等价于 synchronized 或 ReentrantLock（但不可重入！）
+. 资源池管理	         | 许可证数 = 资源总数	    | 如 连接池、线程池、对象池
+. 多生产者-多消费者协调 | 结合 BlockingQueue 使用	| 控制 缓冲区容量（见下文）
+
+===
+🔄 与 synchronized / ReentrantLock 的区别
+特性	        |   synchronized / Lock     |	Semaphore
+目的	        | 保证互斥（一次一个线程）     |	控制并发数量（一次 N 个线程）
+许可证数量	| 固定为 1	                | 可配置（1 ~ N）
+是否可重入	| 是（ReentrantLock）	    | ❌ 否！同一个线程 不能重复 acquire()（除非 permits > 1）
+用途	        | 保护临界区	                | 限流、资源池、协作
+
+💡 用 Semaphore(1) 模拟互斥锁的缺点：
+① 不可重入 → 同一线程二次 acquire() 会死锁！
+② 无所有权概念 → 任何线程都能 release()（即使它没 acquire() 过）
+
+===
+🧩 高级用法：实现 有界缓冲区（生产者-消费者）
+Semaphore 常和 BlockingQueue 配合，或 直接用于 控制缓冲区：
+
+class BoundedBuffer {
+    private final Object[] buffer = new Object[10];
+    private int count = 0, putIndex = 0, takeIndex = 0;
+
+    // 空槽位的数量（初始=10）
+    private final Semaphore empty = new Semaphore(10);
+    // 已填充槽位的数量（初始=0）
+    private final Semaphore full = new Semaphore(0);
+    // 用于保护buffer 的互斥锁
+    private final Semaphore mutex = new Semaphore(1);
+
+    public void put(Object item) throws InterruptedException {
+        empty.acquire();   // 等待有空位
+        mutex.acquire();   // 进入临界区
+        try {
+            buffer[putIndex] = item;
+            putIndex = (putIndex + 1) % buffer.length;
+            count++;
+        } finally {
+            mutex.release();
+            full.release(); // 通知消费者有新数据
+        }
+    }
+
+    public Object take() throws InterruptedException {
+        full.acquire();    // 等待有数据
+        mutex.acquire();
+        try {
+            Object item = buffer[takeIndex];
+            takeIndex = (takeIndex + 1) % buffer.length;
+            count--;
+            return item;
+        } finally {
+            mutex.release();
+            empty.release(); // 通知生产者有空位
+        }
+    }
+}
+这是经典的 “有界缓冲区” 问题，Semaphore 清晰表达了“空位”和“满位”的语义。
+
+===
+⚙️ 常用方法
+方法	                    |   说明
+Semaphore(int permits)	| 创建 具有指定许可证数量的 信号量
+void acquire()	        | 获取一个许可证（阻塞直到可用）
+void acquire(int n)	    | 获取 n 个许可证
+boolean tryAcquire()	| 尝试获取，不阻塞（立即返回 true/false）
+boolean tryAcquire(long timeout, TimeUnit unit)	| 带超时的 尝试获取
+void release()	        | 释放一个许可证（可由任意线程调用！）
+int availablePermits()	| 返回当前可用许可证数（调试用）
+
+===
+⚠️ 注意事项
+① 必须配对使用 acquire() 和 release()
+→ 建议在 try-finally 中 release()，防止异常 导致 许可证泄漏。
+
+② 不要滥用 release()
+→ 错误地 多调用 release() 会导致 许可证数 超过 初始值，破坏 限流逻辑！
+
+③ 公平性（Fairness）
+    new Semaphore(3, true); // 公平模式：按 请求顺序 分配许可证
+默认是 非公平的（性能更好），但可能导致 线程饥饿。
+
+===
+✅ 典型应用场景
+场景	        |   说明
+API 限流     | 防止 第三方服务 被压垮（如每秒最多 100 次调用）
+文件并发写入	| 限制 同时写日志的 线程数，避免 I/O 瓶颈
+爬虫并发控制	| 控制 同时抓取网页的 线程数，遵守网站 robots 协议
+GUI 应用	    | 限制 同时打开的 窗口数量
+测试环境	    | 模拟 高并发下的 资源争用
+
+===
+✅ 总结
+Semaphore 的本质是一个“计数信号量”，用于：
+“允许多个线程（最多 N 个）同时访问共享资源，超出则等待。”
+
+它不是为了 互斥，而是为了 控制并发度，是 构建 高性能、高可靠系统的 关键工具 之一。
+
+🧠 记住口诀：
+“信号量，管并发；拿许可，才进门；用完后，快归还！”
+
+合理使用 Semaphore，能让 你的程序 既安全又高效！

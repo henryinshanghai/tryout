@@ -3,7 +3,7 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-// 使用 ThreadLocal 来封装 想要被线程私有的对象 - simpleDateFormat
+// 使用 ThreadLocal 来 封装 想要被线程私有的对象 - simpleDateFormat
 public class SimpleDateFormatDemo {
     public static void main(String[] args) {
         /*
@@ -12,14 +12,14 @@ public class SimpleDateFormatDemo {
                 protected Calendar calendar;
             }
 
-            这个 calendar对象在被多个线程共享时，很容易发生错误；
-            解决方式： 使用ThreadLocal，使得每个线程都有自己的 calendar对象
+            这个 calendar对象 在 被多个线程 共享 时，很容易 发生错误；
+            解决方式：使用ThreadLocal，使得 每个线程 都有 自己的calendar对象
          */
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
     }
 
-    // 使用 ThreadLocal 来封装 想要被线程私有的对象 - simpleDateFormat
+    // 使用 ThreadLocal 来 封装 想要被线程私有的对象 - simpleDateFormat
     private static final ThreadLocal<DateFormat> DATE_FORMAT_THREADLOCAL =
             new ThreadLocal<DateFormat>() {
                 @Override

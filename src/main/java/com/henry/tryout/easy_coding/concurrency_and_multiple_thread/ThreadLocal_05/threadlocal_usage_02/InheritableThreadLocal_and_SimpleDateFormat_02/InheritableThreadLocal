@@ -49,14 +49,14 @@
                 }
             }
 
-淘宝在很多场景下就是通过 ThreadLocal 来 透传全局上下文的，比如
+淘宝在 很多场景 下 就是 通过ThreadLocal 来 透传 全局上下文 的，比如
     用 ThreadLocal 来 存储监控系统的某一个标记位，暂时命名为 traceId.
-    预期：某一次请求下 所有的traceId都应该是一致的，以 获得可以统一解析的日志文件。
-    实际：但在实际开发开发过程中，发现子线程中的traceId为null.
+    预期：某一次请求下 所有的traceId 都应该是 一致的，以 获得 可以统一解析的 日志文件。
+    实际：但在 实际开发开发过程 中，发现 子线程中的traceId 为null.
 
     解决手段：
-        使用 InheritableThreadLocal 来解决 父子线程之间共享线程变量的问题。
-        - 这样就能够使整个连接过程中的traceId一致
+        使用 InheritableThreadLocal 来 解决 父子线程之间 共享线程变量的问题。
+        - 这样 就能够使 整个连接过程中的 traceId 一致
     代码：RequestProcessTrace
 
 ======

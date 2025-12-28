@@ -1,0 +1,117 @@
+===
+CyclicBarrier（循环屏障）是 Java 并发包（java.util.concurrent）中一个 用于多线程协同等待的 同步辅助工具。
+它的核心作用是：
+    让 一组线程 互相等待，直到 所有线程都 到达 某个“屏障点”（barrier point），然后 一起 继续执行。
+
+你可以 把 它 想象成 一场多人登山活动：
+① 所有队员（线程）各自爬山（执行任务）；
+② 到达山顶（屏障点）后，必须等所有人都到齐；
+③ 人齐了，大家一起喊口号（可选回调），然后集体下山（继续后续任务）。
+
+🎯 核心作用一句话总结：
+CyclicBarrier 实现的是“多线程并行 → 同步汇合 → 再并行”的协作模式，且可重复使用（“循环”）。
+
+
+===
+🔧 基本原理
+    // 创建一个 CyclicBarrier，要求 3 个线程到达屏障
+    CyclicBarrier barrier = new CyclicBarrier(3);
+① 每个线程 在关键点 调用 barrier.await()；
+② 前 2 个线程 调用 await() 后 会阻塞等待；
+③ 第 3 个线程 调用 await() 后，所有 3 个线程 同时被唤醒，继续执行。
+
+✅ 关键特性：可重复使用！ 一轮完成后，屏障自动重置，可进行下一轮同步。
+
+===
+🌰 经典示例：多线程并行计算 + 汇总
+假设 3 个线程分别计算数组的一部分，算完后需汇总结果：
+参考：UsageDemo
+
+💡 注意：屏障动作（Runnable）由最后一个到达的线程执行。
+
+===
+✅ CyclicBarrier 能实现什么同步效果？
+同步效果	            | 说明
+. 多个线程 同步启动	| 所有线程 准备就绪 后，同时开始 执行（避免“先发优势”）
+. 阶段性 并行计算	    | 多轮计算，每轮结束后 同步 再进入 下一轮
+. 一致性检查点	    | 在 分布式模拟、仿真系统 中，确保 所有单元 状态同步
+. 测试 并发性能	    | 精确控制 多个线程 在同一时刻 开始压测
+
+===
+🆚 与 CountDownLatch 的区别（重点！）
+特性	    |   CyclicBarrier               |	CountDownLatch
+用途	    | N 个线程互相等待	            | 1 个（或多个）线程等待 N 个任务完成
+可重用性	| ✅ 可循环使用（reset 后或自动）	| ❌ 一次性（计数归零后不可重置）
+触发方	| 所有参与线程都调用 await()	    | 等待者调用 await()，完成者调用 countDown()
+回调支持	| ✅ 支持屏障动作（Runnable）	    | ❌ 无
+典型场景	| 多线程协作、分阶段计算	        | 主线程等待子任务完成
+
+🧠 记忆口诀：
+① CountDownLatch：一等多（主线程等子线程）
+② CyclicBarrier：多等多（大家互相等）
+
+===
+⚙️ 常用构造方法与方法
+构造函数
+// 只指定参与线程数
+CyclicBarrier(int parties)
+
+// 指定线程数 + 屏障动作（所有线程 到达后 执行）
+CyclicBarrier(int parties, Runnable barrierAction)
+
+核心方法
+方法	                                    | 说明
+int await()	                            | 等待 所有其他线程 到达屏障（阻塞）
+int await(long timeout, TimeUnit unit)	| 带超时的等待（防止死锁）
+int getNumberWaiting()	                | 获取当前 在屏障处等待的 线程数
+int getParties()	                    | 返回参与线程总数
+void reset()	                        | 重置屏障（会中断 所有等待线程，抛出 BrokenBarrierException）
+
+===
+⚠️ 注意事项
+① 超时与中断
+    如果某个线程 在 await() 时超时 或 被中断，屏障 会被破坏（broken），所有等待线程 抛出BrokenBarrierException。
+② 屏障动作异常
+    如果 barrierAction 抛出异常，屏障也会被破坏。
+③ 不要滥用 reset()
+    除非你 明确知道 所有线程的状态，否则 reset() 可能 导致混乱。
+
+===
+✅ 典型应用场景
+场景	                | 说明
+并行算法 分阶段执行	| 如 矩阵计算、蒙特卡洛模拟
+游戏/仿真系统 同步帧   | 所有玩家/NPC 更新完状态 后，再 统一渲染 下一帧
+压力测试 精确启动	    | 让 100个线程 同时发起 请求（配合 CountDownLatch 更佳）
+多传感器 数据融合	    | 等 所有传感器 采集完 数据后 再进行 融合处理
+
+===
+💡 高级技巧：结合 CountDownLatch 实现“同步启动 + 同步结束”
+
+    // 1. 用 CountDownLatch 让 所有线程 同时开始
+    CountDownLatch startSignal = new CountDownLatch(1);
+    // 2. 用 CyclicBarrier 让 所有线程 在结束时 同步
+    CyclicBarrier endBarrier = new CyclicBarrier(threadCount);
+
+    for (int i = 0; i < threadCount; i++) {
+        new Thread(() -> {
+            startSignal.await(); // 等待统一发令枪
+            doWork();
+            endBarrier.await();  // 等待所有人完成
+        }).start();
+    }
+
+    startSignal.countDown(); // 发令：所有线程同时开始！
+
+===
+✅ 总结
+CyclicBarrier 的作用是：
+    “我们一群人约好在山顶集合，谁先到就等着，等人齐了一起下山！”
+
+它特别适合 需要多轮同步协作 的场景，是构建 高精度并发控制逻辑 的重要工具。
+
+
+🧠 记住：
+① CyclicBarrier = 多线程互相等待 + 可循环使用 + 支持回调
+② 与 CountDownLatch 互补，共同解决 不同类型的 线程协调问题。
+
+合理使用 CyclicBarrier，让 你的并发程序 像交响乐一样 精准协作！

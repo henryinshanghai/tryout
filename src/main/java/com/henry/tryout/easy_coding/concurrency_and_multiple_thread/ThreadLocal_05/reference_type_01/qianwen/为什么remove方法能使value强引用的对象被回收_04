@@ -1,0 +1,119 @@
+为什么添加了 tl.remove()语句，bigObject对象就会被GC回收呢?
+
+===
+一、核心原因一句话总结：
+tl.remove() 会从 当前线程的 ThreadLocalMap 中 彻底删除 对应的 Entry，从而 断开 对 BigObject 的强引用链，
+使其变成“不可达对象”，GC 就可以回收它。
+
+===
+二、详细过程拆解
+假设代码如下：
+
+void demo() {
+    ThreadLocal<BigObject> tl = new ThreadLocal<>();
+    tl.set(new BigObject()); // ← 创建一个 BigObject 实例（叫它 BO）
+
+    tl.remove(); // ← 关键操作！
+
+    // 此时 BO 是否可被 GC？
+}
+
+==
+我们分阶段 看 内存状态：
+
+阶段 1：tl.set(new BigObject()) 之后
+在 当前线程的 ThreadLocalMap 中 创建一个 Entry：
+    Entry {
+        key   = WeakReference<tl>   // 弱引用 指向 tl（即 ThreadLocal 实例）
+        value = BO                  // 强引用 指向 BigObject 实例
+    }
+
+引用关系：
+    Thread (GC Root)
+      ↓
+    threadLocals (ThreadLocalMap)
+      ↓
+    Entry[] 数组 → Entry 对象
+                      ↓ (强引用)
+                      BO  ← 所以 BO 是可达的，不能被 GC
+
+==
+阶段 2：执行 tl.remove()
+remove() 方法内部做了什么？（简化版源码）
+
+    public void remove() {
+        ThreadLocalMap m = getMap(Thread.currentThread());
+        if (m != null)
+            m.remove(this); // 传入 this（即 tl）
+    }
+
+    // ThreadLocalMap.remove():
+    private void remove(ThreadLocal<?> key) {
+        Entry[] tab = table;
+        int i = key.threadLocalHashCode & (tab.length - 1);
+        for (Entry e = tab[i]; e != null; e = tab[i = nextIndex(i, len)]) {
+            if (e.get() == key) {     // 找到 key 匹配的 Entry
+                e.clear();            // ← 1. 清除 弱引用（key = null）
+                expungeStaleEntry(i); // ← 2. 清理 整个Entry（包括 value）
+                return;
+            }
+        }
+    }
+
+关键动作：
+① e.clear() → 调用 WeakReference.clear()，将 key 设为 null。
+② expungeStaleEntry(i) → 将 tab[i] = null，并把 e.value = null！
+
+也就是说：
+① Entry 对象本身 从数组中移除（设为 null）
+② Entry.value 被显式置为 null
+
+==
+阶段 3：tl.remove() 之后的内存状态
+
+    Thread (GC Root)
+      ↓
+    threadLocals (ThreadLocalMap)
+      ↓
+    Entry[] 数组 → 某个位置 = null   ← Entry 已被清除！
+
+    BO 对象：没有任何引用指向它 → 不可达！
+
+→ 此时 BigObject 成为 垃圾对象，下次 GC 时就会 被回收。
+
+===
+三、对比：如果 不调用 remove()
+① 即使 tl 变量 出作用域（方法结束），ThreadLocalMap 中的 Entry 仍然存在。
+② Entry.value 依然 强引用着 BO。
+③ 所以 BO 始终可达，永远 不会被 GC → 内存泄漏！
+
+===
+验证代码：ThreadLocalLeakDemo.java
+
+===
+五、重要补充：即使不调用 remove()，有时也能回收？
+
+是的！因为 ThreadLocalMap 在 get()/set() 时会 探测并清理 key为null的 Entry（stale entry）。
+
+但：
+① 如果之后 再也不访问 这个ThreadLocal（比如 在线程池中，该线程 不再处理 同类请求），
+② 那么 stale entry 就永远不会 被清理 → value 永久泄漏。
+✅ 所以：不要依赖 自动清理，必须主动 remove()！
+
+===
+六、总结
+操作	        |   对 BigObject 的影响
+tl.set(BO)	| ThreadLocalMap.Entry.value 强引用 BO → 不可回收
+tl.remove()	|  1. 从 map 中移除 Entry
+               2. 将 value = null
+                → BO 不可达 → 可被 GC
+忘记 remove()|BO 被长期 强引用 → 内存泄漏
+
+✅ 最佳实践：
+    try {
+        tl.set(value);
+        // ... 业务逻辑
+    } finally {
+        tl.remove(); // 确保清理！
+    }
+这才是 ThreadLocal 安全使用的黄金法则！

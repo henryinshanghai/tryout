@@ -2,7 +2,7 @@ package com.henry.tryout.easy_coding.concurrency_and_multiple_thread.ThreadLocal
 
 import org.apache.commons.lang.StringUtils;
 
-// 在父子线程之间 共享线程变量 - 手段：InheritableThreadLocal
+// 在 父子线程 之间 共享 线程变量 - 手段：InheritableThreadLocal
 public class RequestProcessTrace {
     // 定义了一个 InheritableThreadLocal类型的变量 - 封装了 FullLinkContext类型变量
     private static final InheritableThreadLocal<FullLinkContext> FULL_LINK_THREADLOCAL
@@ -49,5 +49,5 @@ public class RequestProcessTrace {
 }
 /*
     使用 ThreadLocal 与 InheritableThreadLocal 来 透传上下文的时候，
-    需要注意 对线程间切换、异常传输的处理 - 避免在传输过程中 因为处理不当而导致的上下文丢失。
+    需要注意 对线程间切换、异常传输的处理 - 避免在 传输过程 中 因为 处理不当 而导致的 上下文丢失。
  */

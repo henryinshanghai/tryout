@@ -1,0 +1,91 @@
+Java中的retry是什么语法?
+
+===
+在 Java 中，retry 并 不是关键字，也不是 独立的语法结构，而是一种 带标签的语句（labeled statement） 的用法。
+它通常 与 break 或 continue 配合使用，用于 跳出或继续 外层循环。
+
+一、基本概念：标签（Label）
+Java 允许给循环（如 for、while、do-while）或代码块加上一个标签（label），格式为：
+    标签名: 语句
+例如：
+    outer: for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i == 1 && j == 1) {
+                break outer; // 跳出 outer 标签所在的整个循环
+            }
+            System.out.println("i=" + i + ", j=" + j);
+        }
+    }
+这里的 outer 就是一个标签，break outer 表示跳出 由outer 所标记的循环。
+
+===
+二、retry 是什么？
+retry 只是 开发者自定义的一个 标签名，常用于 重试逻辑。比如：
+
+retry:
+while (true) {
+    try {
+        doSomething();
+        break retry; // 成功后 退出 retry 循环
+    } catch (Exception e) {
+        System.out.println("失败，准备重试...");
+        // 不 break，继续下一次 while 循环，即“重试”
+    }
+}
+
+✅ 这里的 retry: 是一个标签，break retry 表示 跳出 这个 带标签的 while 循环。
+❌ retry 本身 没有特殊含义，你 也可以写成 loop:、again:、myRetry: 等。
+
+===
+三、典型使用场景：重试机制
+    int maxRetries = 3;
+    int attempt = 0;
+
+    retry:
+    do {
+        attempt++;
+        try {
+            connectToServer(); // 可能抛出异常
+            System.out.println("连接成功！");
+            break retry; // 成功就跳出
+        } catch (IOException e) {
+            System.out.println("第 " + attempt + " 次尝试失败");
+            if (attempt >= maxRetries) {
+                System.out.println("已达到最大重试次数");
+                break retry; // 或者 throw new RuntimeException(e);
+            }
+            // 否则继续 下一次循环（重试）
+        }
+    } while (true);
+
+===
+四、注意事项
+① retry 不是关键字，只是 普通标识符（但建议 只用于 标签，避免混淆）。
+② 标签 只能用于 循环或块语句（如 { ... }），不能用于 任意语句。
+③ break label 跳出到 标签之后；continue label 则 跳到 标签所标记的循环 的下一次迭代。
+④ 过度使用标签 会降低 代码可读性，一般建议 优先用 方法封装 或 布尔标志 控制流程。
+
+===
+五、对比：不用标签的写法（更推荐）
+很多情况下，可以用 布尔变量 替代 标签：
+
+    boolean success = false;
+    int attempts = 0;
+    while (!success && attempts < 3) {
+        attempts++;
+        try {
+            connectToServer();
+            success = true;
+        } catch (IOException e) {
+            // log and retry
+        }
+    }
+这种写法更清晰，也更容易测试和维护。
+
+===
+总结
+问题	                    | 回答
+retry 是 Java 关键字吗？	| ❌ 不是，只是一个 普通的标签名
+它有什么作用？	        | 配合 break 或 continue 实现 对多层循环的精确控制
+常用于什么场景？	        | 重试逻辑、嵌套循环中跳出外层循环
+推荐使用吗？	            | 小心使用，优先考虑 更清晰的控制结构（如 方法拆分、布尔标志）

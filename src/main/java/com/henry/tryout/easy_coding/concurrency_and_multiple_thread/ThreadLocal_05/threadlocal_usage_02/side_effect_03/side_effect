@@ -1,39 +1,39 @@
 ThreadLocal可能引起的副作用：
     1 脏数据；
     2 内存常驻。
-引发副作用的场景：在线程池的线程中使用 ThreadLocal。
+引发 副作用 的场景：在 线程池的线程 中 使用 ThreadLocal。
 
 ===
 脏数据
 
 原理：
-    1 线程池会复用线程；
+    1 线程池会 复用线程；
     2 ThreadLocal变量：
-        - 与Thread绑定； // 因此也会被重用
-        - 作为类的静态属性。
-    3 如果在 线程的run()方法中没有调用remove()方法来清理 与线程相关的ThreadLocal信息，则：
-        如果下一个线程没有调用set()来设置初始值，那么 - 就有可能get()到重用的线程信息 - 包括ThreadLocal对象所关联的线程对象的value值
+        - 与Thread绑定； // 因此也会 被重用
+        - 作为 类的静态属性。
+    3 如果在 线程的run()方法 中 没有调用remove()方法 来 清理 与线程相关的ThreadLocal信息，则：
+        如果 下一个线程 没有调用set() 来 设置初始值，那么 - 就有可能 get()到 重用的线程信息 - 包括 ThreadLocal对象 所关联的 线程对象的value值
 
 脏数据的真实场景：
-    用户A下单后没有看到订单的变化，而用户B却看到了用户A的订单记录。
+    用户A下单后 没有看到 订单的变化，而用户B 却看到了 用户A的订单记录。
     原因：session优化引发的。
         原始的请求方式：
-            用户每次请求server,都会通过 sessionId 去缓存中查询用户的session信息。
+            用户每次请求server,都会通过 sessionId 去缓存中查询 用户的session信息。
         优化后的请求方式：
-            使用框架缓存了 每个用户对应的SecurityContext - 这个对象封装了session相关的信息。
+            使用框架 缓存了 每个用户对应的SecurityContext - 这个对象 封装了 session相关的信息。
     原因：
-        1 优化后的方式，会为每个用户新建一个 session相关的上下文；
-        2 ThreadLocal没有 在线程结束后 及时地进行remove操作；
-        结果在高并发场景下，线程池中的线程 就可能会读取到 上一个线程所缓存的用户信息。
+        1 优化后的方式，会为 每个用户 新建一个 session相关的上下文；
+        2 ThreadLocal 没有 在线程结束后 及时地 进行remove操作；
+        结果在 高并发场景 下，线程池中的线程 就可能会读取到 上一个线程 所缓存的用户信息。
 
     代码模拟：DirtyDataInThreadLocal.java
 
 2 内存泄露
-fact：在 ThreadLocal的源码中，推荐使用 static关键字来修饰 ThreadLocal。
-ThreadLocal的设计初衷：希望 threadLocal对象失去引用之后，借助弱引用的机制来 回收Entry的value。
-由于 threadlocal对象 被static修饰，因此其生命周期要 比类的实例更长 -> 弱引用机制也就失效了。
+fact：在 ThreadLocal的源码 中，推荐使用 static关键字 来 修饰 ThreadLocal。
+ThreadLocal的设计初衷：希望 threadLocal对象 失去引用 之后，借助 弱引用的机制 来 回收Entry的value。
+由于 threadlocal对象 被static修饰，因此 其生命周期要 比 类的实例 更长 -> 弱引用机制 也就失效了。
 
-aka 在线程执行完成后，如果不进行remove()操作，则：
-    Thread对象 通过threadlocal对象所持有的String对象 并不会被释放。
+aka 在 线程执行完成 后，如果 不进行remove()操作，则：
+    Thread对象 通过threadlocal对象 所持有的String对象 并不会 被释放。
 
-总结：对于 threadlocal副作用的解决方案 - 每次使用完threadlocal之后，都需要使用remove()来及时清理。
+总结：对于 threadlocal副作用 的解决方案 - 每次 使用完 threadlocal 之后，都需要 使用remove() 来 及时清理。

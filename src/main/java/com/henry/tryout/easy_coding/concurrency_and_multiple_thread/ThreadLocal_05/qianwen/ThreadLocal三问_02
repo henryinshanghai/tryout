@@ -1,0 +1,59 @@
+ThreadLocal是什么?有什么作用？具体要怎么使用？
+
+===
+ThreadLocal 是 Java 中提供的一种 线程局部变量机制。
+它允许你 为 每个线程 维护一个 独立的变量副本，使得 每个线程 都可以 独立地修改 自己的副本，而不会影响 其他线程 所对应的副本。
+
+一、ThreadLocal 是什么？
+① ThreadLocal 是 java.lang 包中的一个类。
+② 它不是用来 实现线程同步（如 synchronized）的，而是用于 隔离 线程间的数据。
+③ 每个线程 通过 ThreadLocal 访问的变量 是 该线程私有的，互不干扰。
+
+===
+二、ThreadLocal 的作用
+① 线程安全：避免 多个线程 共享同一个变量 所导致的 并发问题。
+② 上下文传递：在 不通过方法参数传递的 情况下，在 同一线程的不同方法?? 之间 传递数据（如用户信息、事务 ID、请求 ID 等）。
+③ 性能优化：避免 频繁创建和销毁 对象（例如 数据库连接、SimpleDateFormat 等 非线程安全对象），可 在线程内复用。
+⚠️ 注意：ThreadLocal 并不是 解决所有并发问题 的银弹，使用不当 可能导致 内存泄漏！
+
+===
+三、ThreadLocal 的基本使用方式
+1. 创建 ThreadLocal 变量
+    private static ThreadLocal<String> threadLocal = new ThreadLocal<>();
+
+或者使用 带初始值的：
+    private static ThreadLocal<String> threadLocal = ThreadLocal.withInitial(() -> "default value");
+
+2. 设置值（set）
+    threadLocal.set("Hello from Thread-" + Thread.currentThread().getName());
+
+3. 获取值（get）
+    String value = threadLocal.get();
+
+4. 移除值（remove）——非常重要！
+    threadLocal.remove(); // 防止内存泄漏
+
+===
+四、完整示例
+参考：ThreadLocalExample.java
+
+===
+五、注意事项 & 常见问题
+1. 内存泄漏风险
+    ① ThreadLocal 的内部实现 使用了 ThreadLocalMap，其中 key 是 ThreadLocal 的弱引用，但 value 是强引用。
+    ② 如果线程 长时间运行（如 线程池中的线程），且 不调用 remove()，value 会 一直存在，导致 内存泄漏。
+    ③ 解决方案：使用完后务必调用 threadLocal.remove()。
+
+2. 不适合 跨线程 传递数据
+    ① ThreadLocal 只在 当前线程 有效。如果任务 提交到线程池，原始线程的 ThreadLocal值 不会自动传递给 执行线程。
+    ② 如需 跨线程 传递上下文，可考虑使用 TransmittableThreadLocal（阿里开源工具）或 InheritableThreadLocal（仅对子线程有效）。
+
+3. 不要滥用
+    不要为了“方便” 把 所有变量 都塞进 ThreadLocal，这会增加 代码理解和维护成本。
+
+===
+六、典型应用场景
+① Web 应用中 保存 当前用户的 登录信息（如 Spring Security 的 SecurityContext）。
+② 数据库连接/事务 的管理（如 MyBatis、Hibernate 的 Session 管理）。
+③ 日志链路追踪 中的 traceId传递。
+④ 非线程安全对象的 线程内复用（如 SimpleDateFormat、Random）。

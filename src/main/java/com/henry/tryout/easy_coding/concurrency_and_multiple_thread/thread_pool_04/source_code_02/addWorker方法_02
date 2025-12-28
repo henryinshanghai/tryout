@@ -1,0 +1,82 @@
+ThreadPoolExecutor的addWorker()方法 的作用是什么？具体怎么使用?
+
+===
+ThreadPoolExecutor 是 Java 并发包（java.util.concurrent）中用于管理线程池的核心类。其内部有一个关键的私有方法 addWorker()，虽然它是 private 的，不能直接被外部调用，但理解它的作用对掌握线程池的工作机制非常重要。
+
+一、addWorker() 方法的作用
+addWorker() 的主要作用是：
+创建一个 新的工作线程（Worker），并 将它加入 线程池，用于 执行 提交的任务。
+
+具体来说，它完成以下几件事：
+
+① 检查 线程池状态：
+    如果 线程池 已关闭（SHUTDOWN/STOP 等），则 可能 拒绝创建 新线程。
+② 检查 是否达到 核心线程数 或 最大线程数 限制：
+    1. 如果当前线程数 < corePoolSize，则：优先创建 核心线程；
+    2. 否则，若 workQueue 已满 且 当前线程数 < maximumPoolSize，则 创建 非核心线程。
+③ 创建 Worker 对象：
+    Worker 是 ThreadPoolExecutor 的内部类，实现了 Runnable，封装了 要执行的 任务 和 线程。
+④ 启动线程：调用 Thread.start() 来 启动该 Worker 线程。
+⑤ 处理 异常和失败情况：
+    如线程创建 失败，会 进行回滚（比如减少线程计数）并 可能 触发拒绝策略。
+
+===
+二、addWorker() 的调用时机（间接使用）
+虽然你 不能直接调用 addWorker()，但它会 在以下场景 被 ThreadPoolExecutor内部 自动调用：
+
+1. 调用 execute(Runnable command)
+当你 向线程池 提交任务 时：
+    ExecutorService executor = new ThreadPoolExecutor(
+        2, 4, 60L, TimeUnit.SECONDS,
+        new LinkedBlockingQueue<>(10)
+    );
+
+    executor.execute(() -> {
+        System.out.println("Task running");
+    });
+此时，execute() 方法内部 会根据 以下逻辑 决定 是否调用 addWorker()：
+① 如果 当前运行的线程数 < corePoolSize → 调用 addWorker(command, true) 来 创建核心线程；
+② 否则，尝试 将 任务 放入队列；
+    1.如果 队列满了，且 当前线程数 < maximumPoolSize → 调用 addWorker(command, false) 创建非核心线程；
+    2.如果 仍无法处理 → 触发 RejectedExecutionHandler。
+
+2. 线程 执行完任务后 继续 从 队列 取任务
+每个 Worker 线程 在 执行完 初始任务 后，会循环 从 workQueue 中 获取新任务。
+如果 某个线程 因异常退出，而 队列中 仍有任务，也可能触发 新的 addWorker()（但 通常不会，因为 已有线程 会持续消费队列）。
+
+===
+三、addWorker() 的参数说明（源码层面）
+    private boolean addWorker(Runnable firstTask, boolean core)
+
+① firstTask：新创建的线程要执行的第一个任务（可以为 null，此时线程会直接从队列取任务）。
+② core：是否受 核心线程数 限制。
+    1.true：表示按 corePoolSize 限制；
+    2.false：表示按 maximumPoolSize 限制。
+
+===
+四、示例：理解何时会创建新线程
+
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(
+        1,                // corePoolSize
+        3,                // maximumPoolSize
+        10L,              // keepAliveTime
+        TimeUnit.SECONDS,
+        new ArrayBlockingQueue<>(2)  // 有界队列
+    );
+① 提交第 1 个任务 → 创建 核心线程（调用 addWorker(task, true)）。
+② 提交第 2、3 个任务 → 队列未满，入队，不创建 新线程。
+③ 提交第 4 个任务 → 队列已满，创建 非核心线程（addWorker(task, false)）。
+④ 提交第 5 个任务 → 再创建一个 非核心线程（总数=3）。
+⑤ 提交第 6 个任务 → 线程数 已达 maximumPoolSize，队列满 → 触发 拒绝策略。
+
+🐖 先把任务 向队列里添加，队列满了 还有新的任务，才会去 创建非核心线程；
+
+===
+五、总结
+项目	        |   说明
+作用	        | 创建并启动 新的工作线程（Worker）来 执行任务
+是否可直接调用| ❌ 私有方法，不可 直接调用
+何时被调用	| execute() 或 submit() 提交任务 时，根据 线程池 状态和配置 自动触发
+关键控制点	| corePoolSize、maximumPoolSize、workQueue 状态、线程池运行状态
+重要性	    | 是 线程池 动态扩缩容 的核心机制
+

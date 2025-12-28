@@ -1,0 +1,109 @@
+===
+一、先明确：谁持有了 value？
+答案是：ThreadLocalMap 内部的 Entry 对象。
+
+回顾 ThreadLocalMap.Entry 的定义（JDK 源码）：
+    static class Entry extends WeakReference<ThreadLocal<?>> {
+        Object value;  // ← 注意：这是一个普通字段！
+
+        Entry(ThreadLocal<?> k, Object v) {
+            super(k);      // 调用 WeakReference 构造函数 → key 是弱引用
+            value = v;     // ← 直接赋值，没有包装！
+        }
+    }
+
+关键点：
+① value 是 Entry 类的一个 普通实例字段（Object 类型）。
+② 在 Java 中，普通字段的引用 就是 强引用（除非你 显式用 SoftReference等 包装）。
+
+所以：
+Entry.value 对 value对象 持有一个强引用。
+
+===
+二、“强引用”在这里的具体含义
+
+在 JVM 垃圾回收中：
+① 强引用（Strong Reference）：
+    只要存在一条 从 GC Roots 出发、通过 强引用链 可达的对象，就 不会被回收。
+② Entry 对象本身 存在于 ThreadLocalMap的数组 中，而 ThreadLocalMap 又属于 某个 Thread 对象。
+③ 线程对象（Thread）是 GC Roots 之一（活跃线程栈中的对象 不可达 才回收）。
+
+因此，引用链如下：
+    GC Root（活跃线程 Thread）
+       ↓（强引用）
+    Thread.threadLocals（ThreadLocalMap）
+       ↓（强引用，Entry[] 数组元素）
+    Entry 对象
+       ↓（强引用）
+    value 对象  ← 所以 value 是强可达的！
+即使 Entry 的 key（即 ThreadLocal 实例）被GC回收了（变成 null），这个引用链 依然存在，因为：
+① Entry 对象本身 还在数组里；
+② Entry.value 仍然指向 你的数据。
+→ value 无法被 GC 回收！
+
+===
+三、图解说明
+假设你有以下代码：
+    void handle() {
+        ThreadLocal<byte[]> tl = new ThreadLocal<>(); // 局部变量 tl
+        tl.set(new byte[1024 * 1024]); // 存一个 1MB 的数组
+        // 方法结束，tl 变量 出作用域
+    }
+
+==
+内存状态变化：
+1. 方法执行中：
+
+栈（Stack）:
+  [tl] ──(强引用)──► [ThreadLocal 对象 TL-Obj]
+
+堆（Heap）:
+  TL-Obj
+     │
+     │ (作为 key)
+     ▼
+Thread.currentThread().threadLocals:
+  [Entry]
+     ├── key ──(WeakReference)──► TL-Obj
+     └── value ──(强引用)───────► [byte[1048576]]
+
+3. 方法结束后（tl 出作用域）：
+① 栈上 tl 消失 → TL-Obj 只剩 WeakReference 指向它。
+② 下次 GC 时，TL-Obj 被回收 → Entry.key = null。
+③ 但 Entry对象本身 还在 ThreadLocalMap 的数组中！
+④ Entry.value 依然 强引用着 byte[]。
+
+Thread.currentThread().threadLocals:
+  [Entry]
+     ├── key = null          ← TL-Obj 已被回收
+     └── value ──(强引用)───► [byte[1048576]]  ← 仍在内存中！
+→ 这个 byte[] 就是 “被 ThreadLocalMap 强引用” 的具体含义。
+
+===
+四、为什么 JDK 不把 value 也设计成 弱引用？
+这是个好问题！但答案是：不能。
+
+因为：
+① ThreadLocal 的语义是：“在线程内 安全地持有 某个值”。
+② 如果 value 是 弱引用，那么即使你 正在使用它，也可能被 GC 掉，导致 get() 返回 null，程序 逻辑崩溃。
+③ value 必须保证 在 使用期间 不被回收 → 所以 必须是 强引用。
+
+✅ 设计权衡：
+① key 用弱引用 → 防止 ThreadLocal 实例泄漏
+② value 用强引用 → 保证业务逻辑正确性
+代价：使用者必须 手动 remove() 来 清理 value
+
+===
+五、如何验证“value 被强引用”？
+参考：ThreadLocalLeakDemo.java
+
+===
+六、总结
+问题	                                | 答案
+value 为什么被强引用？	            | 因为 Entry.value 是一个 普通字段，Java 中普通字段 = 强引用
+“被 ThreadLocalMap 强引用”是什么意思？	| ThreadLocalMap 中的 Entry对象 通过 其value字段 强引用着 你的数据
+为什么这样设计？	                    | 保证 value在使用期间 不被GC，确保 程序正确性
+后果是什么？	                        | 如果忘记 remove()，即使 ThreadLocal 被回收，value 仍会内存泄漏
+如何解决？	                        | 务必在 try-finally 中调用 threadLocal.remove()
+
+理解这一点，你就真正掌握了 ThreadLocal 内存泄漏的根源和防御之道！
