@@ -1,14 +1,14 @@
 如何对 复杂的Java类型 进行比较(compare)？
     手段1：
-        对于自定义的Java类型 - 在定义类时, 实现 Comparable<T>接口, 并重写 compareTo()方法来指定比较逻辑
-    特征：
-        当 compareTo()中所定义的排序规则 不再符合 业务需求时，就需要 对compareTo()方法做代码修改。
-        评论：
-            #1 这违反了开闭原则 - 最好不要对已经交付的类进行修改
-            #2 更极端的情况，这个 SearchResult是外部提供的类(二方库)，我们手上没有源码。怎么办？👇
-    code demo: SearchResult
+        对于自定义的Java类型 - 在定义类时, 实现 Comparable<T>接口, 并重写 compareTo()方法 来 指定比较逻辑
+        特征：
+            当 compareTo()中所定义的排序规则 不再符合 业务需求 时，就需要 对 compareTo()方法 做代码修改。
+            评论：
+                #1 这 违反了 开闭原则 - 最好不要对 已经交付的类 进行修改
+                #2 更极端的情况，这个 SearchResult是 外部提供的类(二方库)，我们手上 没有源码。怎么办？👇
+        code demo: SearchResult
 
-    手段2： 在进行对象之间的比较时，传入 自定义的比较器Comparator - 在比较器中指定比较逻辑;
-    特征：业务方可以根据需求 来 改变排序规则；
-    应用实例: 业务方 想要 在搜索时，把最近订单数(recentOrders)的权重 调整到 相关度与浏览数之间。
-    code demo: SearchResultComparator 实现 Comparator<待比较的对象类型>
+    手段2：在 进行对象之间的比较 时，传入 自定义的比较器Comparator - 在 比较器 中 指定比较逻辑;
+        特征：业务方可以根据需求 来 改变排序规则；
+        应用实例: 业务方 想要 在搜索时，把 最近订单数(recentOrders)的权重 调整到 相关度与浏览数之间。
+        code demo: SearchResultComparator 实现 Comparator<待比较的对象类型>

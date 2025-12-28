@@ -1,0 +1,116 @@
+public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+}
+
+// 计算并返回 指定的key的hash值
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+
+// 向 hashMap实例对象 中 添加 指定的key-value键值对
+/*
+    参数列表：
+    onlyIfAbsent – if true, don't change existing value
+    evict(驱逐) – if false, the table is in creation mode.
+
+    返回值：返回 当前map对象中 该key 所关联的value；如果不存在 对应的key，则返回null
+*/
+final V putVal(int hash,
+                K key, V value,
+                boolean onlyIfAbsent,
+                boolean evict) {
+    // 局部变量: tab 是 散列表的副本; p 是 链表节点的指针; n 是 tab数组的长度; i 是 散列表中的索引值;
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+
+    // case01: 如果 散列表table为null 或者 为空 时，则：
+    if ((tab = table) == null || (n = tab.length) == 0)
+        // #1 初始化散列表table via resize()；#2 初始化 tab 与 n;
+        n = (tab = resize()).length;
+
+    // 找到 key 在哈希表中 所命中的索引位置 - i = (n - 1) & hash
+    // 并 取出 命中的哈希槽中的 节点p - tab[i]
+    if ((p = tab[i = (n - 1) & hash]) == null) // case02: 如果 哈希槽中 还没有 任何东西，则：
+        tab[i] = newNode(hash, key, value, null); // 创建 一个链表节点,并 把它放到 哈希槽中
+    else { // case03 如果哈希槽中 已经有东西了，则：
+        Node<K,V> e; K k;
+
+        // #1 判断 hash槽中的节点的key 与 待插入的key-value中的key 是不是相同
+        if (p.hash == hash &&
+            ((k = p.key) == key || (key != null && key.equals(k))))
+            // 如果相同（说明key已经存在），则：使用 局部变量e 来 记录下 当前节点p - 用于后继 更新旧节点
+            e = p;
+        else if (p instanceof TreeNode) // #2 如果当前节点p是一个树节点，
+            // 则：将 key-value 添加到 树p中，并用 局部变量e 记录下 插入的节点 - 手段: p.putTreeVal(xxx)
+            e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+        else { // #3 否则，说明：① 哈希槽中 已经存在 链表； ② 链表中 第一个节点的key 与 待插入的key-value中的key 不相同(没有发生碰撞)
+            // 则：对 链表中的节点 进行遍历，以 插入(更新)节点 = {记录碰撞节点, 更新碰撞节点的value}
+            for (int binCount = 0; ; ++binCount) {
+                // 如果 遍历过程 到达了 链表的尾节点，说明 未命中，则：
+                if ((e = p.next) == null) {
+                    // 使用 待插入的key-value 来 创建一个新的节点，并 添加到链表中
+                    p.next = newNode(hash, key, value, null);
+                    // 添加新节点后，如果 链表的长度 大于7，则：进行 树化的操作 - 手段：treeifyBin
+                    if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    // 插入节点后,主要任务 已经结束 - 跳出for循环
+                    break;
+                }
+                // 如果 当前节点的key 与 待插入的key-value中的key 相同，说明 发生了碰撞，则：
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    break; // 说明 已经找到 待更新的节点，跳出循环
+
+                // 使用 当前节点 来 更新变量p(用于记录 当前所遍历的节点) - 作用：方便 更新到 它的下一个节点 p.next
+                p = e;
+            }
+        }
+
+        // 对于 以上的3种情况（每个分支中都会 更新 变量e），如果 变量e 不为null（说明Map中 已经存在有 对应的key了），则：
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            // 判断 是否需要 更新旧节点的值：
+            #1 onlyIfAbsent的值(if true, don't change existing value); #2 旧节点的值 是否为 null
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value; // 只要 有一个条件为true，就 更新 旧节点的value值
+            afterNodeAccess(e); // N/A 是一个空方法
+            return oldValue; // 返回 旧节点的value值
+        }
+    }
+    ++modCount; // 更新 变化次数modCount
+    if (++size > threshold) // 判断 是否需要 进行map的扩容，如果 需要，则：
+        resize(); // 进行扩容
+    afterNodeInsertion(evict); // N/A 这是一个空方法
+    return null; // 返回null - 表示 传入的key-value 已经成功插入到 hashMap中了
+}
+
+------
+wrap up:
+--- 尝试 插入节点 - 分类讨论:{① 空哈希表, ② 空哈希槽, ③ 非空哈希桶} 👇 ---
+// case01: 如果 散列表table为null 或者 为空 时，则：#1 初始化 散列表table - resize()；#2 初始化 tab 与 n;
+// case02: 如果 哈希槽中 还没有 任何东西，则：创建一个链表节点,并 把它放到 哈希槽中
+// case03 如果哈希槽中 已经有东西了，则：
+    --- 对于 非空哈希桶，分类讨论：{
+                    ① 首节点与待插入key-value发生碰撞(记录节点)；
+                    ② 桶中是一棵树（插入&记录节点）；
+                    ③ 桶中是一个链表（插入/记录节点）}---
+    // #1 判断 hash槽中的节点的key 与 待插入的key-value中的key 是不是相同。
+        如果相同（说明key已经存在），则：使用 局部变量e 来 记录下 当前节点p - 用于后继 更新旧节点
+    // #2 如果 当前节点p 是一个 树节点，则：将 key-value 添加到树p中，并用 局部变量e 记录下 插入的节点 - 手段: p.putTreeVal(xxx)
+    // #3 否则，说明：1 哈希槽中 已经存在 链表； 2 链表中第一个节点的key 与 待插入的key-value中的key 不相同(没有发生碰撞)
+        --- 对于 桶中是链表 的情况，分类讨论： {① 没有碰撞(插入节点)；② 发生碰撞(记录节点)} ---
+        // 则：对 链表中的节点 进行遍历，以 插入(更新)节点 = {记录 碰撞节点, 更新 碰撞节点的value}
+            // case01: 如果 当前节点 是 链表的尾节点，则：
+                // 使用 待插入的key-value 来 创建一个新的节点，并 添加到链表中
+                // 如果 链表的长度 大于7，则：进行 树化的操作 - 手段：treeifyBin
+            // case02: 如果 当前节点的key 与 待插入的key-value中的key 相同（说明发生碰撞），则：
+                // 说明 已经找到 待更新的节点，跳出循环
+            使用 当前节点 来 更新变量p - 支持循环
+--- 更新节点的value 👇 ---
+// 对于 以上的3种情况（每个分支中都会 更新变量e），如果 变量e 不为null（说明Map中 已经存在有 对应的key了），则：
+    // 判断 是否需要 更新旧节点的值：#1 onlyIfAbsent的值(if true, don't change existing value); #2 旧节点的值 是否为null
+    // 只要 有一个条件 为true，就 更新旧节点的value值
+    // 返回 旧节点的value值
+--- 至此，节点插入/更新 完成 👆 ---
+
+--- 如果是 插入节点(返回null)，可能还需要 扩容处理 ---

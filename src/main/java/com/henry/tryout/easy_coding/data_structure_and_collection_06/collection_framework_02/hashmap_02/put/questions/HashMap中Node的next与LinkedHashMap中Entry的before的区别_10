@@ -1,0 +1,16 @@
+✅ 一句话总结区别
+引用              |	所属类              |	作用范围	            |       目的
+next	         | HashMap.Node	       | 单个哈希桶（bin）内部      | 解决 哈希冲突，形成 链表或红黑树
+before / after	 | LinkedHashMap.Entry | 整个 Map 的所有节点	    | 维护 全局插入顺序或访问顺序
+
+🔑 next 是“局部结构”，before/after 是“全局顺序”。
+
+===
+✅ 总结
+问题	                        |       答案
+next 是什么？	                | 桶内链表指针，用于 处理哈希冲突
+before/after 是什么？	        | 全局双向链表指针，用于 维护插入/访问顺序
+它们冲突吗？	                | 不冲突！一个管“怎么存”，一个管“怎么遍历”
+LinkedHashMap 为什么需要两者？ | 既要 哈希的高性能，又要 有序的可预测性
+
+🌟 HashMap 关心“快速找到”，LinkedHashMap 还关心“按什么顺序找”。

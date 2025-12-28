@@ -1,0 +1,103 @@
+#Q: 为什么使用iterator的remove()方法 在遍历时修改集合，就不会出现 并发修改异常了呢？
+
+这是一个非常经典且重要的问题！
+使用 Iterator 的 remove() 方法 在遍历时修改集合 不会抛出 ConcurrentModificationException（并发修改异常），
+是因为 Iterator 的 remove() 是“受控的、协调一致的修改”，它会 主动同步 内部状态，避免了 fail-fast 机制的触发。
+
+下面我们从原理、源码和机制三个层面详细解释。
+
+===
+一、背景：什么是 ConcurrentModificationException？
+Java 中大多数 非线程安全集合（如 ArrayList、HashMap）都采用 fail-fast（快速失败） 机制：
+    ① 集合内部维护一个 modCount（modification count），记录 结构被修改的次数（如增、删元素）。
+    ② 当你调用 iterator() 时，Iterator 会保存 当前的 modCount 值为 expectedModCount。
+    ③ 每次调用 next() 或 remove() 时，都会检查：
+        if (modCount != expectedModCount) {
+            throw new ConcurrentModificationException();
+        }
+    ④ 如果不等，说明集合被外部（非 Iterator）修改了 → 抛异常。
+✅ 目的：尽早暴露“在遍历过程中非法修改集合”的 bug。
+
+===
+二、为什么直接 list.remove() 会出错？
+
+    List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
+    for (String s : list) {          // for-each 使用 Iterator
+        if ("B".equals(s)) {
+            list.remove(s);          // ❌ 直接通过 list 修改！
+        }
+    }
+
+    执行过程：
+    ① Iterator 创建时，expectedModCount = 0（假设初始 modCount = 0）。
+    ② 遍历到 "B" 时，调用 list.remove("B")：
+        ArrayList 内部将 modCount 增加为 1。
+    ③ 下一次调用 Iterator.next() 时：
+        检查 modCount (1) != expectedModCount (0) → 抛出 ConcurrentModificationException。
+    ❌ 这是“外部修改”，Iterator 不知情，所以 fail-fast 生效。
+
+===
+三、为什么 iterator.remove() 就安全？
+因为 Iterator.remove() 是 集合授权的、内部协调的修改方式，它会：
+    ① 执行实际删除；
+    ② 主动将 expectedModCount 更新为 最新的 modCount，保持 两者一致。
+
+🔍 源码分析（以 ArrayList.Itr.remove() 为例）
+
+private class Itr implements Iterator<E> {
+    int expectedModCount = modCount; // 创建时记录
+
+    public void remove() {
+        if (lastRet < 0)
+            throw new IllegalStateException();
+        checkForComodification(); // 先检查是否已被外部修改
+
+        try {
+            ArrayList.this.remove(lastRet); // 调用 ArrayList 的 remove
+            cursor = lastRet;
+            lastRet = -1;
+            expectedModCount = modCount; // 👈 关键！同步 modCount
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    final void checkForComodification() {
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+    }
+}
+执行流程：
+① iterator.remove() 调用 ArrayList.this.remove(...) → modCount++
+② 紧接着执行：expectedModCount = modCount → 两者再次相等
+③ 后续调用 next() 时，checkForComodification() 不会抛异常
+✅ 这就是“安全删除”的核心秘密：主动同步计数器！
+
+===
+四、类比理解
+想象你在看一本 活页书（集合）：
+
+① 直接撕掉一页（list.remove()）：别人正在按目录读，突然页码对不上了 → “出错了！”
+② 通过图书管理员删页（iterator.remove()）：管理员 不仅撕页，还同步更新了 目录和页码标记 → 读者继续读，一切正常。
+Iterator 就是这个“图书管理员”，它知道如何 安全地修改 并 保持一致性。
+
+===
+五、重要注意事项
+① 每次 next() 之后，只能调用一次 remove()
+    连续调用两次 remove() 会抛 IllegalStateException（因为 lastRet = -1）。
+② Iterator 通常不支持 add()
+    ArrayList.Itr 没有 add() 方法；但 ListIterator 支持，并同样会同步 expectedModCount。
+③ 这仅适用于单线程
+    在多线程环境下，即使 使用 iterator.remove()，如果 其他线程 同时修改集合，仍可能出错（因为 modCount 更新不是原子的）。
+    COW 或 显式同步 才是多线程方案。
+
+===
+六、总结
+操作方式	                    |   是否触发 ConcurrentModificationException	|   原因
+collection.remove()（遍历时）|	✅ 会	                                | 外部修改，modCount 与 expectedModCount 不一致
+iterator.remove()	        |   ❌ 不会	                                | 内部协调修改，主动同步 expectedModCount = modCount
+
+💡 记住：
+Iterator.remove() 是集合 API 提供的“合法修改通道”，它绕过了 fail-fast 检查，因为它自己 就是 检查机制的一部分。
+
+理解这一点，就掌握了 Java 集合遍历修改的安全之道！

@@ -1,0 +1,28 @@
+✅ 总结
+参数	            |   类型   |	    作用              |   主要影响
+onlyIfAbsent	| boolean |	控制 是否覆盖 已有值       |	实现 put vs putIfAbsent
+evict	        | boolean |	标记 是否处于 “可驱逐”状态  |	支持 LinkedHashMap 的 LRU 等回调机制
+
+💡 这两个参数体现了 Java 集合框架的设计哲学：
+    用少量 内部参数，支撑 多种公共API 和 子类扩展行为，避免 代码重复。
+
+如果你正在 实现自己的Map 或 研究 LRU缓存，理解 evict的作用 尤其关键！
+
+==
+✅ 一、onlyIfAbsent：是否“仅在 absent 时才插入”
+🔹 含义：
+    如果为 true：
+        只有当 key 不存在时，才插入/设置 value；
+        如果 key 已存在，则：不修改 原有 value。
+    如果为 false：
+        则 总是 设置新的value（覆盖旧值）。
+
+==
+✅ 二、evict：是否允许“驱逐”（用于 LinkedHashMap）
+🔹 含义：
+    ① 这个参数 主要 被 LinkedHashMap 重写后使用；
+    ② 表示 当前操作 是否发生在 非初始化阶段（即 map 已经处于“活跃使用”状态）；
+    ③ 在 HashMap 中几乎没用，但在 LinkedHashMap 中，用于触发 removeEldestEntry()回调（实现 LRU缓存的关键）。
+🔹 默认值：
+    put() 调用时，传 true；
+    在 构造函数中 批量插入（如 putMapEntries） 时，传 false —— 表示“还在初始化，不要触发 驱逐逻辑”。

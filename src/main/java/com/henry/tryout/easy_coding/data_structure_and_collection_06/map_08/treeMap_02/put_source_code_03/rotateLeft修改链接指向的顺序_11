@@ -1,0 +1,112 @@
+===
+🌳 左旋目标：将右孩子提升为新根
+旋转前结构：
+        p
+       / \
+      α   r
+         / \
+        β   γ
+
+期望旋转后：
+        r
+       / \
+      p   γ
+     / \
+    α   β
+
+其中：
+① p = pivot node（被旋转的原根）
+② r = p.right（将成为新根）
+③ β = r.left（要“移交”给 p 的子树）
+
+===
+✅ JDK 标准 rotateLeft(p) 实现（带顺序编号）
+private void rotateLeft(Entry<K,V> p) {
+    if (p != null) {
+        // [1] 保存 r = p.right
+        Entry<K,V> r = p.right;
+
+        // [2] 将 r 的左子树 β 移交给 p 的 right
+        p.right = r.left;
+
+        // [3] 如果 β 非空，设置其 parent 为 p
+        if (r.left != null)
+            r.left.parent = p;
+
+        // [4] 将 r 的 parent 指向 p 的原 parent
+        r.parent = p.parent;
+
+        // [5] 将 r 挂到 p 原 parent 的对应位置（左/右/根）
+        if (p.parent == null)
+            root = r;
+        else if (p == p.parent.left)
+            p.parent.left = r;
+        else
+            p.parent.right = r;
+
+        // [6] 将 p 设为 r 的左孩子
+        r.left = p;
+        p.parent = r;
+    }
+}
+
+===
+🔍 为什么顺序不能乱？逐条分析
+
+==
+❗ 步骤 [1] 必须最先：r = p.right
+原因：后续所有操作 都依赖 r。
+
+如果 先改 p.right（如步骤 [2] 提前），就 再也拿不到 r 了！
+✅ 必须 先缓存 r。
+
+==
+❗ 步骤 [2] 和 [3] 必须在 [6] 之前：移交 β 给 p
+    p.right = r.left;           // [2]
+    if (r.left != null)         // [3]
+        r.left.parent = p;
+
+目的：把 β（即 r.left）从 r 下摘下来，挂到 p.right。
+
+为什么不能晚做？
+① 如果 先执行 [6]（r.left = p），那么 r.left 就变成了 p，原始的 β 永久丢失！
+② 此时 再执行 p.right = r.left → p.right = p，形成 自环！
+
+✅ 必须在 r.left 被覆盖 前，先把它“救出来”。
+
+==
+❗ 步骤 [4] 和 [5] 必须在 [6] 之前：处理 r 与上层的连接
+    r.parent = p.parent;        // [4]
+    // [5] 更新 p.parent 的 left/right 指向 r
+目的：让 r 接替 p 在树中的位置。
+
+为什么不能 最后做？
+① 如果先执行 [6]（r.left = p; p.parent = r），那么 p.parent 已经指向 r。
+② 此时再执行 r.parent = p.parent → r.parent = r，形成 自环！
+③ 而且 p.parent 已被修改，无法正确找到原父节点来更新其子指针。
+
+✅ 必须在 修改 p.parent 之前，先用它来设置 r.parent 并 更新祖父的链接。
+
+==
+❗ 步骤 [6] 必须最后：建立 r ← p 的父子关系
+    r.left = p;
+    p.parent = r;
+这是旋转的“收尾动作”。
+
+此时：
+① β 已 安全移交（[2][3]）
+② r 已 接入上层树（[4][5]）
+③ 可以 安全地 让 p 成为 r 的左孩子
+
+✅ 只有最后一步才 切断 p 与原父的联系，并 建立与 r 的新关系。
+
+===
+✅ 总结：指针操作顺序的核心原则
+原则	说明
+. 先缓存关键引用	如 r = p.right，防止后续被覆盖
+. 先“拆旧”，再“建新”	先把要移动的子树（β）从原位置摘下，再挂到新位置
+. 先处理上层连接，再处理下层连接	先让 r 接替 p 的位置，再让 p 成为 r 的孩子
+. 最后修改原节点的 parent	避免提前断开导致无法访问祖先
+🔑 本质：旋转是一系列相互依赖的指针重定向，必须按照依赖拓扑顺序执行，否则会破坏树结构。
+
+因此，rotateLeft() 中的顺序不是随意的，而是逻辑必然。这也是为什么所有标准教材和 JDK 源码都采用几乎完全相同的步骤顺序。

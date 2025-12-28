@@ -1,27 +1,27 @@
 package com.henry.tryout.easy_coding.data_structure_and_collection_06.array_and_collection_04;
 
-import com.henry.tryout.easy_coding.data_structure_and_collection_06.collection_framework_02.arraylist_01.JDKArrayList_01;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// 语法：把列表对象 转化成为 数组对象 - list.toArray(arr)
-// 验证：如果指定的数组对象的容量不足够的话，数组对象中会被填满null
-// 使用方式：传入的arr参数的大小等于列表对象的大小
+// 语法：把 列表对象 转化成为 数组对象 - list.toArray(arr)
+// 验证：如果 指定的数组对象的 容量不足够的话，数组对象中 只会 被填满null
+// 使用方式：传入的arr参数的大小 等于 列表对象的大小
 public class ListToArray_03 {
     public static void main(String[] args) {
 
-        List<String> list = new JDKArrayList_01<>();
+        List<String> list = new ArrayList<>();
         list.add("one");
         list.add("two");
         list.add("three");
 
-        /* 把列表对象 转换成为 数组对象 👇 */
-        // 手段1:list.toArray();       结果：泛型信息丢失，只会得到 Object类型的数组
+        /* 把 列表对象 转换成为 数组对象 👇 */
+        // 手段1: list.toArray();       结果：泛型信息丢失，只会得到 Object类型的数组
         Object[] array1 = list.toArray();
 
         // 手段2：list.toArray(array1)
-        // 特征：array1容量小于list中的元素数量 - 结果：得到了两个null值
+        // 特征：array1容量 小于 list中的元素数量 - 结果：得到了两个null值
         String[] array2 = new String[2];
         list.toArray(array2);
         System.out.println(Arrays.asList(array2)); // [null, null]

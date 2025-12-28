@@ -1,0 +1,21 @@
+===
+下面简要介绍 在高并发场景下的 其他哈希集合。
+
+① Hashtable 是 在JDK1.0中引入的 哈希式集合，
+    特性：以 全互斥的方式 处理并发情况，性能极差；
+
+② HashMap 是 在JDK1.2中引入的，
+    特性：是 非线程安全的，
+    问题：在 并发写 的情况下，容易出现 死链问题，导致 服务不可用。
+
+③ ConcurrentHashMap 是在JDK5中引入的 线程安全的 哈希式集合；
+    ① 在JDK8之前 采用了 分段锁 的设计理念；
+        1. 相当于 HashMap 与 Hashtable的折中版本，这是 效率与一致性 权衡后的结果。
+        2. 分段锁 是 由内部类Segment 所实现的，它 继承于 ReentrantLock，用于 管理 它辖区中的各个HashEntry。
+
+    比喻：
+        ① ConcurrentHashMap被Segment分成了 很多的小区；
+        ② Segment就相当于 小区保安，HashEntry列表 相当于 小区业主。
+        ③ 小区保安 通过加锁的方式，保证 每个Segment内 都不发生冲突。
+
+    所谓“网格化管理”。

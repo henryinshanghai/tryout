@@ -1,0 +1,85 @@
+HashMap在什么条件下会出现死链？为什么?
+
+===
+HashMap 在 Java 7 及更早版本 中，
+在多线程并发执行 put 操作 并 触发扩容（resize）时，可能出现“死链”（也叫环形链表、循环链表），
+从而导致 get 操作陷入无限循环，CPU 占用飙升。
+
+⚠️ 注意：Java 8 对此问题做了修复，
+通过改变 扩容时的链表迁移方式（从“头插法”改为“尾插法”），避免了死链的产生。
+但 Java 8 的 HashMap 仍然不是线程安全的，只是 不会出现死链（但仍可能丢数据、覆盖等）。
+
+===
+🔍 死链产生的根本原因（以 Java 7 为例）
+1. 扩容机制 + 头插法（Head Insertion）
+    ① 当 HashMap 元素数量 超过阈值（capacity * loadFactor）时，会触发 resize()，
+        创建一个新数组（容量翻倍），并 将 旧桶中的元素 重新哈希分配到 新桶中。
+    ② 在 Java 7 中，迁移链表节点时 使用“头插法”：
+        即把 旧链表中的每个节点 依次插入到 新链表的头部。
+
+2. 多线程 并发扩容 → 链表反转 + 指针错乱
+
+假设有两个线程 T1 和 T2 同时执行put 并 进入 resize()：
+    ① 假设 某个桶中 原来有链表：A → B → null
+    ② T1 和 T2 同时开始迁移 这个链表 到新数组。
+    ③ 由于 头插法，迁移后 正常顺序 应为：B → A → null（链表 被反转）。
+    ④ 但如果两个线程 交替执行 迁移操作，可能出现：
+        1’ T1 把 A 插入新链表；
+        2‘ T2 把 B 插入新链表，并 让 B.next = A；
+        3’ 但此时 T1 的上下文中 A.next还指向 B（因为旧链表是 A→B）；
+        4‘ 最终可能导致：A.next = B 且 B.next = A，形成 A ↔ B 的环形链表！
+
+3. 后续 get() 操作陷入死循环
+    ① 当调用 map.get(key) 时，如果 key 落在该桶，就会 遍历链表。
+    ② 由于 链表成环，e = e.next 永远不会为 null，while 循环 永不退出，导致 CPU 100%。
+
+===
+🧪 示例（简化版 Java 7 扩容代码逻辑）
+
+    // Java 7 HashMap#transfer (简化)
+    void transfer(Entry[] newTable) {
+        for (Entry<K,V> e : table) {
+            while (null != e) {
+                Entry<K,V> next = e.next;
+                int i = indexFor(e.hash, newTable.length);
+                e.next = newTable[i];   // 👈 头插法：e 指向 当前新桶的头
+                newTable[i] = e;        // 👈 新桶头 变为 e
+                e = next;
+            }
+        }
+    }
+
+在多线程下，多个线程 同时修改 e.next 和 newTable[i]，极易造成 指针交叉引用，形成环。
+
+===
+✅ Java 8 如何解决 死链问题？
+Java 8 改进了 扩容迁移逻辑：
+    ① 仍然 分桶迁移，但 保持 原链表顺序（使用 尾插法）。
+    ② 更重要的是，它将链表 拆分为 loHead / loTail（留在原位置）和 hiHead / hiTail（移到新位置 + oldCap），
+        通过 尾部追加的方式 重建链表，避免了 节点指针的 反复重定向。
+因此，Java 8 的 HashMap 在 并发 resize 时 不会形成 环形链表。
+
+但再次强调：HashMap 本身不是线程安全的！
+
+即使 Java 8 没有死链，仍可能出现：
+    ① 数据覆盖（两个线程 同时put 相同 key）
+    ② 元素丢失（resize 时 部分节点 未被迁移）
+    ③ size 统计错误
+
+===
+🔒 正确的多线程使用方式
+场景               |	推荐方案
+需要线程安全的 Map  |	使用 ConcurrentHashMap
+读多写少	          | Collections.synchronizedMap(map)（性能较差）
+不可变 Map	      | 构建完成后用 Map.copyOf()（Java 10+）或 Guava 的 ImmutableMap
+
+===
+总结
+问题              |   	答案
+什么条件下出现死链？ |	Java 7 及之前版本，多线程 并发put 并 触发 resize 时
+为什么？	          | 扩容时 使用“头插法” 迁移链表，多线程竞争 导致 链表节点 next指针 形成环
+Java 8 还有吗？	  | 没有死链（改用 尾插/分段迁移），但依然 非线程安全
+如何避免？	      | 不要 在多线程环境中 使用HashMap，改用 ConcurrentHashMap
+
+💡 记住：HashMap 是 为单线程设计的。
+任何并发场景 都应选择 线程安全的替代品。

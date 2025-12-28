@@ -1,0 +1,29 @@
+for (int binCount = 0; ; ++binCount) {
+    if ((e = p.next) == null) {
+        p.next = newNode(hash, key, value, null);
+        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+            treeifyBin(tab, hash);
+        break;
+    }
+    if (e.hash == hash &&
+        ((k = e.key) == key || (key != null && key.equals(k))))
+        break;
+    p = e;
+}
+
+✅ 五、总结
+问题	                |       答案
+这段代码的作用？	    |   遍历冲突链表，查找 key；若不存在则插入新节点，并可能触发树化
+两个 break 的区别？	|   • break 1：插入新节点后 退出
+                        • break 2：找到相同 key后 退出（准备更新 value）
+为什么 p = e 在外面？	|  ① 保证 p 始终是 当前检查节点的前驱，便于插入；
+                       ② 且只 在“需继续遍历”时 推进，逻辑 统一简洁
+
+这种写法体现了 JDK 代码的极致效率与简洁性：
+
+用 最少的变量（仅 p, e）来 完成 链表的遍历；
+通过 break 的不同位置 来 表达不同的业务语义；
+循环结构紧凑，无冗余判断。
+
+p表示 previous/predecessor，前驱；
+e表示 entry，

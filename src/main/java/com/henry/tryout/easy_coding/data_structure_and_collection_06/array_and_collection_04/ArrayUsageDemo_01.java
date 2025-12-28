@@ -5,6 +5,7 @@ public class ArrayUsageDemo_01 {
     public static void main(String[] args) {
         // 定义数组手段1：静态初始化/一次性初始化 {"xxx", "ooo"}
         String[] names1 = {"henry", "alicia"};
+
         // 定义数组手段2：对Object对象 做强制转化
         Object obj = names1;
         ((String[]) obj)[0] = "object";

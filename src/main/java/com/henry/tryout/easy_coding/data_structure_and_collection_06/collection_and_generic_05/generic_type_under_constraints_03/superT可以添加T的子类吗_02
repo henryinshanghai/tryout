@@ -1,0 +1,56 @@
+List<? super T> 的集合中，可以添加T的子类的对象吗?
+
+===
+是的，可以！
+
+在 List<? super T> 类型的集合中，不仅可以添加 T 类型的对象，也可以添加 T 的任意子类对象。
+✅ 原因：类型安全 由“下界”保证
+
+List<? super T> 表示：
+这个列表的元素类型 是 某个 T 的父类（或 T 本身），比如 T、Object、Serializable 等。
+而 T 的子类对象，一定是 T 类型的实例，因此 也一定是 该父类的合法实例。
+
+🌰 举例说明
+    class Animal {}
+    class Dog extends Animal {}
+    class Husky extends Dog {}
+现在考虑：
+    List<? super Dog> list = new ArrayList<Animal>(); // OK: Animal 是 Dog 的父类
+
+你可以添加：
+    list.add(new Dog());     // ✅ OK
+    list.add(new Husky());   // ✅ OK！Husky 是 Dog 的子类，也是 Animal 的子类
+    list.add(new Object());  // ❌ 编译错误！Object 不是 Dog 或其子类
+🔍 关键点：编译器 只允许你添加 Dog 或 其子类的对象，因为它们 一定是 列表实际类型（如 Animal 或 Object）的子类型，所以 类型安全 有保障。
+
+===
+🧠 为什么能加子类？——从“IS-A”关系理解
+Husky is-a Dog
+Dog is-a Animal
+所以 Husky is-a Animal
+
+而 List<? super Dog> 的实际类型可能是：
+    List<Dog>
+    List<Animal>
+    List<Object>
+无论哪种情况，Husky 都能被接受！
+
+⚠️ 注意：不能添加“父类”对象
+    list.add(new Animal()); // ❌ 编译错误！
+为什么？因为 List<? super Dog> 可能 实际上是 List<Dog>，而 Animal 不是 Dog 的子类，不能放进 List<Dog> 中。
+
+编译器采取 最保守策略：只允许添加 确定安全的类型 —— 即 T 及其子类。
+
+===
+✅ 总结
+能否添加到 List<? super T>	|   原因
+✅ T 的对象	                | 安全：T 是自身的子类型
+✅ T 的子类对象	            | 安全：子类 is-a T，也是 列表元素类型的 子类型
+❌ T 的父类对象	            | 不安全：列表实际类型 可能是 List<T>，父类 不能放入
+❌ 无关类型                  |	显然不安全
+
+💡 记住：
+? super T 表示“消费 T”，所以一切 能当作 T 用的对象（即 T 及其子类）都可以放进去。
+
+这正是 PECS 原则中 Consumer Super 的体现：
+作为“消费者”，它接受 T 及其子类型的数据。

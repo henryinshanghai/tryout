@@ -1,0 +1,106 @@
+“按照 key 的自然顺序排序” 是 Java 集合框架中的一个核心概念，尤其在 TreeMap、TreeSet 等有序集合中 频繁出现。
+下面我们 用清晰、准确的方式 解释它的含义。
+
+✅ 一、一句话定义
+
+“自然顺序”是指：
+如果一个类 实现了 Comparable<T> 接口，并 重写了 compareTo(T other) 方法，那么 该类的对象 就具有“自然顺序”。
+这种顺序是 类型自身定义的、内在的、默认的排序规则。
+
+===
+✅ 二、关键前提：Comparable 接口
+Java 中的 Comparable 接口定义如下：
+
+public interface Comparable<T> {
+    int compareTo(T o);
+}
+
+compareTo() 返回：
+① 负数：当前对象 小于 参数对象；
+② ：两者 相等（按自然顺序）；
+③ 正数：当前对象 大于 参数对象。
+
+🌰 例子：String 的自然顺序
+"apple".compareTo("banana")  // 返回负数 → "apple" < "banana"
+"10".compareTo("2")          // 返回正数！因为按字典序："1" < "2" 不成立，实际是 '1' (49) < '2' (50)，但 "10" > "2" 字典序？
+// 实际：'1' == '1'？不，"10" vs "2" → 第一个字符 '1'(49) < '2'(50) → 所以 "10" < "2" → 返回负数
+
+✅ String 实现了 Comparable<String>，所以 它的自然顺序 是 字典序（lexicographical order）。
+
+🌰 例子：Integer 的自然顺序
+Integer a = 5;
+Integer b = 10;
+a.compareTo(b) // 返回 -1 → 5 < 10
+
+✅ Integer 的自然顺序 就是 数值大小顺序。
+
+===
+✅ 三、“自然顺序” vs “自定义顺序”
+对比项	        |   自然顺序              |	自定义顺序
+实现方式	        | 类实现 Comparable<T>   | 外部提供 Comparator<T>
+是否内置	        | 是（类型自身定义）	    | 否（由使用者定义）
+示例	            | String, Integer, Date | (a, b) -> b - a（降序）
+在 TreeMap 中使用	| new TreeMap<>()	    | new TreeMap<>(comparator)
+
+// 使用自然顺序（升序）
+TreeMap<String, Integer> map1 = new TreeMap<>();
+
+// 使用自定义顺序（降序）
+TreeMap<String, Integer> map2 = new TreeMap<>((a, b) -> b.compareTo(a));
+
+===
+✅ 四、哪些类有“自然顺序”？
+Java 标准库中 很多常用类 都实现了 Comparable：
+
+类	                     |   自然顺序含义
+String	                 |   字典序（Unicode 顺序）
+Integer, Long, Double 等  |	数值大小
+Character	             | Unicode 值
+Date, LocalDateTime	     | 时间先后
+BigInteger, BigDecimal	 | 数值大小
+
+❌ 而像 Object、自定义未实现 Comparable 的类，则 没有自然顺序。
+
+===
+✅ 五、为什么叫“自然”？
+
+因为它是 最符合 人类直觉 或 数学常识 的顺序：
+数字：1 < 2 < 3
+字母：a < b < c
+时间：上午 < 下午
+
+它是 类型设计者 认为“默认应该这样排”的顺序，所以称为“自然”。
+
+===
+✅ 六、在红黑树中的意义
+当你使用 TreeMap（基于红黑树）时：
+如果 key 有自然顺序（如 String），红黑树会 自动按此顺序 组织节点；
+插入 "c"、"a"、"b"，遍历时 会得到 "a" → "b" → "c"；
+这种顺序是 稳定、可预测、全局一致的。
+
+🔑 对比 HashMap 的红黑树：它 不依赖 自然顺序，而是 用 hash + tieBreakOrder 模拟排序，只为维持 树结构，不保证 遍历顺序 有意义。
+
+===
+✅ 七、常见误区
+❌ 误区 1：“所有对象 都有 自然顺序”
+→ 错！只有实现 Comparable 的才有。
+
+class Person { String name; } // 没实现 Comparable → 无自然顺序
+new TreeMap<Person, String>(); // 插入时会抛 ClassCastException！
+
+❌ 误区 2：“自然顺序 就是 equals()”
+→ 错！compareTo() == 0 应与 equals() 一致（最佳实践），但 不是强制的。
+
+（不过 JDK 类 都遵守这一约定）
+
+===
+✅ 总结
+
+问题                         |       	答案
+什么是 自然顺序？	            | 类 通过 实现Comparable 来 定义 默认排序规则
+如何判断 是否有 自然顺序？	    | 看是否 implements Comparable<T>
+典型例子？	                | String（字典序）、Integer（数值大小）
+和 HashMap 的红黑树 有何不同？	| TreeMap 依赖 自然顺序 保证 有序遍历；HashMap 的树 只为性能，无 业务顺序
+
+理解“自然顺序”，就理解了 Java 有序集合的基石。
+这也是为什么 TreeMap 能保证 keySet() 按顺序输出，而 HashMap 不能。

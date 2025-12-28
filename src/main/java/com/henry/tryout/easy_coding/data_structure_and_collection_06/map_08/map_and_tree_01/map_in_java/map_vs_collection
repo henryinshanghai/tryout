@@ -1,0 +1,34 @@
+Map VS. Collection
+Map：
+    是：一个接口；
+    高层特征：
+        1 与 Collection类 平级 的接口；
+        2 Map 中存在有 部分方法 会 返回Collection视图；- 比如 values()方法 会返回 由所有value构成的列表
+        3 Map中 存储单位 是 KV键值对/Entry；
+    原理：
+        #1 先 使用一定的哈希算法 来 产生一组 比较均匀的哈希值 - 作为Key；
+        #2 Value值 关联在 Key上面。
+    用法特征：
+       1 Key 不能重复，但Value 可以重复；
+       2 Value 可以是 List、Map、Set类；
+       3 KV 是否可以 为null，不同的实现类 会有 不同的规定。
+       4 除了 CRUD的方法 外，还有3个 专用的方法 - keys(), values(), entrySet()
+            #1 这些方法 返回的是 数据的一个视图；
+            #2 这些个视图 支持 清除操作(clear()),但是 修改和增加元素 会抛出异常；- list.subList()也是这个理
+                原因：AbstractCollection 实现了 clear、remove，但是没有实现 add；
+
+------
+是否能够 将KV 设置成为 null - 取决于 具体实现类 所提供的约束
+
+① ConcurrentHashMap
+    特征：
+        1 Key 不允许 为null，Value 也不允许 为null;
+        2 锁分段技术(before JDK1.8) / CAS（JDK1.8）;
+② HashMap
+    特征：
+        1 Key 允许 为null，Value 也允许 为null。
+        2 线程不安全；
+
+结论：
+    1 多数情况下，使用 ConcurrentHashMap 替代 HashMap 没有任何问题 - 性能 区别不大，而且更安全。
+    2 在 任何Map类 中，都需要 尽量避免 给KV 设置null值；

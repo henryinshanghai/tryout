@@ -1,0 +1,26 @@
+最后我们简要介绍 Node的另外两个子类：ForwardingNode 和 ReservationNode。
+
+===
+ForwardingNode 在 table扩容 时使用，它 在内部记录了 扩容后的table，也就是 nextTable。
+
+当 table 需要进行扩容 时，代码会：
+依次遍历 当前table中的每一个槽，
+    如果 当前槽不为null，则：
+        ① 需要 把 该槽中所有的元素 根据hash值 放入 扩容后的nextTable中，
+        ② 而 原有的槽中 会放置一个 ForwardingNode节点。
+正如其名，这个节点 会 把find()请求 转发到 扩容后的nextTable上。
+而 执行put()方法的线程 如果碰到 此节点，也会 协助进行迁移。
+
+===
+ReservationNode 在 computeIfAbsent() 及其相关方法 中，作为一个 预留节点 使用。
+
+computeIfAbsent()方法 会：
+先判断 相应的Key值 是否已经存在，
+    如果 不存在[1]，则：
+        ① 调用 由用户实现的自定义方法 来 生成Value值，组成 KV键值对，
+        ② 随后 插入到 此哈希集合中[2]。
+
+ReservationNode节点用法👇
+在 并发场景 下，在 [1] 得知Key不存在 到 [2] 插入哈希集合 的 时间间隔内，
+为了防止 哈希槽 被其他线程抢占，当前线程 会使用一个 ReservationNode节点 放到槽中，并加锁。
+从而保证了 线程的安全性。

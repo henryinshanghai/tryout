@@ -1,0 +1,95 @@
+LinkedHashMap继承自HashMap，而HashMap中的TreeNode又继承自LinkedHashMap中的Entry。
+这不会导致循环依赖吗？
+类似于A依赖于B，B又依赖于A的感觉
+
+===
+✅ 简短回答：
+不会导致 真正的循环依赖（尤其是 编译或加载时的死锁），因为：
+
+它们在 同一个包（java.util）中，Java 允许 同包中的类 互相引用；
+依赖的是 “类型引用” 而非 “初始化依赖”；
+JVM的类加载机制 能正确处理 这种结构；
+逻辑上，HashMap 并不“功能依赖于” LinkedHashMap —— 它 只是复用了 一个简单的数据结构
+
+==
+一、什么是“真正的循环依赖”？
+真正的危险循环依赖 通常指：
+
+A的初始化 需要 B已经初始化完成；
+B的初始化 又需要 A已经初始化完成；
+
+→ 导致 死锁或 StackOverflowError / NoClassDefFoundError。
+
+但在这个场景中：
+① HashMap 不需要 LinkedHashMap 被初始化 就能工作；
+② LinkedHashMap.Entry 是一个 静态嵌套类（static nested class），它的定义 不依赖 LinkedHashMap 实例的创建；
+③ TreeNode 只是 在编译期引用了 LinkedHashMap.Entry 的类型，并不在 HashMap 初始化时 就去“使用”它。
+✅ 所以：这是“类型层面的 交叉引用”，不是“运行时 初始化循环依赖”。
+
+==
+二、Java 如何处理 同包内的类 之间 互相引用？
+
+在 java.util 包中：
+HashMap.java 和 LinkedHashMap.java 属于 同一个编译单元（同一 JDK 模块）；
+Java 编译器（javac）和 JVM 允许 同包内的类 相互引用 彼此的 public/static 成员，即使它们 尚未完全加载。
+
+例如：
+// 文件 A.java
+class A {
+    static class X extends B.Y { }  // 引用 B 的内部类
+}
+
+// 文件 B.java
+class B extends A {
+    static class Y { }
+}
+→ 这在 Java 中是合法的，只要 Y 是 static 的（不依赖 B 实例）。
+
+而 LinkedHashMap.Entry 正是 static class：
+static class Entry<K,V> extends HashMap.Node<K,V> { ... }
+✅ 因此，HashMap.TreeNode 继承它，在 编译 和 运行时 都是安全的。
+
+==
+三、类加载顺序 如何 避免死锁？
+
+JVM 加载类时的规则：
+① 加载 LinkedHashMap 时，发现它 继承自 HashMap → 因此 先加载 HashMap；
+② 加载 HashMap 时，遇到 TreeNode extends LinkedHashMap.Entry；
+这时，JVM 不会立即 初始化LinkedHashMap，而是：
+    1. 仅解析 LinkedHashMap.Entry 的符号引用；
+    2. 只要 LinkedHashMap 的 .class 文件 存在，就能获取 Entry 的结构信息；
+    3. 不需要执行 LinkedHashMap 的 <clinit>（静态初始化块）。
+📌 关键点：继承关系 和 字段引用 只依赖 类的“结构”，不依赖其“初始化状态”。
+
+所以整个过程是 线性的、无死锁的。
+
+==
+五、JDK 开发者的原话（设计意图）
+
+OpenJDK 源码注释中明确说明了这一点：
+
+"Entry for Tree bins.
+Extends LinkedHashMap.Entry (which in turn extends Node)
+so can be used as extension of either regular or linked node."
+
+意思是：
+“TreeNode 被设计成 既能用于 普通HashMap，也能用于 LinkedHashMap。”
+
+这说明：这种“交叉继承” 是 故意为之，目的是 最大化复用，而非 疏忽造成的循环依赖。
+
+===
+✅ 总结
+问题	            |   答案
+是否存在循环依赖？	| ❌ 没有 运行时 或 编译时的 真正循环依赖
+为什么安全？	    |   • 同包 允许 互相引用
+                    • Entry 是 static类
+                    • 仅 类型引用，无需 初始化
+                    • JVM 类加载 能处理
+设计是否合理？	    | ✅ 非常合理：用 最小代价 实现 HashMap 与 LinkedHashMap 共享树节点
+是否违反分层？	    | 否。
+                    ① HashMap 仍是底层，LinkedHashMap 是扩展；
+                    ② HashMap 不调用 LinkedHashMap 的任何方法
+
+你现在看到的，是 JDK 在 工程实践 与 理论设计 之间 做出的精妙平衡。
+
+这种“看似循环，实则可控”的结构，在大型系统（如操作系统内核、数据库引擎）中其实很常见。

@@ -1,16 +1,16 @@
 插入元素：
-- #1 如果数组容量足够容纳新添的元素时(elementData.length > size + 1)，则：不需要扩容；
-- #2 如果数组空间不够盛放新元素时，则：需要扩容；
+- #1 如果 数组容量 足够容纳 新添的元素 (elementData.length > size + 1)，则：不需要扩容；
+- #2 如果 数组空间 不够盛放 新元素，则：需要扩容；
     if (minCapacity - elementData.length > 0)
        grow(minCapacity);
 
-    插入新元素后所需要的容量 needCapacity | minCapacity = {size + 1, MIN_CAPACITY}
-    ArrayList实际会提供的新容量 newCapacity; - 为了不至于每次添加新元素时，都要进行扩容操作
+    插入新元素后 所需要的容量 needCapacity / minCapacity = {size + 1, MIN_CAPACITY}；
+    ArrayList 实际会提供的新容量 newCapacity（为了 不至于 每次添加新元素时，都要进行 扩容操作）；
     数组的旧容量 oldCapacity = elementData.length;
 
 计算新容量 newCapacity:
     默认新容量 = oldCapacity * 1.5;
-    #1 如果默认新容量 < minCapacity,则：
+    #1 如果 默认新容量 < minCapacity,则：
         使用 minCapacity 作为 newCapacity
     /* 代码：确定newCapacity👇 */
     int oldCapacity = elementData.length;
@@ -18,9 +18,9 @@
     if (newCapacity - minCapacity < 0)
         newCapacity = minCapacity;
 
-    #2 如果默认新容量 超出了 警戒容量(MAX_ARRAY_SIZE),则：
+    #2 如果 默认新容量 超出了 警戒容量(MAX_ARRAY_SIZE),则：
         - 如果 所需要的容量minCapacity > MAX_ARRAY_SIZE, 则：返回 Integer.MAX_VALUE;
-        - 如果 所需要的容量minCapacity还没有超过 警戒容量，则：返回 警戒容量。
+        - 如果 所需要的容量minCapacity 还没有超过 警戒容量，则：返回 警戒容量。
     代码：
         if (newCapacity - MAX_ARRAY_SIZE > 0)
             newCapacity = hugeCapacity(minCapacity);
@@ -28,6 +28,6 @@
         return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
 
 ======
-Ⅰ 在首次插入元素时，设置 minCapacity = DEFAULT_CAPACITY；
+Ⅰ 在 首次插入元素 时，设置 minCapacity = DEFAULT_CAPACITY；
     calculateCapacity(elementData, minCapacity);
 Ⅱ 当 minCapacity > MAX_ARRAY_SIZE时，更新 newCapacity;

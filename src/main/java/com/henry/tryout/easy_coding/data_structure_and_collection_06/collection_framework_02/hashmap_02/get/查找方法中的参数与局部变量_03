@@ -1,0 +1,130 @@
+final TreeNode<K,V> find(int h, Object k, Class<?> kc)
+该方法定义在 HashMap.TreeNode 内部类中，用于在以当前节点为根的红黑子树中查找指定 key 的节点。
+
+==
+✅ 一、参数详解
+1. int h
+含义：目标key 的 哈希值（已扰动）。
+来源：由 外层 hash(key) 计算得出（即 (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16)）。
+作用：
+    ① 作为第一级比较依据；
+    ② 因为红黑树 在HashMap中是 按hash排序的（不是 按 key的自然顺序）；
+快速分流：h < node.hash → 左子树；h > node.hash → 右子树。
+📌 注意：这个 h 是 getTreeNode() 传入的，和 插入时计算的hash 完全一致。
+
+2. Object k
+含义：要查找的 目标 key 对象。
+类型为 Object（而非 K）：
+    ① 允许传入 任意对象（即使类型不匹配，equals() 会安全返回 false）；
+    ② 符合 Map.get(Object key) 的接口设计。
+作用：
+    ① 用于最终的 equals() 比较；
+    ② 在 hash 相等时，判断 是否为 同一个逻辑 key。
+⚠️ 注意：k 可能为 null（HashMap 支持 null key）。
+
+3. Class<?> kc
+含义：目标 key 的 Comparable 接口类型（如果存在）。
+为什么需要？
+    ① 当多个key 的 hash相同，且 都不是 目标key 时，需要决定 “往左还是往右” 继续查找；
+    ② 如果 key 实现了 Comparable<Key>，就可以用 compareTo() 做 第二级排序；
+    ③ kc 就是这个 Comparable 的具体类型（如 String.class）。
+
+传入 null 的含义：
+    ① 表示“尚未确定 key 是否可比较”，由 find() 内部调用 comparableClassFor(k) 动态探测；
+    ② 这是一种懒加载优化：避免 在外层 重复探测。
+
+💡 示例：
+若 k 是 String，则 kc = String.class；
+若 k 是自定义类 且 未实现 Comparable，则 kc = null。
+
+===
+✅ 二、关键局部变量详解（在 do...while 循环内）
+
+do {
+    int ph, dir;
+    K pk;
+    TreeNode<K,V> pl = p.left, pr = p.right;
+    ...
+} while (p != null);
+
+4. TreeNode<K,V> p
+含义：当前正在检查的树节点（初始为 this，即子树根）。
+作用：遍历指针，从根向下移动，直到 找到目标 或 到达叶子。
+
+5. int ph
+含义：当前节点 p 的 hash 值（即 p.hash）。
+作用：与 目标 h 比较，决定 搜索方向。
+技巧：缓存为 局部变量，避免 多次访问字段。
+
+6. K pk
+含义：当前节点 p 的 key（即 p.key）。
+作用：
+    ① 用于 与 目标k 做 == 或 equals() 比较；
+    ② 在 hash 相等时，判断 是否命中。
+技巧：缓存为 局部变量，提升性能。
+
+7. TreeNode<K,V> pl, pr
+含义：
+    pl = p.left：当前节点的左孩子；
+    pr = p.right：当前节点的右孩子。
+作用：
+    ① 避免在多个分支中重复访问 p.left / p.right；
+    ② 提前获取 子节点，便于 后续条件判断（如是否为 null）。
+
+8. int dir
+含义：比较方向的指示器。
+取值含义：
+    ① dir < 0：目标 key “小于” 当前节点 → 应走左子树；
+    ② dir > 0：目标 key “大于” 当前节点 → 应走右子树；
+    ③ dir == 0：无法通过 Comparable 区分（需 fallback 到 tieBreakOrder）。
+来源：
+    ① 要么来自 compareComparables(kc, k, pk)；
+    ② 要么来自 tieBreakOrder(k, pk)。
+
+===
+✅ 三、辅助方法（在分支中调用）
+虽然不是 局部变量，但对 理解逻辑 至关重要：
+
+🔸 comparableClassFor(Object x)
+作用：探测 x 是否实现了 Comparable<? extends T>，并 返回 其运行时类（如 String.class）。
+返回 null：表示 不可比较。
+
+🔸 compareComparables(Class<?> kc, Object k, Object pk)
+作用：安全地调用 ((Comparable)k).compareTo(pk)；
+返回 0：如果类型不匹配或抛异常（视为不可比）。
+
+🔸 tieBreakOrder(Object a, Object b)
+作用：终极 打破平局 的方法（类名 + identityHashCode）；
+保证 任意两个对象 都能 排出顺序。
+
+
+===
+✅ 四、整体协作流程（简化版）
+
+p = this; // 从当前子树根开始
+do {
+    ph = p.hash;
+    pk = p.key;
+    pl = p.left; pr = p.right;
+
+    if (ph > h)         → p = pl;           // hash 大，往左
+    else if (ph < h)    → p = pr;           // hash 小，往右
+    else if (pk == k || k.equals(pk)) → return p; // hash 相等 + key 相等 → 找到！
+    else if (pl == null) → p = pr;          // 左空，只能右
+    else if (pr == null) → p = pl;          // 右空，只能左
+    else if (可用 Comparable 比较) → p = (dir<0 ? pl : pr);
+    else → p = (tieBreakOrder <0 ? pl : pr); // 最后手段
+} while (p != null);
+return null;
+
+===
+✅ 五、总结：设计哲学
+
+元素	        |   设计意图
+h	        | 利用 hash 快速分流（主排序键）
+k	        | 支持 任意 key，最终 靠 equals() 确认
+kc	        | 懒加载探测 Comparable，避免 重复计算
+局部变量缓存  | 减少 字段访问，提升 热点代码性能
+多级比较策略  | 在 “通用性” 和 “树结构稳定性” 之间 取得平衡
+
+你现在看到的，是 JDK 在面对 不确定输入（任意 key）时，如何构建一个稳定、高效、安全的查找过程。

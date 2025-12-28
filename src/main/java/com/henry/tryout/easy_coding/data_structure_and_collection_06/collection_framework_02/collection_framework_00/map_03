@@ -1,14 +1,14 @@
 Map
 
 特征：
-    1 数据结构中存储的元素是 Key-Value键值对 as an Entry；
+    1 数据结构中 存储的元素 是 Key-Value键值对 as an Entry；
     2 数据结构本身是 哈希类型的 - 非线性结构；
-    3 Entry中的 key是唯一的，而 value是可以重复的；
+    3 Entry中的 key 是 唯一的，而 value 是 可以重复的；
     4 多线程下，不安全。
 用法：
-    1 获取所有的key - keySet();
-    2 获取所有的value - values();
-    3 获取所有的key-value - entrySet();
+    1 获取 所有的key - keySet();
+    2 获取 所有的value - values();
+    3 获取 所有的key-value - entrySet();
 同班同学：
     ConcurrentHashMap；
         特征：1 线程安全； 2 性能还不错；

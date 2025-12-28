@@ -2,7 +2,7 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.collection
 
 public class MyArrayListUsage {
     public static void main(String[] args) {
-        MyArrayList_01<String> list = new MyArrayList_01<>();
+        MyArrayList<String> list = new MyArrayList<>();
 
         /*
             默认容量 = 5

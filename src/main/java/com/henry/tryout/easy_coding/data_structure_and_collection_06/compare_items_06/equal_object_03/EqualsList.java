@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 
-// 目标：判断两个list对象是不是相等的 - 手段：Objects.equals(list1, list2)
+// 目标：判断 两个list对象 是不是相等的
+// 手段1：list1.equals(list2)
+// 手段2：Objects.equals(list1, list2)
 public class EqualsList {
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>();
@@ -38,7 +40,7 @@ public class EqualsList {
 /*
 启示：
     1 JDK10中引入了 局部变量类型推断 （Local Variable Type Inference）;
-        作用：初始化阶段，再处理var变量的时候，编译器会 检查右边代码的返回值类型，并将其类型 应用于左侧变量；
-    2 尽量避免 使用实例对象来调用equals()方法，否则容易抛出NPE；
+        作用：初始化阶段，在 处理var变量 的时候，编译器会 检查 右边代码的返回值类型，并 将 其类型 应用于 左侧变量；
+    2 尽量避免 使用 实例对象 来 调用equals()方法，否则 容易抛出NPE；
         推荐使用 JDK7中引入的 Objects的equals()方法 - 能够有效地规避 NPE的问题
  */

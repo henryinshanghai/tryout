@@ -1,0 +1,46 @@
+===
+下面学习一下 CHM的相关属性定义，理解这些信息 有助于 对整个类的成体系认知。
+
+// 默认为null，ConcurrentHashMap存放数据的地方，扩容时大小总是2的幂次方
+// 初始化 发生在 第一次插入操作，数组默认的初始化大小为16
+transient volatile Node<K, V>[] table;
+
+// 默认为null，扩容时 新生成的数组，其大小 为原始数组大小的两倍
+private transient volatile Node<K, V>[] nextTable;
+
+// 存储 单个KV数据节点。内部有 key、value、hash、next（用于指向下一个节点）
+// 它有4个 在CHM中 定义的子类：
+// ① TreeBin；② TreeNode；③ ForwardingNode；④ ReservationNode；
+// 前3个子类 都 重写了 查找元素的重要方法find()
+// 这些节点的概念 必须清楚地区分，否则 会极大地阻碍对源码的理解
+static class Node<K, V> implements Map.Entry<K, V> {...}
+
+// 它并不存储实际的数据，而是 用于维护 对桶内红黑树的读写锁，存储 对红黑树节点的引用
+static final class TreeBin<K, V> extends Node<K, V> {...}
+
+// 在红黑树结构中，用于 实际存储数据的节点
+static final class TreeNode<K, V> extends Node<K, V> {...}
+
+// 扩容转发节点，放置此节点后，外部 对原有哈希槽的操作 会转发到nextTable上
+static final class ForwardingNode<K, V> extends Node<K, V> {...}
+
+// 占位加锁节点。执行某些方法时，对其加锁，比如 computeIfAbsent等
+static final class ReservationNode<K, V> extends Node<K, V> {...}
+
+// 默认为0，重要属性，用来控制 table的初始化和扩容操作
+// sizeCtl=-1，表示 正在初始化中
+// sizeCtl=-n，表示(n-1)个线程 正在扩容中
+// sizeCtl>0，初始化 或 扩容中 需要使用的容量
+// sizeCtl=0，默认值，使用 默认容量 进行初始化
+private transient volatile int sizeCtl;
+
+// 集合size小于64时，无论如何，都不会使用 红黑树结构
+// 转化为红黑树 还有一个条件是 TREEIFY_THRESHOLD
+static final int MIN_TREEIFY_CAPACITY = 64;
+
+// 同一个哈希桶中 存储的元数个数 超过此阈值时，则 存储结构 由链表转化为红黑树
+static final int TREEIFY_THRESHOLD = 8;
+
+// 同一个哈希桶中 存储的元数个数 小于等于 此阈值时，
+// 从红黑树 回退至 链表结构，因为 元素个数比较少时，链表更快
+static final int UNTREEIFY_THRESHOLD = 6;

@@ -1,0 +1,41 @@
+✅ 一、前提：LinkedHashMap 继承自 HashMap
+public class LinkedHashMap<K,V> extends HashMap<K,V>
+
+这意味着：
+    ① LinkedHashMap 直接拥有 HashMap 的所有字段和方法；
+        包括：table[]、putVal()、treeifyBin()、TreeNode 等；
+    ② 所有 树化逻辑（红黑树的构建、查找、插入）都来自 HashMap。
+➡️ LinkedHashMap 自己 一行红黑树代码 都不用写！
+
+✅ 二、关键：TreeNode 的继承链 天然兼容 LinkedHashMap
+虽然 TreeNode 定义在 HashMap 中，但它的声明是：
+    // HashMap.java
+    static final class TreeNode<K,V> extends LinkedHashMap.Entry<K,V>
+
+而 LinkedHashMap.Entry 是：
+    // LinkedHashMap.java
+    static class Entry<K,V> extends HashMap.Node<K,V> {
+        Entry<K,V> before, after;  // ← 顺序指针
+    }
+
+所以 TreeNode 实际上具有三重身份：
+① 是 Map.Entry<K,V> → 因此 支持 entrySet()
+② 是 HashMap.Node → 因此 能放进 table[]，参与哈希查找
+③ 是 LinkedHashMap.Entry → 因此 拥有 before / after 字段，支持LinkedHashMap的顺序特性！
+✅ 这意味着：即使 TreeNode 是 HashMap 创建的，它也天然支持 LinkedHashMap 的顺序维护。
+
+<略>
+
+===
+✅ 五、总结：LinkedHashMap 复用 TreeNode 的三大支柱
+支柱	      |       说明
+. 继承	  |   LinkedHashMap extends HashMap → 直接获得 TreeNode 和树化逻辑
+. 类型设计  |   TreeNode extends LinkedHashMap.Entry → 自带 before/after
+. 钩子机制  |	  重写 afterNodeXxx 方法，在树节点上 维护顺序
+
+🌟 结果：
+① LinkedHashMap 无需实现 任何红黑树代码；
+② 树化后 依然保持 插入/访问顺序；
+③ 性能与 HashMap 几乎一致。
+
+这就是 JDK 的高明之处：用最小的耦合，实现最大的复用。

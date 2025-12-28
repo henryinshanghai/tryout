@@ -1,0 +1,104 @@
+什么叫做CAS？它和多线程有什么关系?
+
+===
+CAS（Compare-And-Swap，比较并交换）是一种实现 无锁并发编程 的 底层原子操作，
+在 多线程环境 中 用于 安全地 更新共享变量，而 无需使用 传统的互斥锁（如 synchronized）。
+
+
+一、什么是 CAS？
+🔧 核心思想：
+“只有当 内存中的值 等于 我预期的旧值 时，我才 把它改成新值；否则，说明 别人已经改过了，我 这次更新 失败。”
+
+它是一个原子指令，由 CPU 硬件直接支持（如 x86 的 cmpxchg 指令），保证整个“比较+交换”过程不可被中断。
+
+📌 CAS 的三个参数：
+    boolean compareAndSwap(
+        Object memory,   // 要修改的内存位置（如某个变量的地址）
+        Object expected, // 期望 当前的值（旧值）
+        Object newValue  // 想要设置的 新值
+    )
+① 如果 memory 中的值 == expected → 将其设为 newValue，返回 true
+② 否则 → 不做任何事，返回 false
+
+===
+二、CAS 和多线程的关系
+
+在多线程环境下，多个线程可能 同时读写 同一个变量，导致 竞态条件（Race Condition）。
+传统方案是 加锁（如 synchronized），但锁有 性能开销（上下文切换、阻塞）。
+
+✅ CAS 提供了一种 “无锁”（lock-free）的 并发控制机制：
+① 不阻塞线程：失败的线程 可以重试 或 做其他事，不会挂起。
+② 高并发性能好：在 冲突较少 时，比锁 更高效。
+③ 是许多 并发工具 的基础：如 AtomicInteger、ConcurrentHashMap、AQS 等。
+
+===
+三、代码示例：用 CAS 实现线程安全的计数器
+❌ 非线程安全版本（有问题）：
+    int count = 0;
+    // 多线程执行：
+    count++; // 实际是：read → inc → write，非原子！
+
+✅ 使用 CAS（Java 中通过 AtomicInteger）：
+    import java.util.concurrent.atomic.AtomicInteger;
+
+    AtomicInteger count = new AtomicInteger(0);
+    // 多线程安全地自增
+    count.incrementAndGet(); // 内部使用 CAS 循环实现
+
+🔍 incrementAndGet() 的底层逻辑（简化版）：
+
+    public final int incrementAndGet() {
+        for (;;) {
+            int current = get();           // 读取当前值
+            int next = current + 1;        // 计算新值
+            if (compareAndSet(current, next)) // CAS 尝试更新
+                return next;
+            // 如果失败（说明别的线程改了），就 循环重试
+        }
+    }
+这就是著名的 “乐观锁”策略：先假设 没人干扰，如果操作失败 再重试。
+
+===
+四、CAS 的优缺点
+✅ 优点：
+① 无锁：避免 线程阻塞 和 上下文切换，吞吐量高。
+② 适用于 低竞争场景：比如 计数器、状态标志等。
+③ 是现代 高性能并发库的基石。
+
+❌ 缺点（ABA 问题等）：
+问题	                    |   说明                                                     |	解决方案
+ABA 问题	                | 线程 T1 读到 A，T2 把 A→B→A，T1 的 CAS 认为没变，其实中间被改过	| 使用 AtomicStampedReference（带版本号）
+循环时间长开销大	        | 高并发下 CAS 失败多次，CPU 空转	                            | 适度退让（如 Thread.yield()）或结合锁
+只能保证一个变量的原子性	| 多个变量 需原子更新时 不够用	                                | 使用锁，或 AtomicReference 包装对象
+
+📌 ABA 问题举例：
+你去银行取钱，看到余额 100 元（A）。
+老板偷偷转走 50 又还你 50（A→50→100），你再取钱时 CAS 成功，但其实账户被动过！
+
+===
+五、Java 中的 CAS 支持
+Java 通过 Unsafe 类（内部使用）和 java.util.concurrent.atomic 包提供 CAS 能力：
+
+类	                | 用途
+AtomicInteger   	| 原子整数
+AtomicLong  	    | 原子长整型
+AtomicReference<T>	| 原子引用
+AtomicBoolean	    | 原子布尔值
+
+它们的核心方法都基于 CAS：
+① compareAndSet(expected, newValue)
+② getAndIncrement()
+③ lazySet() 等
+
+💡 底层：JVM 会将这些方法编译为 CPU 的 CAS 指令（如 lock cmpxchg）。
+
+===
+✅ 总结
+CAS 是一种 硬件级的原子操作，用于 在多线程中 “无锁”地 安全更新 共享变量。
+
+它通过“比较+交换” 实现 乐观并发控制。
+是 AtomicXXX 类、ConcurrentHashMap 等 高性能并发组件 的核心。
+虽有 ABA 等局限，但 在合适场景下 比锁更高效。
+
+🧠 记住一句话：
+“CAS 让线程 自己重试，而不是 排队等待————用 CPU 替换掉 阻塞。”

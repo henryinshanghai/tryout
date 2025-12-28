@@ -1,0 +1,38 @@
+HashMap.Node, LinkedHashMap.Entry, HashMap.TreeNode 三个类之间的关系；
+
+✅ 1. HashMap.Node 定义在 HashMap 中
+原因：
+    它是 HashMap 最基础的存储单元，封装了 哈希表所需的最小结构（key, value, hash, next）。
+作用：
+    ① 实现 Map.Entry接口，以 支持entrySet()；
+    ② 作为 链表节点 处理哈希冲突；
+    ③ 是 所有其他节点类型 的 基类。
+设计原则：基础结构 内聚于 自身类中，保持 HashMap 自包含。
+
+✅ 2. LinkedHashMap.Entry 定义在 LinkedHashMap 中
+原因：它是 对 HashMap.Node 的功能扩展，只为 LinkedHashMap 服务。
+作用：
+    ① 新增 before / after 指针，用于 维护 全局插入/访问 的顺序；
+    ② 支持 有序遍历 和 LRU缓存 等特性。
+设计原则：扩展功能 由子类定义，不污染父类，符合“单一职责”和“开闭原则”。
+
+✅ 3. TreeNode 定义在 HashMap 中
+原因：树化（红黑树优化）是 HashMap 自身的核心性能机制，必须 由它主导。
+作用：
+    ① 在 哈希冲突严重 时 替代链表，提升 查找性能（O(log n)）；
+    ② 虽然 定义在HashMap中，但 继承自 LinkedHashMap.Entry，以便 LinkedHashMap在复用它时 仍能维护顺序。
+设计原则：
+    ① 基础能力 由底层类提供（HashMap 必须能 独立树化）；
+    ② 通过 精心设计的继承链 实现 跨类复用，避免 代码重复。
+
+===
+🧩 总体架构思想：
+类	            | 节点类型  |   定义位置    |	核心理念
+HashMap	        | Node     |   自身内部    | 基础结构 自包含
+LinkedHashMap	| Entry    |   自身内部	 | 扩展功能 局部化
+HashMap	        | TreeNode |   自身内部	 | 核心优化 由底层实现 + 兼容 上层扩展
+🔑 一句话总结：
+
+“基础归基础，扩展归扩展；复用靠继承，解耦靠设计。”
+
+这种安排 既保证了 每个类的内聚性，又 通过合理的继承关系 实现了 最大化的代码复用，是 Java 集合框架优雅架构的典型体现。

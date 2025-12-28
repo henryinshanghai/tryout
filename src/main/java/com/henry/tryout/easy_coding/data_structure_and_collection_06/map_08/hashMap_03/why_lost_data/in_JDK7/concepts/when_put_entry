@@ -1,0 +1,19 @@
+HashMap中三个 与存储相关的概念：
+1 table - 哈希表, 用于 存储 所有的节点数据；
+2 slot - 哈希槽，也就是 数组中的一个方格 table[i]；
+3 bucket - 哈希桶，由 table[i]位置上 所有元素 形成的 表/树的集合。
+
+hashmap's size = 所有哈希桶中的 元素的总和。
+
+
+===
+死链问题来源： JDK1.7中的 HashMap源码；
+
+HashMap 新增元素的过程：
+    put()
+        - addEntry()
+            - createEntry()
+    新添加的元素 直接放在 slot槽上，使 该元素 能够在下次提取 时，可以 被更快地访问到。
+    分析：如果 两个线程同时执行 的话，在 createEntry()方法 中，会出现 线程之间的 赋值覆盖 - 这就是 对象丢失的原因。
+
+usage demo：HashMapSimpleResize

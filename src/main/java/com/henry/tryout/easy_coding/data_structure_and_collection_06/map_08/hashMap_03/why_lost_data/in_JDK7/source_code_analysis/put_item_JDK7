@@ -1,0 +1,51 @@
+public V put(K key, V value) {
+    int hash = hash(key);
+    int i = indexFor(hash, table.length);
+
+    // 找到 数组对应下标的位置 - 手段：使用hashCode
+    // 是要 覆盖旧的元素 还是 添加新的元素
+    // 手段：根据 equals()方法 所返回的 boolean类型结果
+    for(Entry<K, V> e = table[i]; e != null; e = e.next) {
+        // 如果 key的hash 是 相同的，则：
+        // 判断key 是不是 相同的key - 手段：等值判断 或者 equals()判断；
+        if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
+            V oldValue = e.value;
+            e.value = value;
+            return oldValue;
+        }
+    }
+
+    // 还没有 添加元素 就进行 modCount++ 🐖 这会导致很多的隐患
+    modCount++;
+
+    // 添加新的元素 - 最后一个参数i是 table数组的下标
+    addEntry(hash, key, value, i);
+    return null;
+}
+
+void addEntry(int hash, K key, V value, int bucketIndex) {
+    // 如果：① 元素的个数 达到 threshold的扩容阈值; ② 数组下标位置上 已经存在有 元素。则：进行扩容
+    if((size > threshold) && (null != table[bucketIndex]) {
+        // 把 容量 扩大为 先前的两倍  - size 是 元素的数量, table.length 为 数组的容量
+        resize(table.length * 2)
+        hash = (null != key) ? hash(key) : 0;
+        bucketIndex = indexFor(hash, table.length);
+    }
+
+    createEntry(hash, key, value, bucketIndex);
+}
+
+// 插入元素 - 头插法
+void createEntry(int hash, K key, V value, int bucketIndex) {
+    // 记录下 当前哈希槽上 的Entry元素
+    Entry<K, V> e = table[bucketIndex]; // #1
+    // 创建 一个新的Entry节点 放到 哈希槽中，并 把 旧的Entry节点 接到 新节点的后面
+    table[bucketIndex] = new Entry<>(hash, key, value, e);
+    size++;
+}
+
+多线程下，JDK7中 对put()方法的实现 可能会有 如下问题：
+时间顺序下：
+step1 线程A 执行到#1时，由于 CPU时间片结束 而 被挂起;
+step2 线程B 获取到 CPU时间片，并 顺利执行了 整个createEntry()方法 - 这时 新的entry 已经 被添加完成
+step3 线程A 重新获取到 时间片，会继续 从#1处开始执行 - 这就会导致 线程B所添加的新entry 被覆盖掉

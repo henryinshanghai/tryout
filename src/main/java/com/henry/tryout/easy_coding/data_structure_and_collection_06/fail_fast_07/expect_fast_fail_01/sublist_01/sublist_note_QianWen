@@ -1,0 +1,22 @@
+四、如何获得 真正的“子列表副本”？
+如果你想要一个独立、不受原列表影响的子列表：
+    List<String> trueSub = new ArrayList<>(list.subList(from, to));
+这样 就切断了 与原列表的联系。
+
+五、总结：subList() 的关键特性
+特性	          |   说明
+视图（View）	  | 不是副本，与原列表共享数据
+双向同步	      | 修改 subList ⇄ 修改原列表
+索引局部化	  | subList 的索引 从 0 开始，对应原列表 [fromIndex, toIndex)
+fail-fast 机制 |	原列表 被外部结构性修改 后，subList操作 会抛 ConcurrentModificationException
+内存泄漏风险	  |  subList 持有 原列表引用，阻止 GC
+非线程安全	  |  即使原列表同步，subList 也不自动同步
+
+六、适用场景
+① 临时对列表某一段进行操作（如排序、过滤）
+② 分页处理（如 list.subList(start, end)）
+③ 算法中需要 递归处理 子区间（如归并排序）
+✅ 但务必记住：它是“活”的视图，不是快照！
+
+💡 最佳实践：
+如果你不需要 与原列表联动，立即用 new ArrayList<>(subList(...)) 包裹，避免意外副作用和内存问题。

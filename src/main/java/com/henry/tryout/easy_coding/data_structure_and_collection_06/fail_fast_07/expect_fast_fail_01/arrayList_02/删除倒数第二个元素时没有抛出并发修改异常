@@ -1,0 +1,14 @@
+ArrayList 在遍历操作时 删除倒数第二个元素, 为什么没有抛出 ConcurrentModificationException异常呢？
+demo: ArrayListFailFast_02
+原理：
+    #1 遍历集合时，会 使用一个cursor游标 来 标识 当前扫描到的位置；
+    #2 当 cursor == size 的时候，就会 退出循环；
+    #3 在 remove two元素(倒数第二个元素)之后，会把 所有元素向前拷贝 - cursor = (size-1) == 2，此时 cursor也等于2
+    #4 基于#3，在 执行 hasNext() 时，返回值为 false，从而 退出循环体。
+        因此 压根不会执行到 next()方法，也就不会 checkForComodification()
+
+💡 记住：
+ConcurrentModificationException 是“尽力而为”的检测机制，不是安全保证。
+
+即使没抛异常，非法修改 依然可能导致 逻辑错误 或 数据不一致。
+所以，永远不要在 for-each 中直接调用 list.remove() —— 这是 Java 开发的经典陷阱之一！

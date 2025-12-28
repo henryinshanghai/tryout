@@ -2,16 +2,23 @@ package com.henry.tryout.easy_coding.data_structure_and_collection_06.compare_it
 
 import java.util.HashMap;
 
-// 验证：hashmap中获取指定key对应的value时，会使用 hashCode()与equals()来找到 传入的key所对应的Entry
+// 验证：HashMap中获取 指定key所关联的value 时，会使用 hashCode()与equals() 来 查找 传入的key所对应的Entry
+// 手段: 向HashMap中 连续添加 逻辑上相等的key-value，查看 HashMap是否 把它识别为 相同的key
 public class MapsGetMethod {
     public static void main(String[] args) {
 
         HashMap<Object, Object> map = new HashMap<>();
 
-        // 向哈希结构中添加一个 henry-jane的元素
-        map.put("henry", "jane");
+        // henry1 和 henry2 这两个对象 会被 HashMap 视为 相同的对象吗?
+        EqualsObject henry1 = new EqualsObject(1, "henry");
+        EqualsObject henry2 = new EqualsObject(1, "henry");
 
-        // 从哈希结构中获取 key为henry的键值对 所对应的value的值
+        // 以 henry1作为key 添加键值对
+        map.put(henry1, "jane");
+        // 再以henry2作为key 添加键值对
+        map.put(henry2, "jack");
+
+        // 从哈希结构中 获取 key为henry的键值对 中的value的值
         /*
         getNode(hash(key), key)
 
@@ -23,6 +30,7 @@ public class MapsGetMethod {
                 1 使用自定义的对象作为map的key时，需要重写 hashCode() 与 equals()方法
                 2 使用自定义的对象 作为set的元素时，也需要重写 hashCode() 与 equals()方法 - 这两个方法会被用来对象的判等
          */
-        map.get("henry");
+        Object o = map.get(henry1);
+        System.out.println(o); // jack 说明HashMap把 henry2作为key的键值对 视为一个 已经存在的key，做了 更新操作
     }
 }

@@ -1,0 +1,117 @@
+在多线程并发环境下，安全地 遍历并删除集合中的元素 是一个经典难题。
+关键在于：既要避免 ConcurrentModificationException，又要保证 线程安全 和 数据一致性。
+
+下面为你系统梳理 几种可靠、实用的解决方案，按 推荐程度 排序：
+
+===
+✅ 方案一：使用 线程安全的并发集合（最推荐）
+1. CopyOnWriteArrayList（读多写少场景）
+原理：写时复制，读操作 无锁。
+遍历时删除：直接 调用 list.remove() 是安全的（因为 每次修改都 生成新副本）。
+注意：迭代器 基于 创建时的快照，看不到 其他线程 刚删除的元素，但 不会抛异常。
+
+    List<String> list = new CopyOnWriteArrayList<>();
+    // 多个线程可 同时遍历和删除
+    for (String item : list) {
+        if (shouldRemove(item)) {
+            list.remove(item); // ✅ 安全！
+        }
+    }
+✅ 优点：代码简洁，无需 显式同步
+❌ 缺点：写性能差，内存开销大，弱一致性
+
+适用场景：监听器列表、配置缓存等 读远多于写 的场合。
+
+==
+2. ConcurrentHashMap（若存储 key-value）
+① 虽然不能直接“遍历删除”，但 可通过 remove(key, value) 或 keySet().removeIf() 安全操作。
+② Java 8+ 提供了 forEach、removeIf 等 原子操作。
+
+    ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+    map.keySet().removeIf(key -> shouldRemove(key)); // ✅ 线程安全
+
+===
+✅ 方案二：使用 synchronized 块（强一致，通用）
+如果你 必须使用 ArrayList、HashMap 等 非并发集合，必须 全程加锁：
+
+    List<String> list = Collections.synchronizedList(new ArrayList<>());
+
+    synchronized (list) {
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            String item = it.next();
+            if (shouldRemove(item)) {
+                it.remove(); // ✅ 在同步块内 使用 iterator.remove()
+            }
+        }
+    }
+
+⚠️ 关键点：
+① 整个遍历+删除过程 必须在一个同步块中
+② 必须使用 iterator.remove()，不能用 list.remove()
+③ 所有 对 list 的访问（读/写）都必须 用 同一个锁 同步
+
+✅ 优点：强一致性，结果可预测
+❌ 缺点：并发性能差（串行化），容易死锁
+
+===
+✅ 方案三：先标记，后批量删除（避免 遍历时修改）
+思路：不 边遍历边删，而是 先收集 要删除的元素，再 统一删除。
+
+    // 单线程版（需配合外部同步）
+    List<String> toRemove = new ArrayList<>();
+    for (String item : list) {
+        if (shouldRemove(item)) {
+            toRemove.add(item);
+        }
+    }
+    list.removeAll(toRemove);
+
+在多线程下，需 加锁保护 整个过程：
+    synchronized (list) {
+        List<String> toRemove = new ArrayList<>();
+        for (String item : list) {
+            if (shouldRemove(item)) {
+                toRemove.add(item);
+            }
+        }
+        list.removeAll(toRemove);
+    }
+✅ 优点：逻辑清晰，避免 fail-fast
+❌ 缺点：需要 额外内存，两次遍历
+
+===
+✅ 方案四：使用 removeIf()（Java 8+，推荐）
+Collection.removeIf(Predicate) 是原子操作，内部已处理 线程安全问题（但 仅对 并发集合 有效）：
+
+// 对 CopyOnWriteArrayList：✅ 安全
+list.removeIf(this::shouldRemove);
+
+// 对 synchronizedList：❌ 仍需 外部同步！
+synchronized (list) {
+    list.removeIf(this::shouldRemove);
+}
+🔍 注意：removeIf 对 普通ArrayList 不是 线程安全的！
+
+===
+📊 方案对比总结
+方案	                            |  线程安全  |	一致性   |	性能       |	适用场景
+CopyOnWriteArrayList	        | ✅	    | 弱一致	    | 读高 / 写低  |	读多写少（如监听器）
+synchronized + Iterator.remove()| ✅	    | 强一致	    | 低（串行）	  | 小数据、强一致要求
+先标记后删除 + 同步	            | ✅	    | 强一致	    | 中	      | 逻辑复杂、需批量处理
+removeIf() + 并发集合	        | ✅	    | 取决于集合	| 高	      | Java 8+，简洁场景
+
+💡 最佳实践建议
+① 优先选择 并发集合：如 CopyOnWriteArrayList、ConcurrentHashMap。
+② 避免 在遍历时直接修改 非并发集合，即使 单线程 也要用 Iterator.remove()。
+③ 多线程下，宁可 牺牲性能 也要保证正确性：用 synchronized 比 隐藏 bug 好。
+④ 明确 一致性需求：是否必须看到 最新数据？能否容忍 短暂不一致？
+
+===
+举个完整例子（推荐写法）：
+    // 场景：多个线程 动态管理 任务列表
+    private final List<Task> tasks = new CopyOnWriteArrayList<>();
+
+    public void cleanupCompletedTasks() {
+        tasks.removeIf(Task::isCompleted); // ✅ 线程安全，简洁高效
+    }
