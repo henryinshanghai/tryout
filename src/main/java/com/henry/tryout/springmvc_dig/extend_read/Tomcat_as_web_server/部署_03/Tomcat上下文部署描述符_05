@@ -1,3 +1,0 @@
-可以使用/META-INF/context.xml文件 来 定义Tomcat特定的配置选项 - 例如访问日志、数据源、会话管理器配置等等。
-这个XML文件必须包含一个Context元素，它将被视为对应于Host（web应用程序被部署到的位置）的Host元素的子元素
-“Tomcat配置文档” 包含关于Context元素的信息。

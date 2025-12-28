@@ -1,6 +1,0 @@
-结论1：Tomcat在初始化 ContextLoaderListener的时候，完成了 对web应用的IoC容器的初始化。
-结论2：在把根IoC容器添加到 servletContext对象中之前，Tomcat会 对IoC容器进行配置&刷新的操作；
-结论3：在Tomcat初始化Servlet的过程中，完成 Spring MVC(组件)的初始化。
-
-🐖 Spring MVC也支持 “无需web.xml”的web应用开发方式。
-原理：只是使用 代码的方式 来 完成了先前在web.xml文件中所添加的配置（包括组件配置）而已
