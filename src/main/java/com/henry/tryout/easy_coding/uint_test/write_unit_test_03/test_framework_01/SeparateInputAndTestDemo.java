@@ -12,16 +12,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // 数据驱动测试 - @TestFactory
 @DisplayName("售票器类型测试")
-public class ExchangeRateConverterTest_04 {
+public class SeparateInputAndTestDemo {
     private TicketSeller ticketSeller;
 
-    // 把数据的输入输出 与 测试逻辑 分开 - 作用：一次性对各种类型的输出、输出结果进行验证
+    // 把 数据的输入输出 与 测试逻辑 分开 -
+    // 作用：一次性 对 各种类型的输出、输出结果 进行验证
     @TestFactory
     @DisplayName("时间售票检查")
     Stream<DynamicTest> oddNumberDynamicTestWithStream() {
         ticketSeller = new TicketSeller();
         ticketSeller.setCloseTime(LocalTime.of(12, 20, 25, 0));
-        // 使用指定的元素来创建顺序流 - 手段： Stream.of()
+        // 使用 指定的元素 来 创建顺序流 - 手段： Stream.of()
         return Stream.of(
                         Lists.list("提前购票", LocalTime.of(12, 20, 24, 0), true),
                         Lists.list("准点购买", LocalTime.of(12, 20, 25, 0), true),

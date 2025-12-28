@@ -1,6 +1,6 @@
 package com.henry.tryout.easy_coding.uint_test.code_coverage_02;
 
-public class CoverageSampleMethods_01 {
+public class CoverageSampleMethods {
     /*
         5行可执行语句；3个入参；
         测试用例：

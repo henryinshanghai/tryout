@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested;
 
 // 有嵌套结构的测试 - @Nested
 @DisplayName("交易服务测试")
-public class TransactionServiceTest_02 {
+public class NestedTestDemo {
 
     // 第一层-1
     @Nested

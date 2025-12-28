@@ -16,7 +16,7 @@ public class MethodCoverageDemo {
     @Test
     @DisplayName("line coverage sample test")
     public void testLineCoverageSample() {
-        CoverageSampleMethods_01 coverageSampleMethods = new CoverageSampleMethods_01();
+        CoverageSampleMethods coverageSampleMethods = new CoverageSampleMethods();
 
         Assert.assertEquals(false, coverageSampleMethods.testMethod(1, 2, 0));
     }
@@ -30,7 +30,7 @@ public class MethodCoverageDemo {
             "1, 0, 3"
     })
     public void testConditionDecisionCoverageTrue(int a, int b, int c) {
-        CoverageSampleMethods_01 coverageSampleMethods = new CoverageSampleMethods_01();
+        CoverageSampleMethods coverageSampleMethods = new CoverageSampleMethods();
 
         Assert.assertEquals(true, coverageSampleMethods.testMethod(a, b, c));
     }
@@ -38,7 +38,7 @@ public class MethodCoverageDemo {
     @Test
     @DisplayName("Condition Decision coverage sample test result false")
     public void testConditionDecisionCoverageFalse() {
-        CoverageSampleMethods_01 coverageSampleMethods = new CoverageSampleMethods_01();
+        CoverageSampleMethods coverageSampleMethods = new CoverageSampleMethods();
 
         Assert.assertEquals(false, coverageSampleMethods.testMethod(0, 0, 0));
     }
@@ -59,5 +59,5 @@ public class MethodCoverageDemo {
     8种 // 这个要求是要有8种组合吗？貌似不是
 因此 这两个测试用例，满足了 条件判定覆盖的要求。
 
-结论：分支覆盖 是 条件判定覆盖的一个子集。
+结论：分支覆盖 是 条件判定覆盖 的一个子集。
  */

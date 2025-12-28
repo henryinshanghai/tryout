@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
-// 指定用例在测试报告中的显示名称 - 手段：@Display注解
+// 目的：指定用例 在测试报告中的显示名称 - 手段：@Display注解
 @DisplayName("售票器类型测试")
-public class TicketSellerTest_01 {
+public class CommonAnnotationDemo {
 
     // 定义待测试类的实例
     private TicketSeller ticketSeller;

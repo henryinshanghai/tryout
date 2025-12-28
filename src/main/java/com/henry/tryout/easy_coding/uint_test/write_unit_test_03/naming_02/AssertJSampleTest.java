@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// 使用 AspectJ 做 流式断言
+// 使用 AspectJ(第三方工具) 做 流式断言
 public class AssertJSampleTest {
 
     @Test
@@ -64,5 +64,4 @@ public class AssertJSampleTest {
         as("claim")
         .property1()
         .property2();
-
  */
