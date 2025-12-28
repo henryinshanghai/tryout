@@ -1,0 +1,13 @@
+$ javap -cp /e/development_project/tryout/target/classes -c -v com.henry.tryout.easy_coding.jvm_04.memory_layout_02.thread_private_02.ViewOperationStack_01
+
+1. 查看方法签名和字段（默认）
+2. 查看完整的字节码指令（关键！）
+    使用 -c 选项（disassemble code）
+3. 查看更详细的信息（常量池、行号、局部变量表等）
+    其中 -v（或 -verbose）会显示：
+        ① 常量池（Constant Pool）
+        ② 方法的局部变量表（LocalVariableTable）
+        ③ 行号表（LineNumberTable）
+        ④ 栈帧大小（stack=..., locals=...）
+        ⑤ 访问标志（flags）
+    💡 这是分析 JVM 内部机制（如内存布局、栈帧结构）的黄金命令。

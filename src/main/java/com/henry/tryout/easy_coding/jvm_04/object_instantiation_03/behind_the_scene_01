@@ -1,0 +1,40 @@
+$ javap -cp /e/development_project/tryout/target/classes -c com.henry.tryout.easy_coding.jvm_04.object_instantiation_03.InstanceDemo
+
+Compiled from "InstanceDemo.java"
+public class com.henry.tryout.easy_coding.jvm_04.object_instantiation_03.InstanceDemo {
+  public com.henry.tryout.easy_coding.jvm_04.object_instantiation_03.InstanceDemo();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+       0: new           #2                  // class java/lang/Object
+       3: dup
+       4: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       7: astore_1
+       8: return
+}
+
+NEW指令: 如果 找不到 Class对象，就会进行 类的加载。
+    特征：
+        1 加载成功后，会 为对象 在堆中 分配内存 - 从 Object开始，到 当前类 为止 的路径上 的所有属性 都需要 分配内存空间。
+        2 在 空间分配 完成后，会进行 零值初始化。
+        3 引用本身 也是 占据存储空间的，作为变量，引用 会占用 4个字节。
+        4 NEW指令 执行完成 后，会 把 指向实例对象的引用变量 压入 虚拟机栈顶。
+
+DUP指令：
+    作用：在栈顶 对 引用变量 进行复制 - 这样栈顶 会有两个 指向 堆内实例对象 的引用变量。
+    特征：
+        1 如果 <init>方法 有参数，则：会 把 参数 压入 操作栈中；
+        2 位于下面的那个引用，用于 赋值 或者 保存到 局部变量表；
+        3 而 栈顶的引用，用于 作为 句柄 调用 相关方法??
+
+INVOKESPECIAL指令
+    作用：
+        1 调用 对象的实例方法；
+        2 使用 栈顶的引用变量 来调用 <init>方法；
+    特征：
+        1 <clinit> 是 类初始化时 所执行的方法，
+        2 <init> 是 对象初始化时 所执行的方法。

@@ -1,0 +1,26 @@
+===
+什么条件下 可以使用“java 简单类名“的形式？
+
+📌 总结：使用 java 简单类名 的充要条件
+条件	                          | 必须满足？  | 	说明
+. 类在默认包中（无 package 声明） |	✅ 是	  |  有 package 就必须用全限定名
+. .class 文件在当前目录	      | ✅ 是	  |  JVM 默认只在 . 找
+. 当前目录在 classpath 中	      | ✅ 通常自动满足 | 不要乱用 -cp 覆盖掉 .
+
+🔁 对比：什么情况下 不能用 简单类名？
+场景	                    | 能否用 java SimpleName？  |	正确命令
+有 package com.example;  |	❌	                  |  java com.example.SimpleName
+.class 在 out/ 目录	    |   ❌                     | java -cp out SimpleName（且无 package）
+使用了构建工具（Maven/Gradle）|	❌                     |  它们生成的类都在包中
+类在 JAR 文件中	        |   ❌               	  | 必须用全限定名 + -cp your.jar
+
+💡 实用建议
+学习字节码/JVM 时：可以临时创建 无 package 的类，方便用 java MyClass 快速测试。
+正式项目中：始终使用 package，并 用全限定名运行，这是 Java 的标准实践。
+避免 默认包：很多框架（如 Spring、JUnit 5）不支持 默认包中的类。
+
+✅ 记住：只要用了 package，就永远告别 java 简单类名 了。
+
+这不是限制，而是 Java 保证命名空间清晰的设计原则。
+
+规则：永远从 classes 或 out 这样的“包根目录”运行，而不是深入到包内部！

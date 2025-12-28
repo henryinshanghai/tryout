@@ -1,0 +1,12 @@
+wrap up:
+1 字节码指令 一共有 200来个；
+2 字节码文件 以"cafe babe"开始；
+3 字节码指令 可以分为7大类(LCTNMIS - Load, Calculate, Type Conversion, New, Management, Invocation, Sync)
+    CPU：计算；
+    CPU <-> 内存：加载
+    内存：
+        #1 创建 & 访问对象；
+        #2 类型转换；
+        #3 方法调用；
+        #4 操作栈管理；
+        #5 同步指令；

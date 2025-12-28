@@ -1,0 +1,25 @@
+✅ 正确编译方式（推荐使用 -d 指定输出目录）：
+
+# 1. 进入项目根目录（包含 src/ 的目录）
+    cd /your/project/root
+# 2. 创建输出目录（可选但推荐）
+    mkdir -p classes
+# 3. 编译（-d 指定 .class 输出位置）
+    javac -d classes src/com/example/App.java
+
+==
+编译结果
+classes/
+└── com/
+    └── example/
+        └── App.class   ← 自动生成包目录结构
+
+==
+🔧 关键选项说明
+选项              |	        作用                                      |	是否推荐
+-d <目录>	     |   指定 .class 文件输出目录，并自动按 package 创建子目录 |	✅ 强烈推荐
+-cp <路径>	     |   指定依赖的类路径（如引用了其他 JAR 或类）            |	按需使用
+直接写 .java 路径  |	如 src/com/example/App.java	                     | ✅ 必须这样写
+
+==
+为了避免 字符编码相关的报错

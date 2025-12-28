@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm_04.memory_layout_02.thread_private_02;
+package com.henry.tryout.easy_coding.jvm_04.memory_layout_02.thread_private_02.JVM_stack;
 
 // 验证：JVM虚拟机栈是怎样实现一个方法的调用的
 // 手段：查看方法调用时，实际执行的字节码指令 - 工具：jclasslib

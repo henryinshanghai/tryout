@@ -1,0 +1,16 @@
+===
+从IDEA中拷贝的路径字符串 在terminal的bash shell中为什么是无效的?
+
+IDEA 默认使用的是 Windows 风格路径（反斜杠 \），
+而 Bash Shell（包括 Git Bash、WSL、macOS/Linux 终端）只认 Unix 风格路径（正斜杠 /）。
+
+
+✅ 总结
+问题	                        | 原因                        |	解决办法
+IDEA 复制的路径在 Bash 中无效   | 路径是 Windows 格式（\ + X:\）|	手动转换为 /x/... 格式
+盘符无法识别                   | Git Bash 用 /c/ 代替 C:\     |	E:\... → /e/...
+反斜杠被当作转义符	            | Bash 中 \ 有特殊含义	      | 全部替换为 /
+
+✅ 黄金法则：在 Git Bash / WSL / Linux / macOS 中，永远使用 / 开头的正斜杠路径！
+
+技巧：使用 pwd命令 来 得到 符合当前规范的路径

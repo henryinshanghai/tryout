@@ -1,16 +1,16 @@
 本地方法栈 - 对标 虚拟机栈
-作用：为 native方法服务；
+作用：为 native方法 服务；
 特征：
     1 线程对象私有；
-    2 线程开始调用 本地方法（native method）时，会进入一个 不受JVM约束的世界。
+    2 线程 开始调用 本地方法（native method）时，会进入一个 不受JVM约束的世界。
     3 本地方法 能够通过 JNI（Java 本地接口）来：
         - 访问 虚拟机运行时的数据区
-        - 调用寄存器
-      aka，有和JVM相同的能力与权限 —— 这会削弱JVM对系统的控制能力。
+        - 调用 寄存器
+      aka，有 和JVM相同的 能力与权限 —— 这 会削弱 JVM 对系统的控制能力。
 用法：
-    最出名的本地方法 System.currentTimeMillis.
+    最出名的本地方法 System.currentTimeMillis().
 
 wrap up:
-1 native方法调用时，会形成本地方法栈。
-2 native方法通过JNI 来 实现方法的执行；
-3 System.currentTimeMills()是一个native方法。
+1 native方法 调用时，会形成 本地方法栈。
+2 native方法 通过JNI(Java Native Interface) 来 实现 方法的执行；
+3 System.currentTimeMills()是一个 native方法。
