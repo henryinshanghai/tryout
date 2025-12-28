@@ -1,0 +1,14 @@
+13 iinc 0 by 1 // 对变量temp 进行+1操作
+
+16 iload_0      // 把 局部变量表中slot_0位置上的元素 加载到 操作数栈 栈顶
+17 istore_2     // 把 return表达式的计算结果 存储到 局部变量表的slot_2位置上
+
+18 getstatic #3 <java/lang/System.out : Ljava/io/PrintStream;>
+21 ldc #7 <change temps value to 99999>
+23 invokevirtual #8 <java/io/PrintStream.println : (Ljava/lang/String;)V>
+
+26 ldc #9 <99999>
+28 istore_0 // 把 常量99999 存储到 slot_0上
+
+29 iload_2 // 方法返回时，提取的是 局部变量表slot_2位置上的值
+30 ireturn

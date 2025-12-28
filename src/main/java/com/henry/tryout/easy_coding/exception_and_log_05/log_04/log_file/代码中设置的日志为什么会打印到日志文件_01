@@ -1,0 +1,43 @@
+✅ 第一部分：为什么你代码中打印的日志会输出到日志文件？
+核心原因：日志框架 + 配置文件 = 自动路由
+你在代码中写的日志（比如 logger.info("xxx")）本身 不会直接写入 文件，而是交给 日志框架（如 Logback、Log4j2）处理。
+
+而 日志框架的行为 由 配置文件（如 logback.xml、log4j2.xml）控制。
+
+===
+举个具体例子：
+1. 你的代码：
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+
+    public class OrderService {
+        private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
+        public void createOrder() {
+            log.info("创建订单成功"); // ← 这是你写的
+        }
+    }
+
+2. 配置文件 logback.xml：
+
+    <configuration>
+      <!-- 定义一个文件输出器 -->
+      <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file>
+        <encoder>
+          <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+      </appender>
+
+      <!-- root logger：所有 logger 的父级 -->
+      <root level="INFO">
+        <appender-ref ref="FILE"/>
+      </root>
+    </configuration>
+3. 发生了什么？
+    ① OrderService 的 logger 名是 com.yourcompany.service.OrderService
+    ② 它没有单独配置，所以继承 root logger
+    ③ root logger 级别是 INFO，你的日志是 info() → 满足级别
+    ④ root logger 引用了 FILE appender → 日志被写入 logs/app.log
+
+✅ 所以：不是代码决定写哪，而是配置文件决定的！

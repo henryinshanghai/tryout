@@ -1,0 +1,78 @@
+✅ 第二部分：为什么日志文件里有很多“不是我写的”日志？
+核心原因：第三方库 也在用 同一个日志框架！
+你的项目 依赖了 大量开源库（Spring、Tomcat、Hibernate、Netty、Apache HttpClient 等），它们 内部也使用 SLF4J/Log4j/JUL 打印日志。
+
+而 你的日志配置（如 root logger）默认会捕获 所有logger 的日志！
+
+常见“非你写”的日志来源：
+来源	                |   示例日志内容                                      |	说明
+Spring Boot	        | Tomcat initialized with port(s): 8080 (http)	    | 启动时自动打印
+Spring MVC	        | Mapped "{[/api/users]}" onto public List<User> ... |	URL 路由注册
+Hibernate / MyBatis | select user0_.id as id1_0_ from users user0_	    | SQL 语句（如果开启）
+Tomcat / Undertow	| Initializing ProtocolHandler ["http-nio-8080"]	| Web 容器启动
+SLF4J / Logback	    | No configuration file found. Using default.	    | 日志框架自身初始化
+数据库连接池	        | HikariPool-1 - Starting...	                    | HikariCP 连接池日志
+
+
+为什么它们也会进你的日志文件？
+
+因为：
+
+① 这些库使用的 logger 名通常是自己的包名，例如：
+    org.springframework.boot
+    org.apache.catalina
+    com.zaxxer.hikari
+④ 你的 root logger 是所有 logger 的祖先
+只要它们的日志级别 ≥ root 的级别（如 INFO），就会被 root 的 appender 输出
+🌰 就像你家的下水管道（root logger）会接收楼上所有住户（第三方库）的废水。
+
+===
+✅ 如何控制这些“外来”日志？
+方法 1：在配置文件中 单独设置 第三方库的日志级别
+    <!-- logback.xml -->
+    <configuration>
+      <appender name="FILE" class="...">...</appender>
+
+      <!-- 降低 Spring 的日志级别，减少噪音 -->
+      <logger name="org.springframework" level="WARN"/>
+
+      <!-- 关闭 Hibernate SQL 日志 -->
+      <logger name="org.hibernate.SQL" level="ERROR"/>
+
+      <!-- 你的包保持 INFO -->
+      <logger name="com.yourcompany" level="INFO"/>
+
+      <root level="INFO">
+        <appender-ref ref="FILE"/>
+      </root>
+    </configuration>
+
+方法 2：完全关闭某些库的日志
+    <logger name="org.apache.kafka" level="OFF"/>
+
+方法 3：把不同来源的日志输出到不同文件（高级）
+
+    <!-- Kafka 日志单独输出 -->
+    <appender name="KAFKA_FILE" class="...">...</appender>
+    <logger name="org.apache.kafka" level="INFO" additivity="false">
+      <appender-ref ref="KAFKA_FILE"/>
+    </logger>
+
+===
+✅ 总结
+问题                  |   	答案
+为什么我的日志进了文件？ |	因为日志框架 根据配置文件（如 logback.xml）将 日志 路由到了文件 Appender
+为什么有“别人”的日志？	 |  因为第三方库（Spring、Tomcat 等）也在用 同一个日志系统，且 被 root logger 捕获
+如何只看自己的日志？	 |  在配置文件中：
+                        • 提高第三方库的日志级别（如设为 WARN 或 ERROR）
+                        • 或单独配置你的包名 logger
+
+💡 最佳实践：
+永远不要认为“只有我打日志”，要意识到 整个依赖树 都在输出日志。
+通过 精细的日志配置，才能 让日志真正有用 而不被淹没。
+
+这就是为什么一个简单的 application.properties 里常看到：
+    logging.level.com.yourcompany=DEBUG
+    logging.level.org.springframework=WARN
+    logging.level.org.hibernate=ERROR
+——它就是在做这件事！

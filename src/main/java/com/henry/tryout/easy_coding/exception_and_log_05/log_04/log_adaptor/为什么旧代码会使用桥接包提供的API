@@ -1,0 +1,126 @@
+“为什么老代码调用的是 桥接包的API，而不是 原来的日志库？”
+答案的核心在于：① Java 的类加载机制 + ② 桥接包的“同名类替换”策略。
+
+✅ 一句话回答：
+桥接包（如 jcl-over-slf4j）故意提供了
+和旧日志库（如 commons-logging）完全相同的类全限定名（fully qualified class name），
+因此 当它 出现在 classpath中 且 优先加载 时，JVM 就会加载 桥接包里的“假类”，而不是 原日志库的“真类”。
+
+这本质上是一种 “类路径劫持”（Classpath Hijacking） 技术。
+
+===
+🔍 详细原理拆解
+1. 老代码是怎么写日志的？
+以使用 Jakarta Commons Logging (JCL) 的代码为例：
+
+    import org.apache.commons.logging.Log;
+    import org.apache.commons.logging.LogFactory;
+
+    public class MyOldService {
+        private static final Log logger = LogFactory.getLog(MyOldService.class);
+
+        public void doWork() {
+            logger.info("Doing old work..."); // ← 调用的是 JCL API
+        }
+    }
+这段代码 在编译时，依赖的是 commons-logging.jar 中的：
+    org.apache.commons.logging.Log
+    org.apache.commons.logging.LogFactory
+
+2. 桥接包做了什么？
+SLF4J 提供的桥接包 jcl-over-slf4j.jar 里面也包含：
+    org.apache.commons.logging.Log
+    org.apache.commons.logging.LogFactory
+⚠️ 类名、包名完全一样！
+
+但它们的内部实现完全不同：
+
+    // jcl-over-slf4j.jar 中的 LogFactory
+    package org.apache.commons.logging;
+
+    public class LogFactory {
+        public static Log getLog(Class clazz) {
+            // 实际返回一个 ”包装了 SLF4J Logger 的适配器“
+            return new SLF4JLogAdapter(org.slf4j.LoggerFactory.getLogger(clazz));
+        }
+    }
+
+而 SLF4JLogAdapter 的 info() 方法内部是：
+
+    public void info(Object message) {
+        slf4jLogger.info(String.valueOf(message)); // ← 转发给 SLF4J！
+    }
+
+3. JVM 加载哪个类？—— classpath 顺序决定一切
+Java 在运行时 使用ClassLoader 按照classpath 顺序 来 查找类。
+
+假设你的 classpath 包含：
+    ...; jcl-over-slf4j.jar; commons-logging.jar; ...
+
+当执行到：
+    LogFactory.getLog(MyOldService.class)
+JVM 会：
+    ① 在 classpath 中 从左到右搜索 org/apache/commons/logging/LogFactory.class
+    ② 先找到 jcl-over-slf4j.jar 里的版本
+    ③ 直接加载它，不再继续查找
+    ④ 后续所有对 LogFactory 和 Log 的调用，都走桥接包的实现
+✅ 结果：老代码“以为”自己在用 JCL，实际上日志 被悄悄转发给了 SLF4J！
+
+===
+🧩 类比理解：电话号码劫持
+想象：
+
+① 原来的 JCL 是电话号码 110
+② 桥接包把 110 这个号码 注册到了 自己的客服中心
+③ 当老代码“拨打 110”（调用 LogFactory）
+④ 接电话的其实是桥接包
+⑤ 它说：“您好，我是 110，请问有什么可以帮您？” → 然后把请求转给 SLF4J
+
+老代码完全不知道背后换了人！
+
+===
+⚠️ 关键前提：必须排除原始日志库
+如果 classpath 中同时存在：
+    commons-logging.jar（真 JCL）
+    jcl-over-slf4j.jar（假 JCL）
+那么 谁先谁后 就很重要。
+
+更安全的做法是：
+✅ 彻底排除原始依赖
+
+    <dependency>
+      <groupId>some-old-library</groupId>
+      <artifactId>uses-jcl</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- 只引入桥接包 -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+这样 classpath 中只有“假类”，100% 确保被加载。
+
+===
+📌 支持这种“同名替换”的桥接包有哪些？
+桥接目标	                |   桥接包         |	是否需排除原库
+Commons Logging (JCL)	| jcl-over-slf4j  |	✅ 必须排除 commons-logging
+Log4j 1.x	            | log4j-over-slf4j|	✅ 必须排除 log4j:log4j
+java.util.logging (JUL)	| jul-to-slf4j	  |  ❌ 不能排除（JDK 内置），需用 SLF4JBridgeHandler.install()
+
+💡 注意：JUL 是 JDK 的一部分，无法替换 jar，所以采用“监听转发” 而非 “类替换”。
+
+===
+✅ 总结
+问题	                    |       答案
+为什么老代码会用桥接包？	| 因为桥接包提供了同名类，且在 classpath 中优先加载
+JVM 怎么知道加载哪个？	    | 按 classpath 顺序，先找到就加载，不再继续找
+如何确保一定用桥接包？	    | 排除原始日志库依赖，只保留桥接包
+这是不是“欺骗”？	        | 是的，但这是合法且安全的兼容性技巧，广泛用于框架集成
+
+这种设计 体现了 Java 生态中“面向接口编程 + 运行时替换”的强大灵活性，也是 SLF4J 能 成为事实标准 的重要原因之一。
