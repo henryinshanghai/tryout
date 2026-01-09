@@ -1,0 +1,24 @@
+思路1：暴力枚举；
+
+① 遍历每一对 (i, j)，其中 i < j
+② 检查 nums[i] + nums[j] == target
+③ 时间复杂度：O(n²)，空间：O(1)
+✅ 优点：简单直接
+❌ 缺点：效率低，n 大时超时
+
+
+思路2：哈希表；
+核心思想：用空间换时间
+    对于每个数 nums[i]，我们想知道：
+    “target - nums[i] 是否已经在前面出现过？”
+如果出现过，就找到了答案！
+
+步骤：
+① 创建一个哈希表（Map<Integer, Integer>），存储 {值 → 下标}
+② 遍历数组：
+    1.计算 complement = target - nums[i]
+    2.如果 complement 在哈希表中 → 返回 [map.get(complement), i]
+    3.否则，把 nums[i] → i 存入哈希表
+
+✅ 时间复杂度：O(n)
+✅ 空间复杂度：O(n)

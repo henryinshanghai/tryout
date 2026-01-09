@@ -1,0 +1,34 @@
+🔍 编译器的判断逻辑是：
+“是否存在一条可能的执行路径，使得方法在 没有 return 的情况下 结束？”
+
+如果存在 这样的路径 → 编译错误
+如果所有路径 都有 return → 编译通过
+
+===
+🚨 关键点：你看到的代码 其实隐含了 最后一行 throw 或 return
+回顾我之前提供的完整代码：
+    public int[] twoSum(...) {
+        // ...
+        for (...) { ... }
+
+        throw new IllegalArgumentException("No solution found"); // 👈 这行！
+    }
+✅ 正是因为有这行 throw，方法才有“终止出口”。
+
+在 Java 中：
+① throw 是一个 不会正常返回的语句（它抛出异常）
+② 编译器认为：方法 在此处“终止”了，不需要 return
+
+所以控制流是完整的：
+① 要么在循环中 return
+② 要么循环结束，执行 throw → 方法终止
+→ 没有“掉出方法底部”的路径 → 编译通过 ✅
+
+===
+✅ 最佳实践
+即使题目保证有解，也必须在方法末尾 提供一个 终止语句，例如：
+
+① throw new RuntimeException("Should not reach here");
+② 或者（不推荐）return null;（但会破坏契约）
+
+这样既满足编译器，又表达“理论上不会执行到这里”。
