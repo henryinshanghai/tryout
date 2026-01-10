@@ -1,0 +1,6 @@
+// ========== 初始化第 0 天（第一天）的状态 ==========
+currentDayToItsNetBalanceInHold[0] = -currentDayToItsStockPrice[0]; // 第一天买入，利润为 -price[0]
+currentDayToItsNetBalanceInSold[0] = 0;          // 第一天不可能卖出（没有股票可卖），设为 0（安全值）
+currentDayToItsNetBalanceInRest[0] = 0;          // 第一天什么都不做，利润为 0
+
+🐖 第0天无法卖出，把 卖出状态下手中的余额 设置为 0.

@@ -1,0 +1,11 @@
+// ========== 从第 1 天开始，逐天更新状态 ==========
+for (int currentDay = 1; currentDay < days; currentDay++) {
+    // 状态1: 第 currentDay 天结束时持有股票
+    currentDayToItsNetBalanceInHold[currentDay] = Math.max(xxx, ooo);
+
+    // 状态2: 第 currentDay 天结束时 刚刚卖出股票
+    currentDayToItsNetBalanceInSold[currentDay] = xxx;
+
+    // 状态3: 第 currentDay 天结束时 空仓 且 可买入（不在冷冻期）
+    currentDayToItsNetBalanceInRest[currentDay] = Math.max(xxx, ooo);
+}

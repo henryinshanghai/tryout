@@ -1,0 +1,27 @@
+===
+3种状态：
+① 持有股票；hold
+② 不持有股票-当日卖出(第二天是冷冻期，不可买入)；justSold
+③ 不持有股票-第二天可买入；canBuyNextDay
+
+===
+// 定义三个 DP 数组，记录每一天结束时 处于 不同状态 的最大利润
+// currentDayToItsNetBalanceInHold[i]   : 第 i 天结束时 **持有股票** 的最大利润
+// currentDayToItsNetBalanceInSold[i]   : 第 i 天结束时 **刚刚卖出股票（第二天不可买入）** 的最大利润
+// currentDayToItsNetBalanceInRest[i]   : 第 i 天结束时 **不持有股票 且 不在冷冻期（第二天可买入）** 的最大利润
+int[] currentDayToItsNetBalanceInHold = new int[days];
+int[] currentDayToItsNetBalanceInSold = new int[days];
+int[] currentDayToItsNetBalanceInRest = new int[days];
+
+🐖 我们只能从rest状态的下一天 执行 买入操作
+
+===
+三状态法中的三种状态是互斥的嘛？
+
+✅ 五、总结
+性质	    说明
+互斥性	✅ 每天结束时，只能处于 hold / sold / rest 中的一种
+完备性	✅ 所有可能情形都被覆盖
+必要性	✅ 必须区分 sold 和 rest，否则 无法处理 冷冻期约束
+工程价值	✅ 状态 语义清晰，易于扩展（如 加手续费、交易次数限制）
+🌟 三状态法的成功，正是因为它 精准地 将 问题的约束 转化为 互斥的状态划分。

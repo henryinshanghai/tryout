@@ -1,0 +1,48 @@
+今天的状态(*3) = 昨天的状态(*3) + 今天的动作(*3)
+
+===
+所有可能的状态：① 持有股票；② 不持有股票-第二天不可买入(刚刚卖出股票)；③ 不持有股票-第二天可买入
+所有可能的动作：① 买入股票（受限）；② 卖出股票（受限）；③ 什么都不做(不受限)；
+
+===
+昨日状态 × 今日动作 => 今日状态
+
+==
+今日状态1: 第 currentDay 天 结束时 “持有股票”
+有两种可能的来源：
+  ① 昨天 已经 持有，今天 什么都不做
+        → currentDayToItsNetBalanceInHold[currentDay-1]
+  ② 昨天处于 currentDayToItsNetBalanceInRest 状态（可买入），今天 买入
+        → currentDayToItsNetBalanceInRest[currentDay-1] - prices[currentDay]
+  ③ 如果 昨天处于 sold状态(刚刚卖掉，不可买入)，则：
+        今天 不可能 变成 持有股票的状态。PASS
+
+取所有可能来源中的 最大值：
+    currentDayToItsNetBalanceInHold[currentDay] = Math.max(source①, source②);
+
+===
+今日状态2: 第 currentDay 天结束时 “刚刚卖出股票(第二天不可买入)”
+只有一种可能的来源：
+  ① 昨天 持有股票，今天 卖出股票
+        → currentDayToItsNetBalanceInHold[currentDay-1] + prices[currentDay]
+  ② 如果 昨天 刚刚卖出股票，则：
+        今天 不可能 还有股票能卖（手上就只有一只股票）。PASS
+  ③ 如果 昨天 不持有股票且不在冷冻期，则：
+        今天 也不可能 还有股票能卖（手上就只有一只股票）。PASS
+
+取所有可能来源中的 最大值：
+    currentDayToItsNetBalanceInSold[currentDay] = the only source;
+
+===
+今日状态3: 第 currentDay 天结束时 “空仓 且 第二天可买入（不在冷冻期）”
+有两种可能：
+  ① 昨天 是 currentDayToItsNetBalanceInRest 状态，今天 什么都不做
+        → currentDayToItsNetBalanceInRest[currentDay-1]
+  ② 昨天刚卖出（currentDayToItsNetBalanceInSold[currentDay-1]），今天是 冷冻期的第二天，什么都不做（自动变为 可买入状态）
+        → currentDayToItsNetBalanceInSold[currentDay-1]
+  ③ 如果 昨天是 持有股票的状态，
+        今天 不可能 变成 “空仓 可买入”的状态（因为冷冻期）。PASS
+
+取所有可能来源中的 最大值：
+    currentDayToItsNetBalanceInRest[currentDay] =
+            Math.max(source①, source②);
