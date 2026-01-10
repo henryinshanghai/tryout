@@ -1,0 +1,1 @@
+准备一个游标指针 currentSpot，每次循环后，前进 segmentSize的距离即可。
