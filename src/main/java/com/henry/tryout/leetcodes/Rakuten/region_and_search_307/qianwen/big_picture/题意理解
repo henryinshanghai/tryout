@@ -1,0 +1,9 @@
+LeetCode 第 307 题：Range Sum Query - Mutable（区域和检索 - 数组可修改）是一道经典的数据结构设计题，核心在于高效支持两种操作：
+
+① sumRange(i, j)：返回数组 nums[i..j] 的和
+② update(i, val)：将 nums[i] 修改为 val
+
+如果用暴力法：
+① sumRange 是 O(n)，update 是 O(1) → 多次查询会超时 ❌
+② 或 预计算 前缀和：sumRange 是 O(1)，但 update 是 O(n) → 多次更新会超时 ❌
+✅ 正确解法 需要 平衡 查询 与更新的效率，通常做到 O(log n) 两者兼顾。

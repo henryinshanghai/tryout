@@ -1,0 +1,8 @@
+this.numArr = numArr;
+this.numAmount = numArr.length;
+this.currentSpotToItsSum = new int[4 * numAmount]; // 安全起见，分配 4n 空间
+
+当成员变量之间 存在 依赖关系时，初始化的顺序 就是重要的；
+
+这里 currentSpotToItsSum的初始化 用到了 numAmount成员变量，
+因此 需要 先初始化 numAmount；
