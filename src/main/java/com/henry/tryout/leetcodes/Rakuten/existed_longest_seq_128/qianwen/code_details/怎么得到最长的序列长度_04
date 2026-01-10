@@ -1,0 +1,4 @@
+maxSeqLength = Math.max(
+    maxSeqLength,
+    currentSeqLength
+    );

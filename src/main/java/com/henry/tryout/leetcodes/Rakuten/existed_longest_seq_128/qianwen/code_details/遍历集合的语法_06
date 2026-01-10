@@ -1,0 +1,5 @@
+HashSet<Integer> set = xxx;
+
+for(int currentNum : set) {
+    ...
+}
