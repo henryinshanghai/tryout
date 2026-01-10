@@ -1,0 +1,7 @@
+💡 解题思路（标准解法）
+
+步骤 1：构建 前缀和数组（Prefix Sum）
+📌 prefixSum[i] 表示 前 i+1 个元素的 权重总和。
+步骤 2：生成随机数 + 二分查找
+
+代码参考：Solution_qianwen

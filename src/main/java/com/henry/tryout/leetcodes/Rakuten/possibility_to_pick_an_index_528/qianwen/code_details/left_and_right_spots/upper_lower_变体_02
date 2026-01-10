@@ -1,0 +1,64 @@
+upper-bound和lower-bound的二分查找呢？
+它们在while循环结束后，left与right指针位置的关系是怎样的呢?
+
+===
+这是一个非常精准且深入的问题！
+理解 upper-bound 和 lower-bound 二分查找在循环结束时 left 与 right 的关系，是掌握“边界型二分”的核心。
+我们先明确：这 两种变体 通常采用「左闭右开」区间 [left, right) 的写法（这是最清晰、最不容易出错的模板）。
+
+✅ 统一结论（适用于标准 lower/upper bound 实现）
+    在 while (left < right) 循环结束后，必然有：left == right
+这是因为：
+    ① 初始区间：[0, n) → left = 0, right = n
+    ② 循环条件：while (left < right)
+    ③ 每次迭代 缩小 搜索空间，但 始终保持 [left, right) 有效
+    ④ 当 left == right 时，区间为空，循环终止
+所以，无论 lower-bound 还是 upper-bound，只要用 这种写法，结束时 一定有 left == right，且 这个值 就是所求的“边界索引”。
+
+===
+🔍 分别详解
+1. lower-bound：找第一个 ≥ target 的位置
+
+int left = 0, right = arr.length; // [0, n)
+while (left < right) {
+    int mid = left + (right - left) / 2;
+    if (arr[mid] < target) {
+        left = mid + 1;   // 排除 [left, mid]
+    } else {
+        right = mid;      // 保留 mid，继续向左找
+    }
+}
+// 结束：left == right，即 lower-bound
+✅ 结束状态：left == right，且该值 ∈ [0, n]
+📌 语义：所有 < target 的元素都在 [0, left)，所有 ≥ target 的元素从 left 开始。
+
+2. upper-bound：找第一个 > target 的位置
+    int left = 0, right = arr.length; // [0, n)
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] <= target) {
+            left = mid + 1;   // 排除 [left, mid]（包括等于）
+        } else {
+            right = mid;      // 保留 mid，继续向左找
+        }
+    }
+    // 结束：left == right，即 upper-bound
+✅ 结束状态：left == right，且该值 ∈ [0, n]
+📌 语义：所有 ≤ target 的元素都在 [0, left)，所有 > target 的元素从 left 开始。
+
+===
+🆚 对比三种二分的结束状态
+表格
+二分类型	            | 区间表示	     | 初始 right	| 循环条件	| 结束时 left 与 right 关系	| 返回值
+标准二分	            | 闭区间 [l, r]	 | n-1	        | l <= r	| left == right + 1	        | 找到返回索引，否则 -1
+lower/upper bound	| 左闭右开 [l, r) | n	        | l < r	    | left == right	            | 总是返回有效插入位置 [0, n]
+💡 关键区别在于 区间定义方式 不同，导致 结束状态 不同，但逻辑等价。
+
+===
+🌟 为什么推荐 [left, right) 写法？
+① 统一性：lower/upper bound、插入位置等问题都可用同一套模板。
+② 无歧义：right = n 表示“可插入到末尾”，符合直觉。
+③ 结束状态简单：left == right，直接返回即可。
+④ 避免死循环：因为每次 mid 被排除（left = mid+1 或 right = mid），区间 严格缩小。
+
+

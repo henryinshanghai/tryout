@@ -1,0 +1,24 @@
+🔑 理解本题 所需的核心概念
+
+==
+️⃣ 离散概率分布（Discrete Probability Distribution）
+① 每个结果有一个概率，所有概率之和 为 1。
+② 这里：P(i) = w[i] / total_weight
+
+==
+️⃣ 累积分布函数（CDF, Cumulative Distribution Function）
+① 定义：CDF[i] = P(0) + P(1) + ... + P(i)
+② 性质：单调递增，从 0 到 1
+③ 作用：将 “按概率选” 转化为 “在区间中找位置”
+
+✅ 关键思想：生成一个 [0, total) 的随机数，看它 落在 哪个权重区间。
+
+===
+📚 你需要掌握的概念总结
+概念	                    | 为什么重要
+前缀和（Prefix Sum）	    | 将 权重 转化为 连续区间
+均匀随机数生成	        | Random.nextInt(n) 生成 [0,n) 整数
+二分查找（Binary Search）	| 快速定位 区间（lower_bound）
+概率映射思想	            | 把 “按权重选” 变成 “在数轴上投点”
+
+💡 这道题是 “用确定性结构（前缀和）模拟 随机性” 的典范。
