@@ -1,0 +1,4 @@
+maxMountainLength = max(
+    maxMountainLength,
+    currentMountainLength
+)
