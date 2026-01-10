@@ -1,0 +1,4 @@
+// 尝试收缩左边界(可能多次) 来 得到 以当前右边界作为结束元素的、最短的、满足条件的子数组
+while (currentSum >= targetSum) {
+    ...
+} /* 退出while循环时，子数组的subArrCurrentSum 已经 小于target，可以继续追加元素了 */

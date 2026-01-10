@@ -1,0 +1,27 @@
+❗ 关键注意事项
+陷阱	            | 说明
+数组元素为正	    | 这是 滑动窗口能用 的前提！如果含负数，此法失效
+初始化minLength  | 用 Integer.MAX_VALUE，最后判断 是否更新过
+while 而不是 if  | 收缩窗口 可能需要多次（如 [1,1,1,1,100], target=100）
+整数溢出	        | 极端情况下 currentSum 可能溢出，可用 long（但 LeetCode 测试用例 通常不会）
+
+📚 延伸学习建议
+掌握本题后，你可以挑战：
+
+
+题目	                                                        | 关联知识点
+LeetCode 3. Longest Substring Without Repeating Characters	| 滑动窗口 + 哈希表
+LeetCode 76. Minimum Window Substring	                    | 字符串滑动窗口
+LeetCode 904. Fruit Into Baskets	                        | 滑动窗口 + 计数
+LeetCode 239. Sliding Window Maximum	                    | 滑动窗口 + 单调队列
+
+===
+✅ 总结：你需要掌握什么？
+概念	            | 为什么重要
+滑动窗口（双指针）	| 本题核心算法
+正数数组的单调性	| 保证 窗口收缩 的正确性
+循环中 while 收缩 | 避免遗漏 更优解
+边界初始化与判断	| 防止返回 错误结果
+
+💡 记住口诀：
+“右扩找解，左缩优化；正数保证，单调可行。”

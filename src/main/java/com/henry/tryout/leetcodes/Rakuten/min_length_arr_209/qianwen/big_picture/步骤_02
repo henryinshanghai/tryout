@@ -1,0 +1,17 @@
+🧠 解题思路详解（滑动窗口）
+步骤：
+① 初始化：
+    1.left = 0
+    2.currentSum = 0
+    3.minLength = Integer.MAX_VALUE
+
+② 右指针 right 从 0 遍历到 n-1：
+    1.将 nums[right] 加入窗口：currentSum += nums[right]
+    2.当 currentSum >= target 时：
+        更新答案：minLength = min(minLength, right - left + 1)
+        尝试收缩左边界：不断 currentSum -= nums[left]，left++，直到 currentSum < target
+    3.继续移动 right
+
+③ 最后：
+    1.如果 minLength 仍是初始值 → 返回 0
+    2.否则 返回 minLength

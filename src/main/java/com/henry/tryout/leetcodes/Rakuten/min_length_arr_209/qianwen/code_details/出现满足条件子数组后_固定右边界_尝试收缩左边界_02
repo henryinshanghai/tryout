@@ -1,0 +1,11 @@
+// 尝试收缩左边界(可能多次) 来 得到 以当前右边界作为结束元素的、最短的、满足条件的子数组
+while (currentSum >= targetSum) {
+    // ① 计算 当前子数组的 数组长度，尝试 更新minLength
+    minLength = Math.min(minLength, subArrRightBar - subArrLeftBar + 1);
+
+    /* ② 收缩左边界 */
+    // 从sum中 移除 左边界元素
+    currentSum -= numArr[subArrLeftBar];
+    // 把 左边界 向右移动一个位置
+    subArrLeftBar++;
+}
