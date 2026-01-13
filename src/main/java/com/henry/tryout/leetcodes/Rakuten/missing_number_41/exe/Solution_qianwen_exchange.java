@@ -6,16 +6,19 @@ public class Solution_qianwen_exchange {
 
         for (int currentSpot = 0; currentSpot < numAmount; currentSpot++) {
 
-            // 只要 nums[currentSpot] 是 [1, numAmount] 范围内的数，
-            // 且它 不在 正确的位置 上，就 不断尝试 把 它 放到 该放的位置。
-            // 直到 当前位置上放置了正确的数字 or 发现 当前位置上的数字 重复了
-            // 🐖 交换过来的元素 可能 仍旧 不在其正确的位置上，所以 这里使用 while 而不是 if
+            // 只要 ① 当前元素nums[currentSpot] 是 [1, numAmount] 范围内的数，
+            // ② 且它 不在 正确的位置 上...
             while (nums[currentSpot] >= 1 && nums[currentSpot] <= numAmount
                     && numIsNotOnCorrectSpot(nums, currentSpot)) {
 
-                // 交换 nums[currentSpot] 和 nums[nums[currentSpot] - 1]
+                // 就 不断尝试 把 它 排定到 该放的位置
+                // 手段：交换 nums[currentSpot] 和 nums[nums[currentSpot] - 1]
                 arrangeNumOn(nums, currentSpot);
             }
+            /* 循环结束时，当前位置上的元素：
+                要么 是(currentSpot+1)[break 条件②]，
+                要么是 无效数字(<=0, >=n[条件①], 重复的无效数字[条件②])；
+            所有 能被排定的数字 都 已被排定 */
         }
 
         // 找 第一个 不匹配的位置
@@ -40,8 +43,10 @@ public class Solution_qianwen_exchange {
     }
 
     private void arrangeNumOn(int[] nums, int currentSpot) {
-        int temp = nums[nums[currentSpot] - 1];
-        nums[nums[currentSpot] - 1] = nums[currentSpot];
+        int shouldArrangedSpot = nums[currentSpot] - 1;
+
+        int temp = nums[shouldArrangedSpot];
+        nums[shouldArrangedSpot] = nums[currentSpot];
         nums[currentSpot] = temp;
     }
 
