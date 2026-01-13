@@ -1,0 +1,8 @@
+🔍 代码逻辑与字典序生成的对应关系
+
+代码步骤	                模拟的 字典序生成行为
+available 列表	        维护 当前 DFS 层 可选的升序数字
+index = k / groupSize	决定 跳过 前index个完整子树，进入 目标子树
+available.get(index)	选择 当前层的目标分支（即 当前位的数字）
+available.remove(index)	标记该数字 已使用，下一层 不可再选
+k = k % groupSize	    进入 子树 后，更新为 子树内的局部序号

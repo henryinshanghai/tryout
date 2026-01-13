@@ -1,0 +1,8 @@
+✅ 总结：Java 编码 Checklist
+
+检查项	                                    是否完成
+✅ k = k - 1 转 0-based	                    ☑
+✅ 阶乘数组大小为 n，索引 0..n-1	            ☑
+✅ available 严格升序初始化	                ☑
+✅ 循环中用 fact[remaining]（非 remaining-1）	☑
+✅ 测试 k=1 和 k=n! 边界	                    ☑
