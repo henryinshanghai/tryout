@@ -1,0 +1,13 @@
+💡 三、解题思路（LeetCode 157）
+步骤：
+① 创建一个 临时缓冲区 temp = new char[4]（供 read4 使用）；
+② 初始化 total = 0（已读字符数）；
+③ 循环：
+    1.调用 read4(temp)，得到 count（实际读出数）；
+    2.如果 count == 0，说明文件结束，break；
+    3.计算 本次 需要写入进 buf 的字符数：
+        bytesToWrite = min(count, n - total)
+    4.将 temp[0..bytesToWrite-1] 复制到 buf[total..total+bytesToWrite-1]；
+    5.total += bytesToWrite；
+    6.如果 total == n，break；
+④ 返回 total。

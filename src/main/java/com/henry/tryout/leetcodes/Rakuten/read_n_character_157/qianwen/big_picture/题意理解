@@ -1,0 +1,23 @@
+LeetCode 第 157 题是 《Read N Characters Given Read4》（用 read4 接口读取 N 个字符）。
+这是一道 系统设计 + 模拟 + 边界处理 的题目，重点不在于 复杂算法，
+而在于 ① 理解 API 封装、② 缓冲区管理、以及 ③ 输入/输出的边界条件。
+
+===
+🔍 一、题目简述（LeetCode 157）
+你 不能直接访问 文件，但 可以调用一个 预定义的 API：
+    /**
+     * @param buf 目标缓冲区（用于存储读出的字符）
+     * @return 实际读出的字符数（最多 4 个）
+     */
+    int read4(char[] buf);
+
+你的任务是实现：
+    /**
+     * @param buf 目标缓冲区
+     * @param n   要读取的字符数
+     * @return 实际读取的字符数（不超过 n）
+     */
+    public int read(char[] buf, int n);
+⚠️ 注意：buf 是 由调用者提供的 输出缓冲区，
+你需要 把 读到的字符 按顺序写入 buf[0..k-1]，并 返回 k（k ≤ n）。
+
