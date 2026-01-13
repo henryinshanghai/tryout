@@ -1,0 +1,83 @@
+for(currentSpot...)
+    int currentNum = nums[currentSpot];
+
+    while(currentNum...) {
+        ...
+        nums[currentSpot] = nums[shouldArrangedSpot];
+        ...
+    }
+}
+
+如上的代码写法 会在运行时 产生 数组下标越界的异常；
+
+===
+✅ 正确思路回顾
+
+目标：在 O(n) 时间、O(1) 空间内 找出 第一个 缺失的正整数。
+核心思想：
+① 答案一定在 [1, n+1] 范围内（n = 数组长度）
+② 我们尝试 将 每个 x ∈ [1, n] 放到 下标 x - 1 的位置上
+③ 最终 遍历数组，找到第一个 nums[i] != i + 1 的位置，缺失的正整数 就是 i + 1
+如果 都匹配，答案是 n + 1。
+
+===
+❌ 你代码中的问题
+问题 1：while 条件中 使用了 numbers[currentSpot]，但 它 在循环体内 会被修改！
+
+    while(1 <= currentNum && currentNum <= numAmount
+            && currentSpot != numbers[currentSpot] - 1
+            && numbers[currentSpot] != numbers[numbers[currentSpot] - 1]) {
+① 你用 currentNum = numbers[currentSpot] 在循环前 保存了一次值
+② 但 在 while条件 里 又用了 numbers[currentSpot]（而不是 currentNum）
+③ 更严重的是：numbers[currentSpot] 在循环体内 被交换修改了，但 currentNum 没更新！
+
+👉 这会导致：
+① 条件判断 基于 旧值，逻辑混乱
+② 可能陷入 死循环（比如两个相同数字互相交换）
+
+==
+问题 2：缺少 对 numbers[currentSpot] - 1 是否越界 的检查
+虽然你有 1 <= currentNum && currentNum <= numAmount，但在 while 条件中 又用了 numbers[currentSpot]（可能已变），且：
+    numbers[numbers[currentSpot] - 1]
+如果 numbers[currentSpot] 是负数或 > n，就会 数组越界（ArrayIndexOutOfBoundsException）。
+尽管你在 条件开头 写了 范围判断，但由于 numbers[currentSpot] 在循环中 会发生变化，这个判断 可能失效。
+
+==
+问题 3：重复元素 处理 不严谨
+条件中有：
+    numbers[currentSpot] != numbers[numbers[currentSpot] - 1]
+这是为了防止 两个相同数字（如 [1,1]）无限交换。
+✅ 这个想法 是 对的，但 写法 容易出错，且 依赖于 numbers[currentSpot] 的当前值。
+
+===
+推荐的正确写法（标准原地哈希）
+参考：Solution_qianwen_recommend
+
+✨ 关键改进点：
+① while 条件 直接使用 nums[i]，并 在 每次交换 后 自动更新
+    因为 i 不变，每次查看 当前 nums[i] 是否需要 继续换
+② 条件顺序保证安全：
+    1.先判断 nums[i] ∈ [1, n] → 确保 nums[i] - 1 是合法下标
+    2.再判断 nums[i] != nums[nums[i] - 1] → 避免 重复值 死循环
+③ 不引入 额外变量，逻辑清晰
+
+===
+对比你的代码 vs 正确写法
+
+你的写法	                                正确写法
+用 currentNum 缓存初始值，                直接在 while 中用 nums[i]，每次交换后 自动反映 新值
+但 while 条件仍用 numbers[currentSpot]
+currentSpot 在外层 for 中固定，
+内层 while 不移动 currentSpot	        同样 i 不变，靠 while 把 当前位置 “清理干净”
+条件复杂，易出错	                        条件简洁，安全
+
+===
+✅ 总结
+❌ 你的写法 思路正确，但实现 有缺陷，主要问题在于：
+① currentNum 与 numbers[currentSpot] 混用
+② while 条件中 使用了 可能已失效的值
+③ 存在 潜在越界 和 死循环风险
+
+✅ 建议采用 标准写法：在 while 循环中 直接使用 nums[i]，并 确保 条件顺序为：
+    while (nums[i] >= 1 && nums[i] <= n && nums[i] != nums[nums[i] - 1])
+这样 既简洁 又安全，是 LeetCode 社区 广泛接受的解法。
