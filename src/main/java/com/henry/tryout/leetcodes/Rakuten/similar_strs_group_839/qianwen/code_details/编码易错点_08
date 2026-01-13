@@ -1,0 +1,17 @@
+#	易错点分类	错误做法 / 误解	正确做法 / 理解	为什么重要？
+	相似性判断逻辑	认为必须恰好两个位置不同，忽略“完全相同”的情况	✅ 允许 diff == 0（相同字符串）或 diff == 2	题目定义：交换 0 次或 2 次 → 相同字符串属于同一组
+	相似性判断逻辑	只检查不同位置数量是否为 2，不验证字符是否可互换	✅ 因已是 anagram，只要 diff == 2 就一定可交换！
+（无需再检查 a[i]==b[j]）	⭐ 关键简化！
+因为是 anagram，若仅两处不同，则必满足 a[i]=b[j] 且 a[j]=b[i]
+	性能优化	仍写冗余的字符相等判断（如检查 a[i]==b[j]）	✅ 可省略！只需统计不同位置数：
+if (diff != 0 && diff != 2) return false;	减少不必要的比较，代码更简洁高效
+	边界情况	忘记处理 n = 1（只有一个字符串）	✅ 并查集天然支持：初始化后根数=1	虽小，但需确保主循环不 crash
+	并查集 find 实现	findRootOf 未做路径压缩：
+return parent[x] == x ? x : find(parent[x]);	✅ 必须更新父指针：
+parent[x] = findRootOf(parent[x]);	无压缩会导致树退化成链，最坏 O(n) per find
+	连通分量统计	直接用 parent[i] == i 判断根	✅ 必须调用 findRootOf(i) == i	路径压缩后 parent[i] 可能不是最终根（除非刚 find 过）
+	并查集初始化	忘记 parent[i] = i 或数组大小错误	✅ for (int i=0; i<n; i++) parent[i] = i;	初始化错误会导致 union/find 行为异常
+	双重循环范围	j 从 0 开始 → 重复比较 (i,j) 和 (j,i)	✅ for (j = i+1; j < n; j++)	避免无效计算，提升效率（虽不影响正确性）
+	字符串比较效率	多次调用 charAt 或转 char[]	✅ 单次遍历 + 局部变量缓存：
+char c1 = a.charAt(k), c2 = b.charAt(k);	减少方法调用开销（对 300×300×300 场景有益）
+	提前终止	不在 diff > 2 时立即返回	✅ 一旦 diff > 2，直接 return false	提前剪枝，避免无意义遍历

@@ -1,0 +1,27 @@
+✅ 总结：union 的实现要点
+表格
+要点	                说明
+必须先 find 根	    不能直接连 x 和 y，要连它们的根
+判断是否同组	        if (rootX == rootY) return; 避免重复合并
+更新 parent[root]	groupLeader[rootX] = rootY
+减少组数	            groupCount--（本题关键！）
+可选：按秩合并	    提升性能，但本题非必需
+
+
+📦 最简可用版（LeetCode 839 推荐）
+如果你只想要 AC，用这个就够了：
+    public void union(int x, int y) {
+             int rx = find(x);
+             int ry = find(y);
+             if (rx != ry) {
+                 parent[rx] = ry;
+                 count--;
+             }
+         }
+配合：
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
