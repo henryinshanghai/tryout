@@ -1,0 +1,25 @@
+🧠 三、关键难点解析
+
+==
+❗ 难点 1：多次调用之间的状态 如何保持？
+
+假设：
+① 第一次调用：read(buf, 1)
+② 文件内容："abcdefgh"
+
+执行过程：
+① 调用 read4 → 读取 "abcd"（4 字符）
+② 用户只要 1 个 → 返回 'a'
+③ 剩下 "bcd" 必须 保存下来！
+④ 第二次调用 read(buf, 3) 时，应先返回 "bcd"，而不是重新读 "efgh"
+
+✅ 所以你需要：
+① 一个 内部缓冲区（如 char[] internalBuf = new char[4]）
+② 两个指针：
+    1.internalIndex：下一个要读的 内部缓冲区位置
+    2.internalSize：当前内部缓冲区中 有多少 有效字符
+
+==
+❗ 难点 2：何时 需要调用 read4？
+① 只有 当 内部缓冲区 用完（internalIndex == internalSize）时，才调用 read4
+② 调用后 重置 internalIndex = 0，internalSize = read4(...) 的返回值

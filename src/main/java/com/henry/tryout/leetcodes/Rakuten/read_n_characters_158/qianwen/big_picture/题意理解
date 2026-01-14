@@ -1,0 +1,15 @@
+🎯 一、题目简述
+你不能直接访问文件，只能通过一个黑盒 API：
+    /**
+     * The read4 API is defined in the parent class Reader4.
+     *     int read4(char[] buf4);
+     */
+① read4(buf4)：每次从文件中读取 最多 4 个字符，存入 buf4，并返回 实际读取的字符数（0~4）。
+② 当 文件读完 时，返回 0。
+
+你的任务是实现：
+    public int read(char[] buf, int n)
+① 从文件中读取 恰好 n 个字符（或直到文件结束），存入 buf，返回 实际读取的字符数。
+② 关键约束：
+    read 函数会 被多次调用（例如先 read(buf, 1)，再 read(buf, 3)），
+    你必须 正确处理 跨调用的状态！

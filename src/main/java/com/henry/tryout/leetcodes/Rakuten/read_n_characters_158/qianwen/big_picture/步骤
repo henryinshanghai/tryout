@@ -1,0 +1,20 @@
+📈 四、算法步骤（伪代码）
+初始化：
+  internalBuf[4]   // 内部缓冲区
+  internalIndex = 0
+  internalSize = 0
+
+read(buf, n):
+  i = 0  // buf 的写入指针
+  while i < n:
+      if internalIndex == internalSize:  // 内部缓冲区 空了
+          internalSize = read4(internalBuf)
+          internalIndex = 0
+          if internalSize == 0: break    // 文件结束
+
+      // 从 internalBuf 拷贝字符到 buf
+      buf[i] = internalBuf[internalIndex]
+      i++
+      internalIndex++
+
+  return i

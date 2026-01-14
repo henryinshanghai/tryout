@@ -1,0 +1,4 @@
+// 原理：成员变量 属于 实例，因此 能够 在多次调用之间 保持状态
+private char[] internalCharArrBuffer = new char[4]; // 🐖 容量初始化
+private int currentCharCursor = 0; // 缓冲区字符数组中的 游标指针
+private int buffersCharAmount = 0;  // 缓冲区字符数组中的 字符数量
