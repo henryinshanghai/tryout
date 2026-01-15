@@ -1,0 +1,100 @@
+🧩 二、各阶段详解与应用场景
+️⃣1 实例化（Instantiation）
+① 调用 构造函数 或 工厂方法，创建 原始对象（raw object）。
+② ✅ 应用：构造器注入（但 无法解决 循环依赖）。
+
+==
+️2⃣ 属性填充（Populate Properties）
+① 通过 @Autowired、@Value 或 XML 配置 注入依赖。
+② ✅ 应用：字段注入、setter 注入（支持循环依赖）。
+
+==
+️3⃣ Aware 接口回调
+如果 Bean 实现了 以下接口，Spring 会 自动注入 容器相关信息：
+① BeanNameAware → 获取 Bean 名称
+② BeanFactoryAware → 获取 BeanFactory
+③ ApplicationContextAware → 获取 ApplicationContext
+
+✅ 应用场景：
+    @Component
+    public class MyService implements ApplicationContextAware {
+        private ApplicationContext ctx;
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) {
+            this.ctx = applicationContext; // 手动获取上下文
+        }
+    }
+⚠ 一般 不推荐 直接持有 ApplicationContext，除非必要（如动态获取 Bean）。
+
+===
+️4⃣ & 6️⃣ BeanPostProcessor（BPP）
+这是 Spring 最强大的扩展点之一！
+① postProcessBeforeInitialization：在 初始化方法 前 调用
+② postProcessAfterInitialization：在 初始化方法 后 调用
+
+✅ 核心应用：
+① AOP 代理生成：
+    AnnotationAwareAspectJAutoProxyCreator 就是一个 BPP，
+    它在 postProcessAfterInitialization 中 判断 是否需要 创建代理。
+② 自定义 增强逻辑：如 日志、校验、缓存包装等。
+    @Component
+    public class MyBeanPostProcessor implements BeanPostProcessor {
+        @Override
+        public Object postProcessAfterInitialization(Object bean, String beanName) {
+            if ("myService".equals(beanName)) {
+                return Proxy.newProxyInstance(...); // 手动代理
+            }
+            return bean;
+        }
+    }
+
+🔥 重点：代理对象 是在 postProcessAfterInitialization 阶段(6th 阶段) 生成的，
+这也是为什么 三级缓存 需要 延迟暴露 引用———— 因为 此时 代理 才确定！
+
+===
+️5⃣ 初始化方法（Initialization）
+三种方式（按执行顺序）：
+1.@PostConstruct（JSR-250 标准）
+2.InitializingBean.afterPropertiesSet()
+3.XML 或 @Bean(initMethod = "...") 指定的方法
+
+✅ 应用场景：
+① 启动时 加载缓存
+② 建立 数据库连接
+③ 启动 后台线程
+
+    @Service
+    public class CacheService {
+        @PostConstruct
+        public void loadCache() {
+            System.out.println("缓存预热完成！");
+        }
+    }
+
+===
+️⃣8 销毁方法（Destruction）
+容器关闭时（如 ctx.close()）触发：
+① @PreDestroy
+② DisposableBean.destroy()
+③ @Bean(destroyMethod = "...")
+
+✅ 应用场景：
+① 关闭 数据库连接池
+② 停止 定时任务
+③ 释放资源
+
+    @PreDestroy
+    public void cleanup() {
+        threadPool.shutdown();
+    }
+
+===
+阶段	                                顺序	            说明
+构造函数	                            最早	            对象刚创建
+属性注入	                            第二	            @Autowired 生效
+Aware 接口	                        第三	            容器信息注入
+BPP 前	                            初始化前	        可修改 Bean 状态
+@PostConstruct / afterPropertiesSet	初始化核心	    业务初始化
+BPP 后	                            初始化后	        AOP 代理在此生成！
+销毁回调	                            容器关闭时	    资源清理

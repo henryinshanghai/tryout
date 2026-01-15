@@ -1,0 +1,28 @@
+🔁 一、Bean 生命周期的 完整流程（以 单例Bean 为例）
+以下是 Spring 创建和管理 一个单例 Bean 的标准步骤：
+
+1. 实例化（Instantiation）
+   ↓
+2. 设置属性（Populate Properties / Dependency Injection）
+   ↓
+3. Aware 接口回调（如果实现了相关接口）
+   ↓
+4. BeanPostProcessor 的 postProcessBeforeInitialization
+   ↓
+5. 初始化方法（Initialization）
+   │   ├─ @PostConstruct
+   │   ├─ InitializingBean.afterPropertiesSet()
+   │   └─ 自定义 init-method
+   ↓
+6. BeanPostProcessor 的 postProcessAfterInitialization  ← ★ AOP 代理在此生成！
+   ↓
+7. Bean 可用（放入一级缓存，供 getBean() 使用）
+   ↓
+8. 容器关闭时：销毁（Destruction）
+       ├─ @PreDestroy
+       ├─ DisposableBean.destroy()
+       └─ 自定义 destroy-method
+
+💡 关键分界点：
+① 实例化后、初始化前：对象 已存在，但 依赖 未注入，不能 安全使用。
+② 初始化完成后：Bean 完全可用，AOP 代理 也已生成。

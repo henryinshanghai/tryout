@@ -1,0 +1,31 @@
+🛠️ 四、三级缓存 如何解决 这个冲突？
+三级缓存的核心思想是：不 提前决定 暴露什么，而是 “按需生成 正确的引用”。
+
+==
+步骤分解（聚焦 A 的创建）：
+️⃣1 A 实例化完成（但未注入属性，未生成代理）
+    ① Spring 将 A的ObjectFactory 放入 三级缓存：
+        singletonFactories.put("a", () -> {
+            // 这个工厂会在被调用时判断：
+            // 如果 A 需要 AOP → 返回代理对象
+            // 否则 → 返回原始对象
+            return getEarlyBeanReference("a", a_raw);
+        });
+
+️⃣2 B 需要注入 A（触发 循环依赖）
+    ① Spring 查找 A：
+        1.一级缓存？❌（A 未 初始化 完成）
+        2.二级缓存？❌（还没 暴露）
+        3.三级缓存？✅ → 调用 ObjectFactory.getObject()
+    ② 工厂执行：
+        1.发现 A 有 @Transactional → 立即创建 代理对象 a_proxy
+        2.将 a_proxy 放入 二级缓存
+        3.从 三级缓存 中 移除 A的工厂
+
+️⃣3 B 成功注入 a_proxy
+️⃣4 A 继续 初始化
+    ① 注入 B
+    ② 执行 @PostConstruct 等
+    ③ 注意：A 的代理已经在第 2 步创建好了！
+    ④ 将 a_proxy 放入 一级缓存
+    ⑤ 清理 二级缓存中的 A

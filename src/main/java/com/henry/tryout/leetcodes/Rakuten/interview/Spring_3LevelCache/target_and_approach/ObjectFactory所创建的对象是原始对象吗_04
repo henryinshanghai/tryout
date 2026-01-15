@@ -1,0 +1,86 @@
+这是一个非常关键的问题！答案是：
+不一定。
+ObjectFactory 创建出的对象 可能是原始对象，也可能是代理对象，
+取决于该 Bean 是否需要 Spring AOP 增强（如 @Transactional、@Async 等）。
+
+===
+🔍 一、先看 ObjectFactory 在三级缓存中是 怎么用的
+在 Spring 创建 Bean 的早期阶段（实例化后、初始化前），会将一个 ObjectFactory 放入三级缓存：
+    // 伪代码：Spring 内部逻辑
+    addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, beanInstance));
+其中：
+① beanInstance 是刚通过 构造函数 创建的 原始对象（raw object）
+② getEarlyBeanReference(...) 是关键方法，它决定 返回什么
+
+===
+🧩 二、getEarlyBeanReference 做了什么？
+这个方法 会遍历 所有注册的 SmartInstantiationAwareBeanPostProcessor
+（主要是 AbstractAutoProxyCreator，即 AOP 代理创建器）：
+
+    protected Object getEarlyBeanReference(String beanName, Object bean) {
+        Object exposedObject = bean;
+
+        for (BeanPostProcessor bp : getBeanPostProcessors()) {
+            if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
+
+                SmartInstantiationAwareBeanPostProcessor sip =
+                    (SmartInstantiationAwareBeanPostProcessor) bp;
+
+                // 关键：调用 getEarlyBeanReference
+                exposedObject = sip.getEarlyBeanReference(exposed)))) ;
+            }
+        }
+        return exposedObject;
+    }
+✅ 核心逻辑：
+① 如果 没有任何 AOP 切面匹配该 Bean → 返回 原始对象
+② 如果 有 AOP 切面（如 @Transactional） → 返回 代理对象
+
+===
+📌 三、两种情况对比
+情况 1️⃣：Bean 不需要 AOP 代理（普通 Bean）
+    @Service
+    public class OrderService {
+        public void createOrder() { ... }
+    }
+
+① ObjectFactory.getObject() → 返回 原始对象 orderService
+② 最终 放入一级缓存的 也是 同一个原始对象
+③ ✅ 是同一个对象
+
+情况 2️⃣：Bean 需要 AOP 代理（如带 @Transactional）
+    @Service
+    @Transactional
+    public class OrderService {
+        public void createOrder() { ... }
+    }
+① ObjectFactory.getObject() → 调用 getEarlyBeanReference → 创建 代理对象 orderServiceProxy
+② 最终 放入一级缓存的 也是 这个代理对象
+③ ✅ 仍然是 同一个对象（B 拿到的是 代理，容器 最终存的 也是这个代理）
+💡 注意：虽然 代理 内部持有 对原始对象的引用，但 ObjectFactory 返回的是 代理本身，不是 原始对象。
+
+===
+❗ 四、为什么强调“同一个对象”？
+这是为了保证 对象一致性：
+① 如果 B 在 循环依赖 中 拿到的是 原始对象；
+② 而 容器 最终存的是 代理对象
+③ 那么：
+    Ⅰ B 调用 orderService.createOrder() → 不走事务！
+    Ⅱ 其他地方调用 → 走事务
+④ ⚠ 这就 破坏了 Spring AOP 的语义！
+
+✅ 三级缓存 + ObjectFactory 的设计，确保：
+    无论 是否发生 循环依赖，所有地方 使用的 都是 同一个对象（原始 or 代理）
+
+===
+✅ 总结
+
+问题	                                答案
+ObjectFactory 返回的是 原始对象吗？	不一定
+什么时候 返回 原始对象？	            Bean 不需要 AOP 代理 时
+什么时候 返回 代理对象？	            Bean 需要 AOP 代理（如 @Transactional）时
+和最终 容器中的对象 是 同一个吗？	    是！ 保证了对象一致性
+为什么这样设计？	                    防止 循环依赖 导致 AOP 失效
+
+理解这一点，你就真正掌握了 Spring 三级缓存的精髓：
+它 不只是 解决循环依赖，更是保证 “带代理的 Bean” 在 任何场景 下都 行为一致。

@@ -1,0 +1,10 @@
+🧩 二、三级缓存是什么？———— 三个 Map
+Spring 使用三个 ConcurrentHashMap 作为缓存：
+
+缓存级别	变量名	                存储内容	                        作用
+一级缓存	singletonObjects	    Map<String, Object>             正常 getBean() 返回的地方
+                                ✅ 完整的、已初始化的Bean
+二级缓存	earlySingletonObjects	Map<String, Object>
+                                ⚠ 早期暴露的Bean（原始 or 代理）	避免 重复创建 早期引用
+三级缓存	singletonFactories	    Map<String, ObjectFactory<?>>   按需决定 是否创建 代理
+                                🔧 生成 早期引用 的工厂

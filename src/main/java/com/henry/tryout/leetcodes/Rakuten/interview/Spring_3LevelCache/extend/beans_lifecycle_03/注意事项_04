@@ -1,0 +1,12 @@
+⚠️ 四、重要注意事项
+
+1.原型（Prototype）Bean 不会执行 销毁回调
+    → Spring 不管理 其完整生命周期。
+
+2.构造器注入 vs Setter 注入
+    ① 构造器注入：在 实例化阶段 就 需要依赖 → 无法解决 循环依赖
+    ② Setter/Field 注入：在 属性填充阶段 注入 → 可被 三级缓存 解决
+
+3.代理对象 ≠ 原始对象
+    ① 如果你在 初始化方法 中 this.method()，不会 走代理（因为 this 是 原始对象）
+    ② 正确做法：通过 ApplicationContext 自调用，或 使用 AopContext.currentProxy()

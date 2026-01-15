@@ -1,0 +1,34 @@
+假设 A 和 B 都是单例，且 A 有 @Transactional（需要代理）。
+
+步骤详解：
+1.开始创建 A
+    ① 调用 A 的构造函数 → 得到 原始对象 a_raw
+    ② 将 ObjectFactory 放入 三级缓存：
+        singletonFactories.put("a", () -> {
+            // 这个 lambda 会 在 被调用 时 决定 返回 原始对象 还是 代理
+            return smartGetObjectForBean("a", a_raw);
+        });
+2.A 需要注入 B → 开始创建 B
+    ① 同样，B 的 ObjectFactory 放入三级缓存
+3.B 需要注入 A（循环依赖 触发！）
+    ① Spring 查找 A：
+        Ⅰ 一级缓存？❌ 没有（A 未初始化完）
+        Ⅱ 二级缓存？❌ 没有
+        Ⅲ 三级缓存？✅ 有！
+    ② 调用 ObjectFactory.getObject()：
+        Ⅰ 发现 A 需要 AOP → 创建代理对象 a_proxy
+        Ⅱ 将 a_proxy 放入 二级缓存
+        Ⅲ 从 三级缓存 移除 A 的工厂
+    ③ B 成功注入 a_proxy
+4.B 初始化完成 → 放入 一级缓存
+5.回到 A 的创建
+    ① 注入 B（已存在）
+    ② 执行 A 的初始化（@PostConstruct 等）
+    ③ 此时 A的代理 其实已经 提前创建了！
+    ④ 将 a_proxy 放入 一级缓存
+    ⑤ 清理 二级缓存中的 A
+
+✅ 结果：
+① A 和 B 都成功创建
+② B 中 所持有的A 是 代理对象
+③ 容器中 最终存储的A 也是 同一个 代理对象

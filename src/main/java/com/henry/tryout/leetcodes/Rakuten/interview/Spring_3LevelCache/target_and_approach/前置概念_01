@@ -1,0 +1,33 @@
+🔑 一、你需要先理解的前置概念
+1. Bean 的生命周期（关键！）
+Spring 创建 一个 单例Bean 并非 一步到位，而是 分阶段 进行：
+    ①. 实例化（Instantiation）
+       → 调用 构造函数，创建 原始对象（raw object）
+
+    ②. 属性填充（Populate Properties）
+       → 通过 setter / @Autowired 注入依赖
+
+    ③. 初始化（Initialization）
+       → 执行 @PostConstruct、InitializingBean、init-method 等
+       → ** AOP 代理 在 此阶段 生成！**
+
+    ④. 放入 一级缓存（singletonObjects）
+💡 重点：AOP代理 是在 “初始化”阶段 才创建的，而不是 实例化后 立即创建。
+
+2. 什么是 循环依赖？
+① 场景：A 依赖 B，B 又依赖 A（通过 字段 或 setter 注入）。
+② 问题：如果不 特殊处理，会陷入 无限递归 或 空指针。
+③ Spring 能解决的是：单例 + setter/field 注入 的 循环依赖。
+❌ 不能解决：构造器注入 的 循环依赖（因为 构造器注入 会 在 实例化 前 就需要依赖）。
+
+3. Spring AOP 与 代理对象
+① 如果 Bean 被 @Transactional、@Async 等注解 修饰，Spring 会 为其创建 代理对象（JDK 动态代理 或 CGLIB）。
+② 最终放入容器的 应该是 代理对象，而不是 原始对象。
+③ 但 代理对象 只能在 属性注入 完成 后 才能创建（因为 需要知道 目标方法）。
+
+4. “提前暴露引用”思想
+为了解决 循环依赖，Spring 允许 在 Bean 还 未完全初始化好 时，就 将 其早期引用 暴露给 其他正在创建的Bean 使用。
+⚠️ 但这个“早期引用”可能是：
+① 原始对象（无 AOP）
+② 代理对象（有 AOP）
+如何决定？→ 这就是 三级缓存 的关键！

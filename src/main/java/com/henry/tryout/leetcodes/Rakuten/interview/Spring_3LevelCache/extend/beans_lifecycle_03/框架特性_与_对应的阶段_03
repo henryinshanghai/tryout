@@ -1,0 +1,8 @@
+🌐 三、生命周期在实际框架中的应用
+
+场景	                    所依赖的 生命周期阶段
+循环依赖解决	            在 “实例化后、初始化前” 提前暴露 引用（通过 三级缓存）
+@Transactional 事务	    通过 BPP 在 postProcessAfterInitialization（第6阶段） 生成代理对象
+@Async 异步	            同上，代理中 加入 线程池逻辑
+@Configuration 类	    CGLIB 代理 在 初始化 后 生成，确保 @Bean方法 单例
+Spring Boot 自动装配	    利用 BPP 和 Aware接口 来 集成 第三方组件
