@@ -1,0 +1,50 @@
+① 粗略理解轮转的过程：
+    1.使用一个temp 来 记录 左上角位置的元素；
+    2.把 左下角位置的元素 搬运到 左上角位置；↑
+    3.把 右下角位置的元素 搬运到 左下角位置；←
+    4.把 右上角位置的元素 搬运到 右下角位置；↓
+    5.把 temp所记录的元素 搬运到 右上角位置；→
+
+
+② 首先，明确 参与轮转的四个位置 的 坐标：
+    左上角：(i, j); // 轮转的起点位置，同时 也是 步骤2的目标位置
+    左下角：(SX, SY); // 步骤2的起始位置
+        根据其目标位置(i, j) 来 计算出 左下角的坐标(SX, SY)：
+            已知：
+                TX = i; TY = j;
+                SX = length - 1 - TY;
+                SY = TX;
+            则：
+                SX = length - 1 - j;
+                SY = i;
+        因此 左下角的坐标为 (length - 1 - j, i);
+
+    右下角：(SX, SY); // 步骤3的起始位置
+        根据其目标位置(length - 1 - j, i) 来 计算出 该坐标(SX, SY)：
+            已知：
+                TX = length - 1 - j;
+                TY = i;
+                SX = length - 1 - TY;
+                SY = TX;
+            则：
+                SX = length - 1 - i;
+                SY = length - 1 - j;
+        因此 右下角的坐标为 (length - 1 - i, length - 1 - j);
+
+    右上角：(SX, SY); // 步骤4的起始位置
+        根据其目标位置(length - 1 - i, length - 1 - j) 来 计算出 其坐标：
+            已知：
+                TX = length - 1 - i;
+                TY = length - 1 - j
+                SX = length - 1 - TY;
+                SY = TX;
+            则：
+                SX = length - 1 - (length - 1 - j) = length - 1 - length + 1 + j = j;
+                SY = length - 1 - i;
+        因此 右上角的坐标为 (j, length - 1 - i);
+
+综上：
+    左上角坐标：(i, j)
+    左下角：(length - 1 - j, i)
+    右下角：(length - 1 - i, length - 1 - j)
+    右上角：(j, length - 1 - i)
