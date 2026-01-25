@@ -1,0 +1,9 @@
+✅ 编码 Checklist（防错清单）
+
+检查项	                            是否做到
+✅ 先查 complement，再 put 当前元素	✔️
+✅ 使用局部 HashMap，不在类成员中	    ✔️
+✅ 返回 [历史下标, 当前下标]	        ✔️
+✅ 用 containsKey() 显式判断	        ✔️
+✅ 不对 target - nums[i] 做溢出处理	✔️
+✅ 不排序、不预处理数组	            ✔️
