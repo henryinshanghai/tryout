@@ -1,0 +1,10 @@
+✅ 编码 Checklist（防错清单）
+
+检查项	                                        是否做到
+✅ 先预处理 rowCount 和 colCount，避免嵌套扫描	    ✔️
+✅ rowCount 长度 = m，colCount 长度 = n	        ✔️
+✅ 三条件：== 'B'                                ✔
+    且 rowCount[i]==1 且 colCount[j]==1	️
+✅ 预处理时 只对 'B' 计数	                        ✔️
+✅ 使用 数组 而非 集合 存储计数	                    ✔️
+✅ （可选）加 空输入 检查	                        ✔️
