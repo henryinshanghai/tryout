@@ -1,0 +1,4 @@
+while (currentProjectCursor < allProjectAmount && // 条件① 项目指针 在正常范围内
+        projectNoToItsCost[projectNoArrSortByCostInAsc[currentProjectCursor]] <= currentNetBalance) { // 条件② 手上的净余额 超过 当前 最便宜的项目 所需要的投资
+    ...
+}

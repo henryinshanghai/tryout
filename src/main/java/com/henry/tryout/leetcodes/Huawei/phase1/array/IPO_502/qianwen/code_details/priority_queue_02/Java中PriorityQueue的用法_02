@@ -1,0 +1,12 @@
+✅ 总结：支持“按优先级出队”的核心 API
+
+操作	        推荐方法	    返回值（空时）	时间复杂度
+入队	        offer(e)	—	            O(log n)
+查看堆顶	    peek()	    null	        O(1)
+出队	        poll()	    null	        O(log n)
+判空	        isEmpty()	—	            O(1)
+
+💡 记住口诀：
+“入 用 offer，看 用 peek，出 用 poll，空 用 isEmpty”
+这些 API 共同构成了 优先队列 “自动维护 优先级顺序，高效访问 最值”的能力，
+是解决 贪心、调度、Top-K 等问题的 基石。

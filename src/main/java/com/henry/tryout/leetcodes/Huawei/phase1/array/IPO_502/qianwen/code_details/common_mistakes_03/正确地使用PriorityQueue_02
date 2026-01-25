@@ -1,0 +1,11 @@
+✅ 总结：初始化 PriorityQueue 的正确姿势
+
+需求	                推荐写法
+最小堆（默认）	    new PriorityQueue<>()
+最大堆（Integer）	new PriorityQueue<>(Collections.reverseOrder())
+最大堆（通用）	    new PriorityQueue<>((a, b) -> Integer.compare(b, a))
+自定义对象排序	    new PriorityQueue<>((a, b) -> ...)
+避免溢出	            用 Integer.compare(a, b)，别用 a - b
+
+🐖 (a, b) -> ??? 的写法 现阶段更加易读：
+对于 元素a 与 元素b，通过 ??? 来 得到一个比较结果；

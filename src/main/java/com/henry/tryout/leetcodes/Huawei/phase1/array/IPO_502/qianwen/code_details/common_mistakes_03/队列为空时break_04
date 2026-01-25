@@ -1,0 +1,19 @@
+💡 特别注意：Java 中 PriorityQueue<Integer>.poll() 的行为
+
+堆状态	poll()返回值	        int x = poll()
+非空	    Integer 对象（如 5）	正常拆箱为 int
+空	    null	            NullPointerException（拆箱失败）
+
+所以，只要 有可能 堆为空，就必须 在 poll() 前 检查，而 break 是最干净的处理方式。
+
+===
+✅ 结论
+break 语句不能省略！
+它 既是 正确性保障（防止 NPE），也是 性能优化（提前终止无意义循环）。
+
+===
+✅ 最佳实践：
+if (maxHeap.isEmpty()) {
+    break; // 必须 break！
+}
+w += maxHeap.poll();

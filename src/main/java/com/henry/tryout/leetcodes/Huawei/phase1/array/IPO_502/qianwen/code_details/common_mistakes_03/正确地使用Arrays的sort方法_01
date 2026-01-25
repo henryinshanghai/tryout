@@ -1,0 +1,34 @@
+① 为了能够 为Arrays.sort()提供 自定义的比较器，
+要求 被排序的数组元素 必须是 包装类型（Integer），不能是 基本类型（int）；
+
+② 按照 项目成本 来 对索引数组进行排序：
+Arrays.sort(projectNoArrSortByCostInAsc,
+            Comparator.comparingInt(projectNo -> projectNoToItsCost[projectNo]));
+
+===
+🔍 逐部分解析
+...
+
+3. projectNo -> projectNoToItsCost[projectNo]
+这是一个 Lambda 表达式，作用是：
+给定一个项目编号 projectNo，返回它对应的成本
+类型上，这是一个 ToIntFunction<Integer>（接受 Integer，返回 int）
+例如：
+输入 projectNo = 3 → 输出 projectNoToItsCost[3] = 50
+输入 projectNo = 0 → 输出 projectNoToItsCost[0] = 100
+
+4. Comparator.comparingInt(...)
+这是 Java 8 引入的静态工厂方法
+作用：根据 某个“提取的 int 值” 来 构造一个比较器
+语法：
+    Comparator<T> comparingInt(ToIntFunction<? super T> keyExtractor)
+在你这里：
+    T = Integer（因为 projectNoArrSortByCostInAsc 是 Integer[]）
+    keyExtractor = projectNo -> projectNoToItsCost[projectNo]
+所以：
+    这个比较器会：
+    1.对 两个项目编号 a 和 b
+    2.分别取出 它们的成本：costA = projectNoToItsCost[a], costB = projectNoToItsCost[b]
+    3.比较 costA 和 costB 的大小
+    4.如果 costA < costB，则 a 排在 b 前面（升序）
+✅ 结果：索引数组 按 对应成本 升序排列

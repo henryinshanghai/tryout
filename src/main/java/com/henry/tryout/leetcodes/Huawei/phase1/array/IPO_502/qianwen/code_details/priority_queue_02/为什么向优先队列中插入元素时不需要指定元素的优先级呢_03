@@ -1,0 +1,23 @@
+⚠️ 常见误解澄清
+❌ 误解：“优先级 是一个 单独的数字，需要 和元素一起 插入”
+→ 错！那是 其他语言（如 Python 的 heapq 需手动打包 (priority, item)）的做法。
+→ Java 的设计哲学是：优先级 是 元素 固有属性的一部分。
+
+✅ 正确理解：
+① 你插入的是 完整的、携带优先级信息的 元素；
+② 队列 通过 Comparable 或 Comparator 解读 这个信息
+
+===
+✅ 总结：优先队列如何知道优先级？
+
+条件	                优先级来源	                    示例
+元素实现 Comparable	调用 element.compareTo()	        Integer, String
+提供 Comparator	    调用 comparator.compare(a, b)	自定义 排序逻辑
+两者都没有	        编译错误！	                    new PriorityQueue<MyClass>()
+                                                    若 MyClass 未实现 Comparable 且无 Comparator，
+                                                    会抛 ClassCastException
+
+💡 核心思想：
+“优先级” 不是 外挂数据，而是 元素内在属性 的体现。
+优先队列 只是一个“按规则排序的容器”，规则 由你 通过 Comparable 或 Comparator 来 定义。
+这样设计的好处是：类型安全、封装性好、无需 额外存储 优先级值。
