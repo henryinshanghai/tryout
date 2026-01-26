@@ -1,0 +1,2 @@
+手段：从 基准字符串 中，截取 从 0 开始，到 失配位置为止（不包含）范围内的 子字符串；
+代码：pivotStr.substring(0, currentCharSpot); // [0, currentCharSpot)

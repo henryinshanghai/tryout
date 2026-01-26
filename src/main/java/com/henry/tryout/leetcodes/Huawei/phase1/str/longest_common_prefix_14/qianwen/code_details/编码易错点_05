@@ -1,0 +1,9 @@
+✅ 总结：编码 Checklist
+
+检查项	                                    是否做到
+✅ 处理 strs == null 或 strs.length == 0	    ✔️
+✅ 先判断 i >= s.length() 再访问 charAt(i)	✔️
+✅ 外层循环  基于 strs[0].length()	        ✔️
+✅ substring(0, i) 而非 i+1	                ✔️
+✅ 内层循环从 j = 1 开始	                    ✔️
+✅ 理解 空字符串输入 的处理逻辑	                ✔️
