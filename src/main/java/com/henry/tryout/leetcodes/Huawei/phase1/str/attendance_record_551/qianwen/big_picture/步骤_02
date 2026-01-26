@@ -1,0 +1,17 @@
+步骤：
+1.初始化：
+    ① absentCount = 0
+    ② lateStreak = 0（当前连续 'L' 的长度）
+2.遍历每个字符 c：
+    ① 如果 c == 'A'：
+        absentCount++
+        若 absentCount >= 2 → 直接返回 false
+        重置 lateStreak = 0（因为 'A' 中断了 连续的'L'）
+    ② 如果 c == 'L'：
+        lateStreak++
+        若 lateStreak >= 3 → 返回 false
+    ③ 如果 c == 'P'：
+        重置 lateStreak = 0
+3.遍历结束 仍未失败 → 返回 true
+
+✅ 优点：一次遍历、O(1) 空间、提前终止
