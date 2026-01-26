@@ -1,0 +1,7 @@
+maintaining sliding window：
+① 追加元素；
+    被追加的就是 当前元素；
+② 移除元素；
+    被移除的 是 当前窗口的 左边界指针 所指向的元素；
+
+    [leftBar, rightBar] => rightBar - leftBar + 1 = k;
