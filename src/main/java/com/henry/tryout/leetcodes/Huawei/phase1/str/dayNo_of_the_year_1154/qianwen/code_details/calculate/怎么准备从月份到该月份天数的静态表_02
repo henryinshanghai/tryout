@@ -1,0 +1,5 @@
+手段1：使用Map；
+monthNoToItsDayAmountMap
+
+手段2：使用数组 作为编码表；
+int[] monthToItsDayAmountArr

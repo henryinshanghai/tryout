@@ -1,0 +1,5 @@
+① 使用字符串自带的split()方法；
+String[] subStrArr = str.split("-");
+
+② 把得到的子字符串 转化为 整数：
+Integer.parseInt(<str>);

@@ -1,0 +1,3 @@
+手段：DateTimeFormatter类的静态方法 ofPattern('<format_str>')
+
+🐖 其实这一步可以省略，直接 把 日期字符串 传给 LocalDate的parse()方法就可以了。
