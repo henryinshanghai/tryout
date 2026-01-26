@@ -1,0 +1,7 @@
+初始时，两个指针都指向 其对应字符序列的 第一个位置；
+int cursorOfTriedSeq = 0, cursorOfSourceSeq = 0;
+
+if (triedCharSeq.charAt(cursorOfTriedSeq) == textCharSeq.charAt(cursorOfSourceSeq)) {
+    // 把 尝试序列中的指针 向后移动一个位置
+    cursorOfTriedSeq++;
+}

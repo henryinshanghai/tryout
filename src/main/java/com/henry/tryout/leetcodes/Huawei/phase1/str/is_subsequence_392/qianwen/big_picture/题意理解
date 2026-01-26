@@ -1,0 +1,7 @@
+LeetCode 第 392 题是 「判断子序列」（Is Subsequence），题目描述如下：
+给定字符串 s 和 t，判断 s 是否为 t 的子序列。
+子序列是指：不改变 剩余字符相对位置的 情况下，删除 某些字符（也可以不删除）后 得到的 新字符串。
+
+例如：
+s = "abc", t = "ahbgdc" → 返回 true
+s = "axc", t = "ahbgdc" → 返回 false
