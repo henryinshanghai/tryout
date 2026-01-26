@@ -1,0 +1,5 @@
+把push()语句 写在一个else子句中：
+    else {
+        // 否则，说明 当前字符是 某种类型的左括号，则：把 该字符 入栈
+        leftParenthesisStack.push(currentParenthesisChar);
+    }

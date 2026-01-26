@@ -1,0 +1,10 @@
+✅ 总结：五大雷区速查表
+
+易错点	        关键检查
+栈空访问	        if (stack.isEmpty()
+对象比较	        用 != 来 拆箱比较 char，别用 == 比 Character
+Map 方向	        右括号 → 左括号
+忘记  清空检查	return stack.isEmpty();
+用错  栈类型	    Deque<Character> stack = new ArrayDeque<>();
+
+💡 面试技巧：写完后用 ")"、"((("、"([)]" 三个用例快速走查，能覆盖 90% 的 bug。

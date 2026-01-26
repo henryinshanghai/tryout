@@ -1,0 +1,11 @@
+java中 可以使用 双端队列 来 实现栈；
+    Deque<Character> stack = new ArrayDeque<>();
+
+✅ 七、总结：Java 使用栈 的最佳实践
+
+项目	        推荐做法
+声明类型	    Deque<T> stack = new ArrayDeque<>();
+入栈	        stack.push(element);
+出栈	        stack.pop();（先检查 !isEmpty()）
+看栈顶	    stack.peek();（先检查 !isEmpty()）
+避免使用	    java.util.Stack
