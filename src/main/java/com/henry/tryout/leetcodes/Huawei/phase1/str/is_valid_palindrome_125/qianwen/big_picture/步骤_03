@@ -1,0 +1,12 @@
+算法步骤：
+① 初始化 left = 0，right = s.length() - 1
+② 当 left < right 时循环：
+    1.如果 s[left] 不是 字母或数字 → left++
+    2.如果 s[right] 不是 字母或数字 → right--
+    3.否则，将 两个字符 转为小写 并 比较：
+        Ⅰ 不相等 → 返回 false
+        Ⅱ 相等 → left++, right--
+③ 循环结束 → 返回 true
+
+✅ 时间复杂度：O(n)
+✅ 空间复杂度：O(1)
