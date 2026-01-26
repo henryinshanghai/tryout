@@ -1,0 +1,32 @@
+这是一个非常基础但极其重要的问题！为什么可以用 int[] 数组来统计 char 的出现频率？ 答案在于：Java 中的 char 本质是 16 位无符号整数（0 ～ 65535），可以作为数组下标。
+✅ 核心原理：char 可以自动转换为 int
+
+在 Java 中：
+① char 是 基本数据类型
+② 它的实际存储是 Unicode 编码值（UTF-16）
+③ 范围：0 到 65535（即 2^16 - 1）
+
+🔢 举例：
+    char c = 'A';
+    int ascii = c; // 自动提升为 int
+    System.out.println(ascii); // 输出 65
+
+    char ch = '中';
+    int unicode = ch;
+    System.out.println(unicode); // 输出 20013（'中' 的 Unicode 码点）
+✅ 所以，每个 char 都对应 一个唯一的整数编号，这个编号 可以作为 数组下标！
+
+===
+✅ 总结
+
+问题	                            答案
+为什么能用 int[] 统计 char 频率？	因为 char 本质是 0～65535 的整数，可作 数组下标
+数组该开多大？	                ASCII 字符 → 128；仅小写字母 → 26（配合 c-'a'）
+有什么优势？	                    比 HashMap 更快、更省空间、代码更简洁
+适用场景？	                    LeetCode 字符串题（99% 情况下足够）
+
+✅ 记住这个模式：
+    int[] freq = new int[128];
+    for (char c : str.toCharArray()) {
+        freq[c]++;
+    }

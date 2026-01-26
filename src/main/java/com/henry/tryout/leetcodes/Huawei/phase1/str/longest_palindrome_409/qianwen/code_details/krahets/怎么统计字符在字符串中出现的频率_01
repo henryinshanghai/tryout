@@ -1,0 +1,6 @@
+使用一个map 来 记录char -> its frequency的映射关系。
+具体做法：
+    对于 当前字符，
+        ① 如果它 在map中 存在，则：把 map中 对应条目的value +1；
+        ② 如果它 在map中 不存在，则：向map中 添加 字符 -> 1的映射；
+特征：使用 merge(key, value, function) 可以 快速实现 这个需求。
