@@ -1,0 +1,10 @@
+二、解题步骤（算法流程）
+1.长度不等？ → 直接 false
+2.找出 所有 s[i] != goal[i] 的索引，存入 列表 diff
+3.根据 diff.size() 分支处理：
+    ① size() == 0（完全相同）：
+        检查 s 中 是否有 重复字符 → 有则 true，否则 false
+    ② size() == 2：
+        设 两个位置 为 i 和 j；
+        检查 是否 s[i] == goal[j] && s[j] == goal[i] → 是，则 true，否则 false
+4.其他情况（1 个、3 个及以上差异）→ false

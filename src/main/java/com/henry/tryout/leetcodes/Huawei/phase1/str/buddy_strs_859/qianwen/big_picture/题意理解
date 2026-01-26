@@ -1,0 +1,12 @@
+LeetCode 第 859 题是 「亲密字符串」（Buddy Strings），题目描述如下：
+给定两个字符串 s 和 goal，
+判断是否可以 通过 恰好一次交换 s中的两个 不同位置的字符，使得 s 变成 goal。
+如果可以，返回 true；否则返回 false。
+
+🌰 示例说明
+
+输入	输出	解释
+s = "ab", goal = "ba"	true	交换 'a' 和 'b' 即可
+s = "ab", goal = "ab"	false	没有交换，或交换相同字符（但题目要求“两个不同位置”）
+s = "aa", goal = "aa"	true	交换两个 'a'（位置不同，字符相同）是允许的！
+s = "ab", goal = "ca"	false	字符集合不同，无法通过交换得到
