@@ -1,0 +1,4 @@
+当前位置 currentSpot 与 其应该交换到的位置 targetSpot 之间，满足关系
+    currentSpot + targetSpot = length - 1;
+因此有：
+    targetSpot = length - 1 - currentSpot;

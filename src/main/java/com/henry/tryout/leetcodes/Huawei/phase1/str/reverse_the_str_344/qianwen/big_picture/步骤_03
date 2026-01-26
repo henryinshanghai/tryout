@@ -1,0 +1,9 @@
+算法步骤：
+① 初始化 left = 0，right = s.length - 1
+② 当 left < right 时循环：
+    1. 交换 s[left] 和 s[right]
+    2. left++，right--
+③ 循环结束，数组 已原地反转
+
+✅ 时间复杂度：O(n)（n 是字符数）
+✅ 空间复杂度：O(1)（只用常量额外空间）
