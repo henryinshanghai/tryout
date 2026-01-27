@@ -1,0 +1,58 @@
+手段：StringBuilder的 append(<char_seq>, <start>, <end>);
+
+===
+StringBuilder.append(CharSequence s, int start, int end) 是 Java 中一个
+高效追加 字符序列子范围的方法，常用于 避免创建 临时子字符串。
+
+✅ 方法签名
+    public StringBuilder append(CharSequence s, int start, int end)
+⚠ 注意：第一个参数是 CharSequence（接口），不是 String。
+但 String、StringBuilder、StringBuffer 都实现了 CharSequence，所以 可以传入 这些类型。
+
+
+🔧 参数详解
+参数	    类型	            说明	                            要求
+s	    CharSequence	要 从中截取内容的 源字符序列        不能为 null（否则抛 NullPointerException）
+                        （如 String、StringBuilder 等）
+start	int	            起始索引（包含）	                0 ≤ start ≤ end
+end	    int	            结束索引（不包含）	                start ≤ end ≤ s.length()
+📌 关键：实际追加的是 s 中 [start, end) 范围内的字符（左闭右开）
+
+
+📌 核心作用
+① 从 字符序列 s 中 提取 子序列 s[start] 到 s[end - 1]
+② 将 该子序列 直接追加到 当前 StringBuilder 的末尾
+③ 不创建 中间 String 对象（比 先 substring 再 append 更高效）
+④ 返回 当前 StringBuilder 对象本身（支持 链式调用）
+
+
+🧪 示例演示
+示例 1：从 String 中追加部分字符
+    StringBuilder sb = new StringBuilder("Result: ");
+    String source = "HelloWorld";
+
+    sb.append(source, 0, 5);      // 追加 "Hello"
+    sb.append(source, 5, 10);     // 追加 "World"
+
+    System.out.println(sb); // 输出: "Result: HelloWorld"
+
+示例 2：处理数字分组（LeetCode 1694 场景）
+    String digits = "1234567890";
+    StringBuilder formatted = new StringBuilder();
+
+    // 追加前3位
+    formatted.append(digits, 0, 3); // "123"
+    formatted.append('-');
+
+    // 追加接下来3位
+    formatted.append(digits, 3, 6); // "456"
+    formatted.append('-');
+
+    // 追加最后4位（拆成2+2）
+    formatted.append(digits, 6, 8).append('-').append(digits, 8, 10);
+
+    // 结果: "123-456-78-90"
+
+示例 3：null 处理（会抛异常！）
+    StringBuilder sb = new StringBuilder();
+    sb.append(null, 0, 1); // ❌ NullPointerException!

@@ -1,0 +1,60 @@
+截取手段：str.substring(<start_index>)；
+追加手段：str.append(???)
+
+===
+String.substring(int beginIndex) 是 Java 中
+用于 截取字符串 从指定位置到末尾 的子串 的方法。
+
+✅ 方法签名
+public String substring(int beginIndex)
+
+🔧 参数说明
+
+参数	        类型	    要求
+beginIndex	int	    起始索引（包含）
+                    • 必须满足：0 ≤ beginIndex ≤ length()
+                    • 若 beginIndex == length()，返回空字符串 ""
+
+⚠ 注意：beginIndex 是包含的（inclusive），即 该位置的字符 会 出现在结果中。
+
+📌 核心作用
+① 返回 一个新字符串，内容为 原字符串 从 beginIndex 到末尾 的所有字符
+② 不修改 原字符串（因为 String 在 Java 中是不可变的）
+③ 返回的子串长度 = 原字符串长度 - beginIndex
+
+🧪 示例演示
+    String s = "Hello";
+
+    // 从索引 2 开始截取
+    String sub1 = s.substring(2);
+    System.out.println(sub1); // 输出: "llo"
+
+    // 从开头截取（等价于原字符串）
+    String sub2 = s.substring(0);
+    System.out.println(sub2); // 输出: "Hello"
+
+    // 从末尾开始截取
+    String sub3 = s.substring(5); // s.length() == 5
+    System.out.println("[" + sub3 + "]"); // 输出: "[]"（空字符串）
+
+    // 常见用法：去掉第一个字符
+    String withoutFirst = s.substring(1); // "ello"
+
+===
+StringBuilder.append(String str) 是 Java 中用于
+将 字符串 追加到 当前 StringBuilder 末尾的核心方法。
+
+✅ 方法签名
+public StringBuilder append(String str)
+
+📌 核心作用
+① 将 参数 str 的全部内容 添加到 当前 StringBuilder 对象的末尾；
+② 修改 原对象（StringBuilder 是可变的）；
+③ 返回 当前 StringBuilder 对象本身（支持 链式调用）；
+💡 即使 str 为 null，也会追加字符串 "null"（不是抛异常！）
+
+
+参数  	类型	    行为
+str	    String	• 若为非 null：追加其内容
+                • 若为 null：追加字面量 "null" 字符串
+⚠️ 注意：这是 StringBuilder 的设计约定，不会抛 NullPointerException

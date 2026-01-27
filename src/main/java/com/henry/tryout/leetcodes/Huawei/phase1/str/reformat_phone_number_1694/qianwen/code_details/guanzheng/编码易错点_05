@@ -1,0 +1,6 @@
+StringBuilder的deleteCharAt() 与 insert()方法 都是 有返回值的；
+
+所以需要使用 方法调用的返回值 来 更新原始变量：
+resultStr = resultStr.deleteCharAt(<index>);
+
+resultStr = resultStr.insert(<offset>, <char>);

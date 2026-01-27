@@ -1,0 +1,32 @@
+StringBuilder.deleteCharAt(int index) 是 Java 中用于
+删除 StringBuilder 中 指定位置的单个字符 的方法。
+
+✅ 方法签名
+    public StringBuilder deleteCharAt(int index)
+
+🔧 参数说明
+参数	    类型	    要求
+index	int	    要删除的字符的索引（从 0 开始）
+                • 必须满足：0 ≤ index < length()
+                • 不能等于 length()（因为索引最大为 length() - 1）
+
+📌 核心作用
+① 删除 当前 StringBuilder 对象中 索引为index的 那个字符
+② 原有 从（index + 1）开始的 所有字符 向左移动一位
+③ 字符串长度 减少 1
+④ 返回 当前 StringBuilder 对象本身（支持链式调用）
+
+🧪 示例演示
+    StringBuilder sb = new StringBuilder("Hello");
+
+    // 删除索引 1 处的字符 'e'
+    sb.deleteCharAt(1);
+    System.out.println(sb); // 输出: "Hllo"
+
+    // 删除最后一个字符
+    sb.deleteCharAt(sb.length() - 1);
+    System.out.println(sb); // 输出: "Hll"
+
+    // 删除第一个字符
+    sb.deleteCharAt(0);
+    System.out.println(sb); // 输出: "ll"

@@ -1,0 +1,33 @@
+StringBuilder.insert(int offset, char c) 是 Java 中用于 在 指定位置 插入 单个字符的方法。
+
+下面详细介绍其作用、参数、行为和注意事项。
+✅ 方法签名
+    public StringBuilder insert(int offset, char c)
+
+🔧 参数详解
+参数	    类型	    说明
+offset	int	    插入位置的索引（从 0 开始）
+                • 必须满足：0 ≤ offset ≤ length()
+                • 若 offset == length()，表示 在末尾追加
+c	    char	要插入的单个字符
+
+📌 核心作用
+① 在 当前 StringBuilder 对象的 offset 位置 之前，插入字符 c
+② 原有 从 offset 开始的 所有字符 向右移动一位
+③ 返回 当前 StringBuilder 对象本身（支持链式调用）
+
+
+🧪 示例演示
+    StringBuilder sb = new StringBuilder("Hello");
+
+    // 在 索引1处 插入 'a'
+    sb.insert(1, 'a');
+    System.out.println(sb); // 输出: "Haello"
+
+    // 在 开头 插入 'X'
+    sb.insert(0, 'X');
+    System.out.println(sb); // 输出: "XHaello"
+
+    // 在 末尾 插入 '!'
+    sb.insert(sb.length(), '!');
+    System.out.println(sb); // 输出: "XHaello!"
