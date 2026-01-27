@@ -1,0 +1,8 @@
+① 遍历数字序列；
+② 如果 当前数字 没有出现在map中，则：把 该数字 -> 频次为1 添加到map中；
+③ 如果 当前数字 已经出现在map中，则：把 其对应的频次 + 1；
+
+实现手段：
+① 添加/更新：put(num, itsFrequency)；
+② 尝试获取key对应的value - 存在时获取value，不存在时获取到0（默认值）；
+    getOrDefault(key, <default_value>)
