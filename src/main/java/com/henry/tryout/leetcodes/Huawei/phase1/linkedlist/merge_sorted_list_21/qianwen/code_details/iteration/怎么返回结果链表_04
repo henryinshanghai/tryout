@@ -1,0 +1,1 @@
+使用 dummyNode.next，因为dummyNode锚定了 结果链表的头节点（也就是其next节点）；
