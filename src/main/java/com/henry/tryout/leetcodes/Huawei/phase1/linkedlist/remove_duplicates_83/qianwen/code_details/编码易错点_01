@@ -1,0 +1,8 @@
+✅ 编码 Checklist（防错清单）
+
+检查项	                        是否做到
+✅ 循环条件：curr.next != null	✔️
+✅ 重复时 不移动curr	            ✔️
+✅ 无重复时 才curr = curr.next	✔️
+✅ 返回 head，不是 curr	        ✔️
+✅ 不混淆第 82 题（全部删除）	    ✔️

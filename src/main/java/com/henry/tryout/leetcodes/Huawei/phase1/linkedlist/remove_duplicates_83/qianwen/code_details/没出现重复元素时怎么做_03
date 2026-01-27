@@ -1,0 +1,5 @@
+如果当前节点的下一个节点 不是重复元素，则：
+把 当前节点指针 移动到 其下一个节点处；
+
+代码：
+    currentCursorNode = currentCursorNode.next;

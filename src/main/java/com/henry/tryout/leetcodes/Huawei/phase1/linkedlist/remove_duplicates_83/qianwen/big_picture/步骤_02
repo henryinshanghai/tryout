@@ -1,0 +1,13 @@
+步骤：
+1.从 头节点 开始遍历（用指针 curr）
+2.对每个节点 curr：
+    ① 如果 curr.val == curr.next.val → 发现重复
+        Ⅰ 跳过 curr.next：curr.next = curr.next.next
+        Ⅱ 不移动 curr（因为新 curr.next 可能仍重复）
+    ② 否则 → 无重复，curr 前进
+3.直到 curr.next == null（到达尾部）
+
+✅ 时间复杂度：O(n)
+✅ 空间复杂度：O(1)
+
+🌟 关键技巧：发现重复时 不移动 当前指针，继续检查 新的下一个节点！

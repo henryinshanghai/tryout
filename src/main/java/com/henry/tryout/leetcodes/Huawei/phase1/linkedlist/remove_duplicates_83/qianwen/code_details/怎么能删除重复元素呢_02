@@ -1,0 +1,4 @@
+手段：把 当前节点的next 指向 它的下一个节点（重复元素）的next；
+作用：在链表中，移除 重复节点的连接；
+代码：
+    currentNodeCursor.next = currentNodeCursor.next.next;
