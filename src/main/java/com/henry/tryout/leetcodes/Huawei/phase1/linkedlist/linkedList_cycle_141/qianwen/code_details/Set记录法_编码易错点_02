@@ -1,0 +1,22 @@
+✅ LeetCode 141 HashSet 解法 · 易错点速记（共 5 条）
+1.存值不存节点
+→ 错误：Set<Integer> 存 val；
+  正确：Set<ListNode> 存节点引用。
+
+2.检查顺序颠倒
+→ 必须先判断 当前节点 是否已访问，
+    再加入 set，最后 移动指针。
+
+3.用 List 代替 Set
+→ ArrayList.contains() 是 O(n)，会超时；
+    必须用 HashSet（O(1)）。
+
+4.忽略空链表边界
+→ 虽然 while(head != null) 能处理，但 需确保 不提前 解引用 null。
+
+5.误以为要重写 equals/hashCode
+→ LeetCode 的 ListNode 按引用比较，无需重写，直接用即可。
+
+💡 口诀记忆：
+“存点不存值，先查再加移；
+用 Set 别用 List，空链要留意，引用天然比。”
