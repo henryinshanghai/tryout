@@ -1,0 +1,31 @@
+步骤 1：快慢指针 找中点
+① slow 每次走 1 步，fast 每次走 2 步
+② 当 fast到达末尾 时，slow 指向中点 或 中点偏右
+
+链表长度	    结构	slow    最终位置
+偶数（4）	1→2→3→4	    指向 第3个（后半段起点）
+奇数（5）	1→2→3→4→5	指向 第3个（中间节点）
+✅ 我们希望后半段 从slow 开始（奇数时 跳过 中间节点）
+
+技巧：让 slow指针 最终指向 后半段的起始节点
+代码写法👇
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast.next != null && fast.next.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    // 此时 slow指针 指向的是 前半段的最后一个节点（前中点）
+    ListNode secondHalfStart = slow.next;
+
+步骤 2：反转后半段
+    ListNode reversedSecondHalf = reverse(secondHalfStart);
+
+步骤 3：逐个比较两段中的当前节点
+① 从 head 和 reversedSecondHalf 同时遍历
+② 逐个比较 节点的值，直到 后半段结束
+
+步骤 4（可选）：恢复链表
+① 再次反转 后半段，并 接回 原链表
+② 面试中 建议提及，体现 工程素养

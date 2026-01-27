@@ -1,0 +1,9 @@
+✅ 编码 Checklist（防错清单）
+
+检查项	                                        是否做到
+✅ 先处理 head == null 或单节点	                ✔️
+✅ 快慢指针条件：fast.next && fast.next.next	    ✔️
+✅ slow 停在前半段末尾，secondHalf = slow.next	    ✔️
+✅ 反转函数先保存 next	                        ✔️
+✅ 比较时 while (p2 != null)	                    ✔️
+✅ （可选）断开并恢复链表	                        ✔️

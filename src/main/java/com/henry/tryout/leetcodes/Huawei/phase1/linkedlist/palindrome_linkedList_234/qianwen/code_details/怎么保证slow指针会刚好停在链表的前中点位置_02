@@ -1,0 +1,8 @@
+固定写法如下：
+while (fast.next != null && fast.next.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+}
+
+ListNode secondHalfHead = slow.next;
+slow.next = null; // （可选）

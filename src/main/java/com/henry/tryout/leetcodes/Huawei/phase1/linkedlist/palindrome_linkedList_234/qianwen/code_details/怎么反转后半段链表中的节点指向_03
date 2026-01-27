@@ -1,0 +1,4 @@
+① 初始化prevNodeCursor指针 为null；// 🐖 必须为null，这样返回的链表才有结束
+② 初始化currNodeCursor指针 指向头节点；
+③ 改变 当前节点的指向：next连接到 prevNodeCursor；// 重要！改变next的指向
+④ 向前顺序移动 prev指针、curr指针；

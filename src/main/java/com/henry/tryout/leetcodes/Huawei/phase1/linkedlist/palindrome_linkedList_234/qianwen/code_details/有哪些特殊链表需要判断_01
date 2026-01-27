@@ -1,0 +1,7 @@
+① 如果链表是null；// 视为 回文链表
+② 如果链表只有一个节点； // 视为 回文链表
+
+代码：
+if (head == null || head.next == null) {
+    return true;
+}
