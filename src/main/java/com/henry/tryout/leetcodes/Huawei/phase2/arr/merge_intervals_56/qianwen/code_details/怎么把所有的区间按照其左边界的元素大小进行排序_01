@@ -1,0 +1,71 @@
+手段：Arrays工具类的sort()方法 + lambda表达式指定比较规则；
+
+===
+写法1：Arrays.sort(intervals, (p, q) -> p[0] - q[0]);
+
+🎯 整体作用
+这行代码的作用是：
+将二维数组 intervals 按照 每个区间的左端点（即 interval[0]）从小到大排序。
+例如：
+intervals = [[1,3], [2,6], [8,10], [15,18]]
+排序后 → [[1,3], [2,6], [8,10], [15,18]]（已有序）
+
+intervals = [[2,6], [1,3], [8,10]]
+排序后 → [[1,3], [2,6], [8,10]]
+
+
+🔍 Lambda 表达式详解：(p, q) -> p[0] - q[0]
+这是 Java 8 引入的 Lambda 表达式，用于简洁地定义一个比较器（Comparator）。
+1. 上下文：Arrays.sort 的第二个参数
+    public static void sort(T[] a, Comparator<? super T> c)
+① 第二个参数 是一个 Comparator 接口
+② 它的抽象方法是：
+    int compare(T o1, T o2);
+③ 返回值规则：
+    < 0：o1 应排在 o2 前面
+    = 0：两者相等
+    > 0：o1 应排在 o2 后面
+
+2. Lambda 的结构
+    (p, q) -> p[0] - q[0]
+① (p, q)：两个参数，代表 待比较的 两个元素
+    在这里，p 和 q 都是 int[] 类型（因为 intervals 是 int[][]）
+② ->：Lambda 操作符，读作 “goes to”
+③ p[0] - q[0]：返回值（即 比较结果）
+
+3. 具体含义
+① p[0]：第一个区间的左端点（如 [1,3] 的 1）
+② q[0]：第二个区间的左端点（如 [2,6] 的 2）
+③ p[0] - q[0]：
+    如果 结果 < 0 → p 的左端点 更小 → p 排前面 ✅
+    如果 结果 > 0 → q 的左端点 更小 → q 排前面
+    如果 结果 = 0 → 左端点相等，顺序不变（稳定排序 不保证，但 不影响 合并逻辑）
+✅ 这 正好符合 “按左端点升序排序”的要求！
+
+===
+写法2：Arrays.sort(intervalArr, Comparator.comparingInt(a -> a[0]));
+
+1. Comparator.comparingInt 是什么？
+这是 Java 8 在 Comparator 类中 提供的 静态工厂方法，专门用于
+按 某个 int类型的属性 排序。
+
+① 签名：
+    public static <T> Comparator<T> comparingInt(ToIntFunction<? super T> keyExtractor)
+② 作用：根据对象 T 的某个 int 值（通过 keyExtractor 提取）进行自然升序排序
+
+2. a -> a[0] 的作用
+① a 是 intervalArr 中的一个元素（即 int[]）
+② a -> a[0] 是一个 ToIntFunction<int[]> 函数式接口的实现
+③ 它的作用是：提取 每个区间的 左端点（a[0]）作为 排序关键字
+
+3. 整体效果
+    → 按每个区间的 a[0]（左端点）升序排序，和 (p, q) -> p[0] - q[0] 逻辑完全等价。
+
+===
+📌 总结
+
+问题	                        答案
+comparingInt 写法正确吗？	    ✅ 完全正确
+它是什么意思？	            “按 每个元素的 [0] 字段（int 类型）升序排序”
+推荐哪种？	                👉 Comparator.comparingInt 更推荐（安全 + 清晰）
+LeetCode 能用吗？	        ✅ 完全兼容，且是更专业的写法

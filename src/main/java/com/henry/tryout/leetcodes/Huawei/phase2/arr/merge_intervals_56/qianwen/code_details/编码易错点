@@ -1,0 +1,8 @@
+✅ 最佳实践总结
+
+场景	        推荐写法
+安全排序	    Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+更现代写法	Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+避免溢出	    永远不要用 a - b 做比较
+边界处理	    先判空 if (intervals.length == 0)
+清晰意图	    注释说明 “按 区间起点 升序排序”
