@@ -1,0 +1,8 @@
+✅ 推荐解法步骤
+步骤：
+1.初始化 i = 0（nums 的 当前 起始搜索位置）
+2.对 每个 group in groups：
+    a. 从 i 开始，在 nums 中查找 第一个等于 group 的连续子数组
+    b. 如果找不到 → 返回 false
+    c. 如果找到，设 其起始位置 为 pos，则 更新 i = pos + group.length（跳过 已匹配部分）
+3.所有 group 都匹配成功 → 返回 true
