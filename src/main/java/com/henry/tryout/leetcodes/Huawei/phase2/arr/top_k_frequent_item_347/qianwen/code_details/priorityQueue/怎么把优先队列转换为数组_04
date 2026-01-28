@@ -1,0 +1,7 @@
+手段：队列的流式操作；
+
+代码：
+return numMinQueuePrioritizeByFreq
+    .stream()   // 转化为Stream对象
+    .mapToInt(i -> i)// 把 包装类型 转化为 基本类型
+    .toArray(); // 把结果写到数组中
