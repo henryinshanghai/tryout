@@ -1,0 +1,7 @@
+new PriorityQueue<>(
+    Comparator.comparingInt(x -> numToFrequencyMap.get(x))
+);
+
+拼写：
+① Comparator；
+② comparingInt();

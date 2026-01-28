@@ -1,0 +1,9 @@
+① 把 频次 作为 桶的ID；
+② 把 出现了该频次的数字所组成的列表 作为桶的内容；
+
+具体步骤：
+① 创建桶数组；// List<Integer>[] frequencyToItsNumList = new List[nums.length + 1];
+② 桶数组元素的初始化（否则所有元素都是null）；new ArrayList<>();
+③ 遍历集合中的数字：
+    获取到 数字的出现频次；
+    把 该数字 添加到 桶数组中 该频次所对应的桶中；
