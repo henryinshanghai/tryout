@@ -1,0 +1,34 @@
+手段：把 逆序排列的所有单词 使用 空格字符 连接起来。
+
+具体做法：String.join(" ", wordList);
+
+===
+String.join() 是 Java 8 引入的一个非常实用的静态方法，
+用于将 多个字符串（或实现了 CharSequence 的对象）用 指定的分隔符 连接成 一个字符串。
+
+✅ 方法签名（两种重载）
+1. 连接 可变参数（varargs）
+    public static String join(CharSequence delimiter, CharSequence... elements)
+
+2. 连接 Iterable（如 List、Set 等）
+    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements)
+📌 两个方法 都返回 一个新的 String，原数据 不变（字符串不可变性）。
+
+
+🔍 参数详解
+
+参数	        类型	              含义	                                    示例
+delimiter	CharSequence	  分隔符，可以是 String、StringBuilder 等	    ","、" "、" -> "
+elements	CharSequence...
+            或 Iterable<...>  要连接的元素序列	                            "apple", "banana", "cherry"
+💡 CharSequence 是接口，常见实现包括：
+① String
+② StringBuilder
+③ StringBuffer
+④ CharBuffer
+
+✅ 功能说明
+    将 elements 中的每个元素 按顺序 用 delimiter 连接起来，不添加 首尾分隔符。
+
+💡 记住口诀：
+“String.join(分隔符, 元素...) ———— 元素之间 加分隔，首尾干净 不添乱。”

@@ -1,0 +1,22 @@
+String currentWord =
+    sentence.substring(currentSentenceCharCursor, currentWordCharCursor);
+
+===
+✅ 方法签名
+    public String substring(int beginIndex, int endIndex)
+📌 这是 String 类的实例方法，返回一个新的 String 对象。
+
+🔍 参数详解
+
+参数	        含义	            要求
+beginIndex	起始索引（包含）	0 ≤ beginIndex ≤ endIndex
+endIndex	结束索引（不包含）	beginIndex ≤ endIndex ≤ 字符串长度
+
+💡 关键记忆点：
+    区间是 [beginIndex, endIndex) —— 左闭右开！
+
+✅ 功能说明
+返回原字符串中 从 beginIndex 到 endIndex - 1 的字符组成的新字符串。
+
+💡 记住口诀：
+“substring(begin, end) —— 从 begin 开始，到 end 前结束。”

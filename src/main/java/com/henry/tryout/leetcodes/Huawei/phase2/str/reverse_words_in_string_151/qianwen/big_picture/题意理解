@@ -1,0 +1,20 @@
+LeetCode 第 151 题 是一道经典的字符串处理题：
+反转字符串中的单词（Reverse Words in a String）
+
+📌 题目描述（简化）：
+给定一个字符串 s，
+① 反转 单词的顺序（不是字符！）
+② 去除 多余的空格：
+    1.开头和结尾的空格
+    2.单词之间 多个空格 → 只保留一个
+要求：不能使用 内置函数 如 split()、trim() 等（面试 常要求 手写）
+
+✅ 示例：
+输入: s = "the sky is blue"
+输出: "blue is sky the"
+
+输入: s = "  hello world  "
+输出: "world hello"
+
+输入: s = "a good   example"
+输出: "example good a"
