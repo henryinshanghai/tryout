@@ -1,0 +1,46 @@
+这是一个非常基础但关键的问题！我们来一步步拆解这个 Lambda 表达式：
+    (a, b) -> map.get(b) - map.get(a)
+为什么它能实现 “按频次降序”？答案在于 Java 比较器（Comparator）的约定。
+
+===
+✅ 核心原理：Comparator.compare(a, b) 的返回值规则
+在 Java 中，当你写：
+    list.sort((a, b) -> ...)
+这个 Lambda 实际上是 Comparator<Integer> 的 compare(a, b) 方法。
+
+它的返回值含义是：
+返回值	含义
+< 0	    a（第一个参数） 应该排在 b（第二个参数）的前面
+= 0	    a 和 b 相等（顺序无关）
+> 0	    a（第一个参数） 应该排在 b（第二个参数）的后面
+💡 记住口诀：“负前正后，零相等”
+
+===
+🔍 现在看你的表达式：
+    (a, b) -> map.get(b) - map.get(a)
+假设：
+① freqA = map.get(a) → a 的频次
+② freqB = map.get(b) → b 的频次
+那么 表达式 = freqB - freqA
+
+我们分情况讨论：
+情况 1：a 的频次 高于 b（即 freqA > freqB）
+① freqB - freqA < 0
+② 返回 负数
+③ → a 排在 b 前面 ✅（高频在前）
+
+情况 2：a 的频次 低于 b（即 freqA < freqB）
+① freqB - freqA > 0
+② 返回 正数
+③ → a 排在 b 后面 ✅（低频在后）
+
+情况 3：频次相等
+① freqB - freqA = 0
+② 返回 0
+③ → 顺序不变（稳定排序下 保持原序）
+
+===
+✅ 总结：一句话理解
+因为 Java 比较器 规定“返回负数 则 a 在前”，
+而 map.get(b) - map.get(a) < 0 当且仅当 a 的频次更高，
+所以 高频元素 会被排在前面 ———— 实现了降序。

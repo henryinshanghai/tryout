@@ -1,0 +1,52 @@
+✅ 纠正前提：数组是可以进行流式操作的！
+Java 完全支持对数组创建 Stream，而且非常方便：
+    int[] arr = {1, 2, 3, 4};
+    IntStream stream = Arrays.stream(arr); // ✅ 完全合法！
+
+    Integer[] boxedArr = {1, 2, 3, 4};
+    Stream<Integer> stream2 = Arrays.stream(boxedArr); // ✅ 也合法
+所以，“数组不能流式操作” 是错误的。
+
+===
+❓ 那为什么 LeetCode 347 解法中常用 List 而不是数组？
+原因不在“能不能”，而在 “哪个更方便”。具体来说：
+
+==
+🚫 问题 1：我们 需要排序的 是「去重后的数字」
+① 原始输入是 int[] nums
+② 但我们 先用 Map<Integer, Integer> 统计频次
+③ 然后取 map.keySet() → 得到的是 Set<Integer>
+④ 把 Set 转成 List<Integer> 比 转成数组 更自然、更简洁
+    // 转 List（一行）
+    List<Integer> list = new ArrayList<>(freqMap.keySet());
+
+    // 转数组（麻烦）
+    Integer[] arr = freqMap.keySet().toArray(new Integer[0]);
+
+==
+🚫 问题 2：List 支持直接 .sort()，数组需要 Arrays.sort()
+    // List：直接调用方法
+    list.sort(comparator);
+
+    // 数组：需要静态工具类
+    Arrays.sort(arr, comparator);
+虽然都能做，但 面向对象风格（list.sort）更流畅，尤其 在链式编程中。
+
+==
+🚫 问题 3：中间过程 是 动态的，List 更灵活
+① 我们 不知道 有多少个不同数字（可能是 1 个，也可能是 n 个）
+② List 天然支持 动态大小，而数组 需要 预分配长度
+
+===
+💡 最佳实践建议
+
+场景	                        推荐类型
+输入/输出（题目要求）	        int[]（因为 LeetCode 函数签名如此）
+中间处理（去重、排序、过滤）	✅ List<Integer>（更灵活、API 更友好）
+性能极度敏感（避免装箱）	    考虑 IntStream 直接处理，但逻辑复杂
+
+✅ 一句话总结
+数组 完全可以 流式操作，
+但在 LeetCode 347 这类题中，使用 List 是因为
+从 Map.keySet() 到 排序 再到 取 Top-K 的整个流程 用 List 更简洁、更自然，
+而不是因为 数组“不能”流式处理。

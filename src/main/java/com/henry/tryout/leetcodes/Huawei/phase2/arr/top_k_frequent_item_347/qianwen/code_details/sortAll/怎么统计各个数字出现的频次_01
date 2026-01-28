@@ -1,0 +1,10 @@
+① 使用一个Map 来 记录 数字 -> 频次的映射关系；
+② 遍历 数组中的数字：
+    当数字在Map中存在时，把 其频次+1；
+    当数字在Map中不存在时，添加条目 该数字 -> 1；
+
+代码实现：
+    map.put( // put() 既可以表示添加，又可以表示更新
+        currentNum, // 所操作的key
+        map.getOrDefault(currentNum, 0) + 1 // getOrDefault(key, default) 如果key存在，则返回对应的value；否则 返回指定的default
+    )

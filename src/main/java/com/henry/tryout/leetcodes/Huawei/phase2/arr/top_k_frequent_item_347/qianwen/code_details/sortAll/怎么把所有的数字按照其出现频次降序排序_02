@@ -1,0 +1,15 @@
+步骤：
+① 得到 所有数字的列表；// 手段：new ArrayList<>(map.keySet())
+② 使用列表的sort()方法 来 对数字按需排序；// 手段：list.sort(<lambda_rule>)
+
+===
+使用lambda表达式 来 指定正确的排序规则（按照出现频次降序排序 - 高频在前，低频在后）：
+写法1：
+    list.sort((a, b) -> numToFrequency(b) - numToFrequency(a));
+    a, b // 参与比较的两个数字
+    numToFrequency(b), numToFrequency(a) // 这两个数字各自的频次
+    numToFrequency(b) - numToFrequency(a) // 这样写为什么就是倒序???
+
+写法2（推荐）：
+    list.sort(Comparator.comparingInt(x -> numToFrequency(x)).reversed());
+
