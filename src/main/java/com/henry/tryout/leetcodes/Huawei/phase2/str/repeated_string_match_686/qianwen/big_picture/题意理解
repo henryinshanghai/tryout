@@ -1,0 +1,13 @@
+LeetCode 第 686 题 是：
+Repeated String Match
+中文名：重复叠加字符串匹配
+
+📌 题目大意
+给定两个字符串 a 和 b，问：
+最少需要 将 a 重复拼接 多少次，才能 使 b 成为 拼接后字符串 的子串（substring）？
+如果 无论如何 都无法 让 b 成为子串，返回 -1。
+
+示例：
+输入: a = "abcd", b = "cdabcdab"
+输出: 3
+解释: 重复 a 三次得到 "abcdabcdabcd"，其中包含 b = "cdabcdab"

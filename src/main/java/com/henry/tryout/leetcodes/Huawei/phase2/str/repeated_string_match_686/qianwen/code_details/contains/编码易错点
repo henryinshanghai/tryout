@@ -1,0 +1,9 @@
+✅ 最佳实践总结
+
+易错点	    如何避免
+向下取整	    用 (lenB + lenA - 1) / lenA
+漏掉 k+1	    必须检查两次
+无限循环	    绝不 while(true)，只试 k 和 k+1
+低效拼接	    用 StringBuilder
+字符缺失	    可加预检查（非必需）
+边界 case	用示例测试：a="a", b="aa" → 2；a="ab", b="ba" → 2

@@ -1,0 +1,3 @@
+手段：使用 StringBuilder；
+
+具体做法：for循环 重复执行append(strToRepeat) k次；

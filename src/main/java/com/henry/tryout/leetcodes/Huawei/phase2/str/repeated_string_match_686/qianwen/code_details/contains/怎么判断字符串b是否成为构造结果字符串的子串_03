@@ -1,0 +1,3 @@
+手段：查看 构造结果字符串中 是否包含有 字符串b；
+
+具体代码：constructedResultStr.contains(b)；
