@@ -1,0 +1,4 @@
+① 先 手动计算 几个简单模式串的 LPS（如 "AAAA", "ABCDE", "AABAAB"）
+② 用纸笔 模拟 KMP 匹配过程（如 T="ABABDABACDABABCABCABC", P="ABABCAB"）
+③ 对照代码，理解 每一步 指针如何移动
+④ 尝试自己写 computeLPS 和 kmpSearch
