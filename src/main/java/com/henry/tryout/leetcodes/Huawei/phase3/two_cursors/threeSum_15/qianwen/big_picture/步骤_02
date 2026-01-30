@@ -1,0 +1,23 @@
+🧠 解题思路详解
+✅ 步骤 1：排序
+    Arrays.sort(nums); // 使后续双指针和去重可行
+
+✅ 步骤 2：遍历第一个数 i（从 0 到 n-3）
+① 去重：若 i > 0 && nums[i] == nums[i-1]，跳过
+② 剪枝：若 nums[i] > 0，直接 break（因为最小数都 >0，和不可能为0）
+
+✅ 步骤 3：双指针找 left, right
+① left = i + 1, right = n - 1
+② 循环条件：left < right
+
+✅ 步骤 4：计算当前和
+    int sum = nums[i] + nums[left] + nums[right];
+
+✅ 步骤 5：分情况处理
+① sum == 0：
+    Ⅰ 加入结果列表
+    Ⅱ 去重 left 和 right（跳过所有相同值）
+    Ⅲ left++, right--
+② sum < 0：left++（需要更大的数）
+③ sum > 0：right--（需要更小的数）
+

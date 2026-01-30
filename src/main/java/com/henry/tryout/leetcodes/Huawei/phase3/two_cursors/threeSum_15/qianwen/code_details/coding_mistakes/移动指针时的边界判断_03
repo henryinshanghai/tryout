@@ -1,0 +1,11 @@
+错误写法：
+while (itsMiddleBroSpot < nums.length - 1 &&
+       xxx) {
+    ooo
+}
+
+正确写法：
+while (itsMiddleBroSpot < itsBigBroSpot &&
+       xxx) {
+    ooo
+}

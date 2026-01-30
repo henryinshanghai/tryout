@@ -1,0 +1,12 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+输入校验	    处理 null 或长度 < 3
+排序	        Arrays.sort(nums)
+外层循环	    i 从 0 到 n-3
+第一层去重	i > 0 && nums[i] == nums[i-1]
+剪枝	        if (nums[i] > 0) break;
+双指针初始化	left = i+1, right = n-1
+指针移动	    sum<0 → left++; sum>0 → right--
+找到解后	    先 add，再跳重复，最后 left++, right--
+返回类型	    List<List<Integer>>，用 Arrays.asList

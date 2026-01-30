@@ -1,0 +1,4 @@
+① 收集该 满足条件三元组；// list.add(Arrays.asList(numArr))
+② 判断 指针的后继元素 是否是 重复元素：// numSeq[leftCursor] == numSeq[leftCursor + 1]
+    如果是，跳过重复元素；// 因为 题目要求 不能包含 重复的三元组
+③ 最终 把指针都移动到下一个有效位置上；// 移动指针到下一个位置：leftCursor++; rightCursor--;

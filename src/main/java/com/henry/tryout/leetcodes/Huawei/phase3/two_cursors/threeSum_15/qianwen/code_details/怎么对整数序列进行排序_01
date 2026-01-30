@@ -1,0 +1,4 @@
+手段：使用Arrays工具类的sort()静态方法；
+
+具体做法：Arrays.sort(<num_seq_to_be_sorted>);
+排序结果：从小到大地排序。
