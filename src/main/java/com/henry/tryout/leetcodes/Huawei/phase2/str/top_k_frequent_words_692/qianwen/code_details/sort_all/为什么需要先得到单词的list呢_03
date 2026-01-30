@@ -1,0 +1,23 @@
+在 LeetCode 第 692 题「前 K 个高频单词」 中，使用排序解法时，
+通常会 先将
+单词频次的 Map<String, Integer>
+转换为 List<Map.Entry<String, Integer>>（或 List<String>），
+这背后有明确的设计原因。
+
+✅ 核心原因：
+Java 的 Collections.sort() 和 Arrays.sort() 只能对“可索引/可遍历的序列”排序，
+不能直接对 Map 排序。
+而 Map 本身是键值对集合，不支持 直接排序。
+我们需要一个 支持比较和重排序的 线性容器，比如 List。
+
+===
+✅ 总结：为什么要转成 List？
+
+原因	                            说明
+1. Map 不能直接排序	            Java 没有 Map.sort() 方法
+2. List 支持自定义 Comparator	可 灵活实现 “频次降序 + 字典升序”
+3. 保持数据完整性	                Entry 同时携带 单词和频次，避免 重复查询
+4. 符合排序 API 要求	            Collections.sort() 要求 List
+
+💡 本质：
+Map 是“查找结构”，List 是“顺序结构”————要排序，必须用顺序结构。

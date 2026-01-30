@@ -1,0 +1,20 @@
+LeetCode 第 692 题 是一道经典的 Top K 高频元素 问题，结合了 哈希表、堆（优先队列）和字符串处理：
+前 K 个高频单词（Top K Frequent Words）
+
+📌 题目描述（简化）：
+给定一个非空字符串数组 words 和一个整数 k，
+返回 出现频率最高的 前 k 个单词。
+
+排序规则：
+1.按频率降序
+2.频率相同时，按 字典序 升序（字母顺序 靠前的 优先）
+返回结果 应按 上述规则 排序，且 长度 恰好为 k。
+
+✅ 示例：
+输入: words = ["i","love","leetcode","i","love","coding"], k = 2
+输出: ["i","love"]
+解释: "i" 和 "love" 出现 2 次，"leetcode" 和 "coding" 出现 1 次。
+      频率相同者 按字典序："i" < "love"，所以 ["i","love"]
+
+输入: words = ["the","day","is","sunny","the","the","the","sunny","is","is"], k = 4
+输出: ["the","is","sunny","day"]

@@ -1,0 +1,22 @@
+手段：借助排序工具类；
+
+具体做法：
+① 先从map中，得到单词列表（已去重）；// 为了能够方便地 排序
+② 再对单词列表按需排序（按词频降序，按字典序升序）；   // 借助工具类
+
+代码：
+// 2. 把 单词的去重集合 转为 列表
+        List<String> wordList = new ArrayList<>(wordToItsFrequency.keySet());
+
+// 3. 自定义 排序规则
+Collections.sort(wordList, (a, b) -> {
+    int freqA = wordToItsFrequency.get(a);
+    int freqB = wordToItsFrequency.get(b);
+    // ① 频率优先 - 高频的单词在前面（频率降序）
+    if (freqA != freqB) {
+        return freqB - freqA;
+    }
+    // ② 字典序规则次之 - 字母表靠后的单词在后面（字典序升序）
+    // 手段：直接使用compareTo() 就能得到 字典序升序的比较结果
+    return a.compareTo(b);
+});

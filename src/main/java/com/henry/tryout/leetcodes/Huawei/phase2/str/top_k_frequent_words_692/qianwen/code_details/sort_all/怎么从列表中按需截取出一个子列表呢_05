@@ -1,0 +1,59 @@
+List.subList(fromIndex, toIndex) 是 Java 集合框架中
+List 接口提供的一个视图（view）方法，
+用于获取 原列表的一个连续子列表。
+它不复制数据，而是 返回一个 与原列表关联的 动态视图。
+
+===
+✅ 方法签名
+    List<E> subList(int fromIndex, int toIndex)
+📌 适用于所有 List 实现类（如 ArrayList, LinkedList 等）
+
+
+🔍 参数详解
+
+参数	        含义	                要求
+fromIndex	起始索引（包含）	    0 ≤ fromIndex ≤ toIndex
+toIndex	    结束索引（不包含）	    fromIndex ≤ toIndex ≤ list.size()
+
+💡 关键记忆点：
+区间是 [fromIndex, toIndex) —— 左闭右开！
+
+✅ 功能说明
+返回原列表中 从 fromIndex 到 toIndex - 1 的元素 所组成的 新List视图。
+
+
+🧪 示例：
+    List<String> list = Arrays.asList("A", "B", "C", "D", "E");
+
+    list.subList(1, 4); // ["B", "C", "D"] → 索引 1,2,3
+    list.subList(0, 0); // [] （空列表）
+    list.subList(5, 5); // [] （合法！）
+    list.subList(0, 5); // ["A","B","C","D","E"] （整个列表）
+
+===
+⚠ 重要特性：这是一个“视图”（View），不是副本！
+这是最容易被误解的地方！
+✅ 行为特点：
+1.结构共享：subList 返回的列表 与 原列表 共享底层数据
+2.双向同步：
+    ① 修改原列表 → subList 视图 会变化（如果未越界）
+    ② 修改 subList → 原列表 也会变化！
+3.结构性修改 受限制：
+    ① 可以通过 subList 修改 已有元素的值（set）
+    ② 可以在 subList 范围内增删元素（add, remove），这 会同步到 原列表
+    ③ 但如果 原列表 在 subList 范围外 被结构性修改（如原列表 add/remove），
+    再访问 subList 会抛出 ConcurrentModificationException
+
+===
+✅ 总结
+
+要点	        说明
+作用	        返回 原列表的 [fromIndex, toIndex) 子列表视图
+区间	        左闭右开（含 from，不含 to）✅
+是否复制	    ❌ 不复制，是动态视图
+修改同步	    ✅ 双向同步（原列表 ↔ 子列表）
+异常	        越界 或 from > to 时报错
+安全使用	    如需 独立数据，用 new ArrayList<>(subList(...))
+
+💡 记住口诀：
+“subList 是窗口，不是快照；改它 等于 改原表！”

@@ -1,0 +1,5 @@
+手段：使用一个Map，key记录单词本身，value记录单词的出现频次；
+
+具体手段：
+1.map.put(key, value); // 添加条目 或 更新条目
+2.map.getOrDefault(key, default); // 获取到给定key所关联的value，如果key不存在，则 返回default

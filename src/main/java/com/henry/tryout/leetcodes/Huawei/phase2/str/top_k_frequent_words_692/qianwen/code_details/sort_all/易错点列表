@@ -1,0 +1,9 @@
+✅ 编码 Checklist（防错清单）
+
+检查项	                                                    是否做到
+✅ 频率 降序：freqB - freqA 或 Integer.compare(freqB, freqA)	✔️
+✅ 字典序 升序：a.compareTo(b)	                            ✔️
+✅ 对 去重后的单词列表 排序（不是原数组）	                    ✔️
+✅ 使用 freq.keySet() 而非 entrySet()（简化逻辑）	            ✔️
+✅ 防御性处理 k > list.size()（虽题目保证，但好习惯）	        ✔️
+✅ 不依赖 输入顺序，严格 按字典序	                            ✔️
