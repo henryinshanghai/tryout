@@ -1,0 +1,12 @@
+⚠️ 编码易错点提醒
+1.忘记初始化 closestSum
+→ 必须 在循环前 设一个初始值（如前三项之和）
+
+2.比较时 用错差值
+→ 必须用 Math.abs(currentSum - target)，不是 currentSum - target
+
+3.指针 移动方向反了
+→ 记住：“小了动左，大了动右”
+
+4.边界错误
+→ i 最大为 n-3，确保 left = i+1, right = n-1 有效

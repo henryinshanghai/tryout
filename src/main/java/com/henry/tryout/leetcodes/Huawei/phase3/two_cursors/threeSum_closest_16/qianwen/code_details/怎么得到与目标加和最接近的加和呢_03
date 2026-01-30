@@ -1,0 +1,8 @@
+手段：使用 当前加和 与 目标加和 差的绝对值；
+
+具体做法：
+① 计算 当前三元组的加和值；// sumOfCurrentCombo；
+② 计算 其 与 目标加和值的 差的绝对值（接近程度）；// Math.abs(sumOfCurrentCombo - targetSum)
+③ 计算 ‘当前最近加和值’ 与 目标加和值 差的绝对值（接近程度）；// Math.abs(closestSum - targetSum)
+④ 比较 ②的差值 比起 ③的差值 是不是 更小：
+    如果更小，则：使用 sumOfCurrentCombo 来 更新 closestSum

@@ -1,0 +1,25 @@
+🔑 要理解本题，你需要掌握以下核心概念：
+1. 为什么不能 用暴力法？
+① 三重循环 枚举 所有三元组 → 时间复杂度 O(n³)
+② 当 n = 1000 时，操作次数 ≈ 10⁹，超时！
+
+
+2. 排序（Sorting）是前提
+① 对 数组排序 后，才能使用 双指针 高效搜索
+② 排序时间 O(n log n)，远小于 O(n³)
+
+
+3. 双指针（Two Pointers）技巧
+① 固定第一个数 nums[i]
+② 在子数组 [i+1, n-1] 中 用左右指针 left, right 找 另外两个数
+③ 利用 有序性 决定 指针移动方向：
+    Ⅰ 若当前和 < target → 需要 更大的和 → left++
+    Ⅱ 若当前和 > target → 需要 更小的和 → right--
+
+4. “最接近”的判定逻辑
+① 维护一个 全局变量 closestSum
+② 每次计算 当前三数和 currentSum
+③ 如果 |currentSum - target| < |closestSum - target|，就更新 closestSum
+
+5. 提前终止优化（可选但推荐）
+① 如果 某次 currentSum == target，直接返回 target（不可能 更接近了）
