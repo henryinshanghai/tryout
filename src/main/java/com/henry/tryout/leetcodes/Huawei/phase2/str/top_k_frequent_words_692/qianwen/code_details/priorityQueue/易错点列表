@@ -1,0 +1,9 @@
+✅ 编码 Checklist（最小堆防错清单）
+
+检查项	                                    是否做到
+✅ 堆比较器：频率升序（fa - fb）	            ✔️
+✅ 频率相同时：字典序降序（b.compareTo(a)）	    ✔️
+✅ 堆大小 > k 时才 poll()	                    ✔️
+✅ 弹出后 Collections.reverse(result)	    ✔️
+✅ 只遍历 freq.keySet()，避免 null	        ✔️
+✅ 不混淆 堆排序 与 最终排序方向	            ✔️

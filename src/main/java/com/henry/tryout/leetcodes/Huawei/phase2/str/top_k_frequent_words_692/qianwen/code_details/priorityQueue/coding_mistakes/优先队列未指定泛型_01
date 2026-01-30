@@ -1,0 +1,13 @@
+❌ 问题 1：优先队列未指定泛型（Raw Type）
+    PriorityQueue<String> wordMinQueue =
+        new PriorityQueue((a, b) -> { ... }); // ← 这里用了 raw type！
+🔍 问题分析：
+① new PriorityQueue(...) 没有 泛型参数 <String>，编译器 会警告：
+    "Raw use of parameterized class 'PriorityQueue'"
+② 虽然 Java 会做 类型推断（因为左边是 PriorityQueue<String>），但 显式写出 泛型是最佳实践；
+③ 在严格编译（如 -Xlint:unchecked）或某些 IDE 设置下会报 warning
+
+✅ 修复方式：
+    PriorityQueue<String> wordMinQueue =
+        new PriorityQueue<>((a, b) -> { ... }); // 加上 <>
+💡 使用 diamond operator <> 让 编译器 自动推断 类型，既简洁又安全。

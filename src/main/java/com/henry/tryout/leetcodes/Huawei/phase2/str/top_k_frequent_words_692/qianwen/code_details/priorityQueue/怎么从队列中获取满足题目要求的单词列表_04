@@ -1,0 +1,5 @@
+手段：不断获取队列中的‘最小单词’，把它顺序添加到列表中；然后再 把列表中的单词 逆序；
+
+具体做法：
+① 删除队列中的最小单词，并入队list；// list.add(wordMinQueue.poll());
+② 得到完整的list之后，对list中的元素进行逆序；// Collections.reverse(list);
