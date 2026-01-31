@@ -1,0 +1,21 @@
+🧠 解题思路详解
+✅ 步骤 1：创建栈
+Stack<Integer> stack = new Stack<>();
+
+✅ 步骤 2：遍历每个 token
+    for (String token : tokens) {
+        if (token 是操作符) {
+            // 弹出 两个操作数
+            int b = stack.pop();
+            int a = stack.pop();
+            // 根据 当前操作符 执行计算
+            int result = applyOperator(a, b, token);
+            stack.push(result);
+        } else {
+            // 是数字字符，则：转为整数入栈
+            stack.push(Integer.parseInt(token));
+        }
+    }
+
+✅ 步骤 3：最终返回栈顶
+    return stack.pop();

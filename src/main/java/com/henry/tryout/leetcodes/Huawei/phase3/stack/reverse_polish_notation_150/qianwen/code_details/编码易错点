@@ -1,0 +1,9 @@
+✅ 编码 Checklist
+
+检查项	        正确做法
+减法/除法顺序	    先 弹 b，再弹 a，计算 a - b 或 a / b
+除法语义	        直接用 a / b，不要用 Math.floorDiv
+字符串比较	    用 switch 或 .equals()，不用 ==
+负数处理	        Integer.parseInt 自动支持，无需 特殊处理
+输入合法性	    题目保证有效，可不加 栈空检查
+加法/乘法	    顺序 无关，但 建议 风格统一

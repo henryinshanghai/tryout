@@ -1,0 +1,19 @@
+case语句不同与if语句，只需要列举 当前case的值是什么 即可。
+
+最简单的switch...case...default语法的示例：
+public class SimpleSwitch {
+    public static void main(String[] args) {
+        char gender = 'F'; // 'M' 表示男，'F' 表示女
+
+        switch (gender) {
+            case 'M':
+                System.out.println("男性");
+                break;
+            case 'F':
+                System.out.println("女性");
+                break;
+            default:
+                System.out.println("未知性别");
+        }
+    }
+}

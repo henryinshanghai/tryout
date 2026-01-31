@@ -1,0 +1,36 @@
+手段：使用 Java所提供的switch(xxx) case1:ooo case2:ooo 语法（相比于连续的if/else更简洁易懂）；
+
+switch...case...default语法的具体说明：
+switch(expr) {
+    case1:
+        xxx
+        break;
+    case2:
+        xxx
+        break;
+    ...
+    default:
+        ooo;
+}
+
+===
+✅ 总结
+1.作用：多分支选择，替代冗长 if-else
+2.为什么叫 switch：像 电路开关一样 切换 执行路径
+3.为什么叫 case：代表“在这种情况下……”
+4.语义：根据一个值，选择 对应的代码块 执行
+
+💡 记住：
+    switch 是“值驱动的跳转”，case 是“情形标签” ———— 这就是它的灵魂！
+
+===
+语法总结
+
+部分	                作用	                    是否必须
+switch(expression)	提供 要匹配的值	        ✅ 必须
+case value:	        定义 匹配标签 和 执行起点	至少一个
+default:	        定义 无匹配时的默认行为	❌ 可选
+
+🔑 关键结论：
+default 不一定 会执行！它只在 所有case都不匹配 时 才执行。
+它 不是 “最后总会运行的 cleanup 代码”，而是 一个条件分支。
