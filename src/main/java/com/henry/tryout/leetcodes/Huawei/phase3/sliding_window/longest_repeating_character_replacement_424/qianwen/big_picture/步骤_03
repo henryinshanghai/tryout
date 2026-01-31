@@ -1,0 +1,21 @@
+💡 算法步骤详解
+1.初始化：
+    ① left = 0
+    ② maxCount = 0（窗口内 最高频次）
+    ③ freq[26] 数组 记录 各字符频次
+    ④ maxLength = 0
+
+2.遍历右边界 right = 0 to n-1：
+    ① 更新 freq[s[right]]++
+    ② 更新 maxCount = max(maxCount, freq[s[right]])
+    ③ 如果 窗口长度 - maxCount > k：
+        说明 需要替换 超过 k 次 → 不合法
+        收缩 左边界：freq[s[left]]--，left++
+    ④ 更新 maxLength = max(maxLength, right - left + 1)
+
+3.返回 maxLength
+
+⚠️ 注意：
+即使 窗口收缩后 maxCount 可能不是 当前窗口的 真实最大值，也 不影响结果！
+因为我们 只关心 历史最大窗口，
+而 maxCount 偏大 会导致 窗口更早收缩，不会漏掉 更大窗口。

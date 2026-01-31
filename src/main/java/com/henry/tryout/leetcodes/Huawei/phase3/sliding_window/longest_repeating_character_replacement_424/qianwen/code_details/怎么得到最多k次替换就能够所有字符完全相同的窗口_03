@@ -1,0 +1,10 @@
+手段：确保 窗口内 不是‘出现频次最高的字符’的字符的数量 <= k；
+
+具体做法：
+① 统计出 当前窗口中的 出现频次最高的字符（以及该频次）；maxFrequencyInWindow
+② 计算出 当前窗口中，不是 ‘出现频次最高的字符’的字符数量；nonMaxFrequencyCharAmountInWindow
+③ 如果 nonMaxFrequencyCharAmountInWindow <= k，说明：
+    当前窗口 可以通过 最多k次替换（替换为最高频字符） 得到 所有字符完全相同的窗口；
+④ 如果 nonMaxFrequencyCharAmountInWindow > k，说明：
+    当前窗口 不能 通过 最多k次替换 得到 字符完全相同的窗口，则：
+        需要收缩 当前窗口的左边界，从而得到 ‘合法窗口’。
