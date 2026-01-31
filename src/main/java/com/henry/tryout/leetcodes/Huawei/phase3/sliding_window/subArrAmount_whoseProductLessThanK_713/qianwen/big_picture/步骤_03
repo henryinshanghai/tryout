@@ -1,0 +1,11 @@
+💡 算法步骤详解
+1.初始化：
+    ① left = 0, product = 1, count = 0
+2.遍历右边界 right = 0 to n-1：
+    ① 将 nums[right] 乘入 product
+    ② while product >= k：
+        除以 nums[left]
+        left++
+    ③ 此时窗口 [left, right] 满足 product < k
+    ④ 累加 count += (right - left + 1)
+3.返回 count

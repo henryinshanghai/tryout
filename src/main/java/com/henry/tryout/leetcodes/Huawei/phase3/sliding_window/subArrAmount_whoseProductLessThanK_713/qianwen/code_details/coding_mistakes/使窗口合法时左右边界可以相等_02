@@ -1,0 +1,5 @@
+/* 使窗口‘合法’ */
+while(leftBarCursor <= rightBarCursor && // ② 合法的窗口 允许 left == right
+    currentWindowProduct >= k) {
+    ...
+}

@@ -1,0 +1,2 @@
+currentWindowProduct /= nums[leftBarCursor];    // ① 在收缩窗口时，需要更新 窗口的product
+leftBarCursor++;
