@@ -1,0 +1,46 @@
+中序遍历的顺序要求：左 - 根 - 右；
+         1
+       /   \
+      2     3
+     / \   / \
+  nil nil nil nil
+
+怎么 通过迭代的方式 来 实现这个’顺序要求‘呢？
+
+① 左（从栈中弹出的第一个元素 必须是 树的最左边的叶子节点）；
+已知：当前节点参数 是 树的根节点；
+目标：树的最左边的叶子节点的 左子nil节点；
+手段：从 当前节点 开始，一路向左访问，直到 当前节点指针 指向 左子nil节点；
+具体做法1：
+    // 语句会执行多次，直到条件不满足
+    while(currentNode != null) {
+        stack.push(currentNode);
+        currentNode = currentNode.left;
+    } /* 循环结束后：① 栈顶元素为 2；② 节点指针 指向 左子nil节点； */
+
+具体做法2：
+    while(currentNode != null || !stack.isEmpty()) {
+        // if语句只会执行一次，需要配合外层while才能执行多次
+        if(currentNode != null) {
+            stack.push(currentNode);
+            currentNode = currentNode.left;
+        } else { /* 执行else时：① 栈顶元素为2；② 节点指针 指向 左子nil节点； */
+        }
+    }
+
+② 根；（要求：从栈中弹出的当前元素 是 上一个元素的父节点）
+已知：当前节点指针 指向 节点2的左子nil节点；
+目标：节点2；
+手段：从栈中 直接获取栈顶元素即可；
+具体做法：
+    // ① 当 当前节点指针 为nil时，弹出栈顶元素；aka 节点2（根）
+    // ② 把 当前节点指针 指向 刚刚弹出的节点
+    currentNode = stack.pop();
+
+③ 右；（要求：从栈中弹出的当前元素 是 上一个元素的右子节点）
+已知：当前节点指针 指向 节点2；
+目标：节点2的右子节点；
+手段：把 当前节点指针 移动到 节点2的右子节点处；
+具体做法：
+    currentNode = currentNode.right;
+

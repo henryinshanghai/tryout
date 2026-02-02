@@ -1,0 +1,10 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	        正确做法
+外层循环条件	    root != null
+内层向左压栈	    while (root != null) { push; root = left; }
+弹出后更新root	root = root.right;（必须！）
+prev 类型	    long prev = Long.MIN_VALUE;
+比较符号	        if (root.val <= prev)
+更新顺序	        先检查，再 prev = root.val
+栈元素类型	    Stack<TreeNode>

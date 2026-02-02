@@ -1,0 +1,77 @@
+我们来 完整演示 使用迭代法 对以下简单二叉树进行中序遍历（Inorder Traversal）的每一步过程，包括 nil（空）节点的处理逻辑。
+🌳 二叉树结构（显式标出 nil）
+        1
+      /   \
+     2     3
+    / \   / \
+  nil nil nil nil
+✅ 中序遍历顺序应为：2 → 1 → 3
+
+===
+🔧 迭代法中序遍历代码（标准写法）
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode curr = root;
+
+    while (curr != null || !stack.isEmpty()) {
+        // 1. 一路向左，压栈
+        while (curr != null) {
+            stack.push(curr);
+            curr = curr.left;   // ← 这里会遇到 nil
+        }
+
+        // 2. 弹出并访问
+        curr = stack.pop();
+        visit(curr);           // 打印或处理 curr.val
+
+        // 3. 转向右子树
+        curr = curr.right;     // ← 这里也会遇到 nil
+    }
+
+🔍 逐步执行演示（含 nil 处理）
+我们用 表格记录 每一步的状态变化，特别关注 curr 和 stack。
+
+步骤	    操作	                                    curr值	    stack内容（栈顶→底）	说明
+初始	    -	                                    1（根）	    []	                开始
+1	    进入外层循环（curr=1 ≠ null）	            1	        []
+2	    内层 while：curr=1 ≠ null → 压栈	        1	        [1]
+3	    curr = 1.left = 2	                    2	        [1]	                向左走
+4	    内层 while：curr=2 ≠ null → 压栈	        2	        [1, 2]
+5	    curr = 2.left = null	                null	    [1, 2]	            遇到 nil，内层 while 结束
+6	    弹出栈顶：curr = stack.pop() = 2	        2	        [1]	                访问节点 2 ✅
+7	    curr = 2.right = null	                null	    [1]	                转向右子树（nil）
+8	    外层循环继续（curr=null，但 stack 非空）	null	    [1]
+9	    跳过内层 while（curr=null）	            null	    [1]
+10	    弹出栈顶：curr = stack.pop() = 1	        1	        []	                访问节点 1 ✅
+11	    curr = 1.right = 3	                    3	        []	                转向右子树
+12	    外层循环继续（curr=3 ≠ null）	            3	        []
+13	    内层 while：curr=3 ≠ null → 压栈	        3	        [3]
+14	    curr = 3.left = null	                null	    [3]	                遇到 nil，内层结束
+15	    弹出栈顶：curr = stack.pop() = 3	        3	        []	                访问节点 3 ✅
+16	    curr = 3.right = null	                null	    []	                转向右子树（nil）
+17	    外层循环检查：curr=null 且 stack 空	    —	        []	                循环结束
+
+✅ 最终访问顺序：
+    2 → 1 → 3
+完全符合中序遍历（左 → 根 → 右）！
+
+
+💡 关键点解析（关于 nil）
+1.nil 不会被压入栈
+    → 只有 非空节点 才会 push，所以 栈中 永远不会出现 null
+2.nil 是 “转向”的信号
+    ① 当 curr = node.left 得到 null → 表示 左子树 已到底，该访问 当前节点了
+    ② 当 curr = node.right 得到 null → 表示 右子树 为空，下一轮 直接弹出 父节点
+3.外层循环条件 curr != null || !stack.isEmpty() 的意义：
+    ① curr != null：还有 新分支 需要探索（比如 刚转向 右子树）
+    ② !stack.isEmpty()：还有 祖先节点 等待访问（即使当前 curr=null）
+
+===
+🎯 总结：nil 在迭代中的角色
+
+场景	                        nil 的作用
+curr = node.left → nil	    触发“访问 当前节点”
+curr = node.right → nil	    触发“回溯到 上一层”
+栈中	                        永远不会存储 nil
+
+✅ nil 是 流程控制的“路标”，不是数据。
+迭代法 通过 curr == null 来 判断“该回头了”。
