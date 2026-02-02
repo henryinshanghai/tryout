@@ -1,0 +1,31 @@
+一、原始问题 vs 子问题
+🎯 原始问题（主函数）：
+    判断 一棵二叉树 root 是否是 镜像对称的。
+🔁 子问题（递归函数）：
+    判断两棵子树 left 和 right 是否互为镜像。
+💡 关键洞察：
+    “整棵树对称” ⇨ “左子树 与 右子树 镜像”
+所以我们把 原问题 转化为了一个 更通用的子问题。
+
+
+二、当前递归层 需要做哪些事情？
+在每一次调用 isMirror(left, right) 时，当前层要完成 3 件事：
+
+✅ 1. 处理终结情况（Base Case）
+① 如果 left 和 right 都是 null → 返回 true
+② 如果其中一个为 null → 返回 false
+③（可选）如果 值不等 → 提前返回 false
+🧱 这是递归的“地基”，保证 不会 无限下去。
+
+✅ 2. 检查 当前节点 是否满足 对称条件
+① 比较 left.val == right.val
+② 如果不等，直接返回 false（剪枝）
+🔍 这是 当前层 的 局部判断：根节点 必须相等 才可能对称。
+
+✅ 3. 分解为 更小的子问题 并 递归求解
+要判断 left 和 right 是否镜像，需同时满足：
+① 外侧对称：left.left 与 right.right 镜像
+② 内侧对称：left.right 与 right.left 镜像
+    boolean outer = isMirror(left.left, right.right); // 外侧
+    boolean inner = isMirror(left.right, right.left); // 内侧
+🔄 这是问题分解：把 当前问题 拆成 两个更小的同类问题。

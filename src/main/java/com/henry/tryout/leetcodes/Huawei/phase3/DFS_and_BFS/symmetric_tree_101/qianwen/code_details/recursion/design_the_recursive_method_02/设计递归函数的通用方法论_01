@@ -1,0 +1,53 @@
+一、设计递归函数的 4 步通用方法论
+
+✅ 第 1 步：明确「你要解决的子问题是什么」？
+递归函数 = 解决某个’具体子问题‘的黑盒
+
+❌ 错误思路：
+“我要写一个函数 判断整棵树 是否对称” → 这只是 主问题，不是 ’可递归的‘子问题。
+✅ 正确思路：
+“我需要一个函数，能判断 任意两棵子树 是否 互为镜像” → 这才是 ’可递归的‘子问题！
+🔑 关键：把 原问题 泛化成 一个’更通用的‘子问题。
+
+==
+✅ 第 2 步：确定「递归函数的参数」
+    参数 = 描述 ’当前子问题状态‘ 所需的最小信息
+问自己：
+① 要解决 这个子问题，我需要知道 哪些东西？
+② 哪些信息 必须 从 父问题 传递下来？
+
+🌰 以 LeetCode 101 为例：
+子问题：判断 两棵树 是否镜像
+需要的信息：左子树的根节点 + 右子树的根节点
+→ 参数：TreeNode left, TreeNode right
+💡 参数不是 凭空猜的，而是由 子问题的定义 决定的！
+
+==
+✅ 第 3 步：写出「递归终止条件」（Base Case）
+    当 子问题 小到无法再分 时，直接返回 答案
+常见 base case 类型：
+① 空节点处理（如 node == null）
+② 叶子节点处理
+③ 边界值处理（如 n == 0）
+
+🌰 LeetCode 101 的 base case：
+    if (left == null && right == null) return true;  // 都空 → 对称
+    if (left == null || right == null) return false; // 一空一非空 → 不对称
+⚠️ 漏写 base case = 无限递归 = 栈溢出！
+
+==
+✅ 第 4 步：写出「递归关系」（Recursive Relation）
+    当前问题的答案 = 子问题答案的 某种组合
+问自己：
+① 当前问题 如何分解为 更小的 同类子问题？
+② 子问题之间是 AND（都满足）、OR（任一满足）还是 其他关系？
+
+🌰 LeetCode 101 的递归关系：
+要判断 left 和 right 是否镜像，需同时满足：
+1.left.val == right.val
+2.left.left 与 right.right 镜像（外侧对称）
+3.left.right 与 right.left 镜像（内侧对称）
+→ 三者是 AND 关系：
+    return (left.val == right.val)
+        && isMirror(left.left, right.right)
+        && isMirror(left.right, right.left);

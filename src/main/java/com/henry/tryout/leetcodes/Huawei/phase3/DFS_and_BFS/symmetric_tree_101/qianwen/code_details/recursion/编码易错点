@@ -1,0 +1,8 @@
+✅ 编码 Checklist（递归版）
+
+检查项	正确做法
+辅助函数	必须有 isMirror(left, right)
+空树处理	if (root == null) return true
+空值顺序	先 both null → 再 one null → 最后 val
+比较方向	left.left ↔ right.right，left.right ↔ right.left
+返回值	递归调用必须参与 return

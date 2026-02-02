@@ -1,0 +1,19 @@
+三、更多例子：巩固方法论
+🌰 例1：LeetCode 100（相同二叉树）
+① 子问题：判断两棵树 是否 完全相同
+② 参数：TreeNode p, TreeNode q
+③ Base Case：
+    if (p == null && q == null) return true;
+    if (p == null || q == null) return false;
+④ 递归关系：
+    return (p.val == q.val)
+        && isSameTree(p.left, q.left)
+        && isSameTree(p.right, q.right);
+
+
+🌰 例2：LeetCode 104（二叉树最大深度）
+① 子问题：求 ’以某节点为根的‘树的 最大深度
+② 参数：TreeNode node（只需当前节点）
+③ Base Case：if (node == null) return 0;
+④ 递归关系：
+    return 1 + Math.max(maxDepth(node.left), maxDepth(node.right));

@@ -1,0 +1,27 @@
+🎯 原问题：
+判断一棵二叉树是否对称。
+
+🔍 Step 1：泛化子问题
+① 原问题 只涉及 一棵树，但 “对称” 本质是 比较 左右两部分
+② → 子问题：判断 两棵树 是否 互为镜像
+
+🔧 Step 2：确定参数
+① 需要知道 两棵树的根 → TreeNode left, TreeNode right
+
+🛑 Step 3：Base Case
+    // 两棵 都空 → 对称
+    if (left == null && right == null) return true;
+    // 一个空 一个非空 → 不对称
+    if (left == null || right == null) return false;
+
+🔁 Step 4：递归关系
+// 值相等 且 外侧对称 且 内侧对称
+return left.val == right.val
+    && isMirror(left.left, right.right)
+    && isMirror(left.right, right.left);
+
+🧩 组装主函数
+public boolean isSymmetric(TreeNode root) {
+    if (root == null) return true;
+    return isMirror(root.left, root.right); // 启动’子问题‘
+}
