@@ -1,0 +1,52 @@
+✅ 模板 1：递归实现（最常用）
+// 定义二叉树节点（LeetCode 已提供）
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+// 中序遍历：递归版
+public void inorderTraversal(TreeNode root) {
+    if (root == null) return;       // 终止条件：遇到空节点
+
+    inorderTraversal(root.left);    // 1. 遍历左子树
+    System.out.print(root.val + " "); // 2. 访问根节点（可替换为其他操作）
+    inorderTraversal(root.right);   // 3. 遍历右子树
+}
+✅ 特点：代码简洁，逻辑清晰，符合“左→中→右”定义。
+
+===
+✅ 模板 2：迭代实现（用栈 模拟递归）
+import java.util.*;
+
+public List<Integer> inorderTraversal(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode curr = root;
+
+    while (curr != null || !stack.isEmpty()) {
+        // 1. 一路向左，把路径上所有节点压栈
+        while (curr != null) {
+            stack.push(curr);
+            curr = curr.left;
+        }
+
+        // 2. 弹出栈顶（当前最左未访问节点）
+        curr = stack.pop();
+        result.add(curr.val);       // 访问根
+
+        // 3. 转向右子树
+        curr = curr.right;
+    }
+
+    return result;
+}
+✅ 特点：避免递归 可能导致的 栈溢出，适合面试手写。

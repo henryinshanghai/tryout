@@ -1,0 +1,11 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	        正确做法
+visited维度	    boolean[2][n]
+起始状态	        (0, RED) 和 (0, BLUE) 都入队
+起点distance	    0
+邻接表方向	    graph[color][from].add(to)
+颜色切换	        nextColor = 1 - lastColor
+答案更新	        if (answer[u] == -1) answer[u] = dist
+起点初始化	    answer[0] = 0
+队列顺序	        {node, color, dist}
