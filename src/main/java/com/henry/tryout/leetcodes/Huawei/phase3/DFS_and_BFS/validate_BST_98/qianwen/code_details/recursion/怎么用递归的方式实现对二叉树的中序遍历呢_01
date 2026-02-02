@@ -1,0 +1,15 @@
+手段：在递归方法中 以 ’当前节点的左子节点‘ -> 当前节点 -> ’当前节点的右子节点‘的次序 来 处理二叉树中的所有节点；
+
+具体做法：
+① 定义递归方法 xxx(currentRootNode);
+② 方法实现如下：
+    xxx(currentRootNode) {
+        // 递归终止条件
+        ...
+
+        xxx(currentNode.left);
+        // 处理当前节点
+        ...
+        xxx(currentNode.right);
+
+    }
