@@ -1,0 +1,15 @@
+六、为什么用队列？可以用栈吗？
+① 队列（FIFO）：实现 广度优先（BFS）风格的对称检查
+② 栈（LIFO）：实现 深度优先（DFS）风格（类似递归顺序）
+
+两者都正确！例如用栈：
+    Stack<TreeNode> stack = new Stack<>();
+    stack.push(root.left);
+    stack.push(root.right);
+
+    while (!stack.isEmpty()) {
+        TreeNode right = stack.pop();
+        TreeNode left = stack.pop();
+        // ... 后续逻辑相同
+    }
+✅ 选择队列 or 栈 只是 遍历顺序不同，不影响 正确性。

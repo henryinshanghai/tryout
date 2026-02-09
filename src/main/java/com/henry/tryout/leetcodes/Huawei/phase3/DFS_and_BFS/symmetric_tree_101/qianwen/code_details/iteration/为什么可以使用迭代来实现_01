@@ -1,0 +1,22 @@
+一、根本原因：递归 ⇨ 迭代 是通用的
+所有递归算法都可以改写为迭代算法，因为：
+① 递归依赖 系统调用栈 来 保存 函数状态；
+② 我们 可以用 显式数据结构（如栈、队列）来 手动模拟 这个过程。
+所以，只要 一个问题 能用递归解决，原则上 就能 用迭代解决。
+
+
+二、101 题的递归本质是什么？
+回顾递归解法的核心：
+    isMirror(left, right) =
+      (left.val == right.val)
+      && isMirror(left.left, right.right)   // 外侧
+      && isMirror(left.right, right.left);  // 内侧
+
+👉 每次递归 都在 比较 一对节点：
+① 第一次：(root.left, root.right)
+② 第二次：(left.left, right.right) 和 (left.right, right.left)
+③ 第三次：更深层的四对节点……
+
+✅ 关键洞察：
+整个过程 就是在 逐层比较 “对称位置上的节点对”！
+

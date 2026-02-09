@@ -1,0 +1,9 @@
+✅ 编码 Checklist（迭代版）
+
+检查项	 正确做法
+数据结构	 Queue<TreeNode>（推荐）
+初始化	 offer(root.left), offer(root.right)
+循环取值	 每次 poll() 两个节点
+空值顺序	 先 both null → 再 one null → 最后 val
+入队顺序	 (left.left, right.right), (left.right, right.left)
+空树处理	 if (root == null) return true
