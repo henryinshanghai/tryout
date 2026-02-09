@@ -1,0 +1,9 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+空树处理	    if (root == null) return
+队列类型	    Queue<TreeNode>, offer(), poll()
+层大小	    int size = queue.size() 放在 for 外
+for条件	    i < size（不是 i < queue.size()）
+入队检查	    只加 != null 的子节点
+结果收集	    每层新建 List，并 result.add(level)
