@@ -1,0 +1,8 @@
+① 搜索路径到达了 叶子节点处；&&
+② 当前节点的val 等于 路径所需要的value；
+
+代码：
+if(currentNode.left == null &&
+    currentNode.right == null) {
+    return currentNode.val == currentRequiredVal;
+}

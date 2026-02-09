@@ -1,0 +1,8 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+空树处理	    if (root == null) return false;
+叶子判断	    root.left == null && root.right == null
+递归传参	    targetSum - root.val
+返回逻辑	    叶子 才 判断和，非叶 只递归
+避免全局变量	用 参数 来 传递状态，不依赖 外部变量
