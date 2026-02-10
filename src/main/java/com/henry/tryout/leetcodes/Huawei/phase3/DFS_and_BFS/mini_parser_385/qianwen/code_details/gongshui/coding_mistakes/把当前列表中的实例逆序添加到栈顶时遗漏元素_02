@@ -1,0 +1,6 @@
+// 把 当前列表中的所有实体，按照正确的顺序（逆序） 追加到 栈顶的空实例中
+for (int currentSegmentCursor = segmentList.size() - 1;
+    currentSegmentCursor >= 0; // 这里是 >=，而不是 >
+    currentSegmentCursor--) {
+    xxx
+} /* 循环结束后，栈顶的空实例 变成了 [123, 456] */

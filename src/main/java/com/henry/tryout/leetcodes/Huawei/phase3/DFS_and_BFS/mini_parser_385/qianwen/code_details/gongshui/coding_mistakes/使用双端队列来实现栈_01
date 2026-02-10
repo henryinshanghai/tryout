@@ -1,0 +1,5 @@
+// 使用Deque（双端队列）来 实现栈
+Deque<NestedInteger> segmentStack = new ArrayDeque<>();
+
+① 对象的类型是Deque，而不是Stack；
+② 常用的API：push(), pop(), peek()。

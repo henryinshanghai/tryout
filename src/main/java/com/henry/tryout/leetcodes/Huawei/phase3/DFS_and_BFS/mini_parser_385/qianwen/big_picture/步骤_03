@@ -1,0 +1,24 @@
+💡 算法设计：递归下降 解析器
+我们维护一个 全局索引 i，遍历 字符串：
+
+伪代码逻辑：
+    deserialize(s):
+      if s[0] != '[':
+          return 单个整数对象
+      else:
+          创建空 NestedInteger 列表 root
+          i = 1 （跳过 '['）
+          while i < len(s):
+              if s[i] == ']':
+                  break
+              else if s[i] == ',':
+                  i++
+              else:
+                  递归解析 下一个元素（可能是整数或子列表）
+                  将结果 add 到 root
+          return root
+
+如何解析“下一个元素”？
+① 如果是 '[' → 递归调用 deserialize（但 需传入 当前索引）
+② 如果是 数字（或 '-'）→ 解析 完整整数
+⚠️ 因为要 共享 索引i，不能 直接用 deserialize(s) 递归，需封装 辅助函数。
