@@ -1,0 +1,9 @@
+编码 Checklist（面试前默念）
+
+检查项	        正确做法
+递归顺序	        先 left，再 right
+preIndex 管理	用 类成员变量 或 数组 包装（共享状态）
+中序边界	        左：[inStart, inRoot-1]，右：[inRoot+1, inEnd]
+终止条件	        if (inStart > inEnd) return null;
+哈希表	        预处理 inorder 值→索引映射
+根节点获取	    preorder[preIndex++]
