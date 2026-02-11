@@ -1,0 +1,2 @@
+使用图的二维矩阵表示 isConnected[i][j]，
+当 isConnected[i][j] == 1时，表示 节点i 与 节点j 之间 是相互连通的。

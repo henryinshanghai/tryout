@@ -1,0 +1,9 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+初始化	    parent[i] = i, count = n
+find()	    带路径压缩：parent[x] = find(parent[x])
+union()	    先 find 根，再 if (rootX != rootY) 合并
+count 更新	仅在 真正合并 时 count--
+矩阵遍历	    j 从 i+1 开始（上三角）
+自环处理	    忽略 i == j（无需 union）
