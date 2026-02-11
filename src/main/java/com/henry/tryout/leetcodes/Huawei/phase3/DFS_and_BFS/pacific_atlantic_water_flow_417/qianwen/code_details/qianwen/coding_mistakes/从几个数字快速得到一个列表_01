@@ -1,0 +1,5 @@
+手段：Arrays.asList(num1, num2...)
+
+要点：
+① 是asList()，不是toList();
+② 直接填写num1...，而不需要用大括号括起来
