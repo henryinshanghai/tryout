@@ -1,0 +1,9 @@
+✅ 最佳实践 Checklist
+写完代码后自问：
+① 高度比较 是否 为 heights[x][y] < prevHeight（终止条件）？
+② 初始 DFS 是否传了 heights[边界点] 作为 prevHeight？
+③ 是否在 DFS 开头 标记了 visited[x][y] = true？
+④ 太平洋 是否覆盖了 上+左？大西洋 是否覆盖了 下+右？
+⑤ 越界判断 是否 在 数组访问 之前？
+⑥ m = heights.length, n = heights[0].length 是否正确？
+⑦ 结果 是否添加了 [i, j]（不是 [j, i]）？
