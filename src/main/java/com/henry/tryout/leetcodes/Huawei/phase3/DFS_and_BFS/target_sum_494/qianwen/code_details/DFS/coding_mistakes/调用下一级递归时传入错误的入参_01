@@ -1,0 +1,2 @@
+① 下一级递归的cursor参数 应该是 当前级index参数 + 1；
+② 下一递归的currentSum参数 应该是 当前级的currentSum +/- 当前位置上的数字；

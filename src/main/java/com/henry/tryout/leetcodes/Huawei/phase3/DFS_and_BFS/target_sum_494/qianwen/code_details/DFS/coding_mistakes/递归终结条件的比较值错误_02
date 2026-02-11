@@ -1,0 +1,7 @@
+在 当前数字指针 指向 数字序列的末尾的下一个位置，才可以 结束递归了。
+
+因此，结束条件是：
+if(currentNumCursor == nums.length) {...}
+
+而不是
+if(currentNumCursor == nums.length - 1) {...}
