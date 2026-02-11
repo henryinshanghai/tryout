@@ -1,0 +1,9 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+入队标记	    入队前 visited[x] = true
+主循环条件	if (!visited[i]) 才触发 BFS
+内层循环	    j 从 0 到 n-1（全遍历）
+矩阵访问	    graph[cur][j]（固定行，遍历列）
+队列操作	    Queue<Integer>, offer(), poll()
+起始初始化	标记 + 入队 两步缺一不可
