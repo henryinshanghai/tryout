@@ -1,0 +1,9 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	        正确做法
+起始标记	        dfs 开头 visited[city] = true
+邻居检查	        graph[city][j] == 1 && !visited[j]
+主循环条件	    if (!visited[i]) 才触发 DFS
+内层循环	        j 从 0 到 n-1（全遍历）
+visited初始化	new boolean[n]（默认 false）
+矩阵访问	        固定行 city，遍历列 j

@@ -1,0 +1,12 @@
+🔑 要理解本题，你需要掌握 以下核心概念：
+
+概念	                            作用
+图（Graph）	                    将 城市 看作 节点，连接 看作 边
+邻接矩阵（Adjacency Matrix）	    isConnected 就是 图 的 邻接矩阵表示
+连通分量（Connected Component）	极大子图，其中 任意两点 都连通
+深度优先搜索（DFS）	            从 一个节点 出发，遍历 其所在连通分量中 的 所有节点
+广度优先搜索（BFS）	            同上，用队列实现
+并查集（Union-Find /
+Disjoint Set Union, DSU）	    动态维护集合 合并 与 查询
+
+✅ 本题有 三种主流解法：DFS、BFS、并查集。我们逐一讲解。
