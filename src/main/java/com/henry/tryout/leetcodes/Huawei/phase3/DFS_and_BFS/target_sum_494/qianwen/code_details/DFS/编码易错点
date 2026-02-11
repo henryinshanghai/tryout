@@ -1,0 +1,10 @@
+✅ 编码 Checklist（面试前默念）
+
+检查项	    正确做法
+终止条件	    index == nums.length 时判断
+Key设计	    "index,currentSum"
+缓存操作	    先查，再算，最后存
+参数传递	    所有 递归调用 传 memo
+初始调用	    dfs(0, 0, ...)
+结果合并	    用 + 累加 方案数
+Map 作用域	在 主函数 创建，传入递归

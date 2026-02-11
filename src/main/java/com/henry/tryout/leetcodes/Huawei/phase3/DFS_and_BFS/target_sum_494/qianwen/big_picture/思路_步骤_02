@@ -1,0 +1,19 @@
+🧠 解题思路详解（两种主流方法）
+✅ 方法一：动态规划（推荐，O(n × P)）
+步骤：
+1.计算 sum = sum(nums)
+2.检查 (target + sum) 是否非负且为偶数
+3.设 P = (target + sum) / 2
+4.初始化 dp[0] = 1（和为 0 有一种方式：空集）
+5.对每个 num in nums：
+    从 j = P 到 num（倒序！避免重复使用）
+    dp[j] += dp[j - num]
+💡 为什么倒序？
+防止同一个 num 被多次使用（0-1 背包 vs 完全背包）
+
+
+✅ 方法二：DFS + 记忆化（适用于理解递归结构）
+① 状态：(index, current_sum)
+② 递归：对每个位置，尝试 +nums[i] 和 -nums[i]
+③ 记忆化：用 Map<String, Integer> 缓存 (i, sum) 的结果
+⚠️ 但 current_sum 可能为负，需处理偏移量或用哈希表。
