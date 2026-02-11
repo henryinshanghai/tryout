@@ -1,0 +1,2 @@
+① 遍历的次序：先物品(goods first)，再背包(bag second)；// GF BS
+② 内层循环 倒序执行；// IR
