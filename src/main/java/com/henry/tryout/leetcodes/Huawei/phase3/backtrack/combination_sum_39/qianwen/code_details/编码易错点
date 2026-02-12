@@ -1,0 +1,8 @@
+✅ 最佳实践 Checklist
+写完代码后，自问：
+① 是否 new ArrayList<>(path) 拷贝了路径？
+② 递归 是否 传 i（不是 i+1）？
+③ 是否 path.add() 后一定 path.remove()？
+④ 是否 处理了 remain < 0 或 做了 排序剪枝？
+⑤ 循环 是否 从 start 开始（不是 0）？
+⑥ 主函数 是否传 start = 0？
