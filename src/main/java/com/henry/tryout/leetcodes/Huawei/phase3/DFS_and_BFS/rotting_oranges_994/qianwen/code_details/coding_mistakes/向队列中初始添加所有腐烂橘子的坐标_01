@@ -1,0 +1,4 @@
+错误：一维数组的变量名写错；
+
+正确写法：new int[]{item1, item2};
+具体代码：new int[]{currentRow, currentCol}
