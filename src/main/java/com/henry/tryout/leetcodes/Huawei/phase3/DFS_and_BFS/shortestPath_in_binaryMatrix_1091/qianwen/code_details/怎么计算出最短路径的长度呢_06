@@ -1,0 +1,9 @@
+手段：当 当前方格的有效邻居方格 是 终点方格时，把 当前方格的路径长度 +1即可。
+
+具体做法：
+// 如果 当前邻居方格 是 终点方格，说明 找到了 到达终点的路径，
+if (neighborSpotX == rowAmount - 1 &&
+        neighborSpotY == rowAmount - 1) {
+    // 则：路径长度 = 当前方格的路径 + 1（终点方格的计数）
+    return itsPathLength + 1;
+}
