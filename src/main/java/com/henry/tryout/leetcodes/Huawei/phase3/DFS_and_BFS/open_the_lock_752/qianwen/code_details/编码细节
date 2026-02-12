@@ -1,0 +1,11 @@
+✅ 注释覆盖的 BFS 关键步骤总结：
+
+BFS步骤	                        对应代码位置
+1. 初始化队列和 visited	        queue.offer("0000"); visited.add(...)
+2. 按层遍历（记录 size）	        int size = queue.size();
+3. 出队处理当前状态	            String current = queue.poll();
+4. 终止条件判断	                if (current.equals(target))
+5. 生成所有邻居状态	            双重 for 循环（4 位 × ±1）
+6. 合法性检查（非死亡 & 未访问）	if (!visited... && !deadSet...)
+7. 入队并标记 visited	        queue.offer(next); visited.add(next);
+8. 层结束，步数 +1	            steps++;
