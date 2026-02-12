@@ -1,0 +1,7 @@
+✅ 最佳实践 Checklist
+写完代码后，自问：
+① 是否 new ArrayList<>(path) 拷贝了路径？
+② 是否每个 used[i]=true 都 配对了 used[i]=false？
+③ 循环是否 从 i=0 开始（不是 start）？
+④ 是否用 continue 跳过 已用元素（不是 break）？
+⑤ 所有状态变量 是否是 局部的（非成员变量）？
