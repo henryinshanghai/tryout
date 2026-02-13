@@ -1,0 +1,8 @@
+✅ 最佳实践 Checklist
+写完代码后，问自己：
+① 前导零 是否 正确处理？（"0" 合法，"01" 非法）
+② 是否 检查了 start == s.length()？
+③ substring 是否 会越界？循环 是否有 break？
+④ path.add() 后 是否 path.remove()？
+⑤ 剪枝条件 是否 同时检查了 上下界？
+⑥ 是否用 String.join 拼接结果？
