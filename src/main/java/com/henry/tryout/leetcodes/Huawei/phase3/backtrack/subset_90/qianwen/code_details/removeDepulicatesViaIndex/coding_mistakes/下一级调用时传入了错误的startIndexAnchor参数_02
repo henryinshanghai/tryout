@@ -1,0 +1,4 @@
+backtrack(nums,
+        pickedNumCursor + 1, // 这里应该传入i+1，而不是anchor+1
+        constructingSubset,
+        allValidSubsetList);
