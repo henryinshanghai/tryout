@@ -1,0 +1,14 @@
+手段1：使用一个Set 来 维护当前窗口；
+
+① 判断 所追加字符 是否存在于 当前窗口中：
+    set.contains(appending_char)；
+② 删除窗口起始指针的字符：
+    set.remove(s.charAt(leftCursor))；
+
+===
+手段2：使用一个boolean数组 来 维护当前窗口；// 某个字符 是否在 当前窗口中
+
+① 判断 所追加字符 是否存在于 当前窗口中：
+    charToIfExistInCurrWindow[appending_char]；
+② 删除 窗口起始指针的字符：
+    charToIfExistInCurrWindow[s.charAt(leftCursor)] = false;

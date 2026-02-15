@@ -1,7 +1,0 @@
-起始位置的指针 应该移动到：
-max(
-    该重复字符所出现的位置 的下一个位置 // option1
-    保持当前起始位置 // option2
-);
-
-Math.max(charToItsLastOccurrence.get(currentAppendingChar) + 1, windowStart)

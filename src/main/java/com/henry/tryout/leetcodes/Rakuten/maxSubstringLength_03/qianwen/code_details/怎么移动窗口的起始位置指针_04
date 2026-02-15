@@ -1,0 +1,31 @@
+手段1：快进移动；
+
+具体做法：使用一个HashMap 来 记录下 字符 -> 该字符在字符串中的位置；
+原理：HashMap的实现 不允许 重复的条目；
+（所导致的）特性：
+① 当出现 重复字符 时，put()的操作 会更新 map中已经存在的、该字符所对应的条目；
+② 因此，map中所记录的 总是 指定字符 在当前位置之前的、最近一次出现的位置；
+用法：
+    windowStartCursor = max(
+        windowStartCursor, // 不需要移动起始位置指针（重复字符 不在 当前窗口内）
+        itsLastOccurrence(appending_char) + 1 // 按需移动（重复字符 在当前窗口内）
+    )
+
+手段2：一步步地移动；
+    while(追加字符在窗口中) {
+        移除字符；
+        把起始位置指针向后移动；
+    }
+    追加字符；
+
+具体做法1（hashset）：
+    while(contains(char)) {
+        set.remove(index);
+        leftCursor++;
+    }
+
+具体做法2：
+    while(charToExist(char)){
+        charToExist[charAt(leftCursor)] = false;
+        leftCursor++;
+    }

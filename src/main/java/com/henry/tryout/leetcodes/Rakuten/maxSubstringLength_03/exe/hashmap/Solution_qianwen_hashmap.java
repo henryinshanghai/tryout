@@ -1,9 +1,11 @@
-package com.henry.tryout.leetcodes.Rakuten.maxSubstringLength_03.exe;
+package com.henry.tryout.leetcodes.Rakuten.maxSubstringLength_03.exe.hashmap;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Solution_qianwen {
+// 使用 HashMap的手段 来
+// ① 识别 ‘所追加字符’是否是重复字符；② 把起始位置指针 快速跳转到 正确的位置处；
+public class Solution_qianwen_hashmap {
     public int lengthOfLongestSubstring(String charSeq) {
         // 记录 字符 -> 字符在字符串中最近一次出现的位置 的映射
         Map<Character, Integer> charToItsLastOccurrenceSpotMap = new HashMap<>();
@@ -17,11 +19,12 @@ public class Solution_qianwen {
 
             char appendingChar = charSeq.charAt(substringEndSpot);
 
-            // 如果 所追加的字符 先前出现过，并且 在当前窗口内，说明 当前子字符串已经添加过了 该字符，则：
+            // 如果 满足条件①+条件②，说明 当前子字符串 已经添加过了 该字符，
             Integer itsLastOccurrence = charToItsLastOccurrenceSpotMap.get(appendingChar);
-            if (charToItsLastOccurrenceSpotMap.containsKey(appendingChar)
-                    && withinSubstring(itsLastOccurrence, substringStartSpot)) {
-                // 从子字符串中移除该字符 （以保证 滑动窗口中的子字符串 是合法的） 手段：重置 子字符串的起始位置
+            if (charToItsLastOccurrenceSpotMap.containsKey(appendingChar) // ① 所追加的字符 是重复字符，并且
+                    && withinSubstring(itsLastOccurrence, substringStartSpot)) { // ② 前一个位置 在当前窗口内
+                // 则：从子字符串中 移除该字符 （以保证 滑动窗口中的子字符串 是合法的）
+                // 手段：重置 子字符串的起始位置
                 substringStartSpot = itsLastOccurrence + 1;
             }
 

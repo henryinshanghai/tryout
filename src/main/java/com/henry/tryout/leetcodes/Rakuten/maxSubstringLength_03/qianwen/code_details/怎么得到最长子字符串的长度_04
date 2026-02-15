@@ -1,6 +1,0 @@
-每次得到一个 合法的子字符串，就尝试 更新 maxLength;
-
-maxLength = max(
-        maxLength,
-        windowEnd - windowStart + 1
-    )

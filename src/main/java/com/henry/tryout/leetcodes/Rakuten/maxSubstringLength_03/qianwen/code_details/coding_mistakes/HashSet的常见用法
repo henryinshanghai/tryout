@@ -1,0 +1,3 @@
+① 判断集合中是否存在指定的元素：set.contains(item);
+② 从集合中删除指定的元素：set.remove(item)；
+③ 向集合中添加指定的元素：set.add(item)。
