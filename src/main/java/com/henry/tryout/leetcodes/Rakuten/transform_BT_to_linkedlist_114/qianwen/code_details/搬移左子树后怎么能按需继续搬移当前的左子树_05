@@ -1,0 +1,4 @@
+手段：更新 游标指针currNode的指向，把它指向到 右分支上的下一个节点；
+
+具体做法：
+currNodeCursor = currNodeCursor.right;
