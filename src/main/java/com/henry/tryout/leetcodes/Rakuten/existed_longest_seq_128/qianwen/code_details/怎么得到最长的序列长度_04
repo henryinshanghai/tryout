@@ -1,4 +1,7 @@
+手段：使用 当前连续序列的长度 来 尝试更新 最长连续序列的长度；
+
+具体做法：
 maxSeqLength = Math.max(
-    maxSeqLength,
-    currentSeqLength
+    maxSeqLength, //
+    currentSeqLength // 当前连续序列的长度
     );
