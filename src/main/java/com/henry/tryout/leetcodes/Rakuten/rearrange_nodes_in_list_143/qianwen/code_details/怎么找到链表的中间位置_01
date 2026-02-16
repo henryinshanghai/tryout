@@ -8,7 +8,8 @@
     中点 指的是 最中间位置上的节点；
 
 这里需要 找的是 前中点；
-因为中心节点（奇数时）必须保留在前半段结尾，后半段从 mid.next 开始
+因为中心节点（奇数时） 必须保留在 前半段结尾，后半段 从 mid.next 开始
+
 ===
 找前中点的模板代码：
     ListNode slow = head;
@@ -22,13 +23,12 @@
     // 此时 slow 是前中点
 
 ===
-找后中点的写法：
+找后中点的写法(区别在于 while循环的条件)：
 
-// 错误写法（用于回文链表，但不适用于本题！）
+    // 错误写法（用于回文链表，但不适用于本题！）
     ListNode slow = head, fast = head;
     while (fast != null && fast.next != null) {
         slow = slow.next;
         fast = fast.next.next;
-    }
-    // slow 是后中点！
+    } /* 循环结束后，slow指向 后中点！*/
 
