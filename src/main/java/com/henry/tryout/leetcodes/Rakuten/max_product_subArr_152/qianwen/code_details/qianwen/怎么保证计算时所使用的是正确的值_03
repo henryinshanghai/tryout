@@ -1,0 +1,17 @@
+手段：使用一个临时变量 来 暂存maxProduct的计算结果（这样在计算minProduct时才不会使用计算后的结果）；
+
+具体做法：
+/* 计算 ’当前乘积最大的子数组‘的乘积 */
+int tempMax = Math.max(currentNum, // ① 当前位置的数组元素
+        Math.max(currMaxProdSubArrProduct * currentNum, // ②-1 使用当前元素*‘当前乘积最大的子数组’（当前元素为正数）
+                currMinProdSubArrProduct * currentNum)); // ②-2 使用当前元素*‘当前乘积最小的子数组’（当前元素为负数）
+
+/* 计算 ’当前乘积最小的子数组‘的乘积 */
+int tempMin = Math.min(currentNum, // ① 当前位置的数组元素
+        Math.min(currMaxProdSubArrProduct * currentNum, // ②-1 使用当前元素*‘当前乘积最大的子数组’（当前元素为负数）
+                currMinProdSubArrProduct * currentNum)); // ②-2 使用当前元素*‘当前乘积最小的子数组’（当前元素为正数）
+
+// 维护 ’当前乘积最大的子数组‘的乘积
+currMaxProdSubArrProduct = tempMax;
+// 维护 ’当前乘积最小的子数组‘的乘积
+currMinProdSubArrProduct = tempMin;

@@ -1,0 +1,8 @@
+手段：定义 以当前位置作为结束位置的子数组 的最大乘积、最小乘积；
+
+具体做法：
+/* 准备dp[]数组 */
+// i：元素位置；dp1[i]:以i作为结束位置的子数组的最大乘积
+int[] currentSpotToMaxProductEndWithIt = new int[numAmount];
+// i：元素位置；dp1[i]:以i作为结束位置的子数组的最小乘积
+int[] currentSpotToMinProductEndWithIt = new int[numAmount];

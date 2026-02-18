@@ -1,0 +1,4 @@
+手段：对于每个位置，得到以其为结束位置的子数组的最大乘积后，就尝试更新‘最大乘积’；
+
+具体做法：
+maxProduct = max(maxProduct, maxProductEndWithCurrSpot);

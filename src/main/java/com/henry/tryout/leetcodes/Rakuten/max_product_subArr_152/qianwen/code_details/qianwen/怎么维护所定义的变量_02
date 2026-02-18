@@ -1,0 +1,24 @@
+手段：
+#1 对于每个位置，获取其最大乘积 都只有3种可能性👇
+    ① 重开子数组；
+    ② 使用当前元素*当前最大乘积；
+    ③ 使用当前元素*当前最小乘积；
+逐一列举所有可能性，从中取得max即可；
+
+#2 当前最小乘积的维护同理；
+
+具体做法：
+/* 计算 ’当前乘积最大的子数组‘的乘积 */
+int tempMax = Math.max(currentNum, // ① 当前位置的数组元素
+        Math.max(currMaxProdSubArrProduct * currentNum, // ②-1 使用当前元素*‘当前乘积最大的子数组’（当前元素为正数）
+                currMinProdSubArrProduct * currentNum)); // ②-2 使用当前元素*‘当前乘积最小的子数组’（当前元素为负数）
+
+/* 计算 ’当前乘积最小的子数组‘的乘积 */
+int tempMin = Math.min(currentNum, // ① 当前位置的数组元素
+        Math.min(currMaxProdSubArrProduct * currentNum, // ②-1 使用当前元素*‘当前乘积最大的子数组’（当前元素为负数）
+                currMinProdSubArrProduct * currentNum)); // ②-2 使用当前元素*‘当前乘积最小的子数组’（当前元素为正数）
+
+// 维护 ’当前乘积最大的子数组‘的乘积
+currMaxProdSubArrProduct = tempMax;
+// 维护 ’当前乘积最小的子数组‘的乘积
+currMinProdSubArrProduct = tempMin;

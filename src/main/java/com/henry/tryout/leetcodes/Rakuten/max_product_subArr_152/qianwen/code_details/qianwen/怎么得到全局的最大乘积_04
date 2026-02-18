@@ -1,0 +1,5 @@
+手段：每次得到一个‘当前最大乘积’时，就使用它来尝试更新‘全局最大乘积’。
+
+具体做法：
+// 使用 ’当前乘积最大的子数组‘的乘积 来 尝试更新‘最大乘积’
+maxProduct = Math.max(maxProduct, currMaxProdSubArrProduct);
