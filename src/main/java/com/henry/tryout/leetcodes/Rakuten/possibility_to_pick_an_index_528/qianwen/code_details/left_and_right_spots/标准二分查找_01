@@ -1,16 +1,16 @@
-标准的二分查找，在while循环结束后，left指针与right指针的位置关系是怎样的？
+标准的二分查找，在 while循环结束 后，left指针 与 right指针的位置关系 是怎样的？
 
 ✅ 结论先行
 在标准二分查找（使用闭区间 [left, right]，循环条件为 while (left <= right)）中：
     当循环结束时，必然有：left == right + 1
     也就是说：left > right，且两者相邻。
-这是由循环终止条件 left <= right 决定的————一旦不满足，就是 left > right。
-而在标准实现中，由于 每次更新都是 mid ± 1，所以它们 只会相差 1。
+这是 由 循环终止条件 left <= right 决定的————一旦不满足，就是 left > right。
+而在 标准实现 中，由于 每次更新都是 mid ± 1，所以它们 只会相差 1。
 
 ===
 🌟 更深层的意义：left 就是 lower-bound！
 这是一个非常重要的洞察：
-    在标准二分查找 未找到目标 时，循环结束后的 left 值，恰好等于 lowerBound(target)！
+    在 标准二分查找 未找到目标 时，循环结束后的 left 值，恰好等于 lowerBound(target)！
 验证一下：
 ① 上例中 target=6，lowerBound 应该是 3（插在 7 前面），而 left=3 ✅
 ② 如果 target=0，最终 left=0, right=-1 → left = 0 是插入位置 ✅
@@ -19,8 +19,11 @@
 
 ===
 ❗ 对比：lower-bound 的写法（开区间）
-注意：前面讲的 lower-bound 使用的是 开区间 [left, right)，初始 right = n，循环条件 left < right，结束时 left == right。
-而标准二分用的是 闭区间 [left, right]，结束时 left == right + 1。
+注意：
+前面讲的 lower-bound 使用的是 开区间 [left, right)👇
+    初始 right = n，循环条件 left < right，结束时 left == right。
+而标准二分用的是 闭区间 [left, right]，
+    结束时 left == right + 1。
 这是两种 不同二分模板的体现，但结果一致：left 都是插入位置。
 
 ===
