@@ -6,7 +6,7 @@ public class NumArray_qianwen_segmentTree {
     private int[] currentSpotToItsSum;
 
     // 原始的元素序列
-    private int[] numArr;
+    private int[] originalNumArr;
     // 元素的个数
     private int numAmount;
 
@@ -18,7 +18,7 @@ public class NumArray_qianwen_segmentTree {
      */
     public NumArray_qianwen_segmentTree(int[] numArr) {
         /* 成员变量初始化 */
-        this.numArr = numArr;
+        this.originalNumArr = numArr;
         this.numAmount = numArr.length;
         // 安全起见，分配 4n 空间
         this.currentSpotToItsSum = new int[4 * numAmount];
@@ -45,7 +45,7 @@ public class NumArray_qianwen_segmentTree {
         if (itsLeftBar == itsRightBar) {
             /* 则：直接为 线段树中的该节点 赋值 */
             // 手段：该位置上的节点的sum值 就是 原始数组中的元素值（因为不存在任何子节点）
-            currentSpotToItsSum[currentNodeSpot] = numArr[itsLeftBar];
+            currentSpotToItsSum[currentNodeSpot] = originalNumArr[itsLeftBar];
         } else { // 否则：说明 当前节点是一个内部节点
             /* 则：① 先构建出 线段树中 该节点的左右子树 */
             // 计算 区间的中间位置 用于把原始区间 对半分裂
@@ -70,7 +70,7 @@ public class NumArray_qianwen_segmentTree {
      */
     public void update(int givenArrSpot, int newValue) {
         update(1, 0, numAmount - 1, givenArrSpot, newValue);
-        numArr[givenArrSpot] = newValue; // 可选：同步原数组（便于调试或后续使用）
+        originalNumArr[givenArrSpot] = newValue; // 可选：同步原数组（便于调试或后续使用）
     }
 
     private void update(int currentNodeSpot,

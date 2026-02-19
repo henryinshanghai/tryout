@@ -1,0 +1,5 @@
+currentSpotToItsSum[currentNodeSpot] = numArr[itsLeftBar];
+
+说明：
+① 左边的下标 是 节点在完全二叉树中的次序；
+② 右边的下标 是 元素在元素序列种的下标（从节点的边界中获取）；
