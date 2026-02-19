@@ -1,5 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.hash_a_str_3271.exe;
 
+// 直接截取出 当前的子字符串，并 计算出 该子字符串的编码结果
 public class Solution_qianwen_substring {
     public String stringHash(String charSeq, int segmentSize) {
         int charAmount = charSeq.length();

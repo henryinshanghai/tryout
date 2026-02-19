@@ -1,5 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.hash_a_str_3271.exe;
 
+// 使用两个指针，一个 指向 当前子字符串的起始位置，另一个 遍历 当前子字符串的当前字符
 public class Solution_qianwen_charAt {
     public String stringHash(String charSeq, int segmentSize) {
         int charAmount = charSeq.length();
