@@ -14,13 +14,13 @@ public class Solution_qianwen_2cursors {
             // 判断 当前位置 是否为 潜在峰顶：左边小，右边小
             if (isPotentialPeakSpot(itemArr, currentSpot)) {
                 int itsLeftSpot = currentSpot - 1;
-                int itsRightSpot = currentSpot + 1;
 
                 // 向左扩展指针 直到条件不满足：找 最长严格递增段
                 while (itsLeftSpot > 0 && biggerThanLeft(itemArr, itsLeftSpot)) {
                     itsLeftSpot--;
                 }
 
+                int itsRightSpot = currentSpot + 1;
                 // 向右扩展 直到条件不满足：找最长严格递减段
                 while (itsRightSpot < itemAmount - 1 && biggerThanRight(itemArr, itsRightSpot)) {
                     itsRightSpot++;
