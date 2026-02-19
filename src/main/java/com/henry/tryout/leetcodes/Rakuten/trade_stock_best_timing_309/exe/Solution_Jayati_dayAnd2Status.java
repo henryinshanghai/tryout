@@ -1,6 +1,7 @@
 package com.henry.tryout.leetcodes.Rakuten.trade_stock_best_timing_309.exe;
 
-public class Solution_Jayati {
+// 两个维度：第i天；具体状态：[持股、不持股]；
+public class Solution_Jayati_dayAnd2Status {
     /*
     根据 给出的题设条件 来 “找出 子问题之间的 关联关系公式”：
         case 1: dp[i][1] 今日持股

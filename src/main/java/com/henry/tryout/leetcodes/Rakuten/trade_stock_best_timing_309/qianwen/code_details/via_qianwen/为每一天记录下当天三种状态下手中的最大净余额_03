@@ -1,11 +1,22 @@
-// ========== 从第 1 天开始，逐天更新状态 ==========
-for (int currentDay = 1; currentDay < days; currentDay++) {
-    // 状态1: 第 currentDay 天结束时持有股票
-    currentDayToItsNetBalanceInHold[currentDay] = Math.max(xxx, ooo);
+/* 列举当天所有可能的状态👇 */
+// 状态1: ‘持有’股票 的状态
+// 有两种可能：
+//   a) 昨天 是 ‘持有’状态，今天的动作 是 什么都不做
+//   b) 昨天 是 ‘第二天可买入’状态，今天的动作 是 买入
+currentDayToItsNetBalanceInHold[currentDay] =
+        Math.max(currentDayToItsNetBalanceInHold[currentDay - 1], // a)
+                currentDayToItsNetBalanceInCanBuyTomo[currentDay - 1] - currentDayToItsStockPrice[currentDay]); // b)
 
-    // 状态2: 第 currentDay 天结束时 刚刚卖出股票
-    currentDayToItsNetBalanceInSold[currentDay] = xxx;
+// 状态2: ‘刚刚卖出股票’ 的状态
+// 只有一种可能：
+//   昨天 是 ‘持有’状态，今天的动作 是 卖出
+currentDayToItsNetBalanceInJustSold[currentDay] =
+        currentDayToItsNetBalanceInHold[currentDay - 1] + currentDayToItsStockPrice[currentDay];
 
-    // 状态3: 第 currentDay 天结束时 空仓 且 可买入（不在冷冻期）
-    currentDayToItsNetBalanceInRest[currentDay] = Math.max(xxx, ooo);
-}
+// 状态3: ‘明天可买入’ 的状态
+// 有两种可能：
+//   a) 昨天 是 ‘明天可买入’ 状态，今天的动作 是 什么都不做
+//   b) 昨天 是 ‘刚卖出’的状态，今天的动作 是 什么都不做（明天会 自动变为 可买入状态）
+currentDayToItsNetBalanceInCanBuyTomo[currentDay] =
+        Math.max(currentDayToItsNetBalanceInCanBuyTomo[currentDay - 1], // a)
+                currentDayToItsNetBalanceInJustSold[currentDay - 1]); // b)

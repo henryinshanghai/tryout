@@ -1,4 +1,5 @@
 // ========== 最终答案 ==========
-// 最后一天，我们 肯定不想 还拿着股票（因为没卖出 就 赚不到钱 - 状态①）
-// 所以答案是 最后一天 处于 "刚卖出"（状态②） 或 "可买入" 状态（状态③）的最大利润
-return Math.max(currentDayToItsNetBalanceInSold[days - 1], currentDayToItsNetBalanceInRest[days - 1]);
+// 最后一天，我们 肯定不想 还拿着股票（因为没卖出 就 赚不到钱）
+// 所以答案是 最后一天 处于 "刚卖出" 或 "可买入" 状态的最大利润
+return Math.max(currentDayToItsNetBalanceInJustSold[days - 1],
+                currentDayToItsNetBalanceInCanBuyTomo[days - 1]);
