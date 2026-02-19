@@ -1,9 +1,0 @@
-递归方法种，如果两种行为之间互斥，则：
-必须使用语法 来 保证控制流的互斥；
-
-手段1：
-if(condition1) {
-    do something;
-} else {
-    do something else;
-}

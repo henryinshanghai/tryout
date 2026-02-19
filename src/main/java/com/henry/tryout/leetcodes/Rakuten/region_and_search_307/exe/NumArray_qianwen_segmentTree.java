@@ -1,11 +1,13 @@
 package com.henry.tryout.leetcodes.Rakuten.region_and_search_307.exe;
 
-public class NumArray_qianwen {
-    // 线段树（用数组实现，下标从1开始）
-    // 当前位置 -> 当前位置的节点 所表示的区间中 所有元素的和
+public class NumArray_qianwen_segmentTree {
+    // 准备一个int[]成员变量    用于表示线段树（用数组实现，下标从1开始）
+    // 映射关系：当前位置 -> 当前位置的节点 所表示的区间中 所有元素的和
     private int[] currentSpotToItsSum;
 
+    // 原始的元素序列
     private int[] numArr;
+    // 元素的个数
     private int numAmount;
 
     /**
@@ -14,13 +16,14 @@ public class NumArray_qianwen {
      * ② 完成对成员变量的 初始化
      * 🐖 “线段树，四倍开，安全省心不用猜。”
      */
-    public NumArray_qianwen(int[] numArr) {
+    public NumArray_qianwen_segmentTree(int[] numArr) {
         /* 成员变量初始化 */
         this.numArr = numArr;
         this.numAmount = numArr.length;
-        this.currentSpotToItsSum = new int[4 * numAmount]; // 安全起见，分配 4n 空间
+        // 安全起见，分配 4n 空间
+        this.currentSpotToItsSum = new int[4 * numAmount];
 
-        // 构建 线段树
+        // 在构造方法中，构建出 线段树
         build(1, 0, numAmount - 1);
     }
 
@@ -37,19 +40,23 @@ public class NumArray_qianwen {
     private void build(int currentNodeSpot,
                        int itsLeftBar,
                        int itsRightBar) {
-        // 如果 当前节点所表示的区间的 左边界 和 右边界 相等，说明 它是一个 单一元素区间，也就是 线段树中的一个叶子节点，
+        // 如果 当前节点所表示的区间的 左边界 和 右边界 相等，
+        // 说明 它是一个 单一元素区间，也就是 线段树中的一个叶子节点，
         if (itsLeftBar == itsRightBar) {
-            // 则：该位置上的节点的sum值 就是 原始数组中的元素值（因为不存在任何子节点）
+            /* 则：直接为 线段树中的该节点 赋值 */
+            // 手段：该位置上的节点的sum值 就是 原始数组中的元素值（因为不存在任何子节点）
             currentSpotToItsSum[currentNodeSpot] = numArr[itsLeftBar];
-        } else { // 否则：说明 当前节点是一个内部节点，则👇
+        } else { // 否则：说明 当前节点是一个内部节点
+            /* 则：① 先构建出 线段树中 该节点的左右子树 */
             // 计算 区间的中间位置 用于把原始区间 对半分裂
             int middleSpot = itsLeftBar + (itsRightBar - itsLeftBar) / 2;
-            // ① 构建 当前节点 的左子树（对应于 分割出的左半区间 ）
+            // 递归地构建 当前节点 的左子树（对应于 分割出的左半区间 ）
             build(currentNodeSpot * 2, itsLeftBar, middleSpot);
-            // ② 构建 当前节点 的右子树（对应于 分割出的右半区间）
+            // 递归地构建 当前节点 的右子树（对应于 分割出的右半区间）
             build(currentNodeSpot * 2 + 1, middleSpot + 1, itsRightBar);
 
-            // ③ 子树构建完成后，计算 当前树节点的sum值 = 其左子节点的sum值 + 其右子节点的sum值
+            /* ② （子树构建完成后）再为 线段树中的当前节点 赋值 */
+            // 手段：计算 当前树节点的sum值 = 其左子节点的sum值 + 其右子节点的sum值
             currentSpotToItsSum[currentNodeSpot] =
                     currentSpotToItsSum[currentNodeSpot * 2] + currentSpotToItsSum[currentNodeSpot * 2 + 1];
         }
@@ -71,23 +78,28 @@ public class NumArray_qianwen {
                         int itsRightBar,
                         int givenArrSpot,
                         int newValue) {
-        // 如果 当前节点所表示的区间的左边界 等于 其右边界，说明 当前节点 是 线段树的叶子节点，则：
+        // 如果 当前节点所表示的区间的左边界 等于 其右边界，
+        // 说明 当前节点 是 线段树的叶子节点，
         if (itsLeftBar == itsRightBar) {
-            // 直接 使用 调用者传入的newValue 更新 它的sum值
+            /* 则：直接更新 线段树中该节点的值 */
+            // 手段：直接 使用 调用者传入的newValue 更新 它的sum值
             currentSpotToItsSum[currentNodeSpot] = newValue;
-        } else { // 如果 区间不是 单个元素区间，说明 当前节点 是 内部节点，则：👇
+        } else { // 如果 区间不是 单个元素区间，说明 当前节点 是 内部节点，
+            /* 则：① 先 在线段树中 该节点的子树中 按需查询与更新 👇 */
+            // 计算出 当前节点所表示的区间的中间位置
             int middle = itsLeftBar + (itsRightBar - itsLeftBar) / 2;
 
-            // 如果 调用者想要更新的元素位置 属于 左半区间，说明 需要 在当前节点的左子树中 继续查找，则：
+            // 如果 调用者想要更新的元素位置 属于 左半区间，
+            // 说明 需要 在当前节点的左子树中 继续查找，
             if (givenArrSpot <= middle) {
-                // ① 递归地 在左子树中 查找 并 尝试更新
+                // 则：递归地 在左子树中 查找 并 尝试更新
                 update(currentNodeSpot * 2,
                         itsLeftBar,
                         middle,
                         givenArrSpot,
                         newValue);
-            } else {
-                // ② 递归地 在右子树中 查找 并 尝试更新
+            } else { // 否则，
+                // 递归地 在右子树中 查找 并 尝试更新
                 update(currentNodeSpot * 2 + 1,
                         middle + 1,
                         itsRightBar,
@@ -95,7 +107,8 @@ public class NumArray_qianwen {
                         newValue);
             }
 
-            // ③ 在左子树/右子树中 完成更新后，维护 当前节点的sum值
+            /* ② （更新完其子树后）再 更新 线段树中该节点 所对应的值 */
+            // 手段：维护 当前节点的sum值 = 其左子节点的sum值 + 其右子节点的sum值
             currentSpotToItsSum[currentNodeSpot] =
                     currentSpotToItsSum[currentNodeSpot * 2] +
                             currentSpotToItsSum[currentNodeSpot * 2 + 1]; // 回溯(递归结束后) 更新父节点
@@ -115,8 +128,11 @@ public class NumArray_qianwen {
     }
 
     /**
-     * 从 线段树的 treeIndex 节点（它管 [start, end]）出发，计算 原数组 在 用户指定区间 [l, r] 内的聚合值（如和）
-     * 在线段树中查询区间 [l, r] 的和
+     * 从 线段树的 treeIndex 节点（它管 [start, end]）出发，
+     * 计算 原数组 在 用户指定区间 [l, r] 内的聚合值（如和）
+     *
+     * 在线段树中查询区间 [l, r] 的元素和
+     *
      * @param currentNodeSpot   当前节点 在线段树中的 层序遍历 节点次序
      * @param nodesLeftBar      当前节点 所表示的区间的 左边界
      * @param nodesRightBar     当前节点 所表示的区间的 右边界
@@ -131,33 +147,36 @@ public class NumArray_qianwen {
                       int rangeRightBar) {
         // 情形1：如果 当前节点所表示的位置区间 与 指定的查询区间 不存在 任何交集
         if (rangeRightBar < nodesLeftBar || nodesRightBar < rangeLeftBar) {
-            // 说明 区间中 不存在 任何元素，则：把 0 返回给 上一级调用
+            // 说明 区间中 不存在 任何元素，
+            // 则：把 0 返回给 上一级调用
             return 0;
         }
 
         // 情形2：如果 当前节点所表示的位置区间 被 查询区间 完全覆盖，说明 其sum值需要被累加，
         if (rangeLeftBar <= nodesLeftBar && nodesRightBar <= rangeRightBar) {
-            // 把 节点的sum值 返回给上一级调用
+            // 则：把 节点的sum值 返回给上一级调用
             return currentSpotToItsSum[currentNodeSpot];
         }
 
-        /* 情形3：如果 当前节点所表示的位置区间 与 查询区间 部分重叠，说明 不能直接返回其sum值(因为sum包含有 查询区间外的元素)，而需要 递归查询左右子树 ，则👇 */
+        // 情形3：如果 当前节点所表示的位置区间 与 查询区间 部分重叠，
+        // 说明 不能直接返回 其sum值(因为sum包含有 查询区间外的元素)，而需要 递归查询左右子树，
+        // 则：① 获取其子树 对该查询区间的贡献 */
         int middleSpot = nodesLeftBar + (nodesRightBar - nodesLeftBar) / 2;
-        // ① 从左子树中 查询并累加 查询范围内的sum值
+        // 从左子树中 查询并累加 查询范围内的sum值
         int leftSumContribution = query(currentNodeSpot * 2,
                 nodesLeftBar,
                 middleSpot,
                 rangeLeftBar,
                 rangeRightBar);
 
-        // ② 从右子树中 查询并累加 查询范围内的sum值
+        // 从右子树中 查询并累加 查询范围内的sum值
         int rightSumContribution = query(currentNodeSpot * 2 + 1,
                 middleSpot + 1,
                 nodesRightBar,
                 rangeLeftBar,
                 rangeRightBar);
 
-        // ③ 把 左右子树中 查找到的sum值 合并起来，返回给上一级调用
+        // ②（在得到了左右子树对sum的贡献之后）把它们累加起来，返回给上一级调用 */
         return leftSumContribution + rightSumContribution;
     }
 }

@@ -7,42 +7,6 @@ private int numAmount;
 ② nums 成员变量 在 纯线段树实现 中 不是 必需的，但 保留它 有重要工程价值：
     同步状态、便于调试、支持扩展；
 
-===
-一、关于 private int n;
-
-📌 是否必要？
-① 逻辑上不必要：任何时候都可以用 this.nums.length 代替 n
-② 实践中 常保留：原因如下
-
-✅ 保留 n 的理由：
-原因	            | 说明
-1. 避免重复计算	| .length 虽是 O(1)，但在高频操作（如递归）中，缓存长度 更高效
-2. 代码可读性	| for (int i = 0; i < n; i++) 比 i < nums.length 更简洁
-3. 防御性编程	| 如果未来 nums 被意外置为 null，n 仍保留 原始长度（虽然本题不会）
-4. 与 tree 大小一致  | tree = new int[4 * n] 中的 n 来自 成员变量，语义统一
-
-💡 在 LeetCode 这类 性能敏感场景，缓存 .length 是常见做法。
-
-===
-二、关于 private int[] nums;
-📌 是否必要？
-① 在 线段树核心逻辑 中：不必要！
-    1.build() 只需 在初始化时 读一次 nums
-    2.update() 和 sumRange() 只操作 tree[]，不需要 nums
-② 但在 完整类设计 中：建议保留
-
-
-✅ 保留 nums 的关键理由：
-==
-️⃣ 同步最新状态（保持数据一致性）
-    public void update(int index, int val) {
-        update(1, 0, n - 1, index, val);
-        nums[index] = val; // ← 同步原数组
-    }
-① 如果不更新 nums，那么 this.nums 就是 过期的旧数据；
-② 虽然 线段树 正确，但 对象内部状态 不一致，违反 封装原则
-🧪 举例：如果有人 后续 想打印 当前数组（如调试），会看到错误值！
-
 ==
 ️⃣ 便于调试和测试
     // 调试时可以：
