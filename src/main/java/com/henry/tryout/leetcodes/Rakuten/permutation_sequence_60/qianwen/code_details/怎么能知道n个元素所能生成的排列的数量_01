@@ -1,9 +1,14 @@
-答：计算n的阶乘；
-注意n=0时，阶乘结果 初始化为1.
+手段：计算n的阶乘；
 
+具体做法：通过累乘 来 计算阶乘结果
+
+具体代码：
+// 注意n=0时，阶乘结果 初始化为1.
 int[] nToItsPermutationAmount = new int[totalDigitAmount];
 nToItsPermutationAmount[0] = 1; // 0! = 1
 
+// 通过累乘 来 计算阶乘结果
 for (int currentN = 1; currentN < totalDigitAmount; currentN++) {
-    nToItsPermutationAmount[currentN] = nToItsPermutationAmount[currentN - 1] * currentN;
+    nToItsPermutationAmount[currentN] =
+        nToItsPermutationAmount[currentN - 1] * currentN;
 }
