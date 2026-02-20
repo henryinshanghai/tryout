@@ -1,6 +1,7 @@
 package com.henry.tryout.leetcodes.Rakuten.similar_strs_group_839.exe;
 
-public class Solution_leetcode {
+// UnionFind的代码 混在 Solution中，不推荐
+public class Solution_leetcode_mixedUF {
 
     int[] currentNodeToItsParentNode;
 

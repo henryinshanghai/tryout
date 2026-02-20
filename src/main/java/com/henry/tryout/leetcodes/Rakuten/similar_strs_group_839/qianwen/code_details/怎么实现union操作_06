@@ -1,5 +1,5 @@
 ✅ 总结：union 的实现要点
-表格
+
 要点	                说明
 必须先 find 根	    不能直接连 x 和 y，要连它们的根
 判断是否同组	        if (rootX == rootY) return; 避免重复合并
