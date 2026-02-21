@@ -1,6 +1,7 @@
 package com.henry.tryout.leetcodes.Huawei.phase1.array.island_perimeter_463.exe;
 
-public class Solution_lingshan_enumerate {
+// 枚举法：对于一个陆地方格，枚举它的四个方向 来 统计每个方向所贡献的周长
+public class Solution_lingshan_enumerate4Dirs {
     public int islandPerimeter(int[][] grid) {
         int rowAmount = grid.length;
         int colAmount = grid[0].length;
