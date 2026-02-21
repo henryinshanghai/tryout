@@ -1,6 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.read_n_character_157.exe;
 
-public class Solution_qianwen extends Reader4 {
+public class Solution_qianwen_buffArr extends Reader4 {
 
     /**
      * 从文件中 读取 指定数量的字符，并 把读取到的字符 写入到 指定的目标数组中
@@ -17,32 +17,34 @@ public class Solution_qianwen extends Reader4 {
         char[] tempBufferCharArr = new char[4]; // 供 read4 使用的 临时缓冲区
         int totalReadCharAmount = 0;             // 已读取的总字符数
 
+        // 当 temp缓冲区中的字符数量 小于 目标字符数量时，持续读取
         while (totalReadCharAmount < wantedCharAmount) {
+            // ① 从I/O中进行一次读取(最多4个字符) 到 （自定义）缓冲区中
             /* 每次 读取文件内容后，都需要 马上判断 文件是否已经结束（否则 while会无限循环） */
-            // 读取(最多)4个字符 到 （自定义）缓冲区中
             int currentReadCharAmount = read4(tempBufferCharArr);
-            // 如果 读取到的字符数量 为 0，说明 已经读到了文件结束，则：
+            // 如果 读取到的字符数量 为 0，说明 已经读到了文件末尾，则：
             if (currentReadCharAmount == 0) {
-                // 跳出循环
+                // 读取过程结束，跳出循环
                 break;
             }
 
-            // 本次 最多能写入到 目标字符数组 的字符数量
+            // ② 计算 本次 最多能写入到 目标字符数组 的字符数量
             // 原则：从temp 向buff中 写入的字符数量 不能超过 buff所需要的字符数量
             int charsAmountWriteToTarget =
                     Math.min(currentReadCharAmount, // 当前次 使用read4() 所读取到的 字符数量
                             wantedCharAmount - totalReadCharAmount); // buff 当前所需要的字符数量
 
-            // 把 temp中的字符 按需复制到 目标buf中
+            // ③ 把 temp中的字符 按需复制到 目标buf中
             for (int currentCharCursor = 0; currentCharCursor < charsAmountWriteToTarget; currentCharCursor++) {
                 targetCharArr[totalReadCharAmount + currentCharCursor] = tempBufferCharArr[currentCharCursor];
             }
 
-            // 字符复制完成后，更新 当前buff中的字符数量
+            // ④ 字符复制完成后，更新 目标数组中的字符数量
             totalReadCharAmount += charsAmountWriteToTarget;
 
             // (推荐做法：提前退出，意图明确)
-            // 如果 目标buff中的字符数量 等于 调用者所期待的字符数量，说明 读取过程完成，
+            // （buff中的字符数量更新后）如果 目标buff中的字符数量 等于 调用者所期待的字符数量，
+            // 说明 读取过程完成，
             if (totalReadCharAmount == wantedCharAmount) {
                 // 则：跳出循环，不再继续读取
                 break;
