@@ -1,0 +1,2 @@
+手段：从位置0，截取到扩展指针所在的位置（不包含）；
+具体做法：pivotStr.substring(0, currCharToExtend);
