@@ -1,0 +1,10 @@
+具体步骤：
+① 先 根据项目指针 得到 最小投资金额的项目编号；
+② 再 根据此项目编号 得到 该项目的投资金额；
+
+代码：
+while(
+    projectNoToItsCost[
+        projectNoArrSortByCostInAsc[currentProjectCursor] // 最小投资金额的项目编号
+    ] // 最小投资金额
+    <= currentNetBalance) {...}

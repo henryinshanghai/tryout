@@ -1,0 +1,4 @@
+Integer[] projectNoArrSortByCostInAsc = xxx;
+...
+Arrays.sort(projectNoArrSortByCostInAsc,
+            <比较规则>);

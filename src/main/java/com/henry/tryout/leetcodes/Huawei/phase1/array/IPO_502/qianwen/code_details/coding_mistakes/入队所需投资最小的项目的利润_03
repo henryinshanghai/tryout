@@ -1,0 +1,9 @@
+具体步骤：
+① 先 根据项目指针 得到 最小投资金额的项目编号；
+② 再 根据此项目编号 得到 该项目的利润；
+
+代码：
+int currentSelectedProjectsProfit =
+    projectNoToItsProfit[
+        projectNoArrSortByCostInAsc[currentProjectCursor] // 项目编号
+    ]; // 项目利润
