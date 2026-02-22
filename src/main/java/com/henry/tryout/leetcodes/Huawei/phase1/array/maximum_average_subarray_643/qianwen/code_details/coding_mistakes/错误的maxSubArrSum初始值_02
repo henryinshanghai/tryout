@@ -1,0 +1,4 @@
+当前窗口中元素的sum 不一定会大于0，因此 使用0作为比较数字是有风险的。
+
+正确做法：
+int maxSubArrSum = Integer.MIN_VALUE; // 初始化为 整型的最小数字

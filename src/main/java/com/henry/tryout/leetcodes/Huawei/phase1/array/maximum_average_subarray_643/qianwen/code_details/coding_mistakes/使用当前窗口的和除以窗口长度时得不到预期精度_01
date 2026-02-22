@@ -1,0 +1,9 @@
+预期精度：12.75000
+计算结果：12.00000
+
+正确步骤：
+① 先把 maxSum 转化为 double类型；
+② 再进行 double类型的除法；// 就能够得到预期的精度
+
+代码：
+return (double) maxSubArrSum / fixLength;
