@@ -1,1 +1,5 @@
+手段：为了方便 在返回时 快速转化为int[][]（预期的返回类型），
+这里列表的泛型参数 设置为 int[]；
+
+具体手段：
 List<int[]> resultIntervalList;

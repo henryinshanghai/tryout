@@ -1,5 +1,5 @@
 resultIntervalList.toArray(new int[list.size()][])
 
-① 需要 new 二维数组；
-② 需要 在行参数中 传入 区间的个数；
+① 需要 new一个二维数组 来 作为toArray()方法的参数；
+② 需要 在二维数组的第一维中 传入 区间的个数 来 定义行数；
 ③ 列参数 可留空。

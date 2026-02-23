@@ -1,0 +1,14 @@
+手段：在Arrays.sort(arr, <sort_rule>)中，
+使用 lambda表达式 来 实现 排序规则；
+
+具体做法1：
+    Arrays.sort(intervals, (a, b) -> (a[0] - b[0]));
+特征：
+① 参数有两个；
+② 返回值 是一个boolean类型；
+
+具体做法2：
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+特征：
+① 使用 Comparator.comparingInt()方法的返回值 作为参数；
+② 对于一个range，使用它的左边界 作为比较依据（a[0]）。
