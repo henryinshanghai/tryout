@@ -1,0 +1,8 @@
+说明：这种情况 与 字符串中存在有重复字符 互斥，必须 单独有一个return语句；
+
+手段：return false；
+具体做法：
+    for(){
+        ... // return true;
+    }
+    return false;
