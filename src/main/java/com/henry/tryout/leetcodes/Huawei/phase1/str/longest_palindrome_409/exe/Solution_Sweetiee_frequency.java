@@ -17,7 +17,10 @@ public class Solution_Sweetiee_frequency {
 
         int longestPalinLength = 0;
         for (int currentFrequency : charToItsFrequency) {
-            // 构造 回文字符串 时，字符 最多 用偶数次（<= 其在原始字符串中出现的次数）。
+            /* 构造 回文字符串 时，字符 最多 用偶数次（<= 其在原始字符串中出现的次数） */
+            // 判断 当前频率的奇偶性；
+            // 手段（位运算写法）：<int> & 1;
+            // 用法：结果为0，说明<int>为偶数；结果为1，说明<int>为奇数。
             int zeroOrOne = currentFrequency & 1;
             int maxAvailableTimes = currentFrequency - zeroOrOne;
 
