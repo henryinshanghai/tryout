@@ -1,0 +1,9 @@
+手段1：先统一转成小写字符，再进行比较；
+具体做法：// 推荐
+    Character.toLowerCase(<char1>);
+
+手段2：先转成字符串，再使用字符串的‘忽略大小写后是否相等’的方法 作比较；
+具体做法：
+    String.valueOf(<char1>).equalsIgnoreCase(
+        String.valueOf(<char1>)
+        ); // 有对象的开销

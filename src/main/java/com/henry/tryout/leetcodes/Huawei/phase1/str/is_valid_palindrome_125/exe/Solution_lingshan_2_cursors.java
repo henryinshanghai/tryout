@@ -1,6 +1,6 @@
 package com.henry.tryout.leetcodes.Huawei.phase1.str.is_valid_palindrome_125.exe;
 
-// 按需移动指针，在必要时比较
+// 每次循环都移动指针，在需要时比较（不推荐，可能会有多次空转循环）
 public class Solution_lingshan_2_cursors {
     public boolean isPalindrome(String s) {
         int leftCharCursor = 0;

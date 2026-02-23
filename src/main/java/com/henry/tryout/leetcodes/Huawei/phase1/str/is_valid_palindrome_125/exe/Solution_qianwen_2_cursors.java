@@ -1,11 +1,12 @@
 package com.henry.tryout.leetcodes.Huawei.phase1.str.is_valid_palindrome_125.exe;
 
-// 先移动指针 指向有效字符，再 对指针指向的字符 进行比较
+// 先移动指针 指向有效字符，再 对指针指向的字符 进行比较（推荐写法）
 public class Solution_qianwen_2_cursors {
     public boolean isPalindrome(String s) {
         int leftCharCursor = 0;
         int rightCharCursor = s.length() - 1;
 
+        /* 步骤：逐个比较 当前字母字符对中的两个字符 是否相等 */
         while (leftCharCursor < rightCharCursor) {
             /* 使用while循环 来 移动指针到 合法位置（类似 快速排序的操作） */
             // 当 左字符指针 所指向的字符 不是 合法字符时，
