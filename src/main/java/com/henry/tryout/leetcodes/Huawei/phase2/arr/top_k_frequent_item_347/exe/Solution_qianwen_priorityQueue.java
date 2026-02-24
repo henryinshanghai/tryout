@@ -22,17 +22,12 @@ public class Solution_qianwen_priorityQueue {
                 );
 
         // 3. 遍历所有唯一元素
-        for (int currentNum : numToItsFrequency.keySet()) {
-            // 如果 队列中的元素数量 小于 k，
-            if (numMinQueuePrioritizeByFreq.size() < k) {
-                // 则：直接向其中添加
-                numMinQueuePrioritizeByFreq.offer(currentNum);
-            } else if (numToItsFrequency.get(currentNum) > numToItsFrequency.get(numMinQueuePrioritizeByFreq.peek())) {
-                // 如果 队列满员 并且 当前数字的频率 比起 优先队列中的最小频率 更大，则：
-                // ① 剔除 最小频率的元素
+        for (int currentNum : numToItsFrequency.keySet()) { // 🐖 遍历数字集合（避免重复数字）
+            /* 标准写法，无需显示比较（显示比较的写法 易出错） */
+            numMinQueuePrioritizeByFreq.offer(currentNum);
+
+            if(numMinQueuePrioritizeByFreq.size() > k) {
                 numMinQueuePrioritizeByFreq.poll();
-                // ② 向队列中 添加 当前元素
-                numMinQueuePrioritizeByFreq.offer(currentNum);
             }
         }
 
