@@ -1,0 +1,12 @@
+手段：把 假定众数的类型 设置为 Integer，使用 null 来 表示‘还没有设置众数’；
+
+具体做法：
+Integer currentAssumeMajority1 = null;
+
+if(情形1) { // 相等
+    加票
+} else if(情形2) { // 不相等，票数为0
+    // 设置众数
+} else { // 情形3：不相等，票数不为0
+    减票
+}

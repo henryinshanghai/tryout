@@ -5,60 +5,54 @@ import java.util.List;
 
 public class Solution_qianwen_BMVote {
     public List<Integer> majorityElement(int[] nums) {
-        // 初始化两个候选者（使用 Integer 而非 int，以便用 null 表示“未设置”）
+        // 初始化两个候选者（使用 Integer 而非 int，以便用 null 表示“尚未设置该众数”）
         Integer currentAssumeMajority1 = null;
         Integer currentAssumeMajority2 = null;
 
         // 初始化两个候选者的计数器
-        int majority1sFrequency = 0;
-        int majority2sFrequency = 0;
+        int majority1VoteAmount = 0;
+        int majority2VoteAmount = 0;
 
         // ========================
         // 阶段一：投票 筛选 候选者
         // ========================
         for (int currentNum : nums) {
-            // 情况1：当前数字 等于 候选者1 → 候选者1 得一票
+            /* 情形1：与 某个‘假定众数’相等 */
             if (currentAssumeMajority1 != null &&
                     currentNum == currentAssumeMajority1) {
-                majority1sFrequency++;
-            }
-            // 情况2：当前数字 等于 候选者2 → 候选者2 得一票
-            else if (currentAssumeMajority2 != null &&
+                // 加票
+                majority1VoteAmount++;
+            } else if (currentAssumeMajority2 != null &&
                     currentNum == currentAssumeMajority2) {
-                majority2sFrequency++;
-            }
-            // 情况3：候选者1的票数 已归零 → 用 当前数字 替换 候选者1
-            else if (majority1sFrequency == 0) {
+                majority2VoteAmount++;
+            } else if (majority1VoteAmount == 0) { /* 情形2：与 两个‘假定众数’都不相等，且 当前票数为0 */
+                // 替换‘假定众数’
                 currentAssumeMajority1 = currentNum;
-                majority1sFrequency = 1; // 新候选者 初始 得1票
-            }
-            // 情况4：候选者2的票数 已归零 → 用 当前数字 替换 候选者2
-            else if (majority2sFrequency == 0) {
+                majority1VoteAmount = 1; // 新候选者 初始 得1票
+            } else if (majority2VoteAmount == 0) {
                 currentAssumeMajority2 = currentNum;
-                majority2sFrequency = 1; // 新候选者 初始 得1票
+                majority2VoteAmount = 1; // 新候选者 初始 得1票
+            } else { /* 情形3：与 两个‘假定众数’都不相等，且 当前票数不为0 */
+                // 减票
+                majority1VoteAmount--;
+                majority2VoteAmount--;
             }
-            // 情况5：当前数字 与 两个候选者 都不同，且 两个候选者 都有票
-            // → 三者 互相抵消（各减一票），相当于“淘汰”一轮
-            else {
-                majority1sFrequency--;
-                majority2sFrequency--;
-            }
-        }
+        } /* 循环结束后，会得到两个‘可能的众数’ */
 
         // ========================
         // 阶段二：验证 候选者 是否真的 满足条件
         // 注意：投票阶段 只保证 “可能是”，不保证 “一定是”
         // ========================
-        majority1sFrequency = 0;
-        majority2sFrequency = 0;
+        majority1VoteAmount = 0;
+        majority2VoteAmount = 0;
         for (int currentNum : nums) {
             if (currentAssumeMajority1 != null &&
                     currentNum == currentAssumeMajority1) {
-                majority1sFrequency++;
+                majority1VoteAmount++;
             }
             if (currentAssumeMajority2 != null &&
                     currentNum == currentAssumeMajority2) {
-                majority2sFrequency++;
+                majority2VoteAmount++;
             }
         }
 
@@ -69,10 +63,10 @@ public class Solution_qianwen_BMVote {
         int numAmount = nums.length;
 
         // 只有 真实出现次数 > numAmount/3 的候选者(真正的标准) 才加入结果
-        if (majority1sFrequency > numAmount / 3) {
+        if (majority1VoteAmount > numAmount / 3) {
             realMajorityList.add(currentAssumeMajority1);
         }
-        if (majority2sFrequency > numAmount / 3) {
+        if (majority2VoteAmount > numAmount / 3) {
             realMajorityList.add(currentAssumeMajority2);
         }
 
