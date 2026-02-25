@@ -2,52 +2,64 @@ package com.henry.tryout.leetcodes.Huawei.phase2.str.repeated_string_match_686.e
 
 // 计算LPS数组（已匹配子串的 最长公共前后缀 的长度）
 // 推荐使用 0-based 的 LPS（Longest Prefix Suffix）数组，避免 人为添加 占位符
+// 概念：① 子串字符指针；② 前缀指针（结束位置的下一个位置）；
+// ③ 扩展前后缀；④ 回退前缀指针（来继续尝试扩展）
+// 🐖 定义的前缀指针 指向的是 当前子串的最长公共前后缀的前缀结束位置的下一个位置，恰好 等于 前缀长度
 public class ConstructLPS {
 
     /**
      * 计算 给定的模式字符串 的最长公共前后缀的长度
-     * @param pattern   模式字符串（标准 0-based 字符串）
+     *
+     * @param pattern 模式字符串（标准 0-based 字符串）
      * @return 模式字符串在各个位置上的前缀位置数组
      */
     public int[] computeLPS(String pattern) {
         int patCharAmount = pattern.length();
-        int[] currentSpotToItsPrefixSpot = new int[patCharAmount]; // lps[i] = pattern[0..i] 的最长公共真前后缀长度
+        int[] currentSpotToItsPrefixLength = new int[patCharAmount]; // lps[i] = pattern[0..i] 的最长公共真前后缀长度
 
-        // 最长公共前后缀的前缀指针（用于指向 前缀的末尾字符）
-        // 初始指在位置0，表示还没有公共前后缀
-        int currentPrefixCursor = 0;
+        /* 🐖 前缀字符序列末尾字符的下一个位置指针 currentPrefixEndNextSpot 与
+            前缀长度prefixLength的关系是：currentPrefixEndNextSpot = prefixLength */
+        // 准备 ‘最长公共前后缀’的前缀结束指针（用于指向 前缀字符序列的末尾字符的下一个位置）
+        // 初始 指在位置0，表示 还没有公共前后缀
+        int currentPrefixEndNextSpot = 0;
 
-        // 模式字符指针（用于指向 当前的模式字符）
+        // 准备 子串的字符结束指针（用于指向 当前子串的结束位置）
         // 初始指在位置1，因为按照定义 单一字符 不存在最长公共前后缀（LPS(0)=0）
-        int currentPatCharCursor = 1;
+        int currentSubStrEndCursor = 1;
 
-        while (currentPatCharCursor < patCharAmount) {
-            /* LPS扩展成功 */
-            // 如果 新增的模式字符 与 当前前缀指针 所指向的字符 相同，说明 ‘公共前后缀’扩展成功，则：
-            if (pattern.charAt(currentPatCharCursor) == pattern.charAt(currentPrefixCursor)) {
+        while (currentSubStrEndCursor < patCharAmount) {
+            /* 尝试扩展 公共前后缀 */
+            // 如果 新增的子串字符 与 当前前缀指针 所指向的字符 相同，
+            // 说明 能够扩展‘公共前后缀’，则：
+            if (pattern.charAt(currentSubStrEndCursor) ==
+                    pattern.charAt(currentPrefixEndNextSpot)) {
                 // ① 把 前缀指针 向后移动一个位置（扩展 公共前后缀）
-                currentPrefixCursor++;
-                // ② 添加 当前位置 -> 其最长公共前后缀的前缀指针的位置 的映射
-                currentSpotToItsPrefixSpot[currentPatCharCursor] = currentPrefixCursor;
-                // ③ 把 模式字符指针 也向后移动一个位置（继续检查下一个模式字符）
-                currentPatCharCursor++;
-            } else { // 否则，说明 公共前后缀扩展失败，则：
-                /* LPS扩展失败，回退‘前缀指针’（根据既有的LPS[]数组的指导） */
+                currentPrefixEndNextSpot++;
+                // ② 添加 当前子串pat[0..i] -> 其最长公共前后缀的前缀长度 的映射
+                // 🐖 前缀长度 prefixLength == 前缀指针prefixEndNextSpot的位置
+                currentSpotToItsPrefixLength[currentSubStrEndCursor] = currentPrefixEndNextSpot;
+                // ③ 把 子串字符指针 也向后移动一个位置（继续检查下一个 被扩展的模式字符）
+                currentSubStrEndCursor++;
+            } else { // 否则，说明 公共前后缀 扩展失败，则：
+                /* （根据既有的LPS[]数组的指导）回退‘前缀指针’ 来 尝试找到 更短的公共前后缀 */
                 // ① 如果 当前前缀指针的位置 还不是 0，说明 还有回退空间，则：
-                if (currentPrefixCursor != 0) {
+                if (currentPrefixEndNextSpot != 0) {
                     // （利用已计算的 lps信息）回退 前缀指针
-                    // 手段：回退到 lps[len-1]
-                    currentPrefixCursor = currentSpotToItsPrefixSpot[currentPrefixCursor - 1];
-                } else { // ② 如果 当前前缀指针的位置 为 0，说明 已经回退到了 起点，则：
-                    // 把 当前位置 所对应的前缀指针位置 归零
-                    currentSpotToItsPrefixSpot[currentPatCharCursor] = 0;
-                    // 把 模式指针 向后移动一个位置（检查下一个模式字符）
-                    currentPatCharCursor++;
+                    // 手段：回退到 lps[len-1]位置处
+                    // 原理：‘更短的公共前后缀的k’ 恰好是 pat[0..len-1]的最长公共前后缀（逻辑证明）
+                    // 详见 construct_LPS_05
+                    currentPrefixEndNextSpot = currentSpotToItsPrefixLength[currentPrefixEndNextSpot - 1];
+                } else { // ② 如果 当前前缀指针的位置 为 0，说明 没能找到‘更短的公共前后缀’，则：
+                    // 把 当前子串pat[0..1] 的 最长公共前后缀的前缀长度  归零
+                    currentSpotToItsPrefixLength[currentSubStrEndCursor] = 0;
+                    // 把 子串字符指针 向后移动一个位置（继续检查下一个 被扩展的模式字符）
+                    currentSubStrEndCursor++;
                 }
             }
         }
 
-        // 返回 计算得到的 当前位置 -> 其前缀指针位置 的数组
-        return currentSpotToItsPrefixSpot;
+        // 返回 计算得到的 当前子串(字符指针位置) -> 其最长前后缀长度(前缀指针位置) 的数组
+        // 也就是 大名鼎鼎的LPS[]数组（KMP算法的关键）
+        return currentSpotToItsPrefixLength;
     }
 }
