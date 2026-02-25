@@ -1,0 +1,2 @@
+先移动前缀指针；// 到达正确的位置
+再为lsp[i]赋值；// lsp[i] = prefixCursor
