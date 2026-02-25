@@ -1,9 +1,9 @@
 ✅ 推荐解法步骤（简单高效）
 步骤：
-1.计算 最小重复次数 k = ceil(len(b) / len(a))
-    在 Java/Python 中可用：k = (len(b) + len(a) - 1) // len(a)
-2.构造 a 重复 k 次的字符串 s1
+1.计算 最小重复次数k = ceil(len(b) / len(a))
+    在 Java/Python 中可用：k = (len(b) + len(a) - 1) / len(a)
+2.构造 a 重复k次的字符串 s1
 3.如果 s1 包含 b，返回 k
-4.否则，构造 a 重复 k+1 次的字符串 s2
+4.否则，构造 a 重复k+1次的字符串 s2
 5.如果 s2 包含 b，返回 k+1
 6.否则，返回 -1
