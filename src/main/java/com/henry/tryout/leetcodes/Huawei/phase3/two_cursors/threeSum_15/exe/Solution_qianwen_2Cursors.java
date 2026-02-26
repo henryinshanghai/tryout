@@ -37,40 +37,44 @@ public class Solution_qianwen_2Cursors {
 
             // 初始化 两个游标指针的位置
             // 左指针 初始指向 当前位置的下一个位置
-            int leftCursor = currentNumSpot + 1;
+            int middleBroCursor = currentNumSpot + 1;
             // 右指针 初始指向 数字序列的末尾位置
-            int rightCursor = numAmount - 1;
+            int bigBroCursor = numAmount - 1;
+
+            List<List<Integer>> valid3BrosFromCurr = new ArrayList<>();
 
             /* 以 当前位置 作为起点，开始构建 所有 能够满足题意的三元组（用while） */
-            while (leftCursor < rightCursor) {
+            while (middleBroCursor < bigBroCursor) {
                 // 计算 当前位置、左数字指针、右数字指针 3个位置上的元素的和
-                int current3Sum = numArr[currentNumSpot] + numArr[leftCursor] + numArr[rightCursor];
+                int current3BroSum = numArr[currentNumSpot] + numArr[middleBroCursor] + numArr[bigBroCursor];
 
                 // 如果 和为0，说明 找到了一个 满足条件的三元组
-                if (current3Sum == 0) {
+                if (current3BroSum == 0) {
                     // 则：把 满足条件的三元组（转化为list后） 记录到 列表中
-                    allValid3NumsList.add(Arrays.asList(numArr[currentNumSpot], numArr[leftCursor], numArr[rightCursor]));
+                    valid3BrosFromCurr.add(Arrays.asList(numArr[currentNumSpot], numArr[middleBroCursor], numArr[bigBroCursor]));
 
-                    // 第二层去重：跳过重复的 leftCursor 和 rightCursor
-                    while (leftCursor < rightCursor &&
-                            numArr[leftCursor] == numArr[leftCursor + 1]) {
-                        leftCursor++;
+                    // 第二层去重：跳过重复的 middleBroCursor 和 bigBroCursor
+                    while (middleBroCursor < bigBroCursor &&
+                            numArr[middleBroCursor] == numArr[middleBroCursor + 1]) {
+                        middleBroCursor++;
                     }
-                    while (leftCursor < rightCursor &&
-                            numArr[rightCursor] == numArr[rightCursor - 1]) {
-                        rightCursor--;
+                    while (middleBroCursor < bigBroCursor &&
+                            numArr[bigBroCursor] == numArr[bigBroCursor - 1]) {
+                        bigBroCursor--;
                     }
 
                     /* 收缩指针范围 来 查找下一个 满足条件的三元组 */
                     // 把 游标指针 移动到下一个位置
-                    leftCursor++;
-                    rightCursor--;
-                } else if (current3Sum < 0) {
-                    leftCursor++; // 需要 更大的和
+                    middleBroCursor++;
+                    bigBroCursor--;
+                } else if (current3BroSum < 0) {
+                    middleBroCursor++; // 需要 更大的和
                 } else {
-                    rightCursor--; // 需要 更小的和
+                    bigBroCursor--; // 需要 更小的和
                 }
             }
+
+            allValid3NumsList.addAll(valid3BrosFromCurr);
         }
 
         // 返回 所有满足条件的三元组列表

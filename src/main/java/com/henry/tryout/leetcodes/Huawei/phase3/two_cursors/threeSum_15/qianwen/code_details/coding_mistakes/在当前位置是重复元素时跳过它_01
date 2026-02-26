@@ -1,12 +1,12 @@
 正确手段：
-if(currentSpot > 0 &&
-    nums[currentSpot] == nums[currentSpot - 1]) {
-    continue;
-}
+    if(currentSpot > 0 &&
+        nums[currentSpot] == nums[currentSpot - 1]) {
+        continue;
+    }
 
 错误写法：
-while(xxx) {
-    currentSpot++;
-}
+    while(xxx) {
+        currentSpot++;
+    }
 
 💡 原则：不要在 for 循环体内 修改 循环变量！
