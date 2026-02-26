@@ -1,0 +1,5 @@
+已知：‘当前节点指针’ 现在正指向 ‘本轮的根’；
+手段：移动 ‘当前节点指针’ 指向 根节点的右子节点；
+
+具体做法：
+    currentRootNode = currentRootNode.right;
