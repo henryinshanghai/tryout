@@ -1,5 +1,5 @@
 直接入栈；
 
 具体做法：
-① 先把字符串转化为整数； // Integer.parseInt(currentChar)
-② 再把得到的整数入栈；   // stack.push(<int>)
+① 先把 字符串 转化为 整数； // Integer.parseInt(currentChar)
+② 再把 得到的整数 入栈；   // stack.push(<int>)

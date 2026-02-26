@@ -1,4 +1,4 @@
-case语句不同与if语句，只需要列举 当前case的值是什么 即可。
+case语句 不同于 if语句，只需要列举 当前case的值是什么 即可。
 
 最简单的switch...case...default语法的示例：
 public class SimpleSwitch {
@@ -8,7 +8,7 @@ public class SimpleSwitch {
         switch (gender) {
             case 'M':
                 System.out.println("男性");
-                break;
+                break; // 🐖 每个case都需要一个break;
             case 'F':
                 System.out.println("女性");
                 break;

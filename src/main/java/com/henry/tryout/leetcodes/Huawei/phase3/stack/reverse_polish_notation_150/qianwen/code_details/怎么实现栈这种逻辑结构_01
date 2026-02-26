@@ -1,4 +1,12 @@
-手段：使用Java中提供的类型 Stack即可；
+✅ 推荐方案 1：使用 Deque 接口 + ArrayDeque 实现（最标准、最高效）
+这是 Java 官方推荐的现代做法。
 
-具体用法：new Stack<>();
-特征：不需要传入 初始容量大小。
+Deque（Double Ended Queue，双端队列）接口 完美涵盖了 栈的操作，
+而 ArrayDeque 是 基于数组实现的，性能优于 LinkedList。
+
+优点：性能好（数组扩容机制优化过）、非线程安全（单线程快）、API 清晰。
+
+核心方法：
+压栈：push(E e)
+弹栈：pop()
+看栈顶：peek()
