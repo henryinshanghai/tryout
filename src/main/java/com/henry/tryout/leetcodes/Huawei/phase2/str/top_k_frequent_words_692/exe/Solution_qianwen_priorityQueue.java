@@ -17,19 +17,22 @@ public class Solution_qianwen_priorityQueue {
         }
 
         // 2. 创建一个大小为k的优先队列
-        // 🐖 根据题目要求 按需指定 队列元素的比较规则（刚好相反）
+        // 🐖 根据题目要求 按需设置 队列元素的比较规则
+        // 原理：排在前面的（优先级高的）元素 会 先被移除
         PriorityQueue<String> wordMinQueue =
                 new PriorityQueue<>((a, b) -> { // 🐖 不要遗漏<>
                     int freqA = wordToItsFrequency.get(a);
                     int freqB = wordToItsFrequency.get(b);
 
+                    // 频次小的先移除（排在前面）-> 按频次升序
                     if (freqA != freqB) {
-                        return freqA - freqB; // 按 频率 升序（小的在顶，会先被淘汰）
+                        return freqA - freqB;
                     }
-                    return b.compareTo(a);    // 按 字典序 降序（大的在顶，会先被淘汰）→ 保证 字典序小的 留下
+                    // 字典序大的先移除（排在前面）-> 按字典序降序
+                    return b.compareTo(a);
                 });
 
-        // 3. 维护 队列元素
+        // 3. 维护 大小为k的队列
         // 手段：遍历单词集合，不断入队 当前单词，按需出队
         for (String currentWord : wordToItsFrequency.keySet()) {
             // 把 当前单词 添加到 堆中
