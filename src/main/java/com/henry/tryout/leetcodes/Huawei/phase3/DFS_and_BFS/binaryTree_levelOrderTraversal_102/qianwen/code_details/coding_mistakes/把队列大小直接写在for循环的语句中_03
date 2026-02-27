@@ -1,0 +1,9 @@
+错误原因：在for循环的过程中，队列在不断发生变化。
+因此把queue.size()写在循环中，无法实现 ‘遍历当前层的所有节点’的效果；
+
+手段：在for循环之前，先计算出 静态的‘当前层的节点数量’；
+具体做法：
+① 先 在循环之前 得到 当前层的节点数量;
+    int currLevelNodesAmount = queue.size();
+② 再使用 该数量 作为 for循环的结束依据;
+    for(int i=0; i<currLevelNodesAmount; i++) {}

@@ -9,7 +9,7 @@ public class Solution_qianwen_BFS {
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> nodesInCurrentLevelList = new ArrayList<>();
 
-        // 空树特判
+        // ① 对特殊参数 进行单独处理
         if (root == null) {
             return nodesInCurrentLevelList;
         }
@@ -19,7 +19,7 @@ public class Solution_qianwen_BFS {
         nodeSimpleQueue.offer(root);
 
         while (!nodeSimpleQueue.isEmpty()) {
-            // ⭐ 获取到 当前层的节点数量
+            // ② size应该是个静态的值，需要写在for循环的外部（不能在循环过程中发生变化）
             int nodeAmountInCurrentLevel = nodeSimpleQueue.size();
             List<Integer> currentLevelNodes = new ArrayList<>();
 
@@ -31,6 +31,7 @@ public class Solution_qianwen_BFS {
                 currentLevelNodes.add(currentNode.val);
 
                 /* 将 该节点的非空子节点 按序（先左后右）加入 队列（为下一层准备）*/
+                // ③ 只把非nil节点添加到队列中
                 if (currentNode.left != null) {
                     nodeSimpleQueue.offer(currentNode.left);
                 }
