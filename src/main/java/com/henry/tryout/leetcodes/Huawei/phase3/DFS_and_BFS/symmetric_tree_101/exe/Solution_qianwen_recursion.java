@@ -2,7 +2,8 @@ package com.henry.tryout.leetcodes.Huawei.phase3.DFS_and_BFS.symmetric_tree_101.
 
 public class Solution_qianwen_recursion {
     public boolean isSymmetric(TreeNode root) {
-        // 把 原始问题（二叉树是否轴对称） 扩展/泛化成 一个可以递归解决的问题（两棵树之间 是否互为镜像）
+        // 把 原始问题（二叉树是否轴对称）
+        // 扩展/泛化成 一个可以递归解决的问题（两棵树之间 是否互为镜像）
         if (root == null)
             return true;
 
@@ -12,13 +13,17 @@ public class Solution_qianwen_recursion {
 
     private boolean isMirror(TreeNode rootNodeOfTree1, TreeNode rootNodeOfTree2) {
         /* 递归终结条件 */
+        // 如果 两个节点都是 nil节点，说明 它们是相互镜像的，
         if (rootNodeOfTree1 == null &&
                 rootNodeOfTree2 == null) {
+            // 返回true
             return true;
         }
 
+        // 如果 两个节点有一个是 nil节点，说明 它们不是相互镜像的，
         if (rootNodeOfTree1 == null ||
                 rootNodeOfTree2 == null) {
+            // 返回false
             return false;
         }
 
