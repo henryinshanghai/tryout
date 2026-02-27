@@ -1,0 +1,7 @@
+合法方格的有效范围为：[0,0]~[rowAmount-1, colAmount-1]；
+
+因此越界条件为：
+if(currentRow < 0 || currentRow >= rowAMount // =也是越界
+    ...) {
+
+    }
