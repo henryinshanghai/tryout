@@ -30,7 +30,7 @@ public class NestedIntegerImpl implements NestedInteger {
 
     @Override
     public void add(NestedInteger ni) {
-
+        // 向 当前NI实例 中 追加一个NI实例
     }
 
     @Override

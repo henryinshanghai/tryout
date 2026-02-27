@@ -1,0 +1,7 @@
+while(currDigitCursor < charArr.length &&
+    Character.isDigit(s.charAt(currDigitCursor))) {
+    int currentDigitVal = s.charAt(currDigitCursor) - '0';
+    parsedNumVal = parsedNumVal * 10 + currentDigitVal;
+
+    currDigitCursor++; // ① 数字指针要向后移动
+}
