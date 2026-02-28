@@ -1,0 +1,7 @@
+如果 计算得到的bagCapacity 是一个负数，
+则：不存在任何可行的方案；
+
+具体做法：
+    if(bagCapacity < 0) {
+        return 0;
+    }
