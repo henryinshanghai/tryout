@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Solution_gongshui_DFS {
+public class Solution_gongshui_DFS_mutipleStarts {
 
     int colAmount, rowAmount;
     int[][] globalHeights;
@@ -34,7 +34,7 @@ public class Solution_gongshui_DFS {
             dfs(rowAmount - 1, currentCol, currentSpotToIsAbleToFlowFromPacific);
         }
 
-        /* 在得到了 ‘由太平洋方格可达的所有方格’ 与 ‘由大西洋方格可达的所有方格’后，查看 方格集合的交集 */
+        /* （在得到了 ‘由太平洋方格逆流可达的所有方格’ 与 ‘由大西洋方格逆流可达的所有方格’后）收集 方格集合的交集 */
         List<List<Integer>> allValidGridList = new ArrayList<>();
         for (int currentRow = 0; currentRow < rowAmount; currentRow++) {
             for (int currentCol = 0; currentCol < colAmount; currentCol++) {
@@ -61,19 +61,20 @@ public class Solution_gongshui_DFS {
             int neighborSpotX = currentSpotX + currentDirection[0],
                     neighborSpotY = currentSpotY + currentDirection[1];
 
-            // 如果 该邻居越界，则：
+            // ①（对邻居的）越界检查
             if (neighborSpotX < 0 ||
                     neighborSpotX >= rowAmount ||
                     neighborSpotY < 0 ||
-                    neighborSpotY >= colAmount) { // 越界检查
+                    neighborSpotY >= colAmount) {
                 // 不再进行后继处理
                 continue;
             }
 
-            // 如果 该邻居已经被标记过了 或者 该邻居的高度 小于 当前方格的高度，说明 当前方向上的递归结束，则：
-            if (currentSpotToIsAbleToFlowFromSea[neighborSpotX][neighborSpotY] || // 重复性检查
-                    globalHeights[neighborSpotX][neighborSpotY] < globalHeights[currentSpotX][currentSpotY]) { // 业务条件检查
-                // 不再进行后继处理
+            // 如果 该邻居已经被标记过了 或者 该邻居的高度 小于 当前方格的高度，
+            // 说明 当前方向上的递归结束，
+            if (currentSpotToIsAbleToFlowFromSea[neighborSpotX][neighborSpotY] || // ② 重复性检查
+                    globalHeights[neighborSpotX][neighborSpotY] < globalHeights[currentSpotX][currentSpotY]) { // ③ 业务条件检查
+                // 则：不再进行后继处理
                 continue;
             }
 
