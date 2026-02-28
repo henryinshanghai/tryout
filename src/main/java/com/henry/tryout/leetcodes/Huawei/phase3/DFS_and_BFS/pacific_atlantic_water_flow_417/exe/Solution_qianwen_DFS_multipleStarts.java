@@ -16,28 +16,33 @@ public class Solution_qianwen_DFS_multipleStarts {
             return new ArrayList<>();
         }
 
+        // 为全局变量赋值
         globalHeights = currentGridToItsHeights;
-        int rowsAmount = currentGridToItsHeights.length, columnAmount = currentGridToItsHeights[0].length;
+
+        int rowsAmount = currentGridToItsHeights.length;
+        int columnAmount = currentGridToItsHeights[0].length;
+
+        // 准备两个boolean二维矩阵  用作标记矩阵
         boolean[][] currentSpotToIsAbleFlowToPacific = new boolean[rowsAmount][columnAmount];
         boolean[][] currentSpotToIsAbleFlowToAtlantic = new boolean[rowsAmount][columnAmount];
 
-        // 🌊 从 太平洋边界 开始 DFS（上边界 + 左边界）
+        /* 🌊 从 太平洋边界 开始 DFS（上边界 + 左边界）*/
+        // 作用：填充 标记矩阵，得到 哪些方格 由太平洋逆流可达
         for (int currentRow = 0; currentRow < rowsAmount; currentRow++) {
-            dfs(
-                    currentRow,
+            dfs(currentRow,
                     0,
                     currentSpotToIsAbleFlowToPacific,
                     currentGridToItsHeights[currentRow][0]);
         }
         for (int currentColumn = 0; currentColumn < columnAmount; currentColumn++) {
-            dfs(
-                    0,
+            dfs(0,
                     currentColumn,
                     currentSpotToIsAbleFlowToPacific,
                     currentGridToItsHeights[0][currentColumn]);
         }
 
-        // 🌊 从大西洋边界开始 DFS（下边界 + 右边界）
+        /* 🌊 从大西洋边界开始 DFS（下边界 + 右边界）*/
+        // 作用：填充 标记矩阵，得到 哪些方格 由大西洋逆流可达
         for (int currentRow = 0; currentRow < rowsAmount; currentRow++) {
             dfs(
                     currentRow,
@@ -53,12 +58,13 @@ public class Solution_qianwen_DFS_multipleStarts {
                     currentGridToItsHeights[rowsAmount - 1][currentColumn]);
         }
 
-        // 🔍 找交集
+        /* 🔍 从 太平洋的标记矩阵 与 大西洋的标记矩阵 中 找交集 */
         List<List<Integer>> allValidGridList = new ArrayList<>();
         for (int currentRow = 0; currentRow < rowsAmount; currentRow++) {
             for (int currentColumn = 0; currentColumn < columnAmount; currentColumn++) {
                 if (currentSpotToIsAbleFlowToPacific[currentRow][currentColumn]
                         && currentSpotToIsAbleFlowToAtlantic[currentRow][currentColumn]) {
+                    // 收集 既能由太平洋逆流到达、又能由大西洋逆流到达的方格
                     allValidGridList.add(Arrays.asList(currentRow, currentColumn));
                 }
             }
@@ -70,26 +76,28 @@ public class Solution_qianwen_DFS_multipleStarts {
     /**
      * 从 (x, y) 开始 DFS，标记 所有 能“倒流”到的方格
      *
-     * @param currentSpotX              当前位置的x坐标
-     * @param currentSpotY              当前位置的y坐标
-     * @param currentSpotToHasVisited   标记矩阵（pacific 或 atlantic）
-     * @param prevHeight                上一个位置的高度（用于比较）
+     * @param currentSpotX            当前位置的x坐标
+     * @param currentSpotY            当前位置的y坐标
+     * @param currentSpotToHasVisited 标记矩阵（pacific 或 atlantic）
+     * @param prevHeight              上一个位置的高度（用于比较）
      */
     private void dfs(int currentSpotX,
                      int currentSpotY,
                      boolean[][] currentSpotToHasVisited,
                      int prevHeight) { // 🐖 这个参数 可以通过gongshui的写法省略掉
-        // 🛑 边界检查 + 高度检查 + 重复访问检查
+        // 🛑 边界检查  + 重复访问检查 + 业务检查（因此需要参数prevHeight）
         if (currentSpotX < 0 || currentSpotX >= globalHeights.length ||
                 currentSpotY < 0 || currentSpotY >= globalHeights[0].length ||
                 currentSpotToHasVisited[currentSpotX][currentSpotY] ||
-                globalHeights[currentSpotX][currentSpotY] < prevHeight) { // ⚠️ 注意：必须 >= 才能流（倒流时 要求 不下降）
+                // ⚠ 注意：必须 >= 才能流（倒流时 要求 不下降）
+                globalHeights[currentSpotX][currentSpotY] < prevHeight) {
             return;
         }
 
-        currentSpotToHasVisited[currentSpotX][currentSpotY] = true; // ✅ 标记为'已访问'/可达
+        // ✅ 标记 当前位置 为 '已访问'/可达
+        currentSpotToHasVisited[currentSpotX][currentSpotY] = true;
 
-        // 🔁 向四个方向继续搜索
+        // 🔁 向 当前位置的四个邻居方向 继续搜索
         for (int[] currentDirection : DIRS) {
             dfs(
                     currentSpotX + currentDirection[0],
