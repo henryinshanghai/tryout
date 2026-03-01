@@ -11,7 +11,8 @@ public class Solution_qianwen_clearThenSearch {
                 if ((currentRow == 0 || currentRow == rowAmount - 1 ||
                         currentCol == 0 || currentCol == colAmount - 1) &&
                         grid[currentRow][currentCol] == 0) {
-                    dfs(grid, currentRow, currentCol); // 从边界 0 出发，淹没 整个岛屿
+                    // 从 边界陆地方格 出发，淹没 整个岛屿
+                    dfs(grid, currentRow, currentCol);
                 }
             }
         }
@@ -23,13 +24,15 @@ public class Solution_qianwen_clearThenSearch {
             for (int currentCol = 0; currentCol < colAmount; currentCol++) {
                 if (grid[currentRow][currentCol] == 0) {
                     closedIslandAmount++;
-                    dfs(grid, currentRow, currentCol); // 可选：再次淹没（避免重复计数）
+                    // 以 指定位置为起点，搜索所有与之相连通的方格（陆地方格）
+                    dfs(grid, currentRow, currentCol);
                 }
             }
         }
         return closedIslandAmount;
     }
 
+    // 传统DFS写法：先检查当前方格，再标记当前方格，最后递归搜索所有的邻居方格
     private void dfs(int[][] grid, int currentRow, int currentCol) {
         // 边界检查 + 陆地检查
         if (currentRow < 0 || currentRow >= grid.length ||

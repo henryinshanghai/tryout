@@ -1,0 +1,9 @@
+边界岛屿 需要遵守两个约束：
+① 边界约束；
+② 陆地方格约束；
+这两个约束之间 是&&关系；
+
+具体做法：
+(currentRow == 0 || currentRow == rowAmount - 1 ||
+currentCol == 0 || currentCol == colAmount - 1) && // 边界约束
+grid[currentRow][currentCol] == 0 // 陆地方格约束
