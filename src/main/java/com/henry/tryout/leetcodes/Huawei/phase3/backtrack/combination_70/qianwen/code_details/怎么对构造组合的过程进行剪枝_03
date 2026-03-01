@@ -1,0 +1,16 @@
+剪枝公式：i <= n - (k - path.size()) + 1
+
+
+目标组合的长度：k；
+当前所构造出的组合的长度：constructedCombi.size();
+还缺少的数字的个数：k - constructedCombi.size()；
+
+当前还能够选择的数字数量：n - currNumCursor + 1；
+
+能够构造出 满足要求的组合 的基本条件：
+    当前还能够选择的数字数量 >= 还缺少的数字的个数
+也就是说：
+    n - currNumCursor + 1 >= k - constructedCombi.size()
+    n+1 -k +constructedCombi.size() >= currNumCursor
+反转下符号：
+    currNumCursor <= n+1 -k +constructedCombi.size()

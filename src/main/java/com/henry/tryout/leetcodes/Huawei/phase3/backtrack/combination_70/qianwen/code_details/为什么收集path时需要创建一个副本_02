@@ -1,0 +1,5 @@
+① path 是一个引用对象。
+    在递归过程中，path里的内容 一直在变（add -> remove）。
+② 如果 直接 result.add(path)，存进去的是 path 的地址。
+    最后 path 变空了，result里 所有的列表 也都 变空了。
+③ 必须 拷贝一份 当前的快照 存进去。

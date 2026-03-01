@@ -1,0 +1,14 @@
+算法流程
+
+① 定义 一个全局结果列表 result 和一个当前路径列表 path。
+② 编写 递归函数 backtrack(startIndex)：
+    Ⅰ 终止条件：
+        如果 path 的大小等于 k，说明凑齐了，
+        则：将 path 的拷贝加入 result，返回。
+    Ⅱ 单层逻辑：
+        遍历 从 startIndex 到 n 的数字i。
+        做选择：path.add(i)。
+        递归：
+            backtrack(i + 1) (注意是 i+1，保证 不重复选，且 顺序递增)。
+        撤销选择：
+            path.removeLast() (回溯，移除刚才加的 i，尝试下一个)。

@@ -1,0 +1,4 @@
+LeetCode 77 组合 (Combinations) 是一道经典的回溯算法 (Backtracking) 入门题。
+
+题目要求：
+给定 两个整数n和k，返回 范围 [1, n]中 所有可能的 k个数的组合。
