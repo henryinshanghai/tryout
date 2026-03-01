@@ -37,12 +37,12 @@ public class Solution_qianwen_BFS_multipleStarts {
         int neededMinMinutes = 0;
 
         // 🔄 BFS 层序遍历
-        while (!rottenOrangeSpotSimpleQueue.isEmpty() && freshOrangeAmount > 0) {
-            int nodeAmountOnCurrentLevel = rottenOrangeSpotSimpleQueue.size(); // ⚠ 关键：记录当前层的节点数
-            neededMinMinutes++; // 开始新的一分钟
+        while (!rottenOrangeSpotSimpleQueue.isEmpty()) {
+            // 得到 当前分钟所存在的 腐烂橘子的数量
+            int rottenOrangeAmountOnCurrLevel = rottenOrangeSpotSimpleQueue.size();
 
-            // 处理 当前层 所有的腐烂橘子
-            for (int currentRottenOrangeCursor = 0; currentRottenOrangeCursor < nodeAmountOnCurrentLevel; currentRottenOrangeCursor++) {
+            /* 使用当前分钟 来 污染新鲜的橘子 */
+            for (int currentRottenOrangeCursor = 0; currentRottenOrangeCursor < rottenOrangeAmountOnCurrLevel; currentRottenOrangeCursor++) {
                 // 获取到 当前腐烂橘子的位置坐标
                 int[] currentRottenOrangeSpot = rottenOrangeSpotSimpleQueue.poll();
                 int currentRottenOrangeSpotX = currentRottenOrangeSpot[0],
@@ -58,8 +58,8 @@ public class Solution_qianwen_BFS_multipleStarts {
                     if (nextSpotXInCurrentDirection < 0 ||
                             nextSpotXInCurrentDirection >= rowAmount ||
                             nextSpotYInCurrentDirection < 0 ||
-                            nextSpotYInCurrentDirection >= colAmount ||
-                            gridToItsOrangeState[nextSpotXInCurrentDirection][nextSpotYInCurrentDirection] != 1) {
+                            nextSpotYInCurrentDirection >= colAmount || // 越界检查
+                            gridToItsOrangeState[nextSpotXInCurrentDirection][nextSpotYInCurrentDirection] != 1) { // 业务检查：是否是新鲜橘子
                         // 则：→ 跳过
                         continue;
                     }
@@ -72,6 +72,12 @@ public class Solution_qianwen_BFS_multipleStarts {
                     // ③ 把 这个邻居位置 添加到队列中（以便能够 以之为基础，污染新的新鲜橘子）
                     rottenOrangeSpotSimpleQueue.offer(new int[]{nextSpotXInCurrentDirection, nextSpotYInCurrentDirection});
                 }
+            }
+
+            // 只有在 本轮‘的确污染了新鲜橘子’的情况下，才把耗时+1
+            // 原理：被污染的橘子 会被 添加到队列中
+            if (!rottenOrangeSpotSimpleQueue.isEmpty()) {
+                neededMinMinutes++; // 开始新的一分钟
             }
         }
 
