@@ -18,31 +18,32 @@ public class Solution_qianwen_backtrack {
     /**
      * 回溯生成所有子集
      * @param numArr            原始数组（无重复元素）
-     * @param startIndexAnchor  当前考虑的起始索引（避免重复组合）
+     * @param currStartIndex  当前考虑的起始索引（避免重复组合）
      * @param constructingSubset 当前已选择的元素列表（部分子集）
      * @param allSubsetList     存储所有子集的结果列表
      */
     private void backtrack(int[] numArr,
-                           int startIndexAnchor,
+                           int currStartIndex,
                            List<Integer> constructingSubset,
                            List<List<Integer>> allSubsetList) {
-
+        /* 收集 当前所构造出的子集 */
         // ✅ 每个递归调用 都代表 一个有效子集（包括 空集）
-        // 进行 深拷贝！
+        // 🐖 进行 深拷贝！
         allSubsetList.add(new ArrayList<>(constructingSubset));
 
-        // 🔁 从 start 开始遍历 来 保证从可选范围中选择（避免重复子集 [1,2] 和 [2,1]）
-        for (int pickedNumCursor = startIndexAnchor; pickedNumCursor < numArr.length; pickedNumCursor++) {
-            // ➕ 做选择 选择当前元素 添加到子集中
-            constructingSubset.add(numArr[pickedNumCursor]);
+        /* 构造‘当前子集’ */
+        // 避免重复子集   手段：使用 currStartIndex 来 收窄 同树层下一次构造子集时 的 可选数字范围
+        for (int currNumCursor = currStartIndex; currNumCursor < numArr.length; currNumCursor++) {
+            // 为 当前子集 选择当前数字
+            constructingSubset.add(numArr[currNumCursor]);
 
-            // 🔁 递归：下一层从 pickedNumCursor+1 开始
+            // 递归地 继续构造‘当前子集’
             backtrack(numArr,
-                    pickedNumCursor + 1, // 收缩可选范围
+                    currNumCursor + 1, // 同树层下一次构造时，可选范围变小
                     constructingSubset,
                     allSubsetList);
 
-            // ↩️ 撤销 当前所选择的元素（回溯）
+            // 撤销 当前子集的当前数字
             constructingSubset.remove(constructingSubset.size() - 1);
         }
     }
