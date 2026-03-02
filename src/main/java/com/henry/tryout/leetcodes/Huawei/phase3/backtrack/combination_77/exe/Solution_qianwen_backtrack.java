@@ -1,4 +1,4 @@
-package com.henry.tryout.leetcodes.Huawei.phase3.backtrack.combination_70.exe;
+package com.henry.tryout.leetcodes.Huawei.phase3.backtrack.combination_77.exe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,31 +13,32 @@ public class Solution_qianwen_backtrack {
     }
 
     /**
+     * 构造出 满足条件的组合
+     *
      * @param currStartIndex 当前层从哪个数字开始选 (保证不重复、有序)
-     * @param n 上限
-     * @param k 目标长度
+     * @param n              上限
+     * @param k              目标长度
      */
     private void backtrack(int currStartIndex, int n, int k) {
-        // 1. 终止条件：路径长度达到 k
+        /* 构造过程结束 */
+        // 终止条件：所构造的组合中的元素数量（路径长度）达到 k
         if (currValidCombi.size() == k) {
             // 🐖：这里一定要 new一个新的副本，否则 存的是引用
             allValidCombiList.add(new ArrayList<>(currValidCombi));
             return;
         }
 
-        // 2. 单层搜索逻辑
-        // 剪枝优化：i <= n - (k - path.size()) + 1
-        // 解释：如果 还需要选 (k - path.size()) 个数，
-        // 那么 i 最大只能取到 (n - 剩余数量 + 1)
-        // 再往后取，剩下的数字 就不够凑齐 k个了
+        /* 构造 符合条件的组合 */
+        // 剪枝依据：剩余可选的数字的数量（n - currNumCursor + 1） >= 当前组合还需要的数字的数量（k - currValidCombi.size()）
         for (int currentNumCursor = currStartIndex; currentNumCursor <= n - (k - currValidCombi.size()) + 1; currentNumCursor++) {
-            // 做选择
+            // 为 当前组合 选择 当前数字
             currValidCombi.add(currentNumCursor);
 
-            // 递归：下一层 从currentNumCursor+1开始选，保证 不回头选
+            // 继续 递归地构造 当前组合
+            // 🐖：下一层构造 可选数字的范围 从currentNumCursor+1开始，保证不会构造出 重复组合
             backtrack(currentNumCursor + 1, n, k);
 
-            // 撤销选择 (回溯)
+            // 撤销 当前组合中的当前数字
             currValidCombi.remove(currValidCombi.size() - 1);
         }
     }
