@@ -1,0 +1,75 @@
+创建完 代理对象 后，实例化产生的对象（原对象） 哪儿去了？
+这是一个 非常经典的面试题。
+
+场景还原
+1.实例化：
+    Object target = new MyService(); （这是 原对象，包含 真正的业务代码）。
+2.初始化：
+    给 target 注入属性，执行 @PostConstruct。此时 target 是 完美的业务对象。
+3.AOP 代理：
+    ① Spring（通过 AnnotationAwareAspectJAutoProxyCreator）发现 MyService 需要事务。
+    ② Spring 创建一个代理对象 Object proxy = Proxy.newProxyInstance(..., target, ...)。
+    ③ 这个 proxy对象 内部 持有一个引用 指向 target。
+    ④ postProcessAfterInitialization()方法 返回的是 proxy，而不是 target。
+
+原对象的去向
+原对象（Target）并没有 消失，也没有 被垃圾回收（GC）。
+
+1.被 代理对象 所持有：
+    ① 如果是 JDK动态代理：
+        代理对象内部 有一个 h(InvocationHandler)，Handler 内部持有 target引用。
+    ② 如果是 CGLIB 代理：
+        代理对象（子类）内部 有一个 CGLIB$CALLBACK_0，其中 也持有 target引用
+        （或者 代理对象本身 就是 target的子类，
+        通过 MethodInterceptor 调用 super.method()，
+        此时 target 和 proxy 在内存上 是 同一个实例，但 逻辑上 分为 “被拦截部分” 和 “原始部分”）。
+    ③ 结论：只要 代理对象 活着，原对象 就一定活着，因为 它们之间 有 强引用关系。
+2.容器中的引用 被替换：
+    ① Spring 容器（singletonObjects Map）中，
+        Key 是 Bean的名字（如"myService"），Value 原本指向 target。
+    ② 在 postProcessAfterInitialization 返回 proxy 后，
+        Spring 会 将 容器中的Value 替换为 proxy。
+    ③ 以后 任何人 从 Spring容器 获取 这个Bean，拿到的都是 proxy。
+3.原对象的可见性：
+    ① 外部：
+        无法直接通过 Spring容器 拿到 原对象
+        （除非你 通过反射 去挖 代理对象内部的 target 字段，但 这破坏了 封装）。
+    ② 内部：
+        在 Bean自己内部（this），引用的 依然是 原对象。
+        注意：这 会导致 一个经典问题————自调用失效。
+        如果 在 MyService 内部调用 this.doTransaction()，
+        因为 this 是 原对象，不会 经过代理，所以 事务注解 不生效。
+
+内存结构图示：
+[Spring 容器 singletonObjects]
+       |
+       | (Key: "myService")
+       v
++---------------------+
+|   代理对象 (Proxy)   | <--- 用户拿到的对象
+|  (实现接口/子类)     |
++---------------------+
+       |
+       | (内部引用: target / MethodInvocation)
+       v
++---------------------+
+|   原对象 (Target)    | <--- 真正的业务逻辑所在地
+|  (MyService 实例)    |      (没有被 GC，一直被 Proxy 引用)
++---------------------+
+| - field1            |
+| - field2            |
+| + doBusiness()      |
++---------------------+
+
+总结
+1.流程：
+    实例化 -> 属性注入 -> 初始化（含 @PostConstruct） -> AOP 代理创建（作为 初始化的最后一步）。
+2.时机：
+    AOP代理 必须 在 原对象业务 初始化完成后 创建，否则 拦截器执行时 对象状态不正确。
+3.原对象去向：
+    ① 没死：它被 代理对象 在内部 强引用着，生命周期 与 代理对象 一致。
+    ② 被藏起来了：Spring容器中 存储的引用 从 “原对象” 切换成了 “代理对象”。
+        外部 只能访问 代理，通过 代理 间接调用 原对象。
+    ③ 自调用陷阱：
+        Bean内部 通过 this 访问的 仍是原对象，
+        这也是 为什么 Spring AOP 不支持 同类方法 自调用 触发切面的原因。
