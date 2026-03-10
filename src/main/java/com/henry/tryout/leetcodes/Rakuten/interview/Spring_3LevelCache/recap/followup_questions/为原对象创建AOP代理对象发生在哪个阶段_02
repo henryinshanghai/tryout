@@ -1,0 +1,45 @@
+1. 创建 AOP代理对象 必须 在 初始化 之后吗？
+答案是：
+    逻辑上 必须在“业务初始化”之后，但 技术上 是在“初始化阶段 的后半段”。
+
+为什么必须在初始化之后（或之中）？
+AOP代理的目的 是 拦截 目标对象的方法调用（如事务 @Transactional、日志 @Aspect）。
+① 如果在 实例化后、初始化前 就 创建代理：
+    Ⅰ 此时 Bean的属性 还没注入（是 null）。
+    Ⅱ 此时 @PostConstruct 或 init-method 还没执行。
+    Ⅲ 如果你调用 代理对象的方法，拦截器 生效了，
+        但 内部调用的目标对象（Target）状态 是 不完整的，业务逻辑 会报错。
+② 因此，目标对象（Target）必须是一个 完全初始化好的、可用的对象，才能 被包装成 代理。
+
+== Spring 的具体执行点 ==
+在 initializeBean 方法中：
+    protected Object initializeBean(final String beanName,
+                                    final Object bean,
+                                    @Nullable RootBeanDefinition mbd) {
+        // 1. 执行 Aware接口 (setBeanName, setBeanFactory...)
+        invokeAwareMethods(beanName, bean);
+
+        // 2. 执行 BeanPostProcessor的【前置】处理 (postProcessBeforeInitialization)
+        // 这里通常做一些 修改属性、检查等操作，一般 不创建代理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+
+        try {
+            // 3. 执行 初始化方法 (@PostConstruct, init-method, InitializingBean)
+            //【关键】：此时 Bean的业务逻辑初始化 彻底完成！
+            invokeInitMethods(beanName, wrappedBean, mbd);
+        } catch (Throwable ex) {
+            throw new BeanCreationException(..., ex);
+        }
+
+        // 4. 执行 BeanPostProcessor 的【后置】处理 (postProcessAfterInitialization)
+        // 【核心】：AOP代理 就是 在这里创建的！
+        // AnnotationAwareAspectJAutoProxyCreator (AOP 的核心处理器) 会 在这里判断 是否需要 代理。
+        // 如果 需要，它 会返回一个 新的代理对象；如果不需要，返回 原对象。
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
+
+        return wrappedBean;
+    }
+
+结论：AOP代理 是在 业务初始化方法 执行完毕 之后，但 在 整个Bean创建流程 结束之前 创建的。
+它是 初始化阶段 的 “收官之作”。
+
