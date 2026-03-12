@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.jvm_04.memory_layout_02.thread_private_02.JVM_stack.behind_the_scene.JVM_common_commands.exe;
+package com.henry.tryout.easy_coding.jvm_04.memory_layout_02.thread_private_02.JVM_stack_01.behind_the_scene.JVM_common_commands.exe;
 
 public class UnderlyingCommandsDemo2 {
     public static void main(String[] args) {
