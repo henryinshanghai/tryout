@@ -1,0 +1,6 @@
+Jclasslib提供的字节码：
+    0 new #2 <java/lang/Object>
+    3 dup
+    4 invokespecial #1 <java/lang/Object.<init> : ()V>
+    7 astore_1
+    8 return
