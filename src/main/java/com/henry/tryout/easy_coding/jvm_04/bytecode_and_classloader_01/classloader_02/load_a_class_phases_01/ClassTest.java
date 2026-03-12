@@ -22,12 +22,15 @@ public class ClassTest {
             new VS. newInstance
             new是 强类型校验，因此：
                 ① 可以调用 任何一个构造方法；② 在使用new操作的时候，这个类 可以没有被加载过；
-            而Class类下的newInstance()是弱类型，因此：
+            而Class类下的newInstance()是 弱类型，因此：
                 ① 只能够 调用 无参数的构造方法；
-                    如果没有无参构造方法的话，就会抛出 InstantiationException异常；
+                    如果 不存在 无参构造方法 的话，就会抛出 InstantiationException异常；
                     如果 此构造方法 没有权限访问，则 抛出 IllegalAccessException异常。
-            Java 通过 类加载器 来 把 类的实现(类中方法体内的代码) 与 类的定义(类中的声明部分) 进行解耦，所以 它是 实现面向接口编程、依赖倒置 的必然选择。
-            原理：类加载器 在运行时 动态绑定 定义 与 实现，通过 双亲委派模型 来 保证核心定义安全，同时 允许灵活扩展实现。
+            Java 通过 类加载器 来 把 类的实现(类中方法体内的代码) 与 类的定义(类中的声明部分) 进行解耦，
+            所以 它是 实现 面向接口编程、依赖倒置 的必然选择。
+            原理：
+                类加载器 在运行时 动态绑定 定义 与 实现，
+                通过 双亲委派模型 来 保证 核心定义安全，同时 允许 灵活扩展 实现。
          */
         One oneObject = one.newInstance();
         oneObject.call(); // 输出 Hello World!
@@ -36,7 +39,7 @@ public class ClassTest {
         anotherObject.speak(); // 输出 easy coding
 
         /* 使用 类的Class对象 来 修改类的私有属性 👇 */
-        // 1 获取 私有属性对象 Field - 手段：通过 Class对象的 getDeclaredField()方法
+        // 1 获取 私有属性对象Field - 手段：通过 Class对象的 getDeclaredField()方法
         // 可以使用 类似的方式 来 获取其他声明
         Field privateFiledInOne = one.getDeclaredField("inner");
 
@@ -66,17 +69,3 @@ class Another {
         System.out.println("easy coding.");
     }
 }
-/*
-
-Class newInstance()方法 在 JDK9.0时已经被设置为 过时；
-new VS. newInstance()
-    new 的特征：
-        1 属于强制类型校验，可以调用任何构造方法；
-        2 在使用new A 的时候，类A可以没有被加载过；
-    newInstance()的特征：
-        1 属于弱类型，只能调用 无参数的构造方法；
-        2 如果类A没有 默认的构造方法的话，调用newInstance()方法会抛出异常 InstantiationException；
-        3 如果构造方法没有权限访问，则会抛出 IllegalAccessException异常。
-总结：Java通过 类加载器 来 把类的实现 与 类的定义 进行解耦？？
-
- */
