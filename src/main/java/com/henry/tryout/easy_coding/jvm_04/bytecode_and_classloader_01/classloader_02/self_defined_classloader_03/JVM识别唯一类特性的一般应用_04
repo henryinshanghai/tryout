@@ -1,0 +1,142 @@
+JVM 识别类的特性（全限定名 + 类加载器实例 = 唯一类）是
+实现 Java模块化 的 底层物理基础。
+
+在 JDK9 引入 官方模块系统（Project Jigsaw）之前，
+Java社区 早就利用这一特性 构建了 事实上的模块化标准（如 OSGi）。
+即使有了 JDK9 的模块系统，其底层 依然依赖 类加载器的隔离机制。
+
+以下是 这一特性 如何实现 模块化的详细拆解：
+
+===
+1. 核心原理：构建“私有命名空间”；
+在 传统Java开发 中，classpath 是 全局扁平的：
+    所有 jar包里的类 都在 同一个命名空间 下，
+    一旦 名字冲突（比如两个库都有 com.example.Util），
+    后加载的 会覆盖 先加载的，或者 报错。
+
+利用 JVM类识别特性 实现 ‘模块化’，本质上是 人为地切分了 命名空间：
+① 为 每个模块 分配一个 独立的 ClassLoader：
+    模块A -> ClassLoader_A
+    模块B -> ClassLoader_B
+② 隔离效果：
+    ClassLoader_A 加载的 com.example.Util 和
+        ClassLoader_B 加载的 com.example.Util，在 JVM眼中 是 两个完全不同的类。
+    模块A 内部可以自由使用 自己的Util，完全不知道 模块B 也有个 Util，反之亦然。
+    结果：
+        实现了 代码的强隔离，避免了 “Jar Hell”（依赖冲突）。
+
+===
+2. 具体实现机制：‘可见性’控制
+仅仅 隔离 还不够，模块化 还需要 ‘受控的共享’（即：模块B 可以用我的类，但 模块C不能使用）。
+这通过 类加载器的委托关系 和 访问控制 来 实现。
+
+A. 隐藏实现细节 (Encapsulation)
+机制：
+    ClassLoader_A 在 加载类 时，
+    配置为 只加载 本模块目录下的类，
+    且 不委派给 其他兄弟模块的加载器。
+效果：
+    ① 模块A 中的 public class InternalService 虽然是 public 的，
+        但因为它是 由 ClassLoader_A 加载的。
+    ② 模块B 的 ClassLoader_B 无法“看见”或加载 这个类（除非 显式配置依赖）。
+    ③ 如果 模块B 尝试引用 InternalService，
+        会抛出 ClassNotFoundException 或 NoClassDefFoundError。
+意义：
+    实现了 比 private/package-public 更严格的 模块级封装。
+    即使你写了 public，只要 不在导出列表 中，外部模块 依然 无法访问。
+
+B. 显式依赖 与 共享 (Explicit Dependencies)
+机制：
+    当 模块A 需要依赖 模块B 时，架构师会 配置
+    ClassLoader_A 的父加载器（或委托链）包含 ClassLoader_B，或者 建立一个 特定的委托关系。
+流程：
+    ① 模块A的代码 请求加载 com.b.Service。
+    ② ClassLoader_A 发现 自己没有，然后检查配置，发现 配置了 “依赖模块 B”。
+    ③ ClassLoader_A 将 请求 委派给 ClassLoader_B。
+    ④ ClassLoader_B 找到并加载 该类。
+    ⑤ 关键点：
+        此时，模块A 持有的 com.b.Service 对象，实际上是 由ClassLoader_B加载的。
+类型安全：
+    因为 JVM识别类时 看的是 (Name, Loader_B)，
+    模块A 和 模块C 如果 都依赖 模块B，
+    那么 它们拿到的都是 同一个 由ClassLoader_B加载的类实例，
+    因此 可以 互相传递对象，不会报错。
+
+===
+3. 实战案例对比
+
+案例一：OSGi (Open Services Gateway initiative)
+OSGi 是 Java模块化 最成熟的实现（Eclipse IDE内核 就是 基于OSGi）。
+
+实现方式：
+    ① 每个Bundle（模块）都有一个 专属的BundleClassLoader。
+    ② Manifest 文件：
+        每个jar包里 都有个META-INF/MANIFEST.MF 文件，
+        声明了
+            Export-Package（我导出哪些包 给别人用）和
+            Import-Package（我 需要导入 哪些包）。
+    ③ 动态解析：
+        OSGi容器 读取 这些声明，动态建立 ClassLoader之间的连接图。
+效果：
+    ① bundleA 导出了 com.foo.api。
+    ② bundleB 导入了 com.foo.api。
+    ③ bundleC 没有导入。
+    ④ 结果：
+        B 能够调用 A的类，但 C调用A的类 则报错。
+        哪怕 A、B、C 都在同一个 JVM 里。
+
+案例二：Tomcat Web应用的隔离
+实现方式：
+    ① Tomcat 为 每个WAR包 都创建一个 WebAppClassLoader。
+    ② 默认配置下，
+        WebAppClassLoader 会优先加载
+        WEB-INF/lib 和 WEB-INF/classes 下的类（打破双亲委派），
+        找不到时，再交给 父加载器。
+效果：
+    ① App1的WEB-INF/lib里 存在有 commons-lang-2.0.jar。
+    ② App2的WEB-INF/lib里 存在有 commons-lang-3.0.jar。
+    ③ 两个应用 互不影响，各自加载 各自版本的类。这就是 模块化的雏形。
+
+案例三：JDK 9+ Module System (JPMS)
+JDK9官方 引入了 模块系统，但它 依然是 基于‘类加载器特性’的。
+实现方式：
+    ① 引入了 ModuleLayer 和 ModuleReader。
+    ② 每个模块 对应一个 特殊的ClassLoader（通常是 PlatformClassLoader的子类 或 自定义实现）。
+    ③ 通过 module-info.java文件 来 声明 exports 和 requires。
+底层逻辑：
+    ① 当 你执行requires com.module.b 时，JVM 会
+        在底层建立 当前模块的ClassLoader 到 模块B的ClassLoader 的读取链接。
+    ② 如果 没有声明 exports，
+        即使 类是 public的，其他模块的ClassLoader 也无法解析 该类，
+        JVM 会直接拦截 对它的访问。
+
+===
+4. 模块化 所带来的 额外红利：动态卸载
+这是普通 classpath 做不到的，只有利用 (Name + Loader) 特性 才能实现：
+
+① 场景：插件化系统中，用户 卸载了 “插件 A”。
+② 操作：
+    1.断开 所有 对ClassLoader_A的引用。
+    2.等待 GC运行。
+③ 结果：
+    1.因为 类 是 由ClassLoader_A加载的，所以
+        当 ClassLoader_A 被回收 时，
+        它加载的所有类（Class 对象）以及 这些类 所引用的静态变量、资源，都会 一次性 全部被回收。
+    2.这实现了 真正的 内存级模块卸载。
+        如果 不使用 独立的ClassLoader，类 加载到 全局方法区 后，
+        永远 无法单独卸载 某个模块的代码。
+
+===
+总结
+‘JVM 识别类的特性’ 通过 以下三步 实现了 ‘模块化’：
+1.隔离 (Isolation)：
+    利用 不同的 ClassLoader实例，让 同名类 在不同模块中 成为 不同的实体，解决 版本冲突。
+2.封装 (Encapsulation)：
+    利用 ClassLoader的 查找范围限制，隐藏 模块内部实现，只暴露 必要的接口。
+3.连接 (Linking)：
+    通过配置 ClassLoader之间的委托/父子关系，建立 模块间 ‘受控的’依赖通道。
+
+一句话概括：
+类加载器 是 模块的边界墙，
+而 (Name + Loader) 的唯一性规则 是 墙上的 通行证查验机制。
+没有 这个机制，Java 就只能是 一团混乱的全局代码，无法构建 大型、复杂、可动态插拔的系统。
