@@ -1,0 +1,5 @@
+步骤：
+① 在IDEA中 下载 Bytecode Viewer插件；
+② 打开 待查看的类；
+③ View | Show Bytecode With JClassLib;
+④ 在 jclasslib窗口中，导航到 方法菜单，查看 方法的字节码。
