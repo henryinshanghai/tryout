@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.uint_test.code_coverage_02;
+package com.henry.tryout.easy_coding.uint_test_08.code_coverage_02;
 
 public class CoverageSampleMethods {
     /*
