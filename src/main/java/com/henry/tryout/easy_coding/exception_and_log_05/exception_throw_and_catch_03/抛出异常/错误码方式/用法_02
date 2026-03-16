@@ -1,0 +1,92 @@
+具体是怎么用的？（全流程解析）
+错误码的使用 通常 贯穿 定义 -> 抛出 -> 传输 -> 处理 四个环节。
+
+===
+第一步：定义错误码（标准化）
+通常 在 项目初期 会建立一个 错误码字典（Enum 或 常量类）。
+好的错误码设计 通常包含 分类 和 序号。
+
+① HTTP 状态码（系统级）：
+    200: 成功
+    400: 客户端请求错误
+    500: 服务器内部错误
+② 业务错误码（应用级，常用格式：模块号 + 流水号）：
+    A0001: 用户模块 - 用户不存在
+    A0002: 用户模块 - 密码错误
+    B0001: 订单模块 - 库存不足
+    B0002: 订单模块 - 订单已取消
+
+===
+第二步：在代码中抛出（后端实现）
+当 检测到异常 时，
+    不直接抛出 具体的Exception对象 给前端，
+    而是 封装成 统一的响应结构。
+
+Java 示例：
+// 定义枚举
+public enum BizErrorCode {
+    USER_NOT_FOUND("A0001", "用户不存在"),
+    INSUFFICIENT_STOCK("B0001", "库存不足");
+
+    private final String code;
+    private final String message;
+    // 构造函数省略...
+}
+
+// 业务逻辑
+public void buyItem(String userId, int itemId) {
+    User user = getUser(userId);
+    if (user == null) {
+        // 抛出 包含错误码的 业务异常
+        throw new BusinessException(BizErrorCode.USER_NOT_FOUND);
+    }
+
+    if (!checkStock(itemId)) {
+        throw new BusinessException(BizErrorCode.INSUFFICIENT_STOCK);
+    }
+    // ...
+}
+
+===
+第三步：统一 响应格式（传输协议）
+API接口返回的数据结构 通常包含 code, message, data 三个字段。
+即使 HTTP状态码 是 200（表示 网络通信成功），
+业务逻辑的错误 也通过 body中的code 来 体现。
+
+JSON 响应示例（成功）：
+{
+  "code": "200",
+  "message": "success",
+  "data": { "orderId": "12345" }
+}
+
+JSON 响应示例（失败）：
+{
+  "code": "B0001",          // 关键：业务错误码
+  "message": "库存不足",    // 默认提示（可选，前端可覆盖）
+  "data": null,
+  "traceId": "abc-123-xyz" // 链路追踪ID，方便查日志
+}
+
+===
+第四步：前端/调用方处理（消费端）
+前端 接收到响应 后，根据 code 进行判断。
+
+JavaScript 示例：
+fetch('/api/buy')
+  .then(response => response.json())
+  .then(res => {
+    if (res.code === '200') {
+      // 业务成功
+      alert('购买成功！');
+    } else if (res.code === 'A0001') {
+      // 特定错误处理：跳转登录
+      window.location.href = '/login';
+    } else if (res.code === 'B0001') {
+      // 特定错误处理：显示库存提示，并推荐类似商品
+      showStockAlert();
+    } else {
+      // 未知错误：显示通用错误页
+      showErrorPage(res.message);
+    }
+  });
