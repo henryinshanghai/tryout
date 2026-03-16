@@ -1,4 +1,4 @@
-package com.henry.tryout.easy_coding.uint_test.write_unit_test_03.naming_02;
+package com.henry.tryout.easy_coding.uint_test_08.write_unit_test_03.naming_02;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
