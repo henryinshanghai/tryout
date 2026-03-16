@@ -1,0 +1,29 @@
+Result 对象的作用
+
+===
+A. 统一接口规范（标准化）
+前端 只需要 写一套 通用的拦截器（Interceptor）或 Axios响应处理器，判断 code 即可。
+① 如果 code == 200 -> 提取 data 渲染页面。
+② 如果 code != 200 -> 弹出 message 提示框，或跳转登录页。
+前端 不再需要 关心 每个接口 返回的 具体结构差异。
+
+B. 区分 “通信成功” 与 “业务成功”
+① HTTP状态码 200：仅代表 网络请求 通了，服务器 收到了 请求。
+② Result.code：代表 业务逻辑 是否执行成功。
+    Ⅰ 例如：
+        用户密码错误。HTTP状态码 依然是 200（因为 服务器 正常响应了），
+        但 Result.code 是 40001，Result.message 是 "密码错误"。
+    Ⅱ 这样 避免了 大量使用 HTTP 4xx/5xx 状态码 导致的 浏览器默认报错页面 干扰。
+
+C. 扩展性强
+可以在 Result对象 中 轻松添加 额外字段，而不影响 原有结构：
+① traceId：链路追踪ID，方便 排查问题。
+② version：接口版本号。
+③ pagination：如果是 列表，可以嵌套 分页信息。
+
+
+D. 空值保护
+当 查询结果为空 时，
+    直接返回 data: null 或 data: []，
+    而不是返回 null 整个响应体，
+防止前端解构时 报错（如 Cannot read property 'list' of undefined）。

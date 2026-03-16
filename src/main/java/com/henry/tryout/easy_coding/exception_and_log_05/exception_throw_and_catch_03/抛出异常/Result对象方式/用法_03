@@ -1,0 +1,147 @@
+具体要怎么使用？（以 Java Spring Boot 为例）
+
+第一步：定义 Result 类
+这是一个 通用的泛型类，<T> 代表 业务数据的类型。
+
+import lombok.Data;
+import java.io.Serializable;
+
+@Data
+public class Result<T> implements Serializable {
+    private Integer code;
+    private String message;
+    private T data;
+    private Long timestamp;
+
+    // 构造函数
+    public Result() {
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    // --- 静态工厂方法（方便调用） ---
+
+    // 成功：无数据
+    public static <T> Result<T> success() {
+        Result<T> r = new Result<>();
+        r.setCode(200);
+        r.setMessage("success");
+        return r;
+    }
+
+    // 成功：有数据
+    public static <T> Result<T> success(T data) {
+        Result<T> r = new Result<>();
+        r.setCode(200);
+        r.setMessage("success");
+        r.setData(data);
+        return r;
+    }
+
+    // 失败：自定义码 和 消息
+    public static <T> Result<T> error(Integer code, String message) {
+        Result<T> r = new Result<>();
+        r.setCode(code);
+        r.setMessage(message);
+        return r;
+    }
+
+    // 失败：使用 枚举错误码
+    public static <T> Result<T> error(BizErrorCode errorCode) {
+        Result<T> r = new Result<>();
+        r.setCode(errorCode.getCode());
+        r.setMessage(errorCode.getMessage());
+        return r;
+    }
+}
+
+===
+第二步：在 Controller 中使用
+Controller 的方法返回值 不再是 具体的User或List，而是 Result<User> 或 Result<List>。
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    // 场景 1：查询单个用户
+    @GetMapping("/{id}")
+    public Result<User> getUser(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            // 返回业务错误
+            return Result.error(40001, "用户不存在");
+        }
+        // 返回成功数据
+        return Result.success(user);
+    }
+
+    // 场景 2：新增用户
+    @PostMapping
+    public Result<Long> createUser(@RequestBody User user) {
+        try {
+            Long newId = userService.create(user);
+            return Result.success(newId); // 返回生成的 ID
+        } catch (IllegalArgumentException e) {
+            // 参数校验失败
+            return Result.error(40002, e.getMessage());
+        }
+    }
+
+    // 场景 3：删除用户 (无返回值)
+    @DeleteMapping("/{id}")
+    public Result<Void> deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return Result.success(); // data 为 null
+    }
+}
+
+===
+第三步：配合 全局异常处理器（进阶用法）
+为了避免 Controller 里 满屏的 try-catch，通常结合 @RestControllerAdvice 使用。
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // 捕获 自定义业务异常
+    @ExceptionHandler(BusinessException.class)
+    public Result<Void> handleBusinessException(BusinessException e) {
+        // 直接从异常中获取错误码和消息，封装成 Result 返回
+        return Result.error(e.getCode(), e.getMessage());
+    }
+
+    // 捕获 未知系统异常
+    @ExceptionHandler(Exception.class)
+    public Result<Void> handleSystemException(Exception e) {
+        // 记录日志...
+        return Result.error(500, "系统内部错误，请联系管理员");
+    }
+}
+效果：
+    Controller代码 变得 极其干净，只关注 正常逻辑，
+    异常情况 自动被拦截 并 转为 统一的Result格式。
+
+===
+第四步：前端如何处理
+前端（如 Vue/React + Axios）设置 响应拦截器：
+
+// axios 拦截器
+axios.interceptors.response.use(response => {
+  const res = response.data;
+
+  // 假设约定 code 200 为成功
+  if (res.code !== 200) {
+    // 统一处理错误
+    Message.error(res.message || 'Error');
+
+    // 特殊错误码 处理，例如 401 跳登录
+    if (res.code === 401) {
+      location.href = '/login';
+    }
+
+    return Promise.reject(new Error(res.message));
+  } else {
+    // 成功，直接返回 data部分，组件里 就不用再写 res.data.data 了
+    return res.data;
+  }
+});
+
