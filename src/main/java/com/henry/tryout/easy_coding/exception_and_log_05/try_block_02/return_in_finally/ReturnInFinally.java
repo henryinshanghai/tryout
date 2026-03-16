@@ -1,8 +1,9 @@
 package com.henry.tryout.easy_coding.exception_and_log_05.try_block_02.return_in_finally;
 
-// 验证：finally代码块中的return表达式 会覆盖掉 try代码块中的return表达式，成为 方法的返回值!
-// 验证手段：在finally语句块中 也包含一个return语句；
-// 启示：不要在 finally代码块中使用return语句。
+// 验证：finally代码块中的 return表达式 会覆盖掉 try代码块中的return表达式，
+//      成为 方法的返回值!
+// 验证手段：在finally语句块中 也包含 一个return语句；
+// 启示：不要 在 finally代码块 中 使用return语句。
 public class ReturnInFinally {
     static int x = 1;
     static int y = 10;
