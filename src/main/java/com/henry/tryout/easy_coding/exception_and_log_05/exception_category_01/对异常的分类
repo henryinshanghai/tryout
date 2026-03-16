@@ -49,8 +49,18 @@ unchecked异常：
 warp it up:
 异常：Error + Exception；
 Exception：checked + unchecked；
-checked：必须在程序中显式的处理，否则程序会有编译报错；
-unchecked:
+① checked：
+    必须 在程序中显式地处理，否则 程序会有 编译报错；
+② unchecked:
     - 可预测异常(Predicated Exception); 好的编码习惯
     - 需要捕获的异常;
     - 可以忽略的异常；
+
+关键区别：编译器 对 该异常 的定性。
+
+Checked:
+    编译器在说：“我知道这 可能会出错（比如硬盘满了），
+        你必须 写好代码 来 处理 这种情况，否则 我不让你编译。”
+Unchecked:
+    编译器在说：“这是你代码写错了（比如访问了 null），理论上 不应该发生。
+        如果你 非要处理 也可以，但我 不强制你。”
