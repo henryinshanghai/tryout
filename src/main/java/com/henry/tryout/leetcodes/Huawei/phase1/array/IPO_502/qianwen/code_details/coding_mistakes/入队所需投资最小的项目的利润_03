@@ -3,7 +3,7 @@
 ② 再 根据此项目编号 得到 该项目的利润；
 
 代码：
-int currentSelectedProjectsProfit =
+int currentSelectableProjectsProfit =
     projectNoToItsProfit[
         projectNoArrSortByCostInAsc[currentProjectCursor] // 项目编号
     ]; // 项目利润
