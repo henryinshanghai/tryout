@@ -21,7 +21,7 @@ public class Solution_qianwen_buffArr extends Reader4 {
         while (totalReadCharAmount < wantedCharAmount) {
             // ① 从I/O中进行一次读取(最多4个字符) 到 （自定义）缓冲区中
             /* 每次 读取文件内容后，都需要 马上判断 文件是否已经结束（否则 while会无限循环） */
-            int currentReadCharAmount = read4(tempBufferCharArr);
+            int currentReadCharAmount = read4CharTo(tempBufferCharArr);
             // 如果 读取到的字符数量 为 0，说明 已经读到了文件末尾，则：
             if (currentReadCharAmount == 0) {
                 // 读取过程结束，跳出循环
@@ -57,7 +57,7 @@ public class Solution_qianwen_buffArr extends Reader4 {
 }
 
 class Reader4 {
-    int read4(char[] temp) {
+    int read4CharTo(char[] dipperWithFixedCapacity) {
         return 100;
     }
 }
