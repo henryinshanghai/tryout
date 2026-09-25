@@ -26,7 +26,7 @@ public class Solution_qianwen_internalBuffArr extends Reader4 {
             if (requireMoreChars()) {
                 // 则：调用 read4 读取多个字符(最多4个) 到 缓冲区中
                 // 🐖 使用 读取到的字符数量 来 更新 当前缓冲区字符数组中的字符数量
-                buffersCharAmount = read4(internalCharArrBuffer);
+                buffersCharAmount = read4CharTo(internalCharArrBuffer);
 
                 // 把 字符缓冲数组的 字符指针 归零（来 支持 从缓冲数组 拷贝字符到目标数组 的操作）
                 // 🐖 对于leetcode的正确性而言，归零操作 需要 在 文件结束操作 之前 - 这样 能够得到 空字符串(符合预期)，而不是"\u0000"（不符合预期）
@@ -68,7 +68,7 @@ public class Solution_qianwen_internalBuffArr extends Reader4 {
 // 黑盒API
 class Reader4 {
     // dummy实现
-    int read4(char[] buf4) {
+    int read4CharTo(char[] fixedBuffer) {
         return 100;
     }
 }
