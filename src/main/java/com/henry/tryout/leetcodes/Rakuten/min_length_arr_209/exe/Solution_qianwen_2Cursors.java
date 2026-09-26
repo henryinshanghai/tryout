@@ -1,5 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.min_length_arr_209.exe;
 
+// 收缩窗口的左边界时：① 先从currSum中扣除当前左边界的元素的value；② 再把左边界指针向右移动一个位置
 public class Solution_qianwen_2Cursors {
     public int minSubArrayLen(int targetSum, int[] numArr) {
         int numAmount = numArr.length;
@@ -21,9 +22,9 @@ public class Solution_qianwen_2Cursors {
                 minLength = Math.min(minLength, subArrRightBar - subArrLeftBar + 1);
 
                 /* 收缩窗口的左边界 */
-                // 从sum中 移除 左边界元素
+                // ① 先 从sum中 移除 左边界元素的value
                 currentSum -= numArr[subArrLeftBar];
-                // 把 左边界 向右移动一个位置
+                // ② 再把 左边界 向右移动一个位置
                 subArrLeftBar++;
             } /* 退出while循环时，子数组的subArrCurrentSum 已经 小于target，可以 继续追加元素了 */
         }
