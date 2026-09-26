@@ -1,5 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.max_product_subArr_152.exe;
 
+// 为 数组的每个位置 维护两个dp[]数组
 public class Solution_2_dp_arr {
     public int maxProduct(int[] nums) {
         int numAmount = nums.length;

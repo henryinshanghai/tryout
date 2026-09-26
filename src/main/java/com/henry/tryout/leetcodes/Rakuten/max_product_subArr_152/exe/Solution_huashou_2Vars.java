@@ -1,5 +1,6 @@
 package com.henry.tryout.leetcodes.Rakuten.max_product_subArr_152.exe;
 
+// 由于dp[i]仅仅依赖于dp[i-1] 因此可以把两个dp数组 简化为两个变量
 public class Solution_huashou_2Vars {
     public int maxProduct(int[] nums) {
         // 准备一个变量   用于维护‘乘积最大的子数组’的乘积
