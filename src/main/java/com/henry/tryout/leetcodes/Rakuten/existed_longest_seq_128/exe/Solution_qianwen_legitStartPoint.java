@@ -22,7 +22,7 @@ public class Solution_qianwen_legitStartPoint {
             if (isALegitStartPoint(numSet, currentNum)) {
                 /* 则：从它开始 对‘连续序列‘ 进行扩展 */
 
-                // 定义一个指针变量 指向 当前元素
+                // 定义一个指针变量 指向 当前元素(基于当前元素来扩展 连续序列)
                 int numToExtend = currentNum;
                 int currentConsecutiveSeqLength = 1;
 
