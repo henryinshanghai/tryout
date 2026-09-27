@@ -20,7 +20,7 @@ public class NumArray_qianwen_segmentTree {
         /* 成员变量初始化 */
         this.originalNumArr = numArr;
         this.numAmount = numArr.length;
-        // 安全起见，分配 4n 空间
+        // 🐖 安全起见，为 用于表示线段树的数组 分配 4*n大小的空间
         this.currentSpotToItsSum = new int[4 * numAmount];
 
         // 在构造方法中，构建出 线段树
