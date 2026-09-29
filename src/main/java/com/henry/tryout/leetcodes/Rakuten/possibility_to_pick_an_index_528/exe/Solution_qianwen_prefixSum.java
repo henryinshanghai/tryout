@@ -35,13 +35,13 @@ public class Solution_qianwen_prefixSum {
      */
     public int pickIndex() {
         // ① 获取到 最后一个位置 所对应的 前缀和（也就是所有权重元素的sum）
-        int maxItemOfPrefixSumArr = currentSpotToItsPrefixSum[currentSpotToItsPrefixSum.length - 1];
+        int maxPrefixSum = currentSpotToItsPrefixSum[currentSpotToItsPrefixSum.length - 1];
 
         // ② 生成 [0, 所有元素权重sum) 之间的一个随机数
-        int randomInt = random.nextInt(maxItemOfPrefixSumArr); // [0, maxItemOfPrefixSumArr)
+        int targetIntNum = random.nextInt(maxPrefixSum); // [0, maxPrefixSum)
 
         /* ③ 在 前缀和数组(有序数组) 中 进行 标准的upper-bound(第一个＞ target的元素的位置)的 二分查找 */
-        /* 找到第一个 prefixSum[i] > randomInt 的 i */
+        /* 找到第一个 prefixSum[i] > targetIntNum 的 i */
         // 左边界指针 初始指向0
         int leftBarCursor = 0;
         // 标准写法：右边界指针 初始指向 length位置，而不是length-1
@@ -53,13 +53,13 @@ public class Solution_qianwen_prefixSum {
             int middle = (leftBarCursor + rightBarCursor) / 2;
 
             // 如果 当前中间位置上的元素 小于等于 该随机数，说明 middle及其左边的元素 不满足条件(>target)，则：
-            if (currentSpotToItsPrefixSum[middle] <= randomInt) {
+            if (currentSpotToItsPrefixSum[middle] <= targetIntNum) {
                 // 按需更新 当前区间的左边界指针
-                // ② 按照区间定义，middle已经查看过了，所以 新区间 从middle+1开始
+                // ② 按照区间定义(左闭右开区间)，middle已经查看过了，所以 新区间 从middle+1开始
                 leftBarCursor = middle + 1;
             } else { // 否则，说明 mid 是一个候选答案，但左边 可能还有 更小的合法索引，则：
                 // 按需更新 当前区间的右边界
-                // ③ 按照区间定义，middle作为右边界 不会被包含，所以 可以作为右边界
+                // ③ 按照区间定义(左闭右开区间)，middle作为右边界 不会被包含，所以 可以作为右边界
                 rightBarCursor = middle;
             }
         } /* 这种写法，循环结束后，左指针与右指针会指向同一个位置 */
